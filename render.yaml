@@ -1,0 +1,9 @@
+services:
+  - name: mtg-calc
+    type: web
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /healthz
+    autoDeploy: true

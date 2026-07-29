@@ -1,0 +1,17 @@
+@import 'tailwindcss';
+
+/* Redefine `dark:` to key off a `.dark` class (toggled by ThemeToggle) instead of
+   only prefers-color-scheme, so the user's choice can override the system setting. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-slate-50 text-slate-900 antialiased transition-colors duration-200 dark:bg-slate-900 dark:text-slate-100;
+}
