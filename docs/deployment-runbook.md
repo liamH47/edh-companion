@@ -11,7 +11,7 @@ This has been verified end-to-end against a real deploy: the app is live and wor
 ## Architecture in one paragraph
 
 `Dockerfile` is a three-stage build: a Node stage builds the React frontend
-(`frontend/dist`), a Python/uv stage installs backend dependencies, and a final slim Python
+(`apps/web/dist`), a Python/uv stage installs backend dependencies, and a final slim Python
 runtime stage combines both, running `app.main:app` under `uvicorn` as a non-root user.
 FastAPI serves the API under `/api/*`, health checks at `/healthz`/`/readyz`, and the built
 frontend for everything else (see `backend/app/frontend.py`). Render injects a `PORT` env
@@ -210,7 +210,7 @@ git revert <bad-commit-sha>
   sleep after ~15 min of inactivity with a 30-60s cold start; that's not this deployment.)
 - **Static assets 404 in production but work in local dev**: check that
   `backend/app/frontend.py`'s `mount_frontend` is finding a non-empty `app/static/`
-  directory inside the image — this is where the Dockerfile copies `frontend/dist` to. A
+  directory inside the image — this is where the Dockerfile copies `apps/web/dist` to. A
   `docker run --rm -it mtg-calc sh` (once Docker's available locally) and `ls app/static`
   is the fastest way to check.
 - **New card/feature works locally but not in prod**: confirm it's on `main` *and* that the
@@ -242,7 +242,7 @@ CI runs exactly these, so reproducing a red build is a copy-paste:
 
 ```
 cd backend && uv run ruff check . && uv run ruff format --check . && uv run mypy app && uv run pytest
-cd frontend && npm run tokens:check && npx tsc -b && npx oxlint && npx vitest run --coverage
+cd apps/web && npm run tokens:check && npx tsc -b && npx oxlint && npx vitest run --coverage
 ```
 
 Node version is pinned in `.nvmrc` (24, matching `node:24-alpine` in the Dockerfile). If

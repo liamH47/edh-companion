@@ -1,8 +1,8 @@
 # Design tokens
 
-Single source of truth: `frontend/src/theme/tokens.ts` — a plain TS object, no React/DOM
+Single source of truth: `packages/core/src/theme/tokens.ts` — a plain TS object, no React/DOM
 imports, importable verbatim by a future React Native port. `npm run tokens:build` derives
-`frontend/src/theme/tokens.css` from it (Tailwind v4 `@theme` block); `npm run tokens:check`
+`apps/web/src/theme/tokens.css` from it (Tailwind v4 `@theme` block); `npm run tokens:check`
 fails CI if the committed CSS is stale. Never hand-edit `tokens.css`.
 
 On web, color/radius/type tokens are available as Tailwind utilities (`bg-surface`, `rounded-md`,

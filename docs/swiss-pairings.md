@@ -1,10 +1,10 @@
 # Swiss pairings and tiebreakers
 
-Reference for `frontend/src/core/swiss/`. These rules are subtle, easy to misremember,
+Reference for `packages/core/src/swiss/`. These rules are subtle, easy to misremember,
 and expensive to re-derive, so they're written down once here with citations. Verified
 against the Magic Tournament Rules on 2026-08-01 — re-check before changing any of it.
 
-Everything below is implemented as pure TypeScript in `frontend/src/core/swiss/`, with
+Everything below is implemented as pure TypeScript in `packages/core/src/swiss/`, with
 no backend involvement at all. That's deliberate: a tournament runs for hours, the state
 is per-device, and pairing a round must not depend on having a signal. It also means the
 whole subsystem ports to React Native untouched (see `docs/ui/portability-rules.md`).
