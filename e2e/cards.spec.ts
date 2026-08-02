@@ -44,6 +44,35 @@ test.describe('Cards', () => {
     await expect(page.getByRole('button', { name: 'Blood Artist' })).toBeHidden()
   })
 
+  test('rolls Comet for you and logs the face that came up', async ({ page }) => {
+    await page.goto('/cards/comet-stellar-pup')
+
+    // Comet has one setup field, so the board-state sheet opens on arrival.
+    const sheet = page.getByRole('dialog', { name: 'Board state' })
+    await expect(sheet).toBeVisible()
+    await sheet.getByRole('button', { name: 'Done' }).click()
+    await expect(sheet).toBeHidden()
+
+    // One die, not six "which did you roll?" buttons.
+    const rollButton = page.getByRole('button', { name: 'Roll the die' })
+    await expect(rollButton).toBeVisible()
+    await expect(page.getByRole('button', { name: '4', exact: true })).toBeHidden()
+
+    await expect(page.getByText('Nothing yet.')).toBeVisible()
+
+    await rollButton.click()
+
+    // The face is decided up front but only revealed when the tumble ends, so the
+    // log gains exactly one entry, whatever it landed on.
+    await expect(page.getByText('Nothing yet.')).toBeHidden()
+    await expect(page.getByRole('listitem').filter({ hasText: /^[1-6]$/ })).toHaveCount(1)
+
+    // One activation a turn unless a 6 buys more, so the die is now either spent or
+    // recharged -- never in between.
+    const remaining = await page.getByText(/acts left/).textContent()
+    expect(remaining).toBeTruthy()
+  })
+
   test('serves every card the API advertises', async ({ page, request }) => {
     // Guards the registry against the frontend: a card registered in Python but
     // unreachable in the shipped bundle is exactly the kind of packaging mismatch

@@ -2,6 +2,7 @@ import { isActionGuardBlocked, sequenceValue } from '../core/cardModel'
 import { tapHaptic } from '../core/haptics'
 import type { FieldSpec, FieldValues, OutputValues } from '../types'
 import { Button } from '../ui/Button'
+import { DieRoller } from './DieRoller'
 
 interface ActionBarProps {
   liveFields: FieldSpec[]
@@ -9,15 +10,18 @@ interface ActionBarProps {
   outputs: OutputValues | null
   onFieldChange: (name: string, value: unknown) => void
   onNewTurn: () => void
+  /** Forwarded to DieRoller so a test can pin the face rolled. */
+  rng?: () => number
 }
 
 /**
  * Bottom-pinned actions, in the thumb zone rather than buried in the scrolling field
- * list above (screen-spec.md). Two shapes feed it:
+ * list above (screen-spec.md). Three shapes feed it:
  *  - a live counter with an `action_label` gets one lg/fullWidth button ("Pay 50 Life")
- *  - a live `sequence` gets one button per declared option, wrapped in a row, each
- *    appending that option to the log ("1-2" / "3" / "4-5" / "6" for Comet)
- * Both honour the same `action_disabled_when` guard. "New turn" sits last, and the
+ *  - a live `sequence` declaring `roll` gets a die the app rolls itself (Comet)
+ *  - any other live `sequence` gets one button per declared option, each appending
+ *    that option to the log
+ * All honour the same `action_disabled_when` guard. "New turn" sits last, and the
  * bar is padded for the bottom safe area so it clears a phone's gesture bar.
  */
 export function ActionBar({
@@ -26,6 +30,7 @@ export function ActionBar({
   outputs,
   onFieldChange,
   onNewTurn,
+  rng,
 }: ActionBarProps) {
   const counterActionFields = liveFields.filter(
     (field) => field.kind === 'counter' && field.action_label,
@@ -58,6 +63,23 @@ export function ActionBar({
         const entries = sequenceValue(values[field.name])
         const atMax = field.max != null && entries.length >= field.max
         const disabled = atMax || isActionGuardBlocked(field, outputs)
+
+        // A rolled sequence replaces the per-option buttons entirely: offering both a
+        // die and six "pick your result" buttons would invite reporting a roll the app
+        // didn't make.
+        if (field.roll) {
+          return (
+            <DieRoller
+              key={field.name}
+              faces={field.roll.faces}
+              actionLabel={field.roll.action_label}
+              disabled={disabled}
+              rng={rng}
+              onRolled={(face) => onFieldChange(field.name, [...entries, String(face)])}
+            />
+          )
+        }
+
         return (
           <div key={field.name} role="group" aria-label={field.label} className="flex flex-wrap gap-2">
             {(field.options ?? []).map((option) => (

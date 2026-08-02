@@ -16,6 +16,7 @@ function field(overrides: Partial<FieldSpec> & Pick<FieldSpec, 'name' | 'kind'>)
     default_source: null,
     action_label: null,
     action_disabled_when: null,
+    roll: null,
     setup: true,
     short_label: null,
     ...overrides,

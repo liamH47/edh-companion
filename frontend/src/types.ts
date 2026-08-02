@@ -15,6 +15,14 @@ export interface ActionGuard {
   less_than: number
 }
 
+/** A `sequence` field the app rolls for, rather than one the player picks from. The
+ * UI shows a single roll button, generates a face in 1..faces, animates it, and
+ * appends the result. See RollSpec in the backend's schema.py. */
+export interface RollSpec {
+  faces: number
+  action_label: string
+}
+
 export interface FieldSpec {
   name: string
   label: string
@@ -28,6 +36,7 @@ export interface FieldSpec {
   default_source: string | null
   action_label: string | null
   action_disabled_when: ActionGuard | null
+  roll: RollSpec | null
   setup: boolean
   short_label: string | null
 }

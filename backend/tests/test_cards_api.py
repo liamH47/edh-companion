@@ -20,15 +20,19 @@ def test_get_comet_metadata_describes_its_roll_sequence_field(client: TestClient
     rolls = fields_by_name["rolls"]
     assert rolls["kind"] == "sequence"
     assert rolls["default"] == []
-    assert [option["value"] for option in rolls["options"]] == ["1-2", "3", "4-5", "6"]
-    # The roll buttons switch off once he's out of activations for the turn.
+    # One option per die face, so the log shows what was rolled rather than which
+    # branch it fell into.
+    assert [option["value"] for option in rolls["options"]] == ["1", "2", "3", "4", "5", "6"]
+    # The app rolls the die itself, so the UI shows one button instead of six.
+    assert rolls["roll"] == {"faces": 6, "action_label": "Roll the die"}
+    # That button switches off once he's out of activations for the turn.
     assert rolls["action_disabled_when"] == {"output": "activations_remaining", "less_than": 1}
 
 
 def test_calculate_endpoint_walks_a_comet_roll_sequence_in_order(client: TestClient) -> None:
     response = client.post(
         "/api/cards/comet-stellar-pup/calculate",
-        json={"inputs": {"starting_loyalty": 5, "rolls": ["1-2", "4-5"]}},
+        json={"inputs": {"starting_loyalty": 5, "rolls": ["1", "5"]}},
     )
     assert response.status_code == 200
     outputs = response.json()["outputs"]

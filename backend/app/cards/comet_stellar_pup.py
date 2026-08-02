@@ -15,6 +15,7 @@ from .schema import (
     FieldKind,
     FieldSpec,
     OutputSpec,
+    RollSpec,
     SelectOption,
 )
 
@@ -24,11 +25,14 @@ MAX_ROLLS_PER_TURN = 40
 SQUIRRELS_PER_ROLL = 2
 BONUS_ACTIVATIONS_ON_SIX = 2
 DAMAGE_ROLL_LOYALTY_COST = 2
+DIE_FACES = 6
 
-ROLL_SQUIRRELS = "1-2"
-ROLL_RETURN = "3"
-ROLL_DAMAGE = "4-5"
-ROLL_BONUS = "6"
+# The log stores the face actually rolled rather than the branch it falls into, so a
+# turn reads back as "5, 2, 6" -- what happened at the table -- instead of "4-5, 1-2,
+# 6". Grouping into branches is compute()'s job, below.
+FACES_SQUIRRELS = frozenset({"1", "2"})
+FACES_RETURN = frozenset({"3"})
+FACES_DAMAGE = frozenset({"4", "5"})
 
 METADATA = CardMetadata(
     id="comet-stellar-pup",
@@ -63,11 +67,9 @@ METADATA = CardMetadata(
             default=[],
             max=MAX_ROLLS_PER_TURN,
             options=[
-                SelectOption(value=ROLL_SQUIRRELS, label="1–2"),
-                SelectOption(value=ROLL_RETURN, label="3"),
-                SelectOption(value=ROLL_DAMAGE, label="4–5"),
-                SelectOption(value=ROLL_BONUS, label="6"),
+                SelectOption(value=str(face), label=str(face)) for face in range(1, DIE_FACES + 1)
             ],
+            roll=RollSpec(faces=DIE_FACES, action_label="Roll the die"),
             action_disabled_when=ActionGuard(output="activations_remaining", less_than=1),
             help_text="1–2: +2 loyalty and two Squirrels. 3: −1 and return a card. "
             "4–5: deals damage equal to his loyalty, then −2. 6: +1 and two more activations.",
@@ -111,15 +113,15 @@ def compute(inputs: dict[str, Any]) -> dict[str, Any]:
             # so stop rather than quietly compounding an impossible board state.
             break
 
-        if roll == ROLL_SQUIRRELS:
+        if roll in FACES_SQUIRRELS:
             loyalty += 2
             squirrels_created += SQUIRRELS_PER_ROLL
             damage_this_activation = 0
-        elif roll == ROLL_RETURN:
+        elif roll in FACES_RETURN:
             loyalty = max(0, loyalty - 1)
             cards_returned += 1
             damage_this_activation = 0
-        elif roll == ROLL_DAMAGE:
+        elif roll in FACES_DAMAGE:
             # The damage is loyalty *before* the -2: the ability deals damage first and
             # removes counters second. Resolving it the other way round is the single
             # easiest mistake to make with this card, and it costs 2 damage every time.

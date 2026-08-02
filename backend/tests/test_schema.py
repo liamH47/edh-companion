@@ -1,6 +1,14 @@
 import pytest
 
-from app.cards.schema import AlertSpec, CardMetadata, FieldKind, FieldSpec, OutputSpec
+from app.cards.schema import (
+    AlertSpec,
+    CardMetadata,
+    FieldKind,
+    FieldSpec,
+    OutputSpec,
+    RollSpec,
+    SelectOption,
+)
 
 
 def test_field_spec_rejects_select_kind_without_options() -> None:
@@ -71,3 +79,55 @@ def test_card_metadata_accepts_an_alert_spec() -> None:
     assert card.alert is not None
     assert card.alert.output == "game_lost"
     assert card.alert.message == "You lose"
+
+
+def _faces(count: int) -> list[SelectOption]:
+    return [SelectOption(value=str(face), label=str(face)) for face in range(1, count + 1)]
+
+
+def test_field_spec_accepts_a_rolled_sequence_covering_every_face() -> None:
+    field = FieldSpec(
+        name="rolls",
+        label="Rolls",
+        kind=FieldKind.SEQUENCE,
+        options=_faces(6),
+        roll=RollSpec(faces=6),
+    )
+    assert field.roll is not None
+    assert field.roll.faces == 6
+    # The label is generic unless a card overrides it.
+    assert field.roll.action_label == "Roll"
+
+
+def test_field_spec_rejects_a_rolled_sequence_missing_a_face() -> None:
+    # A d6 whose options stop at 5 can roll a value the log cannot label and
+    # validate_inputs would reject -- so it is caught at import, not at runtime.
+    with pytest.raises(ValueError, match="no option for face\(s\) 6"):
+        FieldSpec(
+            name="rolls",
+            label="Rolls",
+            kind=FieldKind.SEQUENCE,
+            options=_faces(5),
+            roll=RollSpec(faces=6),
+        )
+
+
+def test_field_spec_reports_every_missing_face_at_once() -> None:
+    with pytest.raises(ValueError, match="no option for face\(s\) 4, 5, 6"):
+        FieldSpec(
+            name="rolls",
+            label="Rolls",
+            kind=FieldKind.SEQUENCE,
+            options=_faces(3),
+            roll=RollSpec(faces=6),
+        )
+
+
+def test_field_spec_rejects_roll_on_a_non_sequence_kind() -> None:
+    with pytest.raises(ValueError, match="declares roll but is kind"):
+        FieldSpec(name="count", label="Count", kind=FieldKind.COUNTER, roll=RollSpec(faces=6))
+
+
+def test_field_spec_roll_defaults_to_none() -> None:
+    field = FieldSpec(name="count", label="Count", kind=FieldKind.NUMBER, default=0)
+    assert field.roll is None

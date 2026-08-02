@@ -48,6 +48,23 @@ class ActionGuard(BaseModel):
     less_than: int | float
 
 
+class RollSpec(BaseModel):
+    """Marks a `sequence` field as rolled *by the app* rather than picked by the player:
+    the UI shows one roll button instead of one button per option, generates a face,
+    animates it, and appends the result to the log.
+
+    Frontend-only, like ActionGuard: compute() receives the resulting sequence exactly
+    as it would if the player had tapped the entries by hand, and never learns where
+    the values came from. That keeps the die out of the pure function -- randomness
+    lives at the edge, so compute() stays trivially testable.
+
+    The field's `options` must declare one entry per face, valued "1".."faces", so the
+    log can label what was actually rolled rather than which branch it fell into."""
+
+    faces: int
+    action_label: str = "Roll"
+
+
 class FieldSpec(BaseModel):
     name: str
     label: str
@@ -69,6 +86,8 @@ class FieldSpec(BaseModel):
     action_label: str | None = None
     # See ActionGuard. Ignored for non-counter kinds.
     action_disabled_when: ActionGuard | None = None
+    # See RollSpec. Only meaningful on a sequence field.
+    roll: RollSpec | None = None
     # Marks a field as one-time board-state setup (answered once, rarely revisited) rather
     # than something clicked repeatedly during play. Setup fields render inside a collapsible
     # section the player can tuck away once answered, keeping the fields they actually
@@ -82,6 +101,24 @@ class FieldSpec(BaseModel):
     def _check_option_kinds_have_options(self) -> "FieldSpec":
         if self.kind in _OPTION_KINDS and not self.options:
             raise ValueError(f"field {self.name!r} is kind={self.kind} but declares no options")
+        return self
+
+    @model_validator(mode="after")
+    def _check_roll_covers_every_face(self) -> "FieldSpec":
+        """A rolled field must be able to label any face the die can land on -- a d6
+        whose options stop at 5 would roll a value the log cannot render and
+        validate_inputs would reject."""
+        if self.roll is None:
+            return self
+        if self.kind is not FieldKind.SEQUENCE:
+            raise ValueError(f"field {self.name!r} declares roll but is kind={self.kind}")
+        declared = {option.value for option in self.options or []}
+        missing = [str(face) for face in range(1, self.roll.faces + 1) if str(face) not in declared]
+        if missing:
+            raise ValueError(
+                f"field {self.name!r} rolls a d{self.roll.faces} "
+                f"but declares no option for face(s) {', '.join(missing)}"
+            )
         return self
 
 
