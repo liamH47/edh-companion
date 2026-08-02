@@ -84,3 +84,54 @@ def test_validate_inputs_rejects_non_string_select_value() -> None:
     ]
     with pytest.raises(ValueError, match="must be a string"):
         validate_inputs(fields, {"mode": 1})
+
+
+def _sequence_field(*, max_entries: int | None = None) -> FieldSpec:
+    return FieldSpec(
+        name="rolls",
+        label="Rolls",
+        kind=FieldKind.SEQUENCE,
+        default=[],
+        max=max_entries,
+        options=[SelectOption(value="a", label="A"), SelectOption(value="b", label="B")],
+    )
+
+
+def test_validate_inputs_accepts_a_sequence_of_option_values_in_order() -> None:
+    fields = [_sequence_field()]
+    assert validate_inputs(fields, {"rolls": ["b", "a", "b"]}) == {"rolls": ["b", "a", "b"]}
+
+
+def test_validate_inputs_accepts_an_empty_sequence() -> None:
+    assert validate_inputs([_sequence_field()], {"rolls": []}) == {"rolls": []}
+
+
+def test_validate_inputs_rejects_a_non_list_sequence_value() -> None:
+    with pytest.raises(ValueError, match="must be a list"):
+        validate_inputs([_sequence_field()], {"rolls": "a"})
+
+
+def test_validate_inputs_rejects_a_sequence_entry_not_in_options() -> None:
+    with pytest.raises(ValueError, match="entries must each be one of"):
+        validate_inputs([_sequence_field()], {"rolls": ["a", "z"]})
+
+
+def test_validate_inputs_rejects_a_sequence_longer_than_max() -> None:
+    with pytest.raises(ValueError, match="at most 2 entries"):
+        validate_inputs([_sequence_field(max_entries=2)], {"rolls": ["a", "a", "a"]})
+
+
+def test_validate_inputs_accepts_a_sequence_exactly_at_max() -> None:
+    fields = [_sequence_field(max_entries=2)]
+    assert validate_inputs(fields, {"rolls": ["a", "b"]}) == {"rolls": ["a", "b"]}
+
+
+def test_validate_inputs_copies_a_sequence_so_the_shared_default_cannot_be_mutated() -> None:
+    # A sequence field's default is one list object living on a module-level METADATA
+    # singleton. Handing it straight back would let a caller mutating its own inputs
+    # silently change the default every later request falls back to.
+    field = _sequence_field()
+    validated = validate_inputs([field], {})
+    validated["rolls"].append("a")
+    assert field.default == []
+    assert validate_inputs([field], {}) == {"rolls": []}

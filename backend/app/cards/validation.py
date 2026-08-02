@@ -22,8 +22,10 @@ def _validate_field(field: FieldSpec, value: Any) -> Any:
             return _validate_boolean(field, value)
         case FieldKind.NUMBER | FieldKind.COUNTER:
             return _validate_number(field, value)
-        case FieldKind.SELECT:  # pragma: no branch -- exhaustive over FieldKind's 4 members
+        case FieldKind.SELECT:
             return _validate_select(field, value)
+        case FieldKind.SEQUENCE:  # pragma: no branch -- exhaustive over FieldKind's 5 members
+            return _validate_sequence(field, value)
 
 
 def _validate_boolean(field: FieldSpec, value: Any) -> bool:
@@ -49,3 +51,23 @@ def _validate_select(field: FieldSpec, value: Any) -> str:
     if value not in allowed:
         raise ValueError(f"{field.name!r} must be one of {sorted(allowed)}, got {value!r}")
     return value
+
+
+def _validate_sequence(field: FieldSpec, value: Any) -> list[str]:
+    """Order-preserving list of `options` values, capped at `max` entries.
+
+    Returns a *copy*: a sequence field's default is a shared list living on the
+    module-level METADATA singleton, so handing it straight back would let one
+    request's inputs alias every later request's default.
+    """
+    if not isinstance(value, list):
+        raise ValueError(f"{field.name!r} must be a list, got {value!r}")
+    if field.max is not None and len(value) > field.max:
+        raise ValueError(f"{field.name!r} must have at most {field.max} entries, got {len(value)}")
+    allowed = {option.value for option in field.options or []}
+    for entry in value:
+        if entry not in allowed:
+            raise ValueError(
+                f"{field.name!r} entries must each be one of {sorted(allowed)}, got {entry!r}"
+            )
+    return list(value)

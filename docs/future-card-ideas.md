@@ -4,9 +4,15 @@ Candidates for the next cards to add to the plugin registry (`backend/app/cards/
 of these are implemented yet — this is a working spec so whoever picks one up next
 (us, later) doesn't have to re-derive the math or re-verify the Oracle text from scratch.
 All Oracle text below was verified against Scryfall/Gatherer/MTG Salvation search results
-on 2026-07-29, not pulled from memory alone — do the same sanity check before implementing,
-since this is exactly the kind of detail that's easy to misremember (see: the "before it"
-vs. "this turn" mixup we caught in Aetherflux Reservoir's actual first implementation).
+on 2026-07-29 (re-checked 2026-07-31), not pulled from memory alone — do the same sanity
+check before implementing, since this is exactly the kind of detail that's easy to
+misremember (see: the "before it" vs. "this turn" mixup we caught in Aetherflux Reservoir's
+actual first implementation).
+
+Craterhoof Behemoth (formerly listed here) is now implemented —
+`backend/app/cards/craterhoof_behemoth.py`. Its multi-trigger design (independent creature
+counts per trigger resolution, since board state can change between them) is worth reading
+if a similarly-shaped "X = count of Y" one-shot multiplier card comes up again.
 
 Commander (EDH) relevance was the filter for all of these, per the user's ask to focus there
 first. Ranked roughly by how well they fit the site's pattern (few simple inputs, one clear
@@ -22,11 +28,27 @@ Storm count is arguably *the* iconic "annoying math" trigger in Magic, and a nat
 to Aetherflux Reservoir (both are spell-count payoffs, but storm counts strictly *before* the
 triggering spell, not inclusive of it — unlike Aetherflux's actual "this turn, inclusive" wording).
 
-**Proposed fields**: `storm_count` (number — spells cast before this one this turn),
-`damage_per_copy` (number, default 1 — lets the same shape cover similar storm finishers later
-if we ever add them as separate cards, e.g. Tendrils of Agony's life drain).
-**Proposed outputs**: `total_copies` = storm_count + 1 (the original spell plus one copy per
-spell before it), `total_damage` = total_copies × damage_per_copy.
+**Status (2026-07-31): design ideas only, not built yet.** Less table experience with storm on
+the user's side than the other cards here, so this one is deliberately not locked. Two "funky
+rules" details worth designing around up front, since getting these wrong is exactly the kind
+of mistake that already happened once (Aetherflux's "before it" vs. "this turn" mixup):
+- Storm count is spells cast by **all** players this turn, before this one — not just yours.
+  Easy to misremember as "your spells"; whatever field ships needs to say so in its label or
+  `help_text`.
+- Countered spells and spells cast from graveyard/exile still count toward storm; the copies
+  storm itself creates are *not cast* and don't count toward a later storm spell the same turn.
+
+**Proposed shape**: a small shared helper, `backend/app/cards/storm.py`, exporting one pure
+function — `total_copies(storm_count: int) -> int: return storm_count + 1` — unit-tested on
+its own, imported by `grapeshot.py` and any future storm card (Tendrils of Agony — life gain
+instead of damage; Brain Freeze — mill; Empty the Warrens — tokens). Each storm card's own
+`compute()` stays specific to that card's per-copy effect; the shared piece is only the
+"+1 for the original spell, copies aren't cast" logic — not a speculative generic "storm card"
+abstraction that only one card would ever use. Mirrors `validation.py`'s role: a shared
+non-card helper module, not a registered card itself.
+
+Concrete field/output names intentionally not finalized — revisit once the storm-count
+questions above have been thought through further.
 
 ## 2. Nykthos, Shrine to Nyx
 
@@ -44,23 +66,7 @@ pip" +1 button plays the same role "cast a spell" does for Aetherflux.
 devotion_count − 2 (the activated ability itself costs {2}, so this answers "was it worth
 tapping Nykthos for" at a glance).
 
-## 3. Craterhoof Behemoth
-
-> Haste. When this creature enters, creatures you control gain trample and get +X/+X until
-> end of turn, where X is the number of creatures you control.
-
-The classic "am I lethal this turn" combat-math moment in green decks. Different shape from
-Aetherflux/storm (a one-shot multiplier, not an accumulating trigger), so it exercises a
-different kind of `compute()`.
-
-**Proposed fields**: `creature_count` (number — how many creatures you control, including
-Craterhoof itself once it's on the battlefield), `total_power_before_buff` (number — sum of
-your creatures' power before the trigger resolves; this tally is the actually tedious part).
-**Proposed outputs**: `power_bonus_per_creature` = creature_count, `total_power_after_buff` =
-total_power_before_buff + creature_count². (Each of the N creatures gains +N power, so the
-sum increases by N².) Assumes an unblocked/trample-through attack for the "total damage" read.
-
-## 4. Scute Swarm
+## 3. Scute Swarm
 
 > Landfall — Whenever a land you control enters, create a 1/1 green Insect creature token.
 > **If you control six or more lands, create a token that's a copy of this creature instead.**
@@ -81,7 +87,7 @@ start from), `scute_swarm_count` (number, default 1), `insect_token_count` (numb
 loop `lands_played` times; each iteration increments land count by 1, then if the new land
 count ≥ 6, doubles the swarm count, else adds the current swarm count to the insect count.
 
-## 5. Aristocrat mass-drain — anchor card: Blood Artist
+## 4. Aristocrat mass-drain — anchor card: Blood Artist
 
 > Whenever Blood Artist or another creature dies, target player loses 1 life and you gain 1 life.
 
@@ -95,7 +101,7 @@ in your head mid-combo.
 **Proposed outputs**: `total_life_drained` = creatures_died × drain_effect_count (equals both
 total life lost by the target(s) and total life you gain, since the gain side isn't targeted).
 
-## 6. Commander tax (format mechanic, not a single card)
+## 5. Commander tax (format mechanic, not a single card)
 
 Not tied to one card — it's a Commander-specific rule, which is worth calling out since the
 user asked to focus on Commander first: each time your commander would go anywhere from the
@@ -114,9 +120,48 @@ This one's a judgment call on scope: it's not a "card," so it stretches the plug
 describe a rule instead of a card). Worth deciding deliberately if/when we build it, rather
 than by accident.
 
+## 6. Comet, Stellar Pup
+
+> {2}{R}{W} Legendary Planeswalker — Comet. Starting loyalty 5.
+> 0: Roll a six-sided die.
+> 1 or 2 — [+2], then create two 1/1 green Squirrel creature tokens. They gain haste until end
+> of turn.
+> 3 — [−1], then return a card with mana value 2 or less from your graveyard to your hand.
+> 4 or 5 — Comet deals damage equal to the number of loyalty counters on him to a creature or
+> player, then [−2].
+> 6 — [+1], and you may activate Comet's loyalty ability two more times this turn.
+
+User-suggested (played it 2026-08-01, called it "a perfect candidate for being tracked by
+this app"). Oracle text above pulled via web search from Scryfall (Unfinity #166) on
+2026-08-01 — verify again before implementing, per this doc's usual rule.
+
+**Heads-up on scope**: Comet is from Unfinity (silver-bordered/"Un-set"), which is not
+tournament-legal and not Commander-legal under the default banlist — it's only in play at
+tables that have explicitly opted in (as the user's apparently has). Worth a one-line note in
+the card's `rules_text` or a short disclaimer if this ships, so it's not mistaken for a
+standard-legal Commander card.
+
+Shaped differently from every other card here: one loyalty ability with **four die-roll
+branches**, only one of which (4 or 5) has real "annoying math" (damage scales with current
+loyalty, which the player is simultaneously spending down via the same activation — easy to
+get the order of operations wrong live at the table: the damage amount is loyalty *before* the
+[−2], not after). The other three branches (token creation, graveyard return, bonus
+activations) are just loyalty bookkeeping, not calculator-worthy on their own.
+
+**Proposed fields**: `current_loyalty` (number, default 5, setup — ticks up/down turn to turn
+same as any planeswalker), `roll_result` (select: `1-2`, `3`, `4-5`, `6` — the physical die
+roll already happened, so this just tells compute() which branch resolved).
+**Proposed outputs**: `damage_dealt` (loyalty before the −2, only when `roll_result` is `4-5`;
+0 otherwise), `loyalty_after` (loyalty after applying the branch's own loyalty change:
++2 / −1 / −2 / +1 respectively, clamped at 0 same as any planeswalker dying to 0 loyalty).
+**Open question**: whether "you may activate two more times this turn" (the 6 result) is worth
+modeling as a repeat-roll loop in the UI, or left as a note the player handles by pressing the
+button again — leaning toward the latter (keeps the card a single loyalty-ability calculator,
+not a mini state machine) but not decided.
+
 ## Suggested priority
 
-Storm count (Grapeshot) and Craterhoof Behemoth are the strongest next picks — both are very
-well-known and each exercises the pattern cleanly. Scute Swarm is a good pick after that
-specifically because its math shape (threshold-gated simulation) is genuinely different from
-the closed-form/single-formula cards above it.
+Storm count (Grapeshot) is next up, once the open design questions in its section above are
+resolved. Scute Swarm is a good pick after that specifically because its math shape
+(threshold-gated simulation) is genuinely different from the closed-form/single-formula cards
+above it.

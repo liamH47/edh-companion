@@ -11,6 +11,16 @@ class FieldKind(StrEnum):
     BOOLEAN = "boolean"
     SELECT = "select"
     COUNTER = "counter"
+    # An *ordered* list of `options` values, e.g. Comet's die rolls. Distinct from a
+    # set of per-outcome counters because order changes the answer: Comet's 4-5 branch
+    # deals damage equal to his loyalty at that moment, so an earlier +2 roll makes a
+    # later damage roll bigger. `options` holds the allowed entries and `max` caps the
+    # list's length -- no extra FieldSpec attributes needed.
+    SEQUENCE = "sequence"
+
+
+# Kinds whose allowed values come from `options`, and so can't be declared without them.
+_OPTION_KINDS = frozenset({FieldKind.SELECT, FieldKind.SEQUENCE})
 
 
 class OutputKind(StrEnum):
@@ -59,11 +69,19 @@ class FieldSpec(BaseModel):
     action_label: str | None = None
     # See ActionGuard. Ignored for non-counter kinds.
     action_disabled_when: ActionGuard | None = None
+    # Marks a field as one-time board-state setup (answered once, rarely revisited) rather
+    # than something clicked repeatedly during play. Setup fields render inside a collapsible
+    # section the player can tuck away once answered, keeping the fields they actually
+    # interact with all turn (counters, action buttons) visible without scrolling on mobile.
+    setup: bool = False
+    # Short form of `label` for space-constrained UI (a setup summary chip). Falls back
+    # to `label` when unset -- optional so existing cards don't need to declare it.
+    short_label: str | None = None
 
     @model_validator(mode="after")
-    def _check_select_has_options(self) -> "FieldSpec":
-        if self.kind is FieldKind.SELECT and not self.options:
-            raise ValueError(f"field {self.name!r} is kind=select but declares no options")
+    def _check_option_kinds_have_options(self) -> "FieldSpec":
+        if self.kind in _OPTION_KINDS and not self.options:
+            raise ValueError(f"field {self.name!r} is kind={self.kind} but declares no options")
         return self
 
 
@@ -71,6 +89,21 @@ class OutputSpec(BaseModel):
     name: str
     label: str
     kind: OutputKind = OutputKind.NUMBER
+    # Short form of `label` for space-constrained UI (a stat tile). Falls back to
+    # `label` when unset.
+    short_label: str | None = None
+    # Marks this as the card's headline result, e.g. "damage available" for Aetherflux --
+    # rendered as the hero number instead of an equal-weight tile. At most one per card.
+    primary: bool = False
+
+
+class AlertSpec(BaseModel):
+    """Names a boolean compute() output that should drive a banner instead of another
+    stat tile -- e.g. Aetherflux's `game_lost`. Frontend-only concern; compute() just
+    returns the named boolean like any other output."""
+
+    output: str
+    message: str
 
 
 class CardMetadata(BaseModel):
@@ -79,3 +112,11 @@ class CardMetadata(BaseModel):
     rules_text: str
     fields: list[FieldSpec]
     outputs: list[OutputSpec]
+    alert: AlertSpec | None = None
+
+    @model_validator(mode="after")
+    def _check_at_most_one_primary_output(self) -> "CardMetadata":
+        primary_names = [output.name for output in self.outputs if output.primary]
+        if len(primary_names) > 1:
+            raise ValueError(f"card {self.id!r} declares multiple primary outputs: {primary_names}")
+        return self

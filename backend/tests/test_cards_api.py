@@ -6,6 +6,118 @@ def test_get_cards_includes_aetherflux_reservoir(client: TestClient) -> None:
     assert response.status_code == 200
     card_ids = {card["id"] for card in response.json()}
     assert "aetherflux-reservoir" in card_ids
+    assert "craterhoof-behemoth" in card_ids
+    assert "brain-freeze" in card_ids
+    assert "comet-stellar-pup" in card_ids
+    assert "ob-nixilis-the-fallen" in card_ids
+
+
+def test_get_comet_metadata_describes_its_roll_sequence_field(client: TestClient) -> None:
+    response = client.get("/api/cards/comet-stellar-pup")
+    assert response.status_code == 200
+    body = response.json()
+    fields_by_name = {field["name"]: field for field in body["fields"]}
+    rolls = fields_by_name["rolls"]
+    assert rolls["kind"] == "sequence"
+    assert rolls["default"] == []
+    assert [option["value"] for option in rolls["options"]] == ["1-2", "3", "4-5", "6"]
+    # The roll buttons switch off once he's out of activations for the turn.
+    assert rolls["action_disabled_when"] == {"output": "activations_remaining", "less_than": 1}
+
+
+def test_calculate_endpoint_walks_a_comet_roll_sequence_in_order(client: TestClient) -> None:
+    response = client.post(
+        "/api/cards/comet-stellar-pup/calculate",
+        json={"inputs": {"starting_loyalty": 5, "rolls": ["1-2", "4-5"]}},
+    )
+    assert response.status_code == 200
+    outputs = response.json()["outputs"]
+    # +2 first, so the damage roll deals 7 rather than the 5 it would deal alone.
+    assert outputs["damage_this_activation"] == 7
+    assert outputs["loyalty"] == 5
+
+
+def test_calculate_endpoint_rejects_a_roll_outside_the_declared_options(
+    client: TestClient,
+) -> None:
+    response = client.post(
+        "/api/cards/comet-stellar-pup/calculate",
+        json={"inputs": {"starting_loyalty": 5, "rolls": ["7"]}},
+    )
+    assert response.status_code == 422
+
+
+def test_calculate_endpoint_applies_storm_copies_for_brain_freeze(client: TestClient) -> None:
+    response = client.post(
+        "/api/cards/brain-freeze/calculate",
+        json={"inputs": {"storm_count": 4, "target_library_size": 99}},
+    )
+    assert response.status_code == 200
+    assert response.json() == {
+        "outputs": {
+            "copies_from_storm": 4,
+            "total_copies": 5,
+            "cards_milled": 15,
+            "library_after": 84,
+            "mills_out": False,
+        }
+    }
+
+
+def test_calculate_endpoint_grows_ob_nixilis_per_landfall_trigger(client: TestClient) -> None:
+    response = client.post(
+        "/api/cards/ob-nixilis-the-fallen/calculate",
+        json={"inputs": {"existing_counters": 0, "triggers_per_land": 1, "lands_this_turn": 2}},
+    )
+    assert response.status_code == 200
+    outputs = response.json()["outputs"]
+    assert outputs["power"] == 9
+    assert outputs["life_drained"] == 6
+
+
+def test_get_craterhoof_behemoth_metadata_gates_the_second_trigger_field(
+    client: TestClient,
+) -> None:
+    response = client.get("/api/cards/craterhoof-behemoth")
+    assert response.status_code == 200
+    body = response.json()
+    fields_by_name = {field["name"]: field for field in body["fields"]}
+    assert fields_by_name["additional_triggers"]["action_label"] == "Additional Trigger"
+    assert fields_by_name["trigger_2_creature_count"]["visible_if"] == {
+        "field": "additional_triggers",
+        "equals": 1,
+    }
+    # Whether a second trigger happens is learned mid-turn, not one-time board setup --
+    # both fields stay live rather than tucked into the Setup section.
+    assert fields_by_name["additional_triggers"]["setup"] is False
+    assert fields_by_name["trigger_2_creature_count"]["setup"] is False
+    assert fields_by_name["total_power_before_triggers"]["setup"] is True
+
+    outputs_by_name = {output["name"]: output for output in body["outputs"]}
+    assert outputs_by_name["total_power_after_triggers"]["primary"] is True
+    assert outputs_by_name["power_after_trigger_1"]["primary"] is False
+
+
+def test_calculate_endpoint_applies_both_craterhoof_triggers(client: TestClient) -> None:
+    response = client.post(
+        "/api/cards/craterhoof-behemoth/calculate",
+        json={
+            "inputs": {
+                "total_power_before_triggers": 8,
+                "trigger_1_creature_count": 4,
+                "trigger_2_creature_count": 6,
+            }
+        },
+    )
+    assert response.status_code == 200
+    assert response.json() == {
+        "outputs": {
+            "power_bonus_trigger_1": 4,
+            "power_after_trigger_1": 24,
+            "power_bonus_trigger_2": 6,
+            "total_power_after_triggers": 60,
+        }
+    }
 
 
 def test_get_card_metadata_returns_full_schema(client: TestClient) -> None:
@@ -28,6 +140,13 @@ def test_get_card_metadata_returns_full_schema(client: TestClient) -> None:
         "output": "current_life",
         "less_than": 50,
     }
+    assert fields_by_name["starting_life"]["setup"] is True
+    assert fields_by_name["spells_cast_this_turn"]["setup"] is False
+
+    outputs_by_name = {output["name"]: output for output in body["outputs"]}
+    assert outputs_by_name["damage_available"]["primary"] is True
+    assert outputs_by_name["current_life"]["primary"] is False
+    assert body["alert"] == {"output": "game_lost", "message": "Oops, looks like you lose now"}
 
 
 def test_get_card_metadata_returns_404_for_unknown_card_id(client: TestClient) -> None:
@@ -58,6 +177,7 @@ def test_calculate_endpoint_computes_life_for_reservoir_in_play_since_turn_start
             "possible_activations": 1,
             "damage_available": 50,
             "spells_until_next_activation": 7,
+            "game_lost": False,
         }
     }
 
@@ -80,6 +200,7 @@ def test_calculate_endpoint_applies_field_defaults_for_omitted_inputs(client: Te
             "possible_activations": 0,
             "damage_available": 0,
             "spells_until_next_activation": 3,
+            "game_lost": False,
         }
     }
 

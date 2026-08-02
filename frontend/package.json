@@ -4,10 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "predev": "npm run tokens:build",
     "dev": "vite",
+    "prebuild": "npm run tokens:build",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "tokens:build": "node scripts/gen-tokens.mjs",
+    "tokens:check": "node scripts/gen-tokens.mjs --check"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",

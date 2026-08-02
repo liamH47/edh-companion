@@ -15,7 +15,7 @@ export function ThemeToggle() {
       type="button"
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-      className="rounded-full border border-slate-300 p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+      className="min-h-12 min-w-12 rounded-full border border-border text-text-muted transition-colors hover:bg-surface-raised hover:text-text"
     >
       {isDark ? (
         <svg
@@ -26,7 +26,7 @@ export function ThemeToggle() {
           strokeWidth={2}
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="h-5 w-5"
+          className="mx-auto h-5 w-5"
           aria-hidden="true"
         >
           <circle cx="12" cy="12" r="4" />
@@ -37,7 +37,7 @@ export function ThemeToggle() {
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"
-          className="h-5 w-5"
+          className="mx-auto h-5 w-5"
           aria-hidden="true"
         >
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" />

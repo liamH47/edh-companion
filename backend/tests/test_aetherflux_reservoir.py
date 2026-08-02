@@ -141,3 +141,21 @@ def test_compute_clamps_activations_and_spell_projection_when_life_is_negative()
     assert result["damage_available"] == 0
     # Projected from an effective (clamped) life of 0, same as the from-zero case.
     assert result["spells_until_next_activation"] == 10
+
+
+def test_compute_flags_game_lost_when_paying_the_activation_cost_hits_exactly_zero_life() -> None:
+    result = compute(_inputs(starting_life=50, activations_used=1))
+    assert result["current_life"] == 0
+    assert result["game_lost"] is True
+
+
+def test_compute_flags_game_lost_when_current_life_goes_negative() -> None:
+    result = compute(_inputs(starting_life=40, activations_used=1))
+    assert result["current_life"] == -10
+    assert result["game_lost"] is True
+
+
+def test_compute_does_not_flag_game_lost_while_life_remains_positive() -> None:
+    result = compute(_inputs(starting_life=50))
+    assert result["current_life"] == 50
+    assert result["game_lost"] is False

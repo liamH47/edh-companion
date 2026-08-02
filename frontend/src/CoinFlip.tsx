@@ -1,8 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
+import { StatTile } from './ui/StatTile'
 import { flipCoin, type CoinSide } from './coin'
+import { prefersReducedMotion } from './core/motion'
+import { motion } from './theme/tokens'
 import { playLoseSound, playWinSound } from './sound'
 import { SoundToggle } from './SoundToggle'
+import { Button } from './ui/Button'
+import { Surface } from './ui/Surface'
+import { Text } from './ui/Text'
 
 const SPIN_TURNS = 4
 const FLIP_DURATION_MS = 900
@@ -12,10 +18,6 @@ const REDUCED_FLIP_DURATION_MS = 150
 // (by anyone) until end of turn. Zndrsplt, Eye of Wisdom (1/4) draws a card on the same
 // trigger, so "wins" below doubles as "cards drawn" -- no separate counter needed.
 const OKAUN_BASE_POWER = 3
-
-function prefersReducedMotion(): boolean {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
-}
 
 /** Smallest forward rotation (in whole extra spins) that lands on the given side. */
 function rotationFor(currentRotation: number, outcome: CoinSide): number {
@@ -67,15 +69,6 @@ interface FlipResult {
   won: boolean
 }
 
-function StatBox({ value, label }: { value: number | string; label: string }) {
-  return (
-    <div className="rounded-lg bg-slate-50 p-2 text-center dark:bg-slate-900/60">
-      <div className="text-lg font-bold text-slate-900 dark:text-slate-100">{value}</div>
-      <div className="text-xs text-slate-500 dark:text-slate-400">{label}</div>
-    </div>
-  )
-}
-
 export function CoinFlip() {
   const [rotation, setRotation] = useState(0)
   const [isFlipping, setIsFlipping] = useState(false)
@@ -116,28 +109,36 @@ export function CoinFlip() {
   return (
     <section className="flex flex-col items-center gap-4 py-4">
       <div className="flex w-full max-w-xs items-center justify-between gap-4">
-        <p className="text-sm text-slate-600 dark:text-slate-400">
+        <Text variant="body" color="muted">
           Heads: Krark&apos;s face. Tails: Krark&apos;s thumb.
-        </p>
+        </Text>
         <SoundToggle />
       </div>
 
-      <div className="w-full max-w-xs rounded-xl bg-blue-50 p-3 text-center dark:bg-blue-950/40">
-        <div className="text-xs font-medium text-blue-700 dark:text-blue-300">
+      <Surface level="raised" radius="lg" className="w-full max-w-xs text-center">
+        <Text as="div" variant="label" color="accent">
           Okaun&apos;s power/toughness
-        </div>
-        <div className="text-3xl font-bold text-blue-900 dark:text-blue-100">
+        </Text>
+        <Text as="div" variant="statTile" color="accent" className="text-3xl">
           {okaunPower}/{okaunPower}
-        </div>
-        <div className="mt-1 text-xs text-blue-700/80 dark:text-blue-300/80">
+        </Text>
+        <Text as="div" variant="body" color="accent" className="mt-1 opacity-80">
           Zndrsplt draws a card on every win, too
-        </div>
-      </div>
+        </Text>
+      </Surface>
 
-      <div className="grid w-full max-w-xs grid-cols-3 gap-2">
-        <StatBox value={wins} label="Wins" />
-        <StatBox value={losses} label="Losses" />
-        <StatBox value={wins + losses} label="Total" />
+      {/* Flex, not grid: portability-rules.md bans CSS grid outright, since React
+          Native has no equivalent. Equal thirds come from flex-1 on each wrapper. */}
+      <div className="flex w-full max-w-xs gap-2">
+        <div className="flex-1">
+          <StatTile value={wins} label="Wins" />
+        </div>
+        <div className="flex-1">
+          <StatTile value={losses} label="Losses" />
+        </div>
+        <div className="flex-1">
+          <StatTile value={wins + losses} label="Total" />
+        </div>
       </div>
 
       <div style={{ perspective: '800px' }}>
@@ -146,7 +147,7 @@ export function CoinFlip() {
           style={{
             transformStyle: 'preserve-3d',
             transform: `rotateY(${rotation}deg)`,
-            transition: `transform ${durationMs}ms cubic-bezier(0.22, 1, 0.36, 1)`,
+            transition: `transform ${durationMs}ms ${motion.easing.standard}`,
           }}
         >
           <div className="absolute inset-0" style={{ backfaceVisibility: 'hidden' }}>
@@ -162,50 +163,30 @@ export function CoinFlip() {
       </div>
 
       <div className="flex w-full max-w-xs gap-3">
-        <button
-          type="button"
-          onClick={() => handleCall('heads')}
-          disabled={isFlipping}
-          className="flex-1 rounded-full bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500 dark:disabled:bg-slate-700 dark:disabled:text-slate-400"
-        >
+        <Button onClick={() => handleCall('heads')} disabled={isFlipping} fullWidth>
           Call Heads
-        </button>
-        <button
-          type="button"
-          onClick={() => handleCall('tails')}
-          disabled={isFlipping}
-          className="flex-1 rounded-full bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500 dark:disabled:bg-slate-700 dark:disabled:text-slate-400"
-        >
+        </Button>
+        <Button onClick={() => handleCall('tails')} disabled={isFlipping} fullWidth>
           Call Tails
-        </button>
+        </Button>
       </div>
 
       <div aria-live="polite" className="h-10 text-center">
         {lastResult && (
           <>
-            <p className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+            <Text as="p" variant="bodyStrong">
               {lastResult.side === 'heads' ? 'Heads!' : 'Tails!'}
-            </p>
-            <p
-              className={
-                lastResult.won
-                  ? 'text-sm font-medium text-emerald-600 dark:text-emerald-400'
-                  : 'text-sm font-medium text-slate-500 dark:text-slate-400'
-              }
-            >
+            </Text>
+            <Text as="p" variant="body" color={lastResult.won ? 'accent' : 'muted'}>
               Called {lastResult.call} — {lastResult.won ? 'Win!' : 'Loss'}
-            </p>
+            </Text>
           </>
         )}
       </div>
 
-      <button
-        type="button"
-        onClick={handleReset}
-        className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
-      >
+      <Button variant="secondary" onClick={handleReset}>
         New Turn
-      </button>
+      </Button>
     </section>
   )
 }

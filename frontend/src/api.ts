@@ -20,10 +20,12 @@ export function getCard(cardId: string): Promise<CardMetadata> {
 export function calculateCard(
   cardId: string,
   inputs: FieldValues,
+  signal?: AbortSignal,
 ): Promise<{ outputs: OutputValues }> {
   return fetchJson(`/api/cards/${cardId}/calculate`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ inputs }),
+    signal,
   })
 }
