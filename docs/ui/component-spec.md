@@ -148,6 +148,30 @@ Behavior:
 RN notes: this is the one primitive with a genuinely different RN implementation (a native
 `Modal`/bottom-sheet library), not a mechanical swap — budget real time for it in a port.
 
+### TextField
+
+The only text-entry primitive — entrant names, search. A `<label>` wraps the input rather
+than pointing at it by id, so the association needs no generated id and tapping the label
+focuses the field.
+
+| Prop | Type | Default |
+|---|---|---|
+| `value` / `onChange` | `string` / `(value: string) => void` | — |
+| `label` | `string` | — |
+| `hideLabel` | `boolean` | `false` — keeps the label for screen readers only |
+| `placeholder` | `string \| undefined` | — |
+| `type` | `'text' \| 'search'` | `'text'` |
+| `leading` | `ReactNode` | — rendered inside the field, e.g. a `SearchIcon` |
+| `className` | `string` | `''` |
+
+RN notes: becomes `TextInput`; `leading` becomes a sibling inside the wrapping `View`.
+
+### StatTile
+
+One value-over-label tile. Lives in `src/ui/` rather than `src/cards/` because three
+features use it (card stat strip, Coin Flip counters, and anything else needing a small
+number). Props: `label`, `value` (`number | string`), `pending` (dims without blanking).
+
 ### Icon
 
 Base `<svg>` shell (20px, stroke-based, `currentColor`, `aria-hidden`) plus five concrete icons

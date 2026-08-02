@@ -118,6 +118,29 @@ describe('App', () => {
     expect(screen.queryByRole('button', { name: 'Call Heads' })).not.toBeInTheDocument()
   })
 
+  it('opens the pairings tab and keeps the tab bar', async () => {
+    const user = userEvent.setup()
+    vi.mocked(api.listCards).mockResolvedValue([cardA])
+    render(<App />)
+
+    await user.click(await screen.findByRole('button', { name: 'Pairings' }))
+    expect(screen.getByRole('heading', { name: 'New tournament' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Cards' })).toBeInTheDocument()
+  })
+
+  it('runs the pairings tab even when the card API is down', async () => {
+    // The whole point of keeping Swiss logic client-side: a backend outage must not
+    // take the tab you need at the table down with it.
+    const user = userEvent.setup()
+    vi.mocked(api.listCards).mockRejectedValue(new Error('network down'))
+    render(<App />)
+    await screen.findByText(/Failed to load cards/)
+
+    await user.click(screen.getByRole('button', { name: 'Pairings' }))
+    expect(screen.getByRole('heading', { name: 'New tournament' })).toBeInTheDocument()
+    expect(screen.queryByText(/Failed to load cards/)).not.toBeInTheDocument()
+  })
+
   it('shows the tab bar on the coin flip screen', async () => {
     const user = userEvent.setup()
     vi.mocked(api.listCards).mockResolvedValue([cardA])

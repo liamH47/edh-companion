@@ -15,6 +15,10 @@ describe('routeToPath', () => {
   it('maps coin-flip to /coin-flip', () => {
     expect(routeToPath({ name: 'coin-flip' })).toBe('/coin-flip')
   })
+
+  it('maps swiss to /swiss', () => {
+    expect(routeToPath({ name: 'swiss' })).toBe('/swiss')
+  })
 })
 
 describe('pathToRoute', () => {
@@ -41,11 +45,16 @@ describe('pathToRoute', () => {
     expect(pathToRoute('/cards/')).toEqual({ name: 'card-picker' })
   })
 
+  it('maps /swiss to the swiss route', () => {
+    expect(pathToRoute('/swiss')).toEqual({ name: 'swiss' })
+  })
+
   it('round-trips every route through routeToPath', () => {
     const routes: Parameters<typeof routeToPath>[0][] = [
       { name: 'card-picker' },
       { name: 'card', cardId: 'craterhoof-behemoth' },
       { name: 'coin-flip' },
+      { name: 'swiss' },
     ]
     for (const route of routes) {
       expect(pathToRoute(routeToPath(route))).toEqual(route)

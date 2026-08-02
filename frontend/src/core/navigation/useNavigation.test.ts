@@ -52,6 +52,19 @@ describe('useNavigation', () => {
     expect(window.location.pathname).toBe('/coin-flip')
   })
 
+  it('starts at swiss when the URL is /swiss', () => {
+    window.history.pushState(null, '', '/swiss')
+    const { result } = renderHook(() => useNavigation())
+    expect(result.current.route).toEqual({ name: 'swiss' })
+  })
+
+  it('goToSwiss updates the route and pushes /swiss', () => {
+    const { result } = renderHook(() => useNavigation())
+    act(() => result.current.goToSwiss())
+    expect(result.current.route).toEqual({ name: 'swiss' })
+    expect(window.location.pathname).toBe('/swiss')
+  })
+
   it('goToCardPicker updates the route and pushes /', () => {
     const { result } = renderHook(() => useNavigation())
     act(() => result.current.goToCard('aetherflux-reservoir'))
