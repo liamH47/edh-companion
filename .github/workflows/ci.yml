@@ -55,9 +55,6 @@ jobs:
   frontend:
     name: Frontend (tsc, oxlint, vitest)
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend
     steps:
       - uses: actions/checkout@v7
 
@@ -65,8 +62,9 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: npm
-          cache-dependency-path: frontend/package-lock.json
+          cache-dependency-path: package-lock.json
 
+      # One install for the whole workspace; npm links @mtg/core into apps/web.
       - name: Install dependencies
         run: npm ci
 
@@ -74,17 +72,22 @@ jobs:
       # predev/prebuild, but nothing stops a commit that edits tokens.ts alone -- this
       # catches that before the stale CSS ships.
       - name: Check design tokens are current
-        run: npm run tokens:check
+        run: npm run tokens:check -w @mtg/web
 
       - name: Type check
-        run: npx tsc -b
+        run: npm run typecheck --workspaces --if-present
 
       - name: Lint
-        run: npx oxlint
+        run: npm run lint
 
-      # vite.config.ts sets 100% thresholds on lines/branches/functions/statements.
-      - name: Test
+      # Each package sets its own 100% thresholds on lines/branches/functions/statements.
+      - name: Test core
         run: npx vitest run --coverage
+        working-directory: packages/core
+
+      - name: Test web
+        run: npx vitest run --coverage
+        working-directory: apps/web
 
   docker-e2e:
     name: E2E (Docker image)

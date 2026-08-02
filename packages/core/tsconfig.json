@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "es2023",
+    /* No "DOM". That is the enforcement: anything in this package that reaches for
+       `window`, `document` or `localStorage` fails to compile, which is what keeps it
+       importable from React Native. The platform shims (storage, motion, haptics,
+       sound) declare the minimum they need instead. */
+    "lib": ["ES2023"],
+    "module": "esnext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src"]
+}

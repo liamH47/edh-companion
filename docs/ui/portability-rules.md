@@ -1,21 +1,46 @@
 # Portability rules
 
 The strategy: **all logic and all tokens are platform-free; only leaf views are web-shaped.**
-This is the checklist for every PR that touches `frontend/src/`.
+
+## The boundary is enforced, not just documented
+
+Platform-free code lives in the `@mtg/core` package, whose tsconfig **omits `lib: ["DOM"]`**.
+So `window`, `document`, `localStorage` and `navigator` do not compile there — reaching for
+one is a build error, not a code-review note.
+
+What core *is* allowed is declared by hand in `packages/core/src/runtime.d.ts`: the globals
+every target runtime genuinely has (`fetch`, `AbortController`, `setTimeout`,
+`structuredClone`). That file is the line between "universally available" and "web-shaped",
+written down and mechanical.
+
+Anything genuinely platform-specific goes behind a **seam** — a settable backend with an
+inert default, which the host app fills in at startup:
+
+| Seam | Web supplies | React Native will supply |
+|---|---|---|
+| `setStorageBackend` | `localStorage` | MMKV (sync, so hooks can still read during render) |
+| `setReducedMotionSource` | `matchMedia` | a cached `AccessibilityInfo` value |
+| `setHapticsBackend` | `navigator.vibrate` | `expo-haptics` |
+| `setSoundBackend` | `new Audio(url)` | `expo-audio` with bundled assets |
+| `setComputeBackend` | the card API | the same, or local compute |
+
+They are settable module-level singletons rather than React context, because the callers
+include plain module-level functions a context cannot reach. `apps/web/src/platform.ts` is
+the whole web side; the native equivalent will be the same shape.
 
 ## Layer boundaries
 
-| Layer | Directory | React Native port cost |
+| Layer | Location | React Native port cost |
 |---|---|---|
-| Card logic, hooks, storage, api, tokens | `src/core/`, `src/theme/tokens.ts` | Zero — copied verbatim |
-| Domain components (`HeroStat`, `SetupSheet`, ...) | `src/cards/` | Prop shapes identical; swap the primitives they import |
-| Primitives (`Surface`, `Text`, `Button`, ...) | `src/ui/` | Rewritten (~10 small files) |
-| Platform shims (`*.web.ts`) | `src/core/platform/`, `src/core/navigation/history.web.ts` | Rewritten (a handful of files) |
+| Card logic, hooks, storage, tokens | `packages/core/` | Zero — imported unchanged |
+| Domain components (`HeroStat`, `SetupSheet`, ...) | `apps/web/src/cards/` | Prop shapes identical; swap the primitives they import |
+| Primitives (`Surface`, `Text`, `Button`, ...) | `apps/web/src/ui/` | Rewritten (~11 small files) |
+| App shell, navigation, entry point | `apps/web/src/` | Rewritten against Expo Router |
 
-If you're writing logic (a hook, a pure function, a data transform), it belongs in `src/core/`
-and must not import React DOM, `window`/`document` unconditionally, or any `src/ui` component.
-If you're writing a leaf view, it belongs in `src/ui/` or `src/cards/` and should do layout only
-— push calculation into `src/core/`.
+If you're writing logic (a hook, a pure function, a data transform), it belongs in
+`packages/core` — and the compiler will tell you if it isn't platform-free. If you're writing
+a leaf view, it belongs in `apps/web/src/ui/` or `apps/web/src/cards/` and should do layout
+only.
 
 ## Banned in `src/ui/` and `src/cards/`
 

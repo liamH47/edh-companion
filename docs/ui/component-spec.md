@@ -1,10 +1,10 @@
 # Component spec
 
 Each section is self-contained — hand a single section to a model building that one component.
-Every component lives at `frontend/src/ui/<Name>.tsx` (primitives) or
-`frontend/src/cards/<Name>.tsx` (domain), with a co-located `<Name>.test.tsx` covering every
+Every component lives at `apps/web/src/ui/<Name>.tsx` (primitives) or
+`apps/web/src/cards/<Name>.tsx` (domain), with a co-located `<Name>.test.tsx` covering every
 prop value and branch (this repo's Vitest config enforces 100% line/branch/function coverage —
-see `frontend/vite.config.ts`).
+see `apps/web/vite.config.ts`).
 
 Read `design-tokens.md` and `portability-rules.md` first. Every value below (color, spacing,
 radius, type, hit target, motion) refers to a token from `design-tokens.md`, not a raw number.

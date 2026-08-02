@@ -1,11 +1,18 @@
 # syntax=docker/dockerfile:1
 
 FROM node:24-alpine AS frontend-build
-WORKDIR /frontend
-COPY frontend/package.json frontend/package-lock.json ./
-RUN npm ci
-COPY frontend/ ./
-RUN npm run build
+WORKDIR /repo
+# Manifests first, so a dependency-free source change reuses the install layer.
+COPY package.json package-lock.json ./
+COPY packages/core/package.json packages/core/
+COPY apps/web/package.json apps/web/
+# Scoped to the two workspaces the web build needs. A bare `npm ci` would also install
+# apps/mobile's dependencies once that exists, dragging the whole React Native
+# toolchain into an image that never runs it.
+RUN npm ci -w @mtg/web -w @mtg/core --include-workspace-root
+COPY packages/core packages/core
+COPY apps/web apps/web
+RUN npm run build -w @mtg/web
 
 FROM python:3.13-slim AS backend-build
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /usr/local/bin/
@@ -19,7 +26,7 @@ RUN groupadd --system app && useradd --system --gid app --home /app --shell /usr
 WORKDIR /app
 COPY --from=backend-build --chown=app:app /app/.venv ./.venv
 COPY --from=backend-build --chown=app:app /app/app ./app
-COPY --from=frontend-build --chown=app:app /frontend/dist ./app/static
+COPY --from=frontend-build --chown=app:app /repo/apps/web/dist ./app/static
 ENV PATH="/app/.venv/bin:$PATH" \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \

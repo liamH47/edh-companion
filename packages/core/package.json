@@ -1,0 +1,32 @@
+{
+  "name": "@mtg/core",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Platform-free logic and design tokens. No DOM, no react-dom, no react-native -- so a React Native app imports this package unchanged.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./swiss": "./src/swiss/index.ts",
+    "./theme/tokens": "./src/theme/tokens.ts",
+    "./swiss/fixtures": "./src/swiss/fixtures.ts",
+    "./api": "./src/api.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.2",
+    "@types/react": "^19.2.17",
+    "@vitest/coverage-v8": "^4.1.10",
+    "jsdom": "^30.0.1",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "typescript": "~6.0.2",
+    "vitest": "^4.1.10"
+  }
+}

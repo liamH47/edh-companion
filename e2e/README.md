@@ -39,8 +39,8 @@ The container just runs FastAPI with the built frontend copied to `app/static`, 
 can reproduce that path directly:
 
 ```
-cd frontend && npm run build && cd ..
-rm -rf backend/app/static && cp -r frontend/dist backend/app/static
+npm run build
+rm -rf backend/app/static && cp -r apps/web/dist backend/app/static
 cd backend && uv run python -m uvicorn app.main:app --port 8080
 ```
 
