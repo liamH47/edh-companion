@@ -1,158 +1,121 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { setComputeBackend } from '@mtg/core'
-import { listCards } from '@mtg/core/api'
+import { CARDS, resetComputeBackend, setComputeBackend } from '@mtg/core'
 import App from './App'
 
-// The card list is the app's only network call. Compute goes through the seam.
-vi.mock('@mtg/core/api', () => ({ listCards: vi.fn() }))
-
+/**
+ * The app no longer fetches anything: card metadata is bundled and compute is local.
+ * The loading and error states this file used to cover went with the fetch, and these
+ * now run against the real generated metadata rather than stand-in cards.
+ */
 const compute = vi.fn()
-import type { CardMetadata } from '@mtg/core'
-
-
-const cardA: CardMetadata = {
-  id: 'card-a',
-  name: 'Card A',
-  rules_text: 'Rules A',
-  fields: [],
-  outputs: [{ name: 'total', label: 'Total', kind: 'number', short_label: null, primary: true }],
-  alert: null,
-}
-
-const cardB: CardMetadata = {
-  id: 'card-b',
-  name: 'Card B',
-  rules_text: 'Rules B',
-  fields: [],
-  outputs: [{ name: 'total', label: 'Total', kind: 'number', short_label: null, primary: true }],
-  alert: null,
-}
 
 beforeEach(() => {
   window.history.pushState(null, '', '/')
-  setComputeBackend(compute)
+  localStorage.clear()
   compute.mockReset()
-  compute.mockResolvedValue({ outputs: { total: 0 } })
+  compute.mockReturnValue({ total: 0 })
+  setComputeBackend(compute)
 })
 
 afterEach(() => {
+  resetComputeBackend()
   localStorage.clear()
   window.history.pushState(null, '', '/')
 })
 
 describe('App', () => {
-  it('shows a loading state before the card list resolves', () => {
-    vi.mocked(listCards).mockReturnValue(new Promise(() => {}))
+  it('lands on the card picker, listing every card the app ships with', () => {
     render(<App />)
-    expect(screen.getByText('Loading…')).toBeInTheDocument()
+
+    for (const card of CARDS) {
+      expect(screen.getByRole('button', { name: card.name })).toBeInTheDocument()
+    }
   })
 
-  it('shows an error message when the card list fails to load', async () => {
-    vi.mocked(listCards).mockRejectedValue(new Error('network down'))
+  it('needs no network to show the card list', () => {
+    // The point of bundling the metadata: the Cards tab used to need a connection to
+    // display anything at all.
+    const fetchMock = vi.fn()
+    vi.stubGlobal('fetch', fetchMock)
+
     render(<App />)
-    expect(await screen.findByText(/Failed to load cards: network down/)).toBeInTheDocument()
+
+    expect(screen.getByRole('button', { name: 'Blood Artist' })).toBeInTheDocument()
+    expect(fetchMock).not.toHaveBeenCalled()
+    vi.unstubAllGlobals()
   })
 
-  it('stringifies a non-Error rejection when the card list fails to load', async () => {
-    vi.mocked(listCards).mockRejectedValue('network down')
-    render(<App />)
-    expect(await screen.findByText(/Failed to load cards: network down/)).toBeInTheDocument()
-  })
-
-  it('lands on the card picker by default, listing every card', async () => {
-    vi.mocked(listCards).mockResolvedValue([cardA, cardB])
-    render(<App />)
-    expect(await screen.findByRole('button', { name: 'Card A' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Card B' })).toBeInTheDocument()
-  })
-
-  it('opens a card from the picker and shows its screen, hiding the tab bar', async () => {
+  it('opens a card from the picker and hides the tab bar', async () => {
     const user = userEvent.setup()
-    vi.mocked(listCards).mockResolvedValue([cardA, cardB])
     render(<App />)
-    await user.click(await screen.findByRole('button', { name: 'Card A' }))
 
-    expect(await screen.findByRole('heading', { name: 'Card A' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Blood Artist' }))
+
+    expect(screen.getByRole('heading', { name: 'Blood Artist' })).toBeInTheDocument()
+    // The card screen owns the thumb zone, so the tab bar steps aside.
     expect(screen.queryByRole('button', { name: 'Cards' })).not.toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: 'Coin Flip' })).not.toBeInTheDocument()
   })
 
   it('returns to the picker via the card screen back button', async () => {
     const user = userEvent.setup()
-    vi.mocked(listCards).mockResolvedValue([cardA, cardB])
     render(<App />)
-    await user.click(await screen.findByRole('button', { name: 'Card A' }))
-    await screen.findByRole('heading', { name: 'Card A' })
 
+    await user.click(screen.getByRole('button', { name: 'Blood Artist' }))
     await user.click(screen.getByRole('button', { name: 'Back' }))
-    expect(await screen.findByRole('button', { name: 'Card A' })).toBeInTheDocument()
-    expect(await screen.findByRole('button', { name: 'Cards' })).toBeInTheDocument()
+
+    expect(screen.getByRole('searchbox', { name: 'Search cards' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Cards' })).toBeInTheDocument()
   })
 
   it('restores the most recently opened card directly on the next load', async () => {
-    vi.mocked(listCards).mockResolvedValue([cardA, cardB])
     const user = userEvent.setup()
-    const { unmount } = render(<App />)
-    await user.click(await screen.findByRole('button', { name: 'Card B' }))
-    await screen.findByRole('heading', { name: 'Card B' })
-    unmount()
+    const first = render(<App />)
+    await user.click(screen.getByRole('button', { name: 'Grapeshot' }))
+    first.unmount()
 
     window.history.pushState(null, '', '/')
     render(<App />)
-    expect(await screen.findByRole('heading', { name: 'Card B' })).toBeInTheDocument()
+
+    // One fewer tap at the table, which is the whole point of remembering.
+    expect(screen.getByRole('heading', { name: 'Grapeshot' })).toBeInTheDocument()
   })
 
-  it('falls back to the picker for a deep link to an unknown card id', async () => {
-    vi.mocked(listCards).mockResolvedValue([cardA, cardB])
-    window.history.pushState(null, '', '/cards/does-not-exist')
+  it('falls back to the picker for a card id that no longer exists', () => {
+    window.history.pushState(null, '', '/cards/not-a-real-card')
     render(<App />)
-    expect(await screen.findByRole('button', { name: 'Card A' })).toBeInTheDocument()
+
+    expect(screen.getByRole('searchbox', { name: 'Search cards' })).toBeInTheDocument()
   })
 
-  it('switches to the Coin Flip tab and back without losing the calculator', async () => {
+  it('opens the coin flip tab and keeps the tab bar', async () => {
     const user = userEvent.setup()
-    vi.mocked(listCards).mockResolvedValue([cardA])
     render(<App />)
 
-    await user.click(await screen.findByRole('button', { name: 'Coin Flip' }))
-    expect(screen.queryByRole('button', { name: 'Card A' })).not.toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Call Heads' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Coin Flip' }))
 
-    await user.click(screen.getByRole('button', { name: 'Cards' }))
-    expect(await screen.findByRole('button', { name: 'Card A' })).toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: 'Call Heads' })).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Call Heads' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Cards' })).toBeInTheDocument()
   })
 
   it('opens the pairings tab and keeps the tab bar', async () => {
     const user = userEvent.setup()
-    vi.mocked(listCards).mockResolvedValue([cardA])
     render(<App />)
 
-    await user.click(await screen.findByRole('button', { name: 'Pairings' }))
+    await user.click(screen.getByRole('button', { name: 'Pairings' }))
+
     expect(screen.getByRole('heading', { name: 'New tournament' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Cards' })).toBeInTheDocument()
   })
 
-  it('runs the pairings tab even when the card API is down', async () => {
-    // The whole point of keeping Swiss logic client-side: a backend outage must not
-    // take the tab you need at the table down with it.
+  it('switches to Coin Flip and back to the card picker', async () => {
     const user = userEvent.setup()
-    vi.mocked(listCards).mockRejectedValue(new Error('network down'))
     render(<App />)
-    await screen.findByText(/Failed to load cards/)
 
-    await user.click(screen.getByRole('button', { name: 'Pairings' }))
-    expect(screen.getByRole('heading', { name: 'New tournament' })).toBeInTheDocument()
-    expect(screen.queryByText(/Failed to load cards/)).not.toBeInTheDocument()
-  })
+    await user.click(screen.getByRole('button', { name: 'Coin Flip' }))
+    await user.click(screen.getByRole('button', { name: 'Cards' }))
 
-  it('shows the tab bar on the coin flip screen', async () => {
-    const user = userEvent.setup()
-    vi.mocked(listCards).mockResolvedValue([cardA])
-    render(<App />)
-    await user.click(await screen.findByRole('button', { name: 'Coin Flip' }))
-    await waitFor(() => expect(screen.getByRole('button', { name: 'Cards' })).toBeInTheDocument())
+    expect(screen.getByRole('searchbox', { name: 'Search cards' })).toBeInTheDocument()
   })
 })

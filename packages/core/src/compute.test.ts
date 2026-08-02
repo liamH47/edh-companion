@@ -1,4 +1,5 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { CARDS, findCard } from './cards/cards'
 import { computeCard, resetComputeBackend, setComputeBackend } from './compute'
 
 describe('compute backend', () => {
@@ -6,68 +7,62 @@ describe('compute backend', () => {
     resetComputeBackend()
   })
 
-  afterEach(() => {
+  it('computes locally by default, with no network at all', () => {
+    // The whole point: the Cards tab works with no connection, the same as Swiss and
+    // Coin Flip already did.
+    const fetchMock = vi.fn()
+    vi.stubGlobal('fetch', fetchMock)
+
+    const bloodArtist = findCard('blood-artist')!
+    const outputs = computeCard(bloodArtist, { creatures_died: 4, drain_effect_count: 3 })
+
+    expect(outputs).toEqual({ total_life_drained: 12 })
+    expect(fetchMock).not.toHaveBeenCalled()
     vi.unstubAllGlobals()
   })
 
-  it('posts to the server by default', async () => {
-    // The default matters: a host that registers nothing still computes, over the
-    // network, which is what the web did before compute became swappable. Stubbing
-    // fetch rather than the api module exercises the real request too.
-    const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
-      status: 200,
-      statusText: 'OK',
-      json: async () => ({ outputs: { total: 7 } }),
-    })
-    vi.stubGlobal('fetch', fetchMock)
-
-    await expect(computeCard('blood-artist', { creatures_died: 2 })).resolves.toEqual({
-      outputs: { total: 7 },
-    })
-    expect(fetchMock).toHaveBeenCalledWith(
-      '/api/cards/blood-artist/calculate',
-      expect.objectContaining({ method: 'POST' }),
-    )
+  it('applies field defaults for anything omitted', () => {
+    const bloodArtist = findCard('blood-artist')!
+    // drain_effect_count defaults to 1.
+    expect(computeCard(bloodArtist, { creatures_died: 4 })).toEqual({ total_life_drained: 4 })
   })
 
-  it('routes through a registered backend instead, with no request at all', async () => {
-    const fetchMock = vi.fn()
-    vi.stubGlobal('fetch', fetchMock)
-    const local = vi.fn().mockResolvedValue({ outputs: { total: 12 } })
+  it('throws for input the card rejects, so the caller can surface it', () => {
+    const bloodArtist = findCard('blood-artist')!
+    expect(() => computeCard(bloodArtist, { creatures_died: -1 })).toThrow()
+  })
+
+  it('routes through a registered backend instead', () => {
+    const local = vi.fn().mockReturnValue({ total_life_drained: 99 })
     setComputeBackend(local)
 
-    await expect(computeCard('grapeshot', { storm_count: 3 })).resolves.toEqual({
-      outputs: { total: 12 },
-    })
-    expect(local).toHaveBeenCalledWith('grapeshot', { storm_count: 3 }, undefined)
-    expect(fetchMock).not.toHaveBeenCalled()
+    const bloodArtist = findCard('blood-artist')!
+    expect(computeCard(bloodArtist, { creatures_died: 1 })).toEqual({ total_life_drained: 99 })
+    expect(local).toHaveBeenCalledWith(bloodArtist, { creatures_died: 1 })
   })
 
-  it('passes the abort signal through', async () => {
-    const local = vi.fn().mockResolvedValue({ outputs: {} })
-    setComputeBackend(local)
-    const controller = new AbortController()
-
-    await computeCard('scute-swarm', {}, controller.signal)
-
-    expect(local).toHaveBeenCalledWith('scute-swarm', {}, controller.signal)
-  })
-
-  it('goes back to the server when reset', async () => {
-    setComputeBackend(vi.fn().mockResolvedValue({ outputs: { total: 1 } }))
+  it('goes back to local compute when reset', () => {
+    setComputeBackend(vi.fn().mockReturnValue({ total_life_drained: 99 }))
     resetComputeBackend()
 
-    const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
-      status: 200,
-      statusText: 'OK',
-      json: async () => ({ outputs: {} }),
+    const bloodArtist = findCard('blood-artist')!
+    expect(computeCard(bloodArtist, { creatures_died: 2, drain_effect_count: 2 })).toEqual({
+      total_life_drained: 4,
     })
-    vi.stubGlobal('fetch', fetchMock)
+  })
+})
 
-    await computeCard('blood-artist', {})
+describe('bundled card metadata', () => {
+  it('carries every registered card', () => {
+    expect(CARDS.length).toBeGreaterThan(0)
+    expect(CARDS.map((card) => card.id)).toContain('scute-swarm')
+  })
 
-    expect(fetchMock).toHaveBeenCalled()
+  it('finds a card by id', () => {
+    expect(findCard('grapeshot')?.name).toBe('Grapeshot')
+  })
+
+  it('is undefined for an id no card uses', () => {
+    expect(findCard('not-a-card')).toBeUndefined()
   })
 })

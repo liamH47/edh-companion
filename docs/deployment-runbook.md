@@ -14,7 +14,13 @@ This has been verified end-to-end against a real deploy: the app is live and wor
 (`apps/web/dist`), a Python/uv stage installs backend dependencies, and a final slim Python
 runtime stage combines both, running `app.main:app` under `uvicorn` as a non-root user.
 FastAPI serves the API under `/api/*`, health checks at `/healthz`/`/readyz`, and the built
-frontend for everything else (see `backend/app/frontend.py`). Render injects a `PORT` env
+frontend for everything else (see `backend/app/frontend.py`).
+
+**The app itself no longer calls the API.** Card metadata is bundled and compute runs in
+the browser, so every tab works with no connection. The backend still serves `/api/*` as
+canonical data and, more importantly, remains the source of truth that
+`backend/tools/generate_parity_corpus.py` generates the TypeScript port's test corpus
+from — but a failure there degrades nothing a user can see. Render injects a `PORT` env
 var (default 10000) that the container's `CMD` reads at startup — see the comment in the
 Dockerfile if this ever needs changing.
 
