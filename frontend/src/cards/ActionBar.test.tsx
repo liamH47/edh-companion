@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { FieldSpec } from '../types'
 import { ActionBar } from './ActionBar'
 
@@ -16,6 +16,7 @@ function field(overrides: Partial<FieldSpec> & Pick<FieldSpec, 'name' | 'kind'>)
     default_source: null,
     action_label: null,
     action_disabled_when: null,
+    roll: null,
     setup: false,
     short_label: null,
     ...overrides,
@@ -292,5 +293,79 @@ describe('ActionBar', () => {
     )
     expect(screen.getByRole('button', { name: 'Do A' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Do B' })).toBeInTheDocument()
+  })
+})
+
+describe('ActionBar with a rolled sequence', () => {
+  // Hooks rather than inline useFakeTimers/useRealTimers: an assertion that throws
+  // mid-test would otherwise leave the clock faked for everything after it.
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  const rollsField = field({
+    name: 'rolls',
+    kind: 'sequence',
+    label: 'Rolls this turn',
+    options: [1, 2, 3, 4, 5, 6].map((face) => ({ value: String(face), label: String(face) })),
+    roll: { faces: 6, action_label: 'Roll the die' },
+    action_disabled_when: { output: 'activations_remaining', less_than: 1 },
+  })
+
+  function renderBar(overrides: Partial<Parameters<typeof ActionBar>[0]> = {}) {
+    const onFieldChange = vi.fn()
+    render(
+      <ActionBar
+        liveFields={[rollsField]}
+        values={{ rolls: [] }}
+        outputs={{ activations_remaining: 1 }}
+        onFieldChange={onFieldChange}
+        onNewTurn={vi.fn()}
+        rng={() => 0.5}
+        {...overrides}
+      />,
+    )
+    return { onFieldChange }
+  }
+
+  it('shows one roll button instead of one per face', () => {
+    renderBar()
+
+    expect(screen.getByRole('button', { name: 'Roll the die' })).toBeInTheDocument()
+    // Offering both a die and six "pick your result" buttons would invite reporting a
+    // roll the app never made.
+    expect(screen.queryByRole('button', { name: '4' })).not.toBeInTheDocument()
+  })
+
+  it('appends the rolled face to the log once the die lands', () => {
+    const { onFieldChange } = renderBar({ values: { rolls: ['2'] } })
+
+    fireEvent.click(screen.getByRole('button', { name: 'Roll the die' }))
+    expect(onFieldChange).not.toHaveBeenCalled()
+
+    act(() => {
+      vi.advanceTimersByTime(900)
+    })
+
+    expect(onFieldChange).toHaveBeenCalledWith('rolls', ['2', '4'])
+  })
+
+  it('disables the die once the activation guard bites', () => {
+    renderBar({ outputs: { activations_remaining: 0 } })
+
+    expect(screen.getByRole('button', { name: 'Roll the die' })).toBeDisabled()
+  })
+
+  it('disables the die at the sequence length cap', () => {
+    renderBar({
+      liveFields: [{ ...rollsField, max: 2 }],
+      values: { rolls: ['1', '2'] },
+    })
+
+    expect(screen.getByRole('button', { name: 'Roll the die' })).toBeDisabled()
   })
 })

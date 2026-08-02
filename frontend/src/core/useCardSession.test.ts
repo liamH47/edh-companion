@@ -29,6 +29,7 @@ function makeCard(overrides: Partial<CardMetadata> = {}): CardMetadata {
         default_source: null,
         action_label: null,
         action_disabled_when: null,
+        roll: null,
         setup: false,
         short_label: null,
       },
