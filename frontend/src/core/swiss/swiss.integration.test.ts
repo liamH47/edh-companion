@@ -31,16 +31,16 @@ import type { Match, MatchFormat, MatchResult, Rng, Tournament, TournamentMode }
 
 const SCORELINES: Record<MatchFormat, MatchResult[]> = {
   bo3: [
-    { aGameWins: 2, bGameWins: 0, gameDraws: 0 },
-    { aGameWins: 2, bGameWins: 1, gameDraws: 0 },
-    { aGameWins: 1, bGameWins: 1, gameDraws: 1 },
-    { aGameWins: 1, bGameWins: 2, gameDraws: 0 },
-    { aGameWins: 0, bGameWins: 2, gameDraws: 0 },
+    { gameWins: [2, 0], gameDraws: 0 },
+    { gameWins: [2, 1], gameDraws: 0 },
+    { gameWins: [1, 1], gameDraws: 1 },
+    { gameWins: [1, 2], gameDraws: 0 },
+    { gameWins: [0, 2], gameDraws: 0 },
   ],
   bo1: [
-    { aGameWins: 1, bGameWins: 0, gameDraws: 0 },
-    { aGameWins: 0, bGameWins: 0, gameDraws: 1 },
-    { aGameWins: 0, bGameWins: 1, gameDraws: 0 },
+    { gameWins: [1, 0], gameDraws: 0 },
+    { gameWins: [0, 0], gameDraws: 1 },
+    { gameWins: [0, 1], gameDraws: 0 },
   ],
 }
 
@@ -53,7 +53,7 @@ function seededDecider(rng: Rng, format: MatchFormat): Decider {
   return () => options[Math.floor(rng() * options.length)]
 }
 
-const alwaysAWins: Decider = () => ({ aGameWins: 2, bGameWins: 0, gameDraws: 0 })
+const alwaysAWins: Decider = () => ({ gameWins: [2, 0], gameDraws: 0 })
 
 interface RunOptions {
   entrantCount: number
@@ -204,7 +204,7 @@ describe('full events, swept across field sizes and seeds', () => {
     )
 
     for (const round of tournament.rounds) {
-      const byes = round.matches.filter((match) => match.bEntrantId === null)
+      const byes = round.matches.filter((match) => match.entrantIds.length === 1)
       expect(byes).toHaveLength(1)
       expect(byes[0].result).not.toBeNull()
     }
@@ -232,9 +232,9 @@ describe('drops mid-event', () => {
 
     // Dropping flips the field from 8 to 7, so later rounds need a bye.
     for (const round of tournament.rounds.slice(1)) {
-      const ids = round.matches.flatMap((m) => [m.aEntrantId, m.bEntrantId])
+      const ids = round.matches.flatMap((m) => [m.entrantIds[0], m.entrantIds[1]])
       expect(ids).not.toContain(dropped)
-      expect(round.matches.filter((m) => m.bEntrantId === null)).toHaveLength(1)
+      expect(round.matches.filter((m) => m.entrantIds.length === 1)).toHaveLength(1)
     }
 
     // Still ranked, because the games they played still happened.
@@ -255,8 +255,7 @@ describe('re-pairing after a corrected result', () => {
     // Correct round 1, then re-pair everything after it.
     const firstMatch = tournament.rounds[0].matches[0]
     tournament = reportResult(tournament, 1, firstMatch.id, {
-      aGameWins: 0,
-      bGameWins: 2,
+      gameWins: [0, 2],
       gameDraws: 0,
     })
     const outcome = repairRoundsFrom(tournament, 1, rng)
@@ -310,7 +309,7 @@ describe('swapping entrants between pairings', () => {
     const tournament = twoRoundEvent(8)
     const [first, second] = tournament.rounds[0].matches
 
-    const swapped = swapPairing(tournament, 1, first.aEntrantId, second.aEntrantId)
+    const swapped = swapPairing(tournament, 1, first.entrantIds[0], second.entrantIds[0])
 
     expect(checkAllInvariants(swapped)).toEqual([])
   })
@@ -320,12 +319,12 @@ describe('swapping entrants between pairings', () => {
     // already-reported state a bye is created in -- the UI disables reporting for a
     // bye, so an unreported one can never be completed and the round deadlocks.
     const tournament = twoRoundEvent(7)
-    const bye = tournament.rounds[0].matches.find((match) => match.bEntrantId === null)!
-    const opponent = tournament.rounds[0].matches.find((match) => match.bEntrantId !== null)!
+    const bye = tournament.rounds[0].matches.find((match) => match.entrantIds.length === 1)!
+    const opponent = tournament.rounds[0].matches.find((match) => match.entrantIds[1] !== null)!
 
-    const swapped = swapPairing(tournament, 1, bye.aEntrantId, opponent.aEntrantId)
+    const swapped = swapPairing(tournament, 1, bye.entrantIds[0], opponent.entrantIds[0])
 
-    const newBye = swapped.rounds[0].matches.find((match) => match.bEntrantId === null)!
+    const newBye = swapped.rounds[0].matches.find((match) => match.entrantIds.length === 1)!
     expect(newBye.result, 'a bye must arrive already reported').not.toBeNull()
 
     // Report everything a player can actually report, then the round must be complete.

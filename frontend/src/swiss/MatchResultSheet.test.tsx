@@ -59,7 +59,7 @@ describe('MatchResultSheet', () => {
     const user = userEvent.setup()
     const props = renderSheet()
     await user.click(screen.getByRole('button', { name: '2-1' }))
-    expect(props.onReport).toHaveBeenCalledWith({ aGameWins: 2, bGameWins: 1, gameDraws: 0 })
+    expect(props.onReport).toHaveBeenCalledWith({ gameWins: [2, 1], gameDraws: 0 })
     expect(props.onClose).toHaveBeenCalled()
   })
 

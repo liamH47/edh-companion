@@ -12,11 +12,11 @@ import type { Match } from './types'
 
 /** Pairings as unordered "a|b" strings, so assertions don't depend on match order. */
 function pairsOf(matches: Match[]): string[] {
-  return matches.map((m) => [m.aEntrantId, m.bEntrantId ?? 'bye'].sort().join('|')).sort()
+  return matches.map((m) => [m.entrantIds[0], m.entrantIds[1] ?? 'bye'].sort().join('|')).sort()
 }
 
 function byeIn(matches: Match[]): string | undefined {
-  return matches.find((m) => m.bEntrantId === null)?.aEntrantId
+  return matches.find((m) => m.entrantIds.length === 1)?.entrantIds[0]
 }
 
 describe('shuffle', () => {
@@ -69,14 +69,16 @@ describe('seatPairings', () => {
   it('byes the last seat in an odd pod and pairs the rest by opposite seats', () => {
     const matches = seatPairings(makeEntrants(7))
     expect(byeIn(matches)).toBe('entrant-7')
-    expect(pairsOf(matches.filter((m) => m.bEntrantId !== null))).toEqual(
+    expect(pairsOf(matches.filter((m) => m.entrantIds.length > 1))).toEqual(
       ['entrant-1|entrant-4', 'entrant-2|entrant-5', 'entrant-3|entrant-6'].sort(),
     )
   })
 
   it('records the bye as a reported 2-0 win needing no user input', () => {
-    const bye = seatPairings(makeEntrants(5)).find((m) => m.bEntrantId === null)!
-    expect(bye.result).toEqual({ aGameWins: 2, bGameWins: 0, gameDraws: 0 })
+    const bye = seatPairings(makeEntrants(5)).find((m) => m.entrantIds.length === 1)!
+    // A bye has one entrant, so one game-win entry -- the old shape's second
+    // slot described an opponent who does not exist.
+    expect(bye.result).toEqual({ gameWins: [2], gameDraws: 0 })
   })
 
   it('reads seats rather than array order', () => {
@@ -94,14 +96,14 @@ describe('seatPairings', () => {
 describe('randomFirstRoundPairings', () => {
   it('pairs everyone exactly once', () => {
     const matches = randomFirstRoundPairings(makeEntrants(6), seededRng([0.3, 0.8, 0.1, 0.6]))
-    const paired = matches.flatMap((m) => [m.aEntrantId, m.bEntrantId]).filter(Boolean)
+    const paired = matches.flatMap((m) => [m.entrantIds[0], m.entrantIds[1]]).filter(Boolean)
     expect(new Set(paired).size).toBe(6)
     expect(matches).toHaveLength(3)
   })
 
   it('byes exactly one entrant in an odd field', () => {
     const matches = randomFirstRoundPairings(makeEntrants(5), seededRng([0.4]))
-    expect(matches.filter((m) => m.bEntrantId === null)).toHaveLength(1)
+    expect(matches.filter((m) => m.entrantIds.length === 1)).toHaveLength(1)
   })
 })
 
@@ -235,7 +237,7 @@ describe('swissPairings', () => {
       ],
     })
     const { matches } = swissPairings(tournament, 2, seededRng([0.5]))
-    const involved = matches.flatMap((m) => [m.aEntrantId, m.bEntrantId])
+    const involved = matches.flatMap((m) => [m.entrantIds[0], m.entrantIds[1]])
     expect(involved).not.toContain('entrant-4')
     // Three remain, so one takes the bye.
     expect(byeIn(matches)).toBeDefined()
@@ -249,10 +251,10 @@ describe('swissPairings', () => {
     const { matches, hadToRepeatPairing } = swissPairings(tournament, 2, seededRng([0.2, 0.7, 0.4]))
     expect(hadToRepeatPairing).toBe(false)
     expect(matches).toHaveLength(4)
-    const involved = matches.flatMap((m) => [m.aEntrantId, m.bEntrantId!])
+    const involved = matches.flatMap((m) => [m.entrantIds[0], m.entrantIds[1]!])
     expect(new Set(involved).size).toBe(8)
     for (const m of matches) {
-      expect(havePlayed(m.aEntrantId, m.bEntrantId!, tournament)).toBe(false)
+      expect(havePlayed(m.entrantIds[0], m.entrantIds[1]!, tournament)).toBe(false)
     }
   })
 

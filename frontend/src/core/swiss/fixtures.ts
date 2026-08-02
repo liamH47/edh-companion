@@ -1,5 +1,5 @@
 import { reportResult } from './tournament'
-import type { Match, MatchResult, Rng, Tournament } from './types'
+import { isBye, type Match, type MatchResult, type Rng, type Tournament } from './types'
 
 /**
  * Test-only builders. Kept beside the modules they exercise rather than duplicated
@@ -43,21 +43,37 @@ export function makeEntrants(count: number): Tournament['entrants'] {
   }))
 }
 
+/** A 1v1 scoreline, kept in A-then-B order because that is how tests read. Pods build
+ * their results with `podResult`. */
 export function result(aGameWins: number, bGameWins: number, gameDraws = 0): MatchResult {
-  return { aGameWins, bGameWins, gameDraws }
+  return { gameWins: [aGameWins, bGameWins], gameDraws }
 }
 
+/** A pod result: `winnerIndex` took it, or `null` for a draw among everyone. */
+export function podResult(size: number, winnerIndex: number | null): MatchResult {
+  return {
+    gameWins: Array.from({ length: size }, (_unused, i) => (i === winnerIndex ? 1 : 0)),
+    gameDraws: winnerIndex === null ? 1 : 0,
+  }
+}
+
+/** `bEntrantId: null` builds a bye, matching how a match reads at the table. */
 export function match(
   aEntrantId: string,
   bEntrantId: string | null,
   matchResult: MatchResult | null = null,
 ): Match {
+  const entrantIds = bEntrantId === null ? [aEntrantId] : [aEntrantId, bEntrantId]
   return {
-    id: `${aEntrantId}-vs-${bEntrantId ?? 'bye'}`,
-    aEntrantId,
-    bEntrantId,
+    id: bEntrantId === null ? `${aEntrantId}-vs-bye` : `${aEntrantId}-vs-${bEntrantId}`,
+    entrantIds,
     result: matchResult,
   }
+}
+
+/** A pod of three or more. */
+export function pod(entrantIds: string[], matchResult: MatchResult | null = null): Match {
+  return { id: entrantIds.join('-vs-'), entrantIds, result: matchResult }
 }
 
 export function round(number: number, matches: Match[]): Tournament['rounds'][number] {
@@ -108,9 +124,7 @@ export function playRound(
   const round = tournament.rounds.find((candidate) => candidate.number === roundNumber)!
   return round.matches.reduce(
     (current, match) =>
-      match.bEntrantId === null
-        ? current
-        : reportResult(current, roundNumber, match.id, decide(match)),
+      isBye(match) ? current : reportResult(current, roundNumber, match.id, decide(match)),
     tournament,
   )
 }

@@ -1,6 +1,12 @@
 import { useState } from 'react'
 import { entrantIdsInRound, isRoundComplete } from '../core/swiss/tournament'
-import { entrantName, type Match, type MatchResult, type Tournament } from '../core/swiss/types'
+import {
+  entrantName,
+  isBye,
+  type Match,
+  type MatchResult,
+  type Tournament,
+} from '../core/swiss/types'
 import { Button } from '../ui/Button'
 import { Chip } from '../ui/Chip'
 import { ShuffleIcon } from '../ui/Icon'
@@ -20,12 +26,12 @@ interface RoundScreenProps {
 }
 
 function scoreline(match: Match): string {
-  if (match.bEntrantId === null) return 'Bye'
+  if (isBye(match)) return 'Bye'
   if (match.result === null) return 'Not reported'
-  const { aGameWins, bGameWins, gameDraws } = match.result
-  return gameDraws > 0 && aGameWins === bGameWins
-    ? 'Draw'
-    : `${aGameWins}-${bGameWins}`
+  const { gameWins } = match.result
+  const best = Math.max(...gameWins)
+  // Tied at the top is a draw whatever the table size; otherwise show the scoreline.
+  return gameWins.filter((wins) => wins === best).length > 1 ? 'Draw' : gameWins.join('-')
 }
 
 /**
@@ -56,7 +62,7 @@ export function RoundScreen({
   }
 
   const nameById = new Map(tournament.entrants.map((entrant) => [entrant.id, entrant]))
-  const nameOf = (id: string | null) => (id === null ? 'Bye' : entrantName(nameById.get(id)!))
+  const nameOf = (id: string) => entrantName(nameById.get(id)!)
 
   const complete = isRoundComplete(tournament, roundNumber)
   const isLatestRound = roundNumber === tournament.rounds.length
@@ -87,17 +93,19 @@ export function RoundScreen({
         {round.matches.map((match) => (
           <li key={match.id} className="flex items-stretch gap-2">
             <Pressable
-              onClick={() => match.bEntrantId !== null && setEditingMatchId(match.id)}
-              disabled={match.bEntrantId === null}
-              aria-label={`Report ${nameOf(match.aEntrantId)} versus ${nameOf(match.bEntrantId)}`}
+              onClick={() => !isBye(match) && setEditingMatchId(match.id)}
+              disabled={isBye(match)}
+              aria-label={`Report ${nameOf(match.entrantIds[0])} versus ${
+                isBye(match) ? 'Bye' : nameOf(match.entrantIds[1])
+              }`}
               className="min-h-12 min-w-0 flex-1 justify-between gap-3 rounded-lg border border-border bg-surface px-4 py-2 disabled:opacity-100"
             >
               <span className="flex min-w-0 flex-col">
                 <Text variant="bodyStrong" className="truncate">
-                  {nameOf(match.aEntrantId)}
+                  {nameOf(match.entrantIds[0])}
                 </Text>
                 <Text variant="body" color="muted" className="truncate">
-                  {match.bEntrantId === null ? '—' : nameOf(match.bEntrantId)}
+                  {isBye(match) ? '—' : nameOf(match.entrantIds[1])}
                 </Text>
               </span>
               <Text
@@ -108,10 +116,10 @@ export function RoundScreen({
                 {scoreline(match)}
               </Text>
             </Pressable>
-            {!complete && match.bEntrantId !== null && (
+            {!complete && !isBye(match) && (
               <Pressable
-                aria-label={`Swap ${nameOf(match.aEntrantId)} with another entrant`}
-                onClick={() => setSwapFromId(match.aEntrantId)}
+                aria-label={`Swap ${nameOf(match.entrantIds[0])} with another entrant`}
+                onClick={() => setSwapFromId(match.entrantIds[0])}
                 className="min-h-12 min-w-12 shrink-0 justify-center rounded-lg border border-border text-text-muted"
               >
                 <ShuffleIcon />
@@ -140,8 +148,8 @@ export function RoundScreen({
         onClose={() => setEditingMatchId(null)}
         match={editingMatch}
         format={tournament.format}
-        aName={editingMatch ? nameOf(editingMatch.aEntrantId) : ''}
-        bName={editingMatch ? nameOf(editingMatch.bEntrantId) : ''}
+        aName={editingMatch ? nameOf(editingMatch.entrantIds[0]) : ''}
+        bName={editingMatch ? nameOf(editingMatch.entrantIds[1]) : ''}
         onReport={(result) => editingMatch && onReport(roundNumber, editingMatch.id, result)}
         onRepair={hasLaterRounds ? () => onRepairFrom(roundNumber) : undefined}
       />

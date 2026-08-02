@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { makeEntrants, makeTournament, match, result, round } from './fixtures'
+import { makeEntrants, makeTournament, match, pod, podResult, result, round } from './fixtures'
 import {
   checkAllInvariants,
   checkByes,
@@ -7,6 +7,7 @@ import {
   checkMatchPointsConserved,
   checkNoRematches,
   checkNoSelfPairings,
+  checkResultsMatchParticipants,
   checkRoundCoverage,
   checkStandingsWellFormed,
 } from './invariants'
@@ -34,7 +35,7 @@ describe('checkMatchIdsMatchParticipants', () => {
 
   it('catches an id naming players who are no longer in the match', () => {
     // Exactly what a swap used to leave behind: participants rewritten, id stale.
-    const stale = { ...match('entrant-1', 'entrant-2'), aEntrantId: 'entrant-3' }
+    const stale = { ...match('entrant-1', 'entrant-2'), entrantIds: ['entrant-3', 'entrant-2'] }
     const t = withRounds([round(1, [stale])])
 
     expect(checkMatchIdsMatchParticipants(t)).toEqual([
@@ -43,7 +44,7 @@ describe('checkMatchIdsMatchParticipants', () => {
   })
 
   it('catches a bye whose id still names an opponent', () => {
-    const stale = { ...match('entrant-1', 'entrant-2'), bEntrantId: null }
+    const stale = { ...match('entrant-1', 'entrant-2'), entrantIds: ['entrant-1'] }
     expect(checkMatchIdsMatchParticipants(withRounds([round(1, [stale])]))).toHaveLength(1)
   })
 })
@@ -161,7 +162,7 @@ describe('checkNoRematches', () => {
       round(1, [match('entrant-1', 'entrant-2')]),
       round(2, [match('entrant-2', 'entrant-1')]),
     ])
-    expect(checkNoRematches(t)).toEqual(['R2: entrant-2 vs entrant-1 is a rematch'])
+    expect(checkNoRematches(t)).toEqual(['R2: entrant-1 vs entrant-2 have already met'])
   })
 
   it('ignores byes, which are not pairings', () => {
@@ -182,7 +183,9 @@ describe('checkNoSelfPairings', () => {
 
   it('catches an entrant paired against themselves', () => {
     const t = withRounds([round(1, [match('entrant-1', 'entrant-1')])])
-    expect(checkNoSelfPairings(t)).toEqual(['R1: entrant-1 is paired against itself'])
+    expect(checkNoSelfPairings(t)).toEqual([
+      'R1: entrant-1 vs entrant-1 contains the same entrant twice',
+    ])
   })
 })
 
@@ -266,6 +269,39 @@ describe('checkStandingsWellFormed', () => {
   })
 })
 
+describe('checkResultsMatchParticipants', () => {
+  it('accepts one game-win entry per entrant', () => {
+    const t = withRounds([round(1, [match('entrant-1', 'entrant-2', result(2, 0))])])
+    expect(checkResultsMatchParticipants(t)).toEqual([])
+  })
+
+  it('accepts a pod result sized to the pod', () => {
+    const t = withRounds([
+      round(1, [pod(['entrant-1', 'entrant-2', 'entrant-3', 'entrant-4'], podResult(4, 0))]),
+    ])
+    expect(checkResultsMatchParticipants(t)).toEqual([])
+  })
+
+  it('catches a result with fewer entries than entrants', () => {
+    // Every per-entrant lookup indexes gameWins by position, so a short array reads
+    // undefined and poisons every percentage rather than failing near the cause.
+    const short = pod(['entrant-1', 'entrant-2', 'entrant-3'], { gameWins: [1, 0], gameDraws: 0 })
+    expect(checkResultsMatchParticipants(withRounds([round(1, [short])]))).toEqual([
+      'R1: entrant-1 vs entrant-2 vs entrant-3 has 2 game-win entries for 3 entrant(s)',
+    ])
+  })
+
+  it('catches a result with more entries than entrants', () => {
+    const long = { ...match('entrant-1', 'entrant-2'), result: { gameWins: [2, 0, 0], gameDraws: 0 } }
+    expect(checkResultsMatchParticipants(withRounds([round(1, [long])]))).toHaveLength(1)
+  })
+
+  it('ignores unreported matches', () => {
+    const t = withRounds([round(1, [match('entrant-1', 'entrant-2')])])
+    expect(checkResultsMatchParticipants(t)).toEqual([])
+  })
+})
+
 describe('checkAllInvariants', () => {
   it('reports nothing for a well-formed tournament', () => {
     const t = withRounds([
@@ -293,7 +329,7 @@ describe('checkAllInvariants', () => {
     )
     expect(checkAllInvariants(t, { allowRematches: true })).toEqual([])
     expect(checkAllInvariants(t, { allowRematches: false })).toContain(
-      'R2: entrant-1 vs entrant-2 is a rematch',
+      'R2: entrant-1 vs entrant-2 have already met',
     )
   })
 })

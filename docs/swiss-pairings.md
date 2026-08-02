@@ -9,6 +9,37 @@ no backend involvement at all. That's deliberate: a tournament runs for hours, t
 is per-device, and pairing a round must not depend on having a signal. It also means the
 whole subsystem ports to React Native untouched (see `docs/ui/portability-rules.md`).
 
+## The match model
+
+A `Match` holds a **list** of entrants rather than an A side and a B side:
+
+| `entrantIds.length` | What it is |
+|---|---|
+| 1 | a bye |
+| 2 | an ordinary 1v1 match |
+| 3+ | a Commander pod |
+
+`MatchResult.gameWins` is positionally aligned with that list, so who won is *derived*
+rather than stored, by a single rule that covers every table size:
+
+> **Sole highest game wins takes the match. Tied at the highest is a draw.**
+
+```
+[2, 0]         1v1, 2-0             -> win, loss
+[1, 1]         1v1 drawn match      -> draw, draw
+[2]            a bye                -> win  (trivially the sole maximum)
+[0, 1, 0, 0]   a pod B won          -> loss, win, loss, loss
+[0, 0, 0]      a pod that timed out -> draw, draw, draw
+```
+
+Two MTR rules then fall out of the model rather than needing a special case: a bye
+contributes **no opponent** (there is nobody else in the list), and a pod contributes
+**every other player** as an opponent, so beating three people counts three opponents
+toward OMW%.
+
+`storage.ts` migrates tournaments saved in the older two-sided shape, so an event in
+progress survives the upgrade.
+
 ## Scoring
 
 | Outcome | Match points | Game points |

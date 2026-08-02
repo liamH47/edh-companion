@@ -1,10 +1,11 @@
-import { computeStandings, MINIMUM_WIN_PERCENTAGE } from './scoring'
-import type { Match, Standing, Tournament } from './types'
+import { BYE_GAME_WINS, computeStandings, MINIMUM_WIN_PERCENTAGE } from './scoring'
+import { isBye, type Match, type Standing, type Tournament } from './types'
 
 /**
  * Properties that must hold of *any* tournament, whatever the entrant count, round
- * count or result pattern. The integration sweep asserts these after every transition;
- * a single hand-written test can only ever check the case its author thought of.
+ * count, table size or result pattern. The integration sweep asserts these after every
+ * transition; a single hand-written test can only ever check the case its author
+ * thought of.
  *
  * Every checker returns a list of violation descriptions rather than throwing. Two
  * reasons: a failing sweep reports everything wrong at once instead of the first
@@ -13,11 +14,26 @@ import type { Match, Standing, Tournament } from './types'
  * returns "no violations" for the wrong reason and is worse than no checker at all.
  */
 
-/** Byes are recorded as a 2-0 the moment they're created (pairing.makeBye). */
-const BYE_GAME_WINS = 2
-
 function nameOf(match: Match): string {
-  return `${match.aEntrantId} vs ${match.bEntrantId ?? 'bye'}`
+  return isBye(match) ? `${match.entrantIds[0]} vs bye` : match.entrantIds.join(' vs ')
+}
+
+/** The same derivation pairing.ts uses, duplicated deliberately: a checker that called
+ * the production helper could not detect the production helper being wrong. */
+function expectedIdFor(match: Match): string {
+  return isBye(match) ? `${match.entrantIds[0]}-vs-bye` : match.entrantIds.join('-vs-')
+}
+
+/** Every unordered pair of entrants sharing a table. One pair for a 1v1, six for a
+ * four-player pod, none for a bye. */
+function pairsIn(match: Match): string[] {
+  const pairs: string[] = []
+  for (let i = 0; i < match.entrantIds.length; i++) {
+    for (let j = i + 1; j < match.entrantIds.length; j++) {
+      pairs.push([match.entrantIds[i], match.entrantIds[j]].sort().join('|'))
+    }
+  }
+  return pairs
 }
 
 /**
@@ -28,9 +44,7 @@ function nameOf(match: Match): string {
 export function checkMatchIdsMatchParticipants(tournament: Tournament): string[] {
   return tournament.rounds.flatMap((round) =>
     round.matches
-      .filter(
-        (match) => match.id !== `${match.aEntrantId}-vs-${match.bEntrantId ?? 'bye'}`,
-      )
+      .filter((match) => match.id !== expectedIdFor(match))
       .map(
         (match) =>
           `R${round.number}: match id "${match.id}" does not match its participants (${nameOf(match)})`,
@@ -43,8 +57,8 @@ export function checkRoundCoverage(tournament: Tournament): string[] {
   return tournament.rounds.flatMap((round) => {
     const appearances = new Map<string, number>()
     for (const match of round.matches) {
-      for (const id of [match.aEntrantId, match.bEntrantId]) {
-        if (id !== null) appearances.set(id, (appearances.get(id) ?? 0) + 1)
+      for (const id of match.entrantIds) {
+        appearances.set(id, (appearances.get(id) ?? 0) + 1)
       }
     }
 
@@ -73,18 +87,17 @@ export function checkByes(tournament: Tournament): string[] {
   const byeCountById = new Map<string, number>()
 
   for (const round of tournament.rounds) {
-    const byes = round.matches.filter((match) => match.bEntrantId === null)
+    const byes = round.matches.filter(isBye)
     if (byes.length > 1) {
       violations.push(`R${round.number}: ${byes.length} byes in one round`)
     }
     for (const bye of byes) {
-      byeCountById.set(bye.aEntrantId, (byeCountById.get(bye.aEntrantId) ?? 0) + 1)
+      const id = bye.entrantIds[0]
+      byeCountById.set(id, (byeCountById.get(id) ?? 0) + 1)
       if (bye.result === null) {
-        violations.push(`R${round.number}: bye for ${bye.aEntrantId} has no result`)
-      } else if (bye.result.aGameWins !== BYE_GAME_WINS || bye.result.bGameWins !== 0) {
-        violations.push(
-          `R${round.number}: bye for ${bye.aEntrantId} is not a ${BYE_GAME_WINS}-0`,
-        )
+        violations.push(`R${round.number}: bye for ${id} has no result`)
+      } else if (bye.result.gameWins[0] !== BYE_GAME_WINS) {
+        violations.push(`R${round.number}: bye for ${id} is not a ${BYE_GAME_WINS}-0`)
       }
     }
   }
@@ -103,8 +116,9 @@ export function checkByes(tournament: Tournament): string[] {
 }
 
 /**
- * No pair meets twice. Only meaningful when the pairer reported it did not have to
- * repeat one -- once `hadToRepeatPairing` is true, a rematch is the correct outcome.
+ * No two entrants share a table twice. Only meaningful when the pairer reported it did
+ * not have to repeat a pairing -- once `hadToRepeatPairing` is true, a rematch is the
+ * correct outcome.
  */
 export function checkNoRematches(tournament: Tournament): string[] {
   const seen = new Set<string>()
@@ -112,21 +126,21 @@ export function checkNoRematches(tournament: Tournament): string[] {
 
   for (const round of tournament.rounds) {
     for (const match of round.matches) {
-      if (match.bEntrantId === null) continue
-      const key = [match.aEntrantId, match.bEntrantId].sort().join('|')
-      if (seen.has(key)) {
-        violations.push(`R${round.number}: ${nameOf(match)} is a rematch`)
+      for (const pair of pairsIn(match)) {
+        if (seen.has(pair)) {
+          violations.push(`R${round.number}: ${pair.replace('|', ' vs ')} have already met`)
+        }
+        seen.add(pair)
       }
-      seen.add(key)
     }
   }
   return violations
 }
 
 /**
- * Match points are conserved: every reported match puts exactly 3 into the pool (a
- * win, or a bye), except a draw, which puts 2 in. Catches a scoring change that
- * quietly creates or destroys points.
+ * Match points are conserved. Every reported match puts 3 into the pool when one
+ * entrant took it outright, or 1 per entrant tied at the top when it was drawn.
+ * Catches a scoring change that quietly creates or destroys points.
  */
 export function checkMatchPointsConserved(
   tournament: Tournament,
@@ -136,15 +150,15 @@ export function checkMatchPointsConserved(
   for (const round of tournament.rounds) {
     for (const match of round.matches) {
       if (match.result === null) continue
-      const { aGameWins, bGameWins } = match.result
-      expected += aGameWins === bGameWins ? 2 : 3
+      const { gameWins } = match.result
+      const best = Math.max(...gameWins)
+      const atBest = gameWins.filter((wins) => wins === best).length
+      expected += atBest === 1 ? 3 : atBest
     }
   }
 
   const actual = standings.reduce((total, standing) => total + standing.matchPoints, 0)
-  return actual === expected
-    ? []
-    : [`match points total ${actual}, expected ${expected}`]
+  return actual === expected ? [] : [`match points total ${actual}, expected ${expected}`]
 }
 
 /**
@@ -202,13 +216,35 @@ export function checkStandingsWellFormed(
   return violations
 }
 
-/** Nobody is paired against themselves. Cheap, and the obvious failure mode of any
+/** Nobody appears twice at the same table. Cheap, and the obvious failure mode of any
  * change to the swap or re-pair logic. */
 export function checkNoSelfPairings(tournament: Tournament): string[] {
   return tournament.rounds.flatMap((round) =>
     round.matches
-      .filter((match) => match.aEntrantId === match.bEntrantId)
-      .map((match) => `R${round.number}: ${match.aEntrantId} is paired against itself`),
+      .filter((match) => new Set(match.entrantIds).size !== match.entrantIds.length)
+      .map((match) => `R${round.number}: ${nameOf(match)} contains the same entrant twice`),
+  )
+}
+
+/**
+ * A result carries exactly one game-win count per entrant.
+ *
+ * New with the N-participant model, and worth having: every per-entrant lookup indexes
+ * `gameWins` by the entrant's position, so a short array reads `undefined` and poisons
+ * every percentage downstream instead of failing anywhere near the cause.
+ */
+export function checkResultsMatchParticipants(tournament: Tournament): string[] {
+  return tournament.rounds.flatMap((round) =>
+    round.matches
+      .filter(
+        (match) =>
+          match.result !== null && match.result.gameWins.length !== match.entrantIds.length,
+      )
+      .map(
+        (match) =>
+          `R${round.number}: ${nameOf(match)} has ${match.result!.gameWins.length} game-win ` +
+          `entries for ${match.entrantIds.length} entrant(s)`,
+      ),
   )
 }
 
@@ -228,6 +264,7 @@ export function checkAllInvariants(
     ...checkRoundCoverage(tournament),
     ...checkByes(tournament),
     ...checkNoSelfPairings(tournament),
+    ...checkResultsMatchParticipants(tournament),
     ...checkMatchPointsConserved(tournament, standings),
     ...checkStandingsWellFormed(tournament, standings),
     ...(options.allowRematches === true ? [] : checkNoRematches(tournament)),

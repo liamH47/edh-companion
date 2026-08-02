@@ -27,26 +27,26 @@ interface ResultChoice {
 function choicesFor(format: MatchFormat): ResultChoice[] {
   if (format === 'bo1') {
     return [
-      { label: '1-0', result: { aGameWins: 1, bGameWins: 0, gameDraws: 0 } },
-      { label: 'Draw', result: { aGameWins: 0, bGameWins: 0, gameDraws: 1 } },
-      { label: '0-1', result: { aGameWins: 0, bGameWins: 1, gameDraws: 0 } },
+      { label: '1-0', result: { gameWins: [1, 0], gameDraws: 0 } },
+      { label: 'Draw', result: { gameWins: [0, 0], gameDraws: 1 } },
+      { label: '0-1', result: { gameWins: [0, 1], gameDraws: 0 } },
     ]
   }
   return [
-    { label: '2-0', result: { aGameWins: 2, bGameWins: 0, gameDraws: 0 } },
-    { label: '2-1', result: { aGameWins: 2, bGameWins: 1, gameDraws: 0 } },
-    { label: '1-1 draw', result: { aGameWins: 1, bGameWins: 1, gameDraws: 1 } },
-    { label: '1-2', result: { aGameWins: 1, bGameWins: 2, gameDraws: 0 } },
-    { label: '0-2', result: { aGameWins: 0, bGameWins: 2, gameDraws: 0 } },
+    { label: '2-0', result: { gameWins: [2, 0], gameDraws: 0 } },
+    { label: '2-1', result: { gameWins: [2, 1], gameDraws: 0 } },
+    { label: '1-1 draw', result: { gameWins: [1, 1], gameDraws: 1 } },
+    { label: '1-2', result: { gameWins: [1, 2], gameDraws: 0 } },
+    { label: '0-2', result: { gameWins: [0, 2], gameDraws: 0 } },
   ]
 }
 
 function sameResult(a: MatchResult | null, b: MatchResult): boolean {
   return (
     a !== null &&
-    a.aGameWins === b.aGameWins &&
-    a.bGameWins === b.bGameWins &&
-    a.gameDraws === b.gameDraws
+    a.gameDraws === b.gameDraws &&
+    a.gameWins.length === b.gameWins.length &&
+    a.gameWins.every((wins, index) => wins === b.gameWins[index])
   )
 }
 

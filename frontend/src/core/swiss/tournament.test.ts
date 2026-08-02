@@ -136,7 +136,7 @@ describe('startNextRound', () => {
     expect(next.rounds).toHaveLength(1)
     expect(next.rounds[0].number).toBe(1)
     // 4-pod: 1v3 and 2v4.
-    const pairs = next.rounds[0].matches.map((m) => `${m.aEntrantId}|${m.bEntrantId}`)
+    const pairs = next.rounds[0].matches.map((m) => `${m.entrantIds[0]}|${m.entrantIds[1]}`)
     expect(pairs).toEqual(['entrant-1|entrant-3', 'entrant-2|entrant-4'])
   })
 
@@ -160,7 +160,7 @@ describe('startNextRound', () => {
     expect(next.rounds).toHaveLength(2)
     expect(next.rounds[1].number).toBe(2)
     const pairs = next.rounds[1].matches.map((m) =>
-      [m.aEntrantId, m.bEntrantId].sort().join('|'),
+      [m.entrantIds[0], m.entrantIds[1]].sort().join('|'),
     )
     expect(pairs.sort()).toEqual(['entrant-1|entrant-3', 'entrant-2|entrant-4'])
   })
@@ -180,7 +180,7 @@ describe('reportResult', () => {
 
   it('records a result on the named match', () => {
     const next = reportResult(base, 1, 'entrant-1-vs-entrant-2', result(2, 1))
-    expect(next.rounds[0].matches[0].result).toEqual({ aGameWins: 2, bGameWins: 1, gameDraws: 0 })
+    expect(next.rounds[0].matches[0].result).toEqual({ gameWins: [2, 1], gameDraws: 0 })
   })
 
   it('immediately changes the standings, with nothing else to invalidate', () => {
@@ -207,7 +207,7 @@ describe('reportResult', () => {
       ],
     })
     const next = reportResult(twoRounds, 2, 'entrant-2-vs-entrant-1', result(2, 0))
-    expect(next.rounds[0].matches[0].result).toEqual({ aGameWins: 2, bGameWins: 0, gameDraws: 0 })
+    expect(next.rounds[0].matches[0].result).toEqual({ gameWins: [2, 0], gameDraws: 0 })
   })
 
   it('ignores an unknown match id', () => {
@@ -236,8 +236,7 @@ describe('repairRoundsFrom', () => {
     expect(repaired.rounds).toHaveLength(2)
     // Winners (2 and 4) still face each other; the point is the round was rebuilt.
     expect(repaired.rounds[0].matches[0].result).toEqual({
-      aGameWins: 0,
-      bGameWins: 2,
+      gameWins: [0, 2],
       gameDraws: 0,
     })
   })
@@ -307,7 +306,7 @@ describe('swapPairing', () => {
 
   it('exchanges two entrants between their matches', () => {
     const next = swapPairing(tournament, 1, 'entrant-2', 'entrant-3')
-    const pairs = next.rounds[0].matches.map((m) => `${m.aEntrantId}|${m.bEntrantId}`)
+    const pairs = next.rounds[0].matches.map((m) => `${m.entrantIds[0]}|${m.entrantIds[1]}`)
     expect(pairs).toEqual(['entrant-1|entrant-3', 'entrant-2|entrant-4'])
   })
 
@@ -340,7 +339,7 @@ describe('swapPairing', () => {
       ],
     })
     const next = swapPairing(withBye, 1, 'entrant-2', 'entrant-3')
-    const pairs = next.rounds[0].matches.map((m) => `${m.aEntrantId}|${m.bEntrantId ?? 'bye'}`)
+    const pairs = next.rounds[0].matches.map((m) => `${m.entrantIds[0]}|${m.entrantIds[1] ?? 'bye'}`)
     expect(pairs).toEqual(['entrant-1|entrant-3', 'entrant-2|bye'])
   })
 
@@ -360,7 +359,7 @@ describe('swapPairing', () => {
     })
     const next = swapPairing(twoRounds, 2, 'entrant-3', 'entrant-4')
     expect(next.rounds[0]).toEqual(twoRounds.rounds[0])
-    expect(next.rounds[1].matches.map((m) => `${m.aEntrantId}|${m.bEntrantId}`)).toEqual([
+    expect(next.rounds[1].matches.map((m) => `${m.entrantIds[0]}|${m.entrantIds[1]}`)).toEqual([
       'entrant-1|entrant-4',
       'entrant-2|entrant-3',
     ])

@@ -216,13 +216,12 @@ export function swapPairing(
   const round = tournament.rounds.find((candidate) => candidate.number === roundNumber)
   if (!round || entrantAId === entrantBId) return tournament
 
-  const matchOf = (id: string) =>
-    round.matches.find((match) => match.aEntrantId === id || match.bEntrantId === id)
+  const matchOf = (id: string) => round.matches.find((match) => match.entrantIds.includes(id))
   const matchA = matchOf(entrantAId)
   const matchB = matchOf(entrantBId)
   if (!matchA || !matchB || matchA.id === matchB.id) return tournament
 
-  const substitute = (id: string | null) =>
+  const substitute = (id: string) =>
     id === entrantAId ? entrantBId : id === entrantBId ? entrantAId : id
 
   return {
@@ -234,8 +233,7 @@ export function swapPairing(
             ...candidate,
             matches: candidate.matches.map((match) => {
               if (match.id !== matchA.id && match.id !== matchB.id) return match
-              const nextA = substitute(match.aEntrantId)!
-              const nextB = substitute(match.bEntrantId)
+              const swapped = match.entrantIds.map(substitute)
               // Rebuilt through the pairing constructors rather than spread, for two
               // reasons. The id is derived from the participants, so spreading keeps
               // one that names the players who *used* to be here -- and every result
@@ -246,7 +244,7 @@ export function swapPairing(
               // For a real match the result is still dropped, because it belongs to
               // the pairing rather than the players -- it no longer describes who
               // played whom.
-              return nextB === null ? makeBye(nextA) : makeMatch(nextA, nextB)
+              return swapped.length === 1 ? makeBye(swapped[0]) : makeMatch(swapped)
             }),
           },
     ),
@@ -269,7 +267,5 @@ export function isRoundComplete(tournament: Tournament, roundNumber: number): bo
 export function entrantIdsInRound(tournament: Tournament, roundNumber: number): string[] {
   const round = tournament.rounds.find((candidate) => candidate.number === roundNumber)
   if (!round) return []
-  return round.matches.flatMap((match) =>
-    match.bEntrantId === null ? [match.aEntrantId] : [match.aEntrantId, match.bEntrantId],
-  )
+  return round.matches.flatMap((match) => match.entrantIds)
 }
