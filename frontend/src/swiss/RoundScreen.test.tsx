@@ -104,8 +104,7 @@ describe('RoundScreen', () => {
     await user.click(screen.getByRole('button', { name: 'Report A versus B' }))
     await user.click(screen.getByRole('button', { name: '2-0' }))
     expect(props.onReport).toHaveBeenCalledWith(1, 'entrant-1-vs-entrant-2', {
-      aGameWins: 2,
-      bGameWins: 0,
+      gameWins: [2, 0],
       gameDraws: 0,
     })
   })

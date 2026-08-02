@@ -24,21 +24,48 @@ export interface Entrant {
   droppedAfterRound: number | null
 }
 
-/** Games won by each side, plus games that ended in a draw. A bye is stored as 2-0,
- * matching the MTR's "considered to have won the match 2-0". */
+/**
+ * Games won by each entrant, positionally aligned with the match's `entrantIds`, plus
+ * games that ended in a draw.
+ *
+ * Deliberately a list rather than an A-side/B-side pair: a Commander pod has three or
+ * more players and no "sides". The win/loss/draw a player actually gets is derived
+ * from it rather than stored, by one rule that covers every shape -- sole highest
+ * game wins is a win, tied at the highest is a draw, anything else is a loss:
+ *
+ *   [2, 0]        1v1, 2-0            -> win, loss
+ *   [1, 1]        1v1 drawn match     -> draw, draw
+ *   [2]           a bye               -> win (MTR: "considered to have won 2-0")
+ *   [0, 1, 0, 0]  a pod B won         -> loss, win, loss, loss
+ *   [0, 0, 0]     a pod that timed out -> draw, draw, draw
+ */
 export interface MatchResult {
-  aGameWins: number
-  bGameWins: number
+  gameWins: number[]
   gameDraws: number
 }
 
 export interface Match {
   id: string
-  aEntrantId: string
-  /** `null` is a bye: entrant A had no opponent this round. */
-  bEntrantId: string | null
+  /**
+   * Everyone playing, in pairing order. One entrant is a bye, two is an ordinary
+   * 1v1 match, three or more is a Commander pod. Keeping a single shape means
+   * pairing, scoring and the invariant checks have one code path rather than one per
+   * table size.
+   */
+  entrantIds: string[]
   /** `null` until someone reports it. Unreported matches count toward nobody's record. */
   result: MatchResult | null
+}
+
+/** A bye is the degenerate match: one entrant, nobody to play. */
+export function isBye(match: Match): boolean {
+  return match.entrantIds.length === 1
+}
+
+/** Everyone in the match except the given entrant. Empty for a bye, which is exactly
+ * why byes contribute no opponent to OMW%/OGW%. */
+export function opponentsIn(match: Match, entrantId: string): string[] {
+  return match.entrantIds.filter((id) => id !== entrantId)
 }
 
 export interface Round {

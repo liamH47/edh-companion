@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { makeEntrants, makeTournament, match, result, round } from './fixtures'
+import { makeEntrants, makeTournament, match, pod, podResult, result, round } from './fixtures'
 import {
   computeStandings,
   gameWinPercentage,
@@ -11,6 +11,7 @@ import {
   opponentsGameWinPercentage,
   opponentsMatchWinPercentage,
 } from './scoring'
+import type { MatchResult } from './types'
 
 const THIRD = MINIMUM_WIN_PERCENTAGE
 
@@ -347,5 +348,86 @@ describe('a full hand-checked 4-player, 2-round tournament', () => {
     expect(gameWinPercentage('entrant-3', tournament)).toBeCloseTo(0.5, 10)
     const order = computeStandings(tournament).map((s) => s.entrantId)
     expect(order.indexOf('entrant-2')).toBeLessThan(order.indexOf('entrant-3'))
+  })
+})
+
+describe('scoring a multiplayer pod', () => {
+  /**
+   * No pod *pairing* exists yet, so these hand-build the matches. That is the point:
+   * they prove the scoring model already generalises past two players, which is the
+   * whole reason for holding participants in a list. If these pass, pod pairing only
+   * has to produce the right groupings -- it does not need its own scoring path.
+   */
+  const FOUR = ['entrant-1', 'entrant-2', 'entrant-3', 'entrant-4']
+
+  function podTournament(matchResult: MatchResult) {
+    return makeTournament({
+      entrants: makeEntrants(4),
+      rounds: [round(1, [pod(FOUR, matchResult)])],
+    })
+  }
+
+  it('gives the winner 3 points and everyone else 0', () => {
+    const t = podTournament(podResult(4, 1))
+
+    expect(matchPointsFor('entrant-2', t)).toBe(3)
+    for (const loser of ['entrant-1', 'entrant-3', 'entrant-4']) {
+      expect(matchPointsFor(loser, t)).toBe(0)
+    }
+  })
+
+  it('records one win and three losses, not one win and one loss', () => {
+    const t = podTournament(podResult(4, 1))
+
+    expect(matchRecord('entrant-2', t)).toEqual({ wins: 1, losses: 0, draws: 0 })
+    expect(matchRecord('entrant-1', t)).toEqual({ wins: 0, losses: 1, draws: 0 })
+  })
+
+  it('gives everyone 1 point when the pod is drawn', () => {
+    const t = podTournament(podResult(4, null))
+
+    for (const id of FOUR) {
+      expect(matchPointsFor(id, t)).toBe(1)
+      expect(matchRecord(id, t)).toEqual({ wins: 0, losses: 0, draws: 1 })
+    }
+  })
+
+  it('counts every other player in the pod as an opponent', () => {
+    // Beating three people should count three opponents toward OMW%, not one.
+    const t = podTournament(podResult(4, 0))
+
+    expect(opponentIdsFor('entrant-1', t).sort()).toEqual([
+      'entrant-2',
+      'entrant-3',
+      'entrant-4',
+    ])
+  })
+
+  it('treats the pod as a single game for game-win percentage', () => {
+    const t = podTournament(podResult(4, 0))
+
+    // One game, won by entrant-1: 3 of 3 game points.
+    expect(gameWinPercentage('entrant-1', t)).toBe(1)
+    // Losers earn nothing and fall to the one-third floor.
+    expect(gameWinPercentage('entrant-2', t)).toBe(MINIMUM_WIN_PERCENTAGE)
+  })
+
+  it('ranks the pod winner first', () => {
+    const standings = computeStandings(podTournament(podResult(4, 2)))
+
+    expect(standings[0].entrantId).toBe('entrant-3')
+    expect(standings[0].matchPoints).toBe(3)
+  })
+
+  it('scores a three-player pod the same way', () => {
+    // The rule is "sole highest game wins takes it", not "one of exactly four".
+    const t = makeTournament({
+      entrants: makeEntrants(3),
+      rounds: [round(1, [pod(['entrant-1', 'entrant-2', 'entrant-3'], podResult(3, 2))])],
+    })
+
+    expect(matchPointsFor('entrant-3', t)).toBe(3)
+    expect(matchPointsFor('entrant-1', t)).toBe(0)
+    expect(opponentIdsFor('entrant-3', t)).toHaveLength(2)
   })
 })

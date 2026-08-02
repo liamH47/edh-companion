@@ -54,10 +54,9 @@ describe('useTournament', () => {
     act(() => result.current.start(startInput()))
     act(() => result.current.nextRound())
     const matchId = result.current.tournament!.rounds[0].matches[0].id
-    act(() => result.current.report(1, matchId, { aGameWins: 2, bGameWins: 0, gameDraws: 0 }))
+    act(() => result.current.report(1, matchId, { gameWins: [2, 0], gameDraws: 0 }))
     expect(loadTournament()!.rounds[0].matches[0].result).toEqual({
-      aGameWins: 2,
-      bGameWins: 0,
+      gameWins: [2, 0],
       gameDraws: 0,
     })
   })
@@ -92,7 +91,7 @@ describe('useTournament', () => {
     act(() => result.current.nextRound())
     act(() => result.current.swap(1, 'entrant-1', 'entrant-2'))
     const pairs = result.current.tournament!.rounds[0].matches.map(
-      (m) => `${m.aEntrantId}|${m.bEntrantId}`,
+      (m) => `${m.entrantIds[0]}|${m.entrantIds[1]}`,
     )
     expect(pairs).toContain('entrant-2|entrant-3')
   })

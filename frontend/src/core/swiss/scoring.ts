@@ -1,4 +1,4 @@
-import type { Match, Standing, Tournament } from './types'
+import { opponentsIn, type Match, type Standing, type Tournament } from './types'
 
 /**
  * Match points, game points and the four MTG tiebreakers, per the Magic Tournament
@@ -12,8 +12,9 @@ const MATCH_POINTS_DRAW = 1
 const GAME_POINTS_WIN = 3
 const GAME_POINTS_DRAW = 1
 
-/** A bye is "considered to have won the match 2-0": 3 match points, 6 game points. */
-const BYE_GAME_WINS = 2
+/** A bye is "considered to have won the match 2-0": 3 match points, 6 game points.
+ * Exported because pairing.ts builds byes and this is the single definition. */
+export const BYE_GAME_WINS = 2
 
 /**
  * The MTR floors every win percentage so one disastrous opponent can't drag a
@@ -27,16 +28,29 @@ export const MINIMUM_WIN_PERCENTAGE = 1 / 3
 function reportedMatchesFor(entrantId: string, tournament: Tournament): Match[] {
   return tournament.rounds.flatMap((round) =>
     round.matches.filter(
-      (match) =>
-        match.result !== null &&
-        (match.aEntrantId === entrantId || match.bEntrantId === entrantId),
+      (match) => match.result !== null && match.entrantIds.includes(entrantId),
     ),
   )
 }
 
-/** True when this match is `entrantId`'s bye (they were side A with no opponent). */
-function isByeFor(match: Match, entrantId: string): boolean {
-  return match.bEntrantId === null && match.aEntrantId === entrantId
+type Outcome = 'win' | 'loss' | 'draw'
+
+/**
+ * One rule for every table size: whoever has the most game wins took the match, and
+ * a tie at the top is a draw.
+ *
+ * That covers a 2-0, a 1-1 drawn match, a bye (a single entrant is trivially the sole
+ * maximum), a four-player pod with one winner, and a pod that timed out with nobody
+ * on a game win -- without a special case for any of them.
+ */
+function outcomeFor(match: Match, entrantId: string): Outcome {
+  const { gameWins } = match.result!
+  const index = match.entrantIds.indexOf(entrantId)
+  const own = gameWins[index]
+  const best = Math.max(...gameWins)
+
+  if (own < best) return 'loss'
+  return gameWins.filter((wins) => wins === best).length === 1 ? 'win' : 'draw'
 }
 
 export interface MatchRecord {
@@ -46,25 +60,16 @@ export interface MatchRecord {
 }
 
 export function matchRecord(entrantId: string, tournament: Tournament): MatchRecord {
-  let wins = 0
-  let losses = 0
-  let draws = 0
+  const record: MatchRecord = { wins: 0, losses: 0, draws: 0 }
 
   for (const match of reportedMatchesFor(entrantId, tournament)) {
-    const result = match.result!
-    if (isByeFor(match, entrantId)) {
-      wins += 1
-      continue
-    }
-    const isSideA = match.aEntrantId === entrantId
-    const own = isSideA ? result.aGameWins : result.bGameWins
-    const opponent = isSideA ? result.bGameWins : result.aGameWins
-    if (own > opponent) wins += 1
-    else if (own < opponent) losses += 1
-    else draws += 1
+    const outcome = outcomeFor(match, entrantId)
+    if (outcome === 'win') record.wins += 1
+    else if (outcome === 'loss') record.losses += 1
+    else record.draws += 1
   }
 
-  return { wins, losses, draws }
+  return record
 }
 
 export function matchPointsFor(entrantId: string, tournament: Tournament): number {
@@ -82,17 +87,13 @@ function gameTallyFor(entrantId: string, tournament: Tournament): GameTally {
   let played = 0
 
   for (const match of reportedMatchesFor(entrantId, tournament)) {
-    const result = match.result!
-    if (isByeFor(match, entrantId)) {
-      points += BYE_GAME_WINS * GAME_POINTS_WIN
-      played += BYE_GAME_WINS
-      continue
-    }
-    const isSideA = match.aEntrantId === entrantId
-    const own = isSideA ? result.aGameWins : result.bGameWins
-    const opponent = isSideA ? result.bGameWins : result.aGameWins
-    points += own * GAME_POINTS_WIN + result.gameDraws * GAME_POINTS_DRAW
-    played += own + opponent + result.gameDraws
+    const { gameWins, gameDraws } = match.result!
+    const own = gameWins[match.entrantIds.indexOf(entrantId)]
+    // Everyone at the table played the same games, so the count is the whole match's
+    // games however many people were in it -- a bye's [2] gives 2, a 2-1 gives 3, a
+    // single-game pod gives 1.
+    points += own * GAME_POINTS_WIN + gameDraws * GAME_POINTS_DRAW
+    played += gameWins.reduce((total, wins) => total + wins, 0) + gameDraws
   }
 
   return { points, played }
@@ -115,15 +116,18 @@ export function gameWinPercentage(entrantId: string, tournament: Tournament): nu
   return flooredPercentage(points, played * GAME_POINTS_WIN)
 }
 
-/** Everyone this entrant actually sat across from. Byes contribute no opponent, which
- * is why they're excluded from both opponents' percentages below. */
+/**
+ * Everyone this entrant actually sat across from. A bye yields none -- which is the
+ * MTR rule that byes contribute no opponent, falling straight out of the model rather
+ * than needing a check.
+ *
+ * A pod contributes every other player in it, so beating three people counts three
+ * opponents toward OMW%.
+ */
 export function opponentIdsFor(entrantId: string, tournament: Tournament): string[] {
-  const opponents: string[] = []
-  for (const match of reportedMatchesFor(entrantId, tournament)) {
-    if (match.bEntrantId === null) continue
-    opponents.push(match.aEntrantId === entrantId ? match.bEntrantId : match.aEntrantId)
-  }
-  return opponents
+  return reportedMatchesFor(entrantId, tournament).flatMap((match) =>
+    opponentsIn(match, entrantId),
+  )
 }
 
 function averageOverOpponents(

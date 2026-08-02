@@ -1,5 +1,5 @@
-import { computeStandings } from './scoring'
-import type { Entrant, Match, Rng, Standing, Tournament } from './types'
+import { BYE_GAME_WINS, computeStandings } from './scoring'
+import { isBye, type Entrant, type Match, type Rng, type Standing, type Tournament } from './types'
 
 /** Fisher-Yates, with the RNG injected so tests are deterministic. */
 export function shuffle<T>(items: T[], rng: Rng): T[] {
@@ -16,25 +16,28 @@ export function shuffle<T>(items: T[], rng: Rng): T[] {
  * entrant plays at most one match per round, which makes this unique within its round
  * -- and round number plus match id is how every lookup is keyed.
  */
-function matchId(aEntrantId: string, bEntrantId: string | null): string {
-  return `${aEntrantId}-vs-${bEntrantId ?? 'bye'}`
+function matchId(entrantIds: string[]): string {
+  return entrantIds.length === 1 ? `${entrantIds[0]}-vs-bye` : entrantIds.join('-vs-')
 }
 
-/** Exported so anything that rewrites a pairing (swapPairing) rebuilds through here
+/**
+ * Exported so anything that rewrites a pairing (swapPairing) rebuilds through here
  * rather than spreading the old match, which would keep an id naming the wrong
- * players. */
-export function makeMatch(aEntrantId: string, bEntrantId: string): Match {
-  return { id: matchId(aEntrantId, bEntrantId), aEntrantId, bEntrantId, result: null }
+ * players.
+ *
+ * Takes a list, so the same constructor builds a 1v1 match and a Commander pod.
+ */
+export function makeMatch(entrantIds: string[]): Match {
+  return { id: matchId(entrantIds), entrantIds, result: null }
 }
 
 /** A bye is recorded as a 2-0 win straight away -- there's no match to play and
  * nothing for the player to report. */
 export function makeBye(entrantId: string): Match {
   return {
-    id: matchId(entrantId, null),
-    aEntrantId: entrantId,
-    bEntrantId: null,
-    result: { aGameWins: 2, bGameWins: 0, gameDraws: 0 },
+    id: matchId([entrantId]),
+    entrantIds: [entrantId],
+    result: { gameWins: [BYE_GAME_WINS], gameDraws: 0 },
   }
 }
 
@@ -49,7 +52,7 @@ export function seatPairings(entrants: Entrant[]): Match[] {
   const half = Math.floor(bySeat.length / 2)
 
   const matches = Array.from({ length: half }, (_unused, index) =>
-    makeMatch(bySeat[index].id, bySeat[index + half].id),
+    makeMatch([bySeat[index].id, bySeat[index + half].id]),
   )
   if (bySeat.length % 2 === 1) matches.push(makeBye(bySeat[bySeat.length - 1].id))
   return matches
@@ -60,7 +63,7 @@ export function randomFirstRoundPairings(entrants: Entrant[], rng: Rng): Match[]
   const shuffled = shuffle(entrants, rng)
   const matches: Match[] = []
   for (let i = 0; i + 1 < shuffled.length; i += 2) {
-    matches.push(makeMatch(shuffled[i].id, shuffled[i + 1].id))
+    matches.push(makeMatch([shuffled[i].id, shuffled[i + 1].id]))
   }
   if (shuffled.length % 2 === 1) matches.push(makeBye(shuffled[shuffled.length - 1].id))
   return matches
@@ -74,19 +77,19 @@ export function activeEntrantsForRound(tournament: Tournament, roundNumber: numb
   )
 }
 
+/** Whether these two have already sat at the same table -- in a 1v1 match, or, once
+ * pods exist, in the same pod. */
 export function havePlayed(aId: string, bId: string, tournament: Tournament): boolean {
   return tournament.rounds.some((round) =>
     round.matches.some(
-      (match) =>
-        (match.aEntrantId === aId && match.bEntrantId === bId) ||
-        (match.aEntrantId === bId && match.bEntrantId === aId),
+      (match) => match.entrantIds.includes(aId) && match.entrantIds.includes(bId),
     ),
   )
 }
 
 function hasHadBye(entrantId: string, tournament: Tournament): boolean {
   return tournament.rounds.some((round) =>
-    round.matches.some((match) => match.bEntrantId === null && match.aEntrantId === entrantId),
+    round.matches.some((match) => isBye(match) && match.entrantIds[0] === entrantId),
   )
 }
 
@@ -110,7 +113,7 @@ function pairRecursively(
     if (!allowRematches && havePlayed(first, candidate, tournament)) continue
     const remaining = [...rest.slice(0, i), ...rest.slice(i + 1)]
     const tail = pairRecursively(remaining, tournament, allowRematches)
-    if (tail !== null) return [makeMatch(first, candidate), ...tail]
+    if (tail !== null) return [makeMatch([first, candidate]), ...tail]
   }
   return null
 }
