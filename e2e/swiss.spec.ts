@@ -148,3 +148,71 @@ test.describe('Swiss pairings', () => {
     await expect(page.getByRole('button', { name: 'Report Ava versus Dan' })).toContainText('2-0')
   })
 })
+
+test.describe('Commander pods', () => {
+  const SEVEN = ['Ava', 'Ben', 'Cara', 'Dan', 'Eve', 'Finn', 'Gus']
+
+  async function startPodEvent(page: Page, players: string[]) {
+    await page.goto('/swiss')
+    await expect(page.getByRole('heading', { name: 'New tournament' })).toBeVisible()
+    await page.getByRole('radio', { name: 'Commander' }).click()
+
+    for (let added = 4; added < players.length; added++) {
+      await page.getByRole('button', { name: 'Add player' }).click()
+    }
+    for (const [index, name] of players.entries()) {
+      await page.getByRole('textbox', { name: `Player ${index + 1}` }).fill(name)
+    }
+    await page.getByRole('button', { name: 'Start with this seating' }).click()
+  }
+
+  test('splits seven players into a four and a three, with nobody sitting out', async ({
+    page,
+  }) => {
+    await startPodEvent(page, SEVEN)
+
+    await expect(page.getByRole('heading', { name: 'Round 1 of 3' })).toBeVisible()
+    await expect(page.getByText('Ava, Ben, Cara, Dan')).toBeVisible()
+    await expect(page.getByText('Eve, Finn, Gus')).toBeVisible()
+    // No byes in Commander -- a table of three is a real game.
+    await expect(page.getByText('Bye')).toBeHidden()
+  })
+
+  test('reports a pod by who won, then advances the round', async ({ page }) => {
+    await startPodEvent(page, SEVEN)
+
+    await page.getByRole('button', { name: /^Report the pod with Ava/ }).click()
+    const sheet = page.getByRole('dialog', { name: 'Report result' })
+    await expect(sheet).toBeVisible()
+    // Who won, not a scoreline -- listing four-player game-win permutations would be absurd.
+    await expect(sheet.getByRole('button', { name: 'Cara won' })).toBeVisible()
+    await sheet.getByRole('button', { name: 'Cara won' }).click()
+    await expect(sheet).toBeHidden()
+
+    await page.getByRole('button', { name: /^Report the pod with Eve/ }).click()
+    await page.getByRole('dialog').getByRole('button', { name: 'Finn won' }).click()
+
+    await expect(page.getByText('Complete')).toBeVisible()
+    await page.getByRole('button', { name: 'Start round 2' }).click()
+    await expect(page.getByRole('heading', { name: 'Round 2 of 3' })).toBeVisible()
+  })
+
+  test('seats all five at one table rather than sitting anyone out', async ({ page }) => {
+    // Five is the one count that cannot split into pods of three and four.
+    await startPodEvent(page, SEVEN.slice(0, 5))
+
+    await expect(page.getByText('Ava, Ben, Cara, Dan, Eve')).toBeVisible()
+    await expect(page.getByRole('button', { name: /^Report the pod with/ })).toHaveCount(1)
+  })
+
+  test('awards the pod winner three points and everyone else none', async ({ page }) => {
+    await startPodEvent(page, SEVEN.slice(0, 4))
+
+    await page.getByRole('button', { name: /^Report the pod with Ava/ }).click()
+    await page.getByRole('dialog').getByRole('button', { name: 'Ben won' }).click()
+
+    await page.getByRole('button', { name: 'Standings', exact: true }).click()
+    await expect(page.getByText('3 pts')).toHaveCount(1)
+    await expect(page.getByText('0 pts')).toHaveCount(3)
+  })
+})

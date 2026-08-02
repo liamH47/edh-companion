@@ -10,6 +10,7 @@ import { isBye, type Match, type MatchResult, type Rng, type Tournament } from '
 export function makeTournament(overrides: Partial<Tournament> = {}): Tournament {
   return {
     mode: 'solo',
+    eventFormat: 'draft',
     format: 'bo3',
     totalRounds: 3,
     entrants: [],

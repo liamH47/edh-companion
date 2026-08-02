@@ -1,12 +1,22 @@
 import {
   makeBye,
   makeMatch,
+  podPairings,
   randomFirstRoundPairings,
+  randomPods,
   seatPairings,
+  seatPods,
   shuffle,
   swissPairings,
 } from './pairing'
-import type { MatchFormat, MatchResult, Rng, Tournament, TournamentMode } from './types'
+import type {
+  EventFormat,
+  MatchFormat,
+  MatchResult,
+  Rng,
+  Tournament,
+  TournamentMode,
+} from './types'
 
 /**
  * Every transition returns a new Tournament rather than mutating one, so React state
@@ -34,6 +44,7 @@ export function recommendedRounds(entrantCount: number): number {
 
 export interface CreateTournamentInput {
   mode: TournamentMode
+  eventFormat: EventFormat
   format: MatchFormat
   totalRounds: number
   /** In seat order. One name per entrant for solo, two for Two-Headed Giant. */
@@ -43,8 +54,13 @@ export interface CreateTournamentInput {
 export function createTournament(input: CreateTournamentInput): Tournament {
   return {
     mode: input.mode,
-    // Two-Headed Giant is played best-of-one, so the format choice doesn't apply.
-    format: input.mode === 'two-headed-giant' ? 'bo1' : input.format,
+    eventFormat: input.eventFormat,
+    // Two-Headed Giant and Commander are both played as a single game, so the
+    // best-of-three choice doesn't apply to either.
+    format:
+      input.mode === 'two-headed-giant' || input.eventFormat === 'commander'
+        ? 'bo1'
+        : input.format,
     totalRounds: input.totalRounds,
     entrants: input.entrantMembers.map((members, index) => ({
       id: `entrant-${index + 1}`,
@@ -111,10 +127,15 @@ export function startNextRound(
   firstRoundMethod: FirstRoundPairingMethod = 'draft-seating',
 ): StartRoundOutcome {
   const roundNumber = tournament.rounds.length + 1
+  const isPodded = tournament.eventFormat === 'commander'
 
   if (roundNumber === 1) {
-    const matches =
-      firstRoundMethod === 'random'
+    const random = firstRoundMethod === 'random'
+    const matches = isPodded
+      ? random
+        ? randomPods(tournament.entrants, rng)
+        : seatPods(tournament.entrants)
+      : random
         ? randomFirstRoundPairings(tournament.entrants, rng)
         : seatPairings(tournament.entrants)
     return {
@@ -123,7 +144,9 @@ export function startNextRound(
     }
   }
 
-  const { matches, hadToRepeatPairing } = swissPairings(tournament, roundNumber, rng)
+  const { matches, hadToRepeatPairing } = isPodded
+    ? podPairings(tournament, roundNumber, rng)
+    : swissPairings(tournament, roundNumber, rng)
   return {
     tournament: { ...tournament, rounds: [...tournament.rounds, { number: roundNumber, matches }] },
     hadToRepeatPairing,

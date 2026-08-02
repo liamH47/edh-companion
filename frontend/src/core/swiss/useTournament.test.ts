@@ -19,7 +19,14 @@ afterEach(() => {
 const NAMES = [['Ava'], ['Ben'], ['Cara'], ['Dev']]
 
 function startInput(overrides = {}) {
-  return { mode: 'solo' as const, format: 'bo3' as const, totalRounds: 3, entrantMembers: NAMES, ...overrides }
+  return {
+    mode: 'solo' as const,
+    eventFormat: 'draft' as const,
+    format: 'bo3' as const,
+    totalRounds: 3,
+    entrantMembers: NAMES,
+    ...overrides,
+  }
 }
 
 describe('useTournament', () => {

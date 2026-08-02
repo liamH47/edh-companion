@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { match, result } from '../core/swiss/fixtures'
+import { match, pod, result } from '../core/swiss/fixtures'
 import { MatchResultSheet } from './MatchResultSheet'
 
 function renderSheet(overrides: Partial<Parameters<typeof MatchResultSheet>[0]> = {}) {
@@ -10,8 +10,7 @@ function renderSheet(overrides: Partial<Parameters<typeof MatchResultSheet>[0]> 
     onClose: vi.fn(),
     match: match('entrant-1', 'entrant-2', null),
     format: 'bo3' as const,
-    aName: 'Ava',
-    bName: 'Ben',
+    names: ['Ava', 'Ben'],
     onReport: vi.fn(),
     ...overrides,
   }
@@ -27,8 +26,7 @@ describe('MatchResultSheet', () => {
         onClose={() => {}}
         match={null}
         format="bo3"
-        aName=""
-        bName=""
+        names={[]}
         onReport={() => {}}
       />,
     )
@@ -94,5 +92,82 @@ describe('MatchResultSheet', () => {
   it('hides the re-pair option when nothing later depends on it', () => {
     renderSheet()
     expect(screen.queryByRole('button', { name: 'Re-pair later rounds' })).not.toBeInTheDocument()
+  })
+})
+
+describe('MatchResultSheet for a Commander pod', () => {
+  const POD = ['Ava', 'Ben', 'Cara', 'Dan']
+
+  function renderPod(overrides: Partial<Parameters<typeof MatchResultSheet>[0]> = {}) {
+    const props = {
+      open: true,
+      onClose: vi.fn(),
+      match: pod(['entrant-1', 'entrant-2', 'entrant-3', 'entrant-4'], null),
+      format: 'bo1' as const,
+      names: POD,
+      onReport: vi.fn(),
+      ...overrides,
+    }
+    render(<MatchResultSheet {...props} />)
+    return props
+  }
+
+  it('asks who won rather than offering a scoreline', () => {
+    // Listing every game-win permutation for four players would be absurd; a pod is
+    // one game with one survivor.
+    renderPod()
+
+    for (const name of POD) {
+      expect(screen.getByRole('button', { name: `${name} won` })).toBeInTheDocument()
+    }
+    expect(screen.queryByRole('button', { name: '2-0' })).not.toBeInTheDocument()
+  })
+
+  it('names everyone at the table', () => {
+    renderPod()
+    expect(screen.getByText('Ava vs Ben vs Cara vs Dan')).toBeInTheDocument()
+  })
+
+  it('reports a win as one game win for that seat and none for the rest', () => {
+    const props = renderPod()
+    fireEvent.click(screen.getByRole('button', { name: 'Cara won' }))
+
+    expect(props.onReport).toHaveBeenCalledWith({ gameWins: [0, 0, 1, 0], gameDraws: 0 })
+  })
+
+  it('offers a draw, because pods do run out of time', () => {
+    const props = renderPod()
+    fireEvent.click(screen.getByRole('button', { name: 'Draw' }))
+
+    expect(props.onReport).toHaveBeenCalledWith({ gameWins: [0, 0, 0, 0], gameDraws: 1 })
+  })
+
+  it('marks the reported winner as selected', () => {
+    renderPod({
+      match: pod(
+        ['entrant-1', 'entrant-2', 'entrant-3', 'entrant-4'],
+        { gameWins: [0, 1, 0, 0], gameDraws: 0 },
+      ),
+    })
+    expect(screen.getByRole('button', { name: 'Ben won' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    expect(screen.getByRole('button', { name: 'Ava won' })).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    )
+  })
+
+  it('sizes the result to a three-player pod', () => {
+    // The gameWins array has to match the pod, not assume four.
+    const props = renderPod({
+      match: pod(['entrant-1', 'entrant-2', 'entrant-3'], null),
+      names: ['Ava', 'Ben', 'Cara'],
+    })
+    expect(screen.queryByRole('button', { name: 'Dan won' })).not.toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Cara won' }))
+    expect(props.onReport).toHaveBeenCalledWith({ gameWins: [0, 0, 1], gameDraws: 0 })
   })
 })

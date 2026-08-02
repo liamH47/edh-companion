@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { makeEntrants, makeTournament, match, result, round, seededRng } from './fixtures'
+import {
+  makeEntrants,
+  makeTournament,
+  match,
+  result,
+  round,
+  seededRng,
+} from './fixtures'
 import { computeStandings } from './scoring'
 import {
   assignSeatsRandomly,
@@ -39,6 +46,7 @@ describe('createTournament', () => {
   it('seats entrants in the order their names were given', () => {
     const tournament = createTournament({
       mode: 'solo',
+      eventFormat: 'draft',
       format: 'bo3',
       totalRounds: 3,
       entrantMembers: names(3),
@@ -54,6 +62,7 @@ describe('createTournament', () => {
   it('forces best-of-one for Two-Headed Giant regardless of the format asked for', () => {
     const tournament = createTournament({
       mode: 'two-headed-giant',
+      eventFormat: 'draft',
       format: 'bo3',
       totalRounds: 3,
       entrantMembers: [['A', 'B'], ['C', 'D']],
@@ -64,6 +73,7 @@ describe('createTournament', () => {
   it('keeps both member names on a Two-Headed Giant team', () => {
     const tournament = createTournament({
       mode: 'two-headed-giant',
+      eventFormat: 'draft',
       format: 'bo1',
       totalRounds: 3,
       entrantMembers: [['A', 'B'], ['C', 'D']],
@@ -74,6 +84,7 @@ describe('createTournament', () => {
   it('honours the chosen format for a solo event', () => {
     const tournament = createTournament({
       mode: 'solo',
+      eventFormat: 'draft',
       format: 'bo1',
       totalRounds: 3,
       entrantMembers: names(2),
@@ -464,5 +475,45 @@ describe('entrantIdsInRound', () => {
 
   it('is empty for an unknown round', () => {
     expect(entrantIdsInRound(makeTournament(), 3)).toEqual([])
+  })
+})
+
+describe('Commander events', () => {
+  const commanderInput = {
+    mode: 'solo' as const,
+    eventFormat: 'commander' as const,
+    format: 'bo3' as const,
+    totalRounds: 3,
+    entrantMembers: Array.from({ length: 7 }, (_u, i) => [`P${i + 1}`]),
+  }
+
+  it('forces best-of-one, because a pod is a single game', () => {
+    expect(createTournament(commanderInput).format).toBe('bo1')
+  })
+
+  it('pods round 1 from seat order by default', () => {
+    const { tournament } = startNextRound(createTournament(commanderInput), seededRng())
+
+    expect(tournament.rounds[0].matches.map((m) => m.entrantIds)).toEqual([
+      ['entrant-1', 'entrant-2', 'entrant-3', 'entrant-4'],
+      ['entrant-5', 'entrant-6', 'entrant-7'],
+    ])
+  })
+
+  it('pods round 1 at random when asked', () => {
+    const { tournament } = startNextRound(
+      createTournament(commanderInput),
+      seededRng([0.9, 0.2, 0.7, 0.4]),
+      'random',
+    )
+    const pods = tournament.rounds[0].matches
+
+    expect(pods.map((m) => m.entrantIds.length).sort((a, b) => b - a)).toEqual([4, 3])
+    expect(new Set(pods.flatMap((m) => m.entrantIds)).size).toBe(7)
+  })
+
+  it('never produces a bye', () => {
+    const { tournament } = startNextRound(createTournament(commanderInput), seededRng())
+    expect(tournament.rounds[0].matches.every((m) => m.entrantIds.length >= 3)).toBe(true)
   })
 })

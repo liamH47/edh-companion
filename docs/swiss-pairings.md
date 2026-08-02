@@ -82,6 +82,53 @@ With no completed rounds (or no opponents), the floor stands in rather than divi
 zero. `computeStandings` breaks any remaining tie by seat, so the order is deterministic
 instead of depending on array order.
 
+## Event formats
+
+`eventFormat` affects exactly two things: how round 1 is seeded, and whether the field
+is split into pods at all. Scoring, tiebreakers, drops and re-pairing are identical
+throughout.
+
+| Format | Round 1 | Later rounds |
+|---|---|---|
+| `draft` | draft seating | 1v1 Swiss |
+| `sealed` | random | 1v1 Swiss |
+| `constructed` | random | 1v1 Swiss |
+| `commander` | pods, by seat order or random | pods |
+
+Commander is forced to best-of-one, since a pod is a single game.
+
+## Commander pods
+
+Minimum pod size 3, ideal 4 — so maximise fours and make up the remainder with threes.
+Every count from 3 up is expressible as 4a + 3b **except 5**, which becomes a single pod
+of five. **There are no byes in Commander**: a table of three is a perfectly good game,
+so nobody sits out at any field size.
+
+```
+ 3  [3]        7  [4,3]      11  [4,4,3]     15  [4,4,4,3]
+ 4  [4]        8  [4,4]      12  [4,4,4]     16  [4,4,4,4]
+ 5  [5]        9  [3,3,3]    13  [4,3,3,3]
+ 6  [3,3]     10  [4,3,3]    14  [4,4,3,3]
+```
+
+### Pod pairing minimises repeats rather than forbidding them
+
+The objective is deliberately different from 1v1 Swiss. There a repeat is binary, and
+the backtracking search either avoids one or reports that it couldn't. Pods burn
+pairings far faster — a four-player pod uses six at once — so a perfect assignment
+usually **does not exist**, and searching for one would be wasted work.
+
+So `podPairings` walks the standings and fills each seat with the highest-ranked
+remaining player who has met the fewest of the pod so far. Taking the highest-ranked
+zero-repeat candidate keeps score groups together at the same time.
+
+Worth internalising, because it looks like a bug otherwise: **with 8 players in two pods
+of four, a fully fresh round 2 is impossible.** Any new pod of four drawn from two prior
+pods must take two from one of them (pigeonhole), and that pair has already met. The
+best achievable is a 2+2 split per pod — four repeated pairs — which is what the pairer
+produces. Nine players in three pods of three *can* re-pod with no repeats at all, and
+it finds that.
+
 ## Round 1: draft seating
 
 Seat `i` plays seat `i + floor(N/2)` — the players sitting furthest apart in the pod,
