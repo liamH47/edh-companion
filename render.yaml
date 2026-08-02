@@ -6,4 +6,7 @@ services:
     dockerfilePath: ./Dockerfile
     dockerContext: .
     healthCheckPath: /healthz
-    autoDeploy: true
+    # Deploys are triggered by the `deploy` job in .github/workflows/ci.yml, which only
+    # runs after the backend and frontend checks pass. Turning this back on would let an
+    # untested push to main ship straight to production.
+    autoDeploy: false

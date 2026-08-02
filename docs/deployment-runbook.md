@@ -49,18 +49,43 @@ project (an unrelated org's access was a concern), so this part is manual:
 
 ## Normal deploy flow (after first-time setup)
 
-`autoDeploy: true` in `render.yaml` means **every push to `main` auto-deploys**. There is no
-separate manual deploy step for routine changes:
+**Deploys are gated on CI.** `autoDeploy` is `false` in `render.yaml`; what ships to Render
+is the `deploy` job in `.github/workflows/ci.yml`, which runs only on `main` and only after
+the backend and frontend jobs pass. So the flow is:
 
 ```
-git push origin main
+git push origin <branch>     # open a PR; CI runs
+# merge the PR once checks are green
 ```
+
+Merging to `main` runs CI once more and, if green, POSTs to the Render deploy hook. A red
+build on `main` deploys nothing and leaves the previous release live.
 
 Watch the deploy in the Render dashboard (Events tab) or via:
 ```
 # if gh/render CLIs are set up
 render deploys list mtg-calc
 ```
+
+### One-time CI setup (manual — do this yourself)
+
+1. **Add the deploy hook secret.** Render dashboard → the `mtg-calc` service → Settings →
+   Deploy Hook → copy the URL. Then in GitHub: Settings → Secrets and variables → Actions →
+   New repository secret, named `RENDER_DEPLOY_HOOK_URL`. The `deploy` job fails with an
+   explicit error if this is missing, so a misconfiguration is loud rather than silent.
+2. **Turn off Render's own auto-deploy in the dashboard too.** `render.yaml` sets
+   `autoDeploy: false`, but a service created before that change may still have it enabled
+   in its settings — Blueprint sync does not always override it. Check
+   Settings → Build & Deploy → Auto-Deploy is "No".
+3. **Protect `main`.** GitHub → Settings → Branches → add a rule for `main`: require pull
+   requests, and require the `Backend (ruff, mypy, pytest)` and
+   `Frontend (tsc, oxlint, vitest)` status checks to pass. Without this, CI is advisory —
+   someone can still push straight to `main`.
+
+### Deploying without a code change
+
+To redeploy the current `main` (e.g. after a rollback, or to pick up an env var change),
+POST to the deploy hook directly, or use the Render dashboard's "Manual Deploy" button.
 
 ## Verifying a deploy
 
@@ -84,15 +109,15 @@ Render keeps a history of previous successful deploys per service, and rolling b
 3. Click it → **Rollback to this deploy** (Render redeploys that exact previous build).
 4. Re-run the verification steps above against the rolled-back version.
 
-If the bad deploy also needs to stop auto-redeploying from `main` while you fix it: toggle
-`autoDeploy` off in the service's Settings, or set it to `false` in `render.yaml` and push
-that one change — do this deliberately, and remember to turn it back on once fixed.
+A bad deploy cannot re-ship on its own — `autoDeploy` is off and only a green CI run on
+`main` triggers the hook — so a rollback stays rolled back while you fix forward.
 
 For a code-level rollback (not just Render's deploy history), standard git revert works
-fine too, and will itself trigger a new auto-deploy of the reverted state:
+fine too. It goes through CI like any other change, so the reverted state is tested before
+it deploys:
 ```
 git revert <bad-commit-sha>
-git push origin main
+# push to a branch, open a PR, merge once green
 ```
 
 ## Troubleshooting
@@ -113,9 +138,13 @@ git push origin main
   directory inside the image — this is where the Dockerfile copies `frontend/dist` to. A
   `docker run --rm -it mtg-calc sh` (once Docker's available locally) and `ls app/static`
   is the fastest way to check.
-- **New card/feature works locally but not in prod**: confirm it's actually on `main` and
-  pushed — `autoDeploy` only watches the branch Render is configured to track (`main` by
-  default).
+- **New card/feature works locally but not in prod**: confirm it's on `main` *and* that the
+  CI run for that merge went green all the way through the `deploy` job — a red backend or
+  frontend job skips the deploy entirely, so `main` can be ahead of what's live. Check the
+  Actions tab first, Render's Events tab second.
+- **CI green but no deploy fired**: the `deploy` job only runs on `push` events to `main`,
+  not on `pull_request`. If it ran and failed, the most likely cause is a missing or
+  rotated `RENDER_DEPLOY_HOOK_URL` secret — the job prints an explicit error for that case.
 
 ## Known limitations of this deployment (by design, for now)
 
@@ -125,10 +154,19 @@ git push origin main
   per browser session), so this isn't a gap, just worth noting if that ever changes.
 - No custom domain configured yet; Render's `onrender.com` subdomain is fine for sharing
   with friends. Worth adding later if this becomes more than a hobby link.
-- No CI checks gating the deploy yet (lint/test/coverage all currently run locally, not in
-  a pipeline) — that's `ci-app.yml`/`ci-terraform.yml` from the main project plan, still
-  to be built. Until then, run the local checks before pushing to `main`:
-  ```
-  cd backend && uv run ruff check . && uv run ruff format --check . && uv run mypy app && uv run pytest
-  cd frontend && npx tsc -b && npx oxlint && npx vitest run --coverage
-  ```
+- No end-to-end test against the built image yet — CI runs unit tests and type/lint checks,
+  but nothing exercises the Docker image the way a browser does, so a packaging regression
+  (a bad `COPY` path, a broken SPA catch-all) would still reach production. Playwright
+  against the container is the next piece of this.
+
+## Running the checks locally
+
+CI runs exactly these, so reproducing a red build is a copy-paste:
+
+```
+cd backend && uv run ruff check . && uv run ruff format --check . && uv run mypy app && uv run pytest
+cd frontend && npm run tokens:check && npx tsc -b && npx oxlint && npx vitest run --coverage
+```
+
+Node version is pinned in `.nvmrc` (24, matching `node:24-alpine` in the Dockerfile). If
+you use `nvm`, `nvm use` at the repo root picks it up.

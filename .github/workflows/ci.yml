@@ -1,0 +1,106 @@
+name: CI
+
+# Runs on every PR and on pushes to main. The deploy job at the bottom is what actually
+# ships to Render -- `render.yaml` has autoDeploy disabled precisely so that a push to
+# main cannot deploy without these checks passing first.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# A new push to the same branch makes the in-flight run obsolete. Never cancel a run on
+# main, though: the deploy job hangs off it.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Backend (ruff, mypy, pytest)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: backend/uv.lock
+
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      - name: Lint
+        run: uv run ruff check .
+
+      - name: Format check
+        run: uv run ruff format --check .
+
+      - name: Type check
+        run: uv run mypy app
+
+      # pyproject.toml already sets --cov-fail-under=100 with branch coverage, so this
+      # step is the coverage gate as well as the test run.
+      - name: Test
+        run: uv run pytest
+
+  frontend:
+    name: Frontend (tsc, oxlint, vitest)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      # tokens.css is generated from tokens.ts. Regenerating locally is wired to
+      # predev/prebuild, but nothing stops a commit that edits tokens.ts alone -- this
+      # catches that before the stale CSS ships.
+      - name: Check design tokens are current
+        run: npm run tokens:check
+
+      - name: Type check
+        run: npx tsc -b
+
+      - name: Lint
+        run: npx oxlint
+
+      # vite.config.ts sets 100% thresholds on lines/branches/functions/statements.
+      - name: Test
+        run: npx vitest run --coverage
+
+  deploy:
+    name: Deploy to Render
+    runs-on: ubuntu-latest
+    needs: [backend, frontend]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: Trigger Render deploy
+        env:
+          DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$DEPLOY_HOOK" ]; then
+            echo "::error::RENDER_DEPLOY_HOOK_URL secret is not set. Add it in"
+            echo "::error::Settings > Secrets and variables > Actions. Get the URL from"
+            echo "::error::the Render dashboard: service > Settings > Deploy Hook."
+            exit 1
+          fi
+          # --fail so a non-2xx from Render fails the job rather than silently
+          # reporting success on an error page.
+          curl --fail --silent --show-error --request POST "$DEPLOY_HOOK"
+          echo "Deploy triggered. Watch it in the Render dashboard (Events tab)."
