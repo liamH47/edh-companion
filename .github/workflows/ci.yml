@@ -52,6 +52,13 @@ jobs:
       - name: Test
         run: uv run pytest
 
+      # Python owns card behaviour; packages/core mirrors it in TypeScript. This fails
+      # if the checked-in corpus no longer matches what Python produces -- which catches
+      # both "a formula changed" and "a card was added". The TypeScript side is then
+      # checked against that corpus by the frontend job.
+      - name: Check the parity corpus is current
+        run: uv run python tools/generate_parity_corpus.py --check
+
   frontend:
     name: Frontend (tsc, oxlint, vitest)
     runs-on: ubuntu-latest

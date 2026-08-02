@@ -1,0 +1,735 @@
+{
+  "cardId": "ob-nixilis-the-fallen",
+  "cases": [
+    {
+      "inputs": {
+        "existing_counters": 0,
+        "lands_this_turn": 0,
+        "triggers_per_land": 1
+      },
+      "outputs": {
+        "counters_added": 0,
+        "landfall_triggers": 0,
+        "life_drained": 0,
+        "power": 3,
+        "total_counters": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "existing_counters": 0,
+        "lands_this_turn": -1,
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "inputs": {
+        "existing_counters": 0,
+        "lands_this_turn": 99,
+        "triggers_per_land": 1
+      },
+      "outputs": {
+        "counters_added": 297,
+        "landfall_triggers": 99,
+        "life_drained": 297,
+        "power": 300,
+        "total_counters": 297
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "existing_counters": 0,
+        "lands_this_turn": 100,
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "existing_counters": 0,
+        "lands_this_turn": 0,
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "existing_counters": 0,
+        "lands_this_turn": -1,
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "existing_counters": 0,
+        "lands_this_turn": 99,
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "existing_counters": 0,
+        "lands_this_turn": 100,
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "inputs": {
+        "existing_counters": 0,
+        "lands_this_turn": 0,
+        "triggers_per_land": 4
+      },
+      "outputs": {
+        "counters_added": 0,
+        "landfall_triggers": 0,
+        "life_drained": 0,
+        "power": 3,
+        "total_counters": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "existing_counters": 0,
+        "lands_this_turn": -1,
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "inputs": {
+        "existing_counters": 0,
+        "lands_this_turn": 99,
+        "triggers_per_land": 4
+      },
+      "outputs": {
+        "counters_added": 1188,
+        "landfall_triggers": 396,
+        "life_drained": 1188,
+        "power": 1191,
+        "total_counters": 1188
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "existing_counters": 0,
+        "lands_this_turn": 100,
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "existing_counters": 0,
+        "lands_this_turn": 0,
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "existing_counters": 0,
+        "lands_this_turn": -1,
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "existing_counters": 0,
+        "lands_this_turn": 99,
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "existing_counters": 0,
+        "lands_this_turn": 100,
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": -1,
+        "lands_this_turn": 0,
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": -1,
+        "lands_this_turn": -1,
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": -1,
+        "lands_this_turn": 99,
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": -1,
+        "lands_this_turn": 100,
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": -1,
+        "lands_this_turn": 0,
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": -1,
+        "lands_this_turn": -1,
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": -1,
+        "lands_this_turn": 99,
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": -1,
+        "lands_this_turn": 100,
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": -1,
+        "lands_this_turn": 0,
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": -1,
+        "lands_this_turn": -1,
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": -1,
+        "lands_this_turn": 99,
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": -1,
+        "lands_this_turn": 100,
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": -1,
+        "lands_this_turn": 0,
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": -1,
+        "lands_this_turn": -1,
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": -1,
+        "lands_this_turn": 99,
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": -1,
+        "lands_this_turn": 100,
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "inputs": {
+        "existing_counters": 999,
+        "lands_this_turn": 0,
+        "triggers_per_land": 1
+      },
+      "outputs": {
+        "counters_added": 0,
+        "landfall_triggers": 0,
+        "life_drained": 0,
+        "power": 1002,
+        "total_counters": 999
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "existing_counters": 999,
+        "lands_this_turn": -1,
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "inputs": {
+        "existing_counters": 999,
+        "lands_this_turn": 99,
+        "triggers_per_land": 1
+      },
+      "outputs": {
+        "counters_added": 297,
+        "landfall_triggers": 99,
+        "life_drained": 297,
+        "power": 1299,
+        "total_counters": 1296
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "existing_counters": 999,
+        "lands_this_turn": 100,
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "existing_counters": 999,
+        "lands_this_turn": 0,
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "existing_counters": 999,
+        "lands_this_turn": -1,
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "existing_counters": 999,
+        "lands_this_turn": 99,
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "existing_counters": 999,
+        "lands_this_turn": 100,
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "inputs": {
+        "existing_counters": 999,
+        "lands_this_turn": 0,
+        "triggers_per_land": 4
+      },
+      "outputs": {
+        "counters_added": 0,
+        "landfall_triggers": 0,
+        "life_drained": 0,
+        "power": 1002,
+        "total_counters": 999
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "existing_counters": 999,
+        "lands_this_turn": -1,
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "inputs": {
+        "existing_counters": 999,
+        "lands_this_turn": 99,
+        "triggers_per_land": 4
+      },
+      "outputs": {
+        "counters_added": 1188,
+        "landfall_triggers": 396,
+        "life_drained": 1188,
+        "power": 2190,
+        "total_counters": 2187
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "existing_counters": 999,
+        "lands_this_turn": 100,
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "existing_counters": 999,
+        "lands_this_turn": 0,
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "existing_counters": 999,
+        "lands_this_turn": -1,
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "existing_counters": 999,
+        "lands_this_turn": 99,
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "existing_counters": 999,
+        "lands_this_turn": 100,
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": 1000,
+        "lands_this_turn": 0,
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": 1000,
+        "lands_this_turn": -1,
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": 1000,
+        "lands_this_turn": 99,
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": 1000,
+        "lands_this_turn": 100,
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": 1000,
+        "lands_this_turn": 0,
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": 1000,
+        "lands_this_turn": -1,
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": 1000,
+        "lands_this_turn": 99,
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": 1000,
+        "lands_this_turn": 100,
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": 1000,
+        "lands_this_turn": 0,
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": 1000,
+        "lands_this_turn": -1,
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": 1000,
+        "lands_this_turn": 99,
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": 1000,
+        "lands_this_turn": 100,
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": 1000,
+        "lands_this_turn": 0,
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": 1000,
+        "lands_this_turn": -1,
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": 1000,
+        "lands_this_turn": 99,
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "existing_counters"
+      },
+      "inputs": {
+        "existing_counters": 1000,
+        "lands_this_turn": 100,
+        "triggers_per_land": 5
+      }
+    }
+  ],
+  "generatedFrom": "backend/app/cards/ob_nixilis_the_fallen.py",
+  "note": "Generated by backend/tools/generate_parity_corpus.py. Do not edit by hand."
+}

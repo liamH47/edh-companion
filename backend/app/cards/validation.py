@@ -8,6 +8,25 @@ from typing import Any
 from .schema import FieldKind, FieldSpec
 
 
+class InputError(ValueError):
+    """A validation failure carrying a machine-readable code beside its message.
+
+    The code exists for the TypeScript parity corpus. Asserting that both
+    implementations produce the same *message* is a trap: these embed ``{value!r}``,
+    and Python renders ``True``/``'x'`` where JavaScript renders ``true``/``"x"`` --
+    so message equality would mean hand-writing a Python ``repr`` in TypeScript
+    forever, and would break on values nobody thought about.
+
+    The message itself is unchanged, so the API's 422 body and every existing test
+    still see exactly what they did before.
+    """
+
+    def __init__(self, field: str, code: str, message: str) -> None:
+        super().__init__(message)
+        self.field = field
+        self.code = code
+
+
 def validate_inputs(fields: list[FieldSpec], raw_inputs: dict[str, Any]) -> dict[str, Any]:
     """Apply each field's default for omitted keys, then type/bounds-check every value."""
     return {
@@ -30,26 +49,43 @@ def _validate_field(field: FieldSpec, value: Any) -> Any:
 
 def _validate_boolean(field: FieldSpec, value: Any) -> bool:
     if not isinstance(value, bool):
-        raise ValueError(f"{field.name!r} must be a boolean, got {value!r}")
+        raise InputError(
+            field.name, "not_boolean", f"{field.name!r} must be a boolean, got {value!r}"
+        )
     return value
 
 
 def _validate_number(field: FieldSpec, value: Any) -> int:
+    # bool is a subclass of int in Python, so True would otherwise pass as 1. No such
+    # hazard exists in the TypeScript port, which is exactly why the corpus compares
+    # error *codes* rather than trying to mirror this check.
     if isinstance(value, bool) or not isinstance(value, int):
-        raise ValueError(f"{field.name!r} must be an integer, got {value!r}")
+        raise InputError(
+            field.name, "not_integer", f"{field.name!r} must be an integer, got {value!r}"
+        )
     if field.min is not None and value < field.min:
-        raise ValueError(f"{field.name!r} must be >= {field.min}, got {value}")
+        raise InputError(
+            field.name, "below_min", f"{field.name!r} must be >= {field.min}, got {value}"
+        )
     if field.max is not None and value > field.max:
-        raise ValueError(f"{field.name!r} must be <= {field.max}, got {value}")
+        raise InputError(
+            field.name, "above_max", f"{field.name!r} must be <= {field.max}, got {value}"
+        )
     return value
 
 
 def _validate_select(field: FieldSpec, value: Any) -> str:
     if not isinstance(value, str):
-        raise ValueError(f"{field.name!r} must be a string, got {value!r}")
+        raise InputError(
+            field.name, "not_string", f"{field.name!r} must be a string, got {value!r}"
+        )
     allowed = {option.value for option in field.options or []}
     if value not in allowed:
-        raise ValueError(f"{field.name!r} must be one of {sorted(allowed)}, got {value!r}")
+        raise InputError(
+            field.name,
+            "not_in_options",
+            f"{field.name!r} must be one of {sorted(allowed)}, got {value!r}",
+        )
     return value
 
 
@@ -61,13 +97,19 @@ def _validate_sequence(field: FieldSpec, value: Any) -> list[str]:
     request's inputs alias every later request's default.
     """
     if not isinstance(value, list):
-        raise ValueError(f"{field.name!r} must be a list, got {value!r}")
+        raise InputError(field.name, "not_list", f"{field.name!r} must be a list, got {value!r}")
     if field.max is not None and len(value) > field.max:
-        raise ValueError(f"{field.name!r} must have at most {field.max} entries, got {len(value)}")
+        raise InputError(
+            field.name,
+            "too_long",
+            f"{field.name!r} must have at most {field.max} entries, got {len(value)}",
+        )
     allowed = {option.value for option in field.options or []}
     for entry in value:
         if entry not in allowed:
-            raise ValueError(
-                f"{field.name!r} entries must each be one of {sorted(allowed)}, got {entry!r}"
+            raise InputError(
+                field.name,
+                "entry_not_in_options",
+                f"{field.name!r} entries must each be one of {sorted(allowed)}, got {entry!r}",
             )
     return list(value)
