@@ -13,6 +13,17 @@ node_modules/
 dist/
 coverage/
 
+# Built frontend copied into the backend package. The Dockerfile creates this inside
+# the image; locally it only exists when reproducing the production serving path
+# (see e2e/README.md).
+backend/app/static/
+
+# Playwright
+test-results/
+playwright-report/
+blob-report/
+.playwright/
+
 # Terraform (future milestones)
 .terraform/
 *.tfstate
