@@ -1,0 +1,857 @@
+{
+  "cardId": "comet-stellar-pup",
+  "cases": [
+    {
+      "inputs": {
+        "rolls": [],
+        "starting_loyalty": 5
+      },
+      "outputs": {
+        "activations_remaining": 1,
+        "cards_returned": 0,
+        "comet_died": false,
+        "damage_this_activation": 0,
+        "loyalty": 5,
+        "squirrels_created": 0,
+        "total_damage": 0
+      }
+    },
+    {
+      "inputs": {
+        "rolls": [
+          "1"
+        ],
+        "starting_loyalty": 5
+      },
+      "outputs": {
+        "activations_remaining": 0,
+        "cards_returned": 0,
+        "comet_died": false,
+        "damage_this_activation": 0,
+        "loyalty": 7,
+        "squirrels_created": 2,
+        "total_damage": 0
+      }
+    },
+    {
+      "inputs": {
+        "rolls": [
+          "6"
+        ],
+        "starting_loyalty": 5
+      },
+      "outputs": {
+        "activations_remaining": 2,
+        "cards_returned": 0,
+        "comet_died": false,
+        "damage_this_activation": 0,
+        "loyalty": 6,
+        "squirrels_created": 0,
+        "total_damage": 0
+      }
+    },
+    {
+      "inputs": {
+        "rolls": [
+          "6",
+          "4"
+        ],
+        "starting_loyalty": 5
+      },
+      "outputs": {
+        "activations_remaining": 1,
+        "cards_returned": 0,
+        "comet_died": false,
+        "damage_this_activation": 6,
+        "loyalty": 4,
+        "squirrels_created": 0,
+        "total_damage": 6
+      }
+    },
+    {
+      "inputs": {
+        "rolls": [
+          "6",
+          "5"
+        ],
+        "starting_loyalty": 5
+      },
+      "outputs": {
+        "activations_remaining": 1,
+        "cards_returned": 0,
+        "comet_died": false,
+        "damage_this_activation": 6,
+        "loyalty": 4,
+        "squirrels_created": 0,
+        "total_damage": 6
+      }
+    },
+    {
+      "inputs": {
+        "rolls": [
+          "6",
+          "6",
+          "6",
+          "6",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ],
+        "starting_loyalty": 5
+      },
+      "outputs": {
+        "activations_remaining": 0,
+        "cards_returned": 1,
+        "comet_died": false,
+        "damage_this_activation": 10,
+        "loyalty": 8,
+        "squirrels_created": 4,
+        "total_damage": 22
+      }
+    },
+    {
+      "inputs": {
+        "rolls": [
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3"
+        ],
+        "starting_loyalty": 5
+      },
+      "outputs": {
+        "activations_remaining": 0,
+        "cards_returned": 5,
+        "comet_died": true,
+        "damage_this_activation": 0,
+        "loyalty": 0,
+        "squirrels_created": 0,
+        "total_damage": 0
+      }
+    },
+    {
+      "error": {
+        "code": "too_long",
+        "field": "rolls"
+      },
+      "inputs": {
+        "rolls": [
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1"
+        ],
+        "starting_loyalty": 5
+      }
+    },
+    {
+      "inputs": {
+        "rolls": [],
+        "starting_loyalty": 0
+      },
+      "outputs": {
+        "activations_remaining": 1,
+        "cards_returned": 0,
+        "comet_died": false,
+        "damage_this_activation": 0,
+        "loyalty": 0,
+        "squirrels_created": 0,
+        "total_damage": 0
+      }
+    },
+    {
+      "inputs": {
+        "rolls": [
+          "1"
+        ],
+        "starting_loyalty": 0
+      },
+      "outputs": {
+        "activations_remaining": 0,
+        "cards_returned": 0,
+        "comet_died": false,
+        "damage_this_activation": 0,
+        "loyalty": 2,
+        "squirrels_created": 2,
+        "total_damage": 0
+      }
+    },
+    {
+      "inputs": {
+        "rolls": [
+          "6"
+        ],
+        "starting_loyalty": 0
+      },
+      "outputs": {
+        "activations_remaining": 2,
+        "cards_returned": 0,
+        "comet_died": false,
+        "damage_this_activation": 0,
+        "loyalty": 1,
+        "squirrels_created": 0,
+        "total_damage": 0
+      }
+    },
+    {
+      "inputs": {
+        "rolls": [
+          "6",
+          "4"
+        ],
+        "starting_loyalty": 0
+      },
+      "outputs": {
+        "activations_remaining": 0,
+        "cards_returned": 0,
+        "comet_died": true,
+        "damage_this_activation": 1,
+        "loyalty": 0,
+        "squirrels_created": 0,
+        "total_damage": 1
+      }
+    },
+    {
+      "inputs": {
+        "rolls": [
+          "6",
+          "5"
+        ],
+        "starting_loyalty": 0
+      },
+      "outputs": {
+        "activations_remaining": 0,
+        "cards_returned": 0,
+        "comet_died": true,
+        "damage_this_activation": 1,
+        "loyalty": 0,
+        "squirrels_created": 0,
+        "total_damage": 1
+      }
+    },
+    {
+      "inputs": {
+        "rolls": [
+          "6",
+          "6",
+          "6",
+          "6",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ],
+        "starting_loyalty": 0
+      },
+      "outputs": {
+        "activations_remaining": 0,
+        "cards_returned": 1,
+        "comet_died": false,
+        "damage_this_activation": 5,
+        "loyalty": 3,
+        "squirrels_created": 4,
+        "total_damage": 12
+      }
+    },
+    {
+      "inputs": {
+        "rolls": [
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3"
+        ],
+        "starting_loyalty": 0
+      },
+      "outputs": {
+        "activations_remaining": 0,
+        "cards_returned": 1,
+        "comet_died": true,
+        "damage_this_activation": 0,
+        "loyalty": 0,
+        "squirrels_created": 0,
+        "total_damage": 0
+      }
+    },
+    {
+      "error": {
+        "code": "too_long",
+        "field": "rolls"
+      },
+      "inputs": {
+        "rolls": [
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1"
+        ],
+        "starting_loyalty": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "starting_loyalty"
+      },
+      "inputs": {
+        "rolls": [],
+        "starting_loyalty": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "starting_loyalty"
+      },
+      "inputs": {
+        "rolls": [
+          "1"
+        ],
+        "starting_loyalty": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "starting_loyalty"
+      },
+      "inputs": {
+        "rolls": [
+          "6"
+        ],
+        "starting_loyalty": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "starting_loyalty"
+      },
+      "inputs": {
+        "rolls": [
+          "6",
+          "4"
+        ],
+        "starting_loyalty": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "starting_loyalty"
+      },
+      "inputs": {
+        "rolls": [
+          "6",
+          "5"
+        ],
+        "starting_loyalty": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "starting_loyalty"
+      },
+      "inputs": {
+        "rolls": [
+          "6",
+          "6",
+          "6",
+          "6",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ],
+        "starting_loyalty": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "starting_loyalty"
+      },
+      "inputs": {
+        "rolls": [
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3"
+        ],
+        "starting_loyalty": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "starting_loyalty"
+      },
+      "inputs": {
+        "rolls": [
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1"
+        ],
+        "starting_loyalty": -1
+      }
+    },
+    {
+      "inputs": {
+        "rolls": [],
+        "starting_loyalty": 999
+      },
+      "outputs": {
+        "activations_remaining": 1,
+        "cards_returned": 0,
+        "comet_died": false,
+        "damage_this_activation": 0,
+        "loyalty": 999,
+        "squirrels_created": 0,
+        "total_damage": 0
+      }
+    },
+    {
+      "inputs": {
+        "rolls": [
+          "1"
+        ],
+        "starting_loyalty": 999
+      },
+      "outputs": {
+        "activations_remaining": 0,
+        "cards_returned": 0,
+        "comet_died": false,
+        "damage_this_activation": 0,
+        "loyalty": 1001,
+        "squirrels_created": 2,
+        "total_damage": 0
+      }
+    },
+    {
+      "inputs": {
+        "rolls": [
+          "6"
+        ],
+        "starting_loyalty": 999
+      },
+      "outputs": {
+        "activations_remaining": 2,
+        "cards_returned": 0,
+        "comet_died": false,
+        "damage_this_activation": 0,
+        "loyalty": 1000,
+        "squirrels_created": 0,
+        "total_damage": 0
+      }
+    },
+    {
+      "inputs": {
+        "rolls": [
+          "6",
+          "4"
+        ],
+        "starting_loyalty": 999
+      },
+      "outputs": {
+        "activations_remaining": 1,
+        "cards_returned": 0,
+        "comet_died": false,
+        "damage_this_activation": 1000,
+        "loyalty": 998,
+        "squirrels_created": 0,
+        "total_damage": 1000
+      }
+    },
+    {
+      "inputs": {
+        "rolls": [
+          "6",
+          "5"
+        ],
+        "starting_loyalty": 999
+      },
+      "outputs": {
+        "activations_remaining": 1,
+        "cards_returned": 0,
+        "comet_died": false,
+        "damage_this_activation": 1000,
+        "loyalty": 998,
+        "squirrels_created": 0,
+        "total_damage": 1000
+      }
+    },
+    {
+      "inputs": {
+        "rolls": [
+          "6",
+          "6",
+          "6",
+          "6",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ],
+        "starting_loyalty": 999
+      },
+      "outputs": {
+        "activations_remaining": 0,
+        "cards_returned": 1,
+        "comet_died": false,
+        "damage_this_activation": 1004,
+        "loyalty": 1002,
+        "squirrels_created": 4,
+        "total_damage": 2010
+      }
+    },
+    {
+      "inputs": {
+        "rolls": [
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3"
+        ],
+        "starting_loyalty": 999
+      },
+      "outputs": {
+        "activations_remaining": -5,
+        "cards_returned": 6,
+        "comet_died": false,
+        "damage_this_activation": 0,
+        "loyalty": 993,
+        "squirrels_created": 0,
+        "total_damage": 0
+      }
+    },
+    {
+      "error": {
+        "code": "too_long",
+        "field": "rolls"
+      },
+      "inputs": {
+        "rolls": [
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1"
+        ],
+        "starting_loyalty": 999
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "starting_loyalty"
+      },
+      "inputs": {
+        "rolls": [],
+        "starting_loyalty": 1000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "starting_loyalty"
+      },
+      "inputs": {
+        "rolls": [
+          "1"
+        ],
+        "starting_loyalty": 1000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "starting_loyalty"
+      },
+      "inputs": {
+        "rolls": [
+          "6"
+        ],
+        "starting_loyalty": 1000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "starting_loyalty"
+      },
+      "inputs": {
+        "rolls": [
+          "6",
+          "4"
+        ],
+        "starting_loyalty": 1000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "starting_loyalty"
+      },
+      "inputs": {
+        "rolls": [
+          "6",
+          "5"
+        ],
+        "starting_loyalty": 1000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "starting_loyalty"
+      },
+      "inputs": {
+        "rolls": [
+          "6",
+          "6",
+          "6",
+          "6",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ],
+        "starting_loyalty": 1000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "starting_loyalty"
+      },
+      "inputs": {
+        "rolls": [
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3"
+        ],
+        "starting_loyalty": 1000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "starting_loyalty"
+      },
+      "inputs": {
+        "rolls": [
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1"
+        ],
+        "starting_loyalty": 1000
+      }
+    }
+  ],
+  "generatedFrom": "backend/app/cards/comet_stellar_pup.py",
+  "note": "Generated by backend/tools/generate_parity_corpus.py. Do not edit by hand."
+}

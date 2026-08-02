@@ -1,0 +1,801 @@
+[
+  {
+    "alert": {
+      "message": "Oops, looks like you lose now",
+      "output": "game_lost"
+    },
+    "fields": [
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": 40,
+        "default_source": null,
+        "help_text": null,
+        "kind": "number",
+        "label": "Life total at the start of the turn",
+        "max": 99999,
+        "min": 0,
+        "name": "starting_life",
+        "options": null,
+        "roll": null,
+        "setup": true,
+        "short_label": "start life",
+        "visible_if": null
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": true,
+        "default_source": null,
+        "help_text": null,
+        "kind": "boolean",
+        "label": "In play at the start of the turn?",
+        "max": null,
+        "min": null,
+        "name": "was_in_play_at_turn_start",
+        "options": null,
+        "roll": null,
+        "setup": true,
+        "short_label": "in play",
+        "visible_if": null
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": 0,
+        "default_source": null,
+        "help_text": null,
+        "kind": "number",
+        "label": "Spells already cast before it entered",
+        "max": 99,
+        "min": 0,
+        "name": "spells_already_cast",
+        "options": null,
+        "roll": null,
+        "setup": true,
+        "short_label": "spells before",
+        "visible_if": {
+          "equals": false,
+          "field": "was_in_play_at_turn_start"
+        }
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": 0,
+        "default_source": "spells_already_cast",
+        "help_text": null,
+        "kind": "counter",
+        "label": "Spells cast this turn",
+        "max": 99,
+        "min": 0,
+        "name": "spells_cast_this_turn",
+        "options": null,
+        "roll": null,
+        "setup": false,
+        "short_label": "spells cast",
+        "visible_if": null
+      },
+      {
+        "action_disabled_when": {
+          "less_than": 50,
+          "output": "current_life"
+        },
+        "action_label": "Pay 50 Life",
+        "default": 0,
+        "default_source": null,
+        "help_text": null,
+        "kind": "counter",
+        "label": "Activations used",
+        "max": 99,
+        "min": 0,
+        "name": "activations_used",
+        "options": null,
+        "roll": null,
+        "setup": false,
+        "short_label": "activations",
+        "visible_if": null
+      }
+    ],
+    "id": "aetherflux-reservoir",
+    "name": "Aetherflux Reservoir",
+    "outputs": [
+      {
+        "kind": "number",
+        "label": "Life gained this spell",
+        "name": "life_this_spell",
+        "primary": false,
+        "short_label": "this spell"
+      },
+      {
+        "kind": "number",
+        "label": "Total life gained",
+        "name": "total_life",
+        "primary": false,
+        "short_label": "life gained"
+      },
+      {
+        "kind": "number",
+        "label": "Current life total",
+        "name": "current_life",
+        "primary": false,
+        "short_label": "life"
+      },
+      {
+        "kind": "number",
+        "label": "Damage dealt",
+        "name": "damage_dealt",
+        "primary": false,
+        "short_label": "damage dealt"
+      },
+      {
+        "kind": "number",
+        "label": "Activations available",
+        "name": "possible_activations",
+        "primary": false,
+        "short_label": "activations"
+      },
+      {
+        "kind": "number",
+        "label": "Damage available",
+        "name": "damage_available",
+        "primary": true,
+        "short_label": "damage"
+      },
+      {
+        "kind": "number",
+        "label": "Spells until next activation",
+        "name": "spells_until_next_activation",
+        "primary": false,
+        "short_label": "until next"
+      }
+    ],
+    "rules_text": "Whenever you cast a spell, you gain 1 life for each spell you've cast this turn. Pay 50 life: Aetherflux Reservoir deals 50 damage to any target."
+  },
+  {
+    "alert": null,
+    "fields": [
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": 1,
+        "default_source": null,
+        "help_text": "Count Blood Artist itself plus any other death-drain trigger you control (Zulaport Cutthroat, Cruel Celebrant, ...).",
+        "kind": "number",
+        "label": "Blood-Artist-style triggers you control",
+        "max": 20,
+        "min": 0,
+        "name": "drain_effect_count",
+        "options": null,
+        "roll": null,
+        "setup": true,
+        "short_label": "triggers",
+        "visible_if": null
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": 0,
+        "default_source": null,
+        "help_text": "However many died at once -- a board wipe, a combat trade, a single removal spell.",
+        "kind": "number",
+        "label": "Creatures that died this event",
+        "max": 99,
+        "min": 0,
+        "name": "creatures_died",
+        "options": null,
+        "roll": null,
+        "setup": false,
+        "short_label": "died",
+        "visible_if": null
+      }
+    ],
+    "id": "blood-artist",
+    "name": "Blood Artist",
+    "outputs": [
+      {
+        "kind": "number",
+        "label": "Life drained (and gained)",
+        "name": "total_life_drained",
+        "primary": true,
+        "short_label": "drained"
+      }
+    ],
+    "rules_text": "Whenever Blood Artist or another creature dies, target player loses 1 life and you gain 1 life."
+  },
+  {
+    "alert": {
+      "message": "That mills them out",
+      "output": "mills_out"
+    },
+    "fields": [
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": 99,
+        "default_source": null,
+        "help_text": "99 is a fresh Commander deck -- lower it to whatever they're actually down to.",
+        "kind": "number",
+        "label": "Cards left in the library you're targeting",
+        "max": 999,
+        "min": 0,
+        "name": "target_library_size",
+        "options": null,
+        "roll": null,
+        "setup": true,
+        "short_label": "library",
+        "visible_if": null
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": "Spell cast before this",
+        "default": 0,
+        "default_source": null,
+        "help_text": "Spells cast by *any* player this turn, not just you. Countered spells and spells cast from a graveyard or exile still count; the copies storm itself makes are not cast, so they never count.",
+        "kind": "counter",
+        "label": "Spells cast before this one this turn",
+        "max": 99,
+        "min": 0,
+        "name": "storm_count",
+        "options": null,
+        "roll": null,
+        "setup": false,
+        "short_label": "storm",
+        "visible_if": null
+      }
+    ],
+    "id": "brain-freeze",
+    "name": "Brain Freeze",
+    "outputs": [
+      {
+        "kind": "number",
+        "label": "Copies from storm",
+        "name": "copies_from_storm",
+        "primary": false,
+        "short_label": "copies"
+      },
+      {
+        "kind": "number",
+        "label": "Total resolutions",
+        "name": "total_copies",
+        "primary": false,
+        "short_label": "resolutions"
+      },
+      {
+        "kind": "number",
+        "label": "Cards milled",
+        "name": "cards_milled",
+        "primary": true,
+        "short_label": "milled"
+      },
+      {
+        "kind": "number",
+        "label": "Cards left after",
+        "name": "library_after",
+        "primary": false,
+        "short_label": "left"
+      }
+    ],
+    "rules_text": "Target player mills three cards. Storm (When you cast this spell, copy it for each spell cast before it this turn. You may choose new targets for the copies.)"
+  },
+  {
+    "alert": {
+      "message": "Comet hit 0 loyalty and died",
+      "output": "comet_died"
+    },
+    "fields": [
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": 5,
+        "default_source": null,
+        "help_text": "5 the turn he lands.",
+        "kind": "number",
+        "label": "Loyalty before this turn's first activation",
+        "max": 999,
+        "min": 0,
+        "name": "starting_loyalty",
+        "options": null,
+        "roll": null,
+        "setup": true,
+        "short_label": "start loyalty",
+        "visible_if": null
+      },
+      {
+        "action_disabled_when": {
+          "less_than": 1,
+          "output": "activations_remaining"
+        },
+        "action_label": null,
+        "default": [],
+        "default_source": null,
+        "help_text": "1\u20132: +2 loyalty and two Squirrels. 3: \u22121 and return a card. 4\u20135: deals damage equal to his loyalty, then \u22122. 6: +1 and two more activations.",
+        "kind": "sequence",
+        "label": "Rolls this turn",
+        "max": 40,
+        "min": null,
+        "name": "rolls",
+        "options": [
+          {
+            "label": "1",
+            "value": "1"
+          },
+          {
+            "label": "2",
+            "value": "2"
+          },
+          {
+            "label": "3",
+            "value": "3"
+          },
+          {
+            "label": "4",
+            "value": "4"
+          },
+          {
+            "label": "5",
+            "value": "5"
+          },
+          {
+            "label": "6",
+            "value": "6"
+          }
+        ],
+        "roll": {
+          "action_label": "Roll the die",
+          "faces": 6
+        },
+        "setup": false,
+        "short_label": "rolls",
+        "visible_if": null
+      }
+    ],
+    "id": "comet-stellar-pup",
+    "name": "Comet, Stellar Pup",
+    "outputs": [
+      {
+        "kind": "number",
+        "label": "Loyalty",
+        "name": "loyalty",
+        "primary": true,
+        "short_label": "loyalty"
+      },
+      {
+        "kind": "number",
+        "label": "Activations remaining",
+        "name": "activations_remaining",
+        "primary": false,
+        "short_label": "acts left"
+      },
+      {
+        "kind": "number",
+        "label": "Damage from the last roll",
+        "name": "damage_this_activation",
+        "primary": false,
+        "short_label": "dmg now"
+      },
+      {
+        "kind": "number",
+        "label": "Total damage this turn",
+        "name": "total_damage",
+        "primary": false,
+        "short_label": "total dmg"
+      },
+      {
+        "kind": "number",
+        "label": "Squirrels created",
+        "name": "squirrels_created",
+        "primary": false,
+        "short_label": "squirrels"
+      },
+      {
+        "kind": "number",
+        "label": "Cards returned",
+        "name": "cards_returned",
+        "primary": false,
+        "short_label": "returned"
+      }
+    ],
+    "rules_text": "0: Roll a six-sided die. 1 or 2 \u2014 [+2], then create two 1/1 green Squirrel creature tokens. They gain haste until end of turn. 3 \u2014 [\u22121], then return a card with mana value 2 or less from your graveyard to your hand. 4 or 5 \u2014 Comet deals damage equal to the number of loyalty counters on him to a creature or player, then [\u22122]. 6 \u2014 [+1], and you may activate Comet's loyalty ability two more times this turn."
+  },
+  {
+    "alert": null,
+    "fields": [
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": 0,
+        "default_source": null,
+        "help_text": null,
+        "kind": "number",
+        "label": "Total power of your creatures before any trigger resolves",
+        "max": 9999,
+        "min": 0,
+        "name": "total_power_before_triggers",
+        "options": null,
+        "roll": null,
+        "setup": true,
+        "short_label": "power before",
+        "visible_if": null
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": 0,
+        "default_source": null,
+        "help_text": "Include Craterhoof itself -- it has haste and is already on the battlefield when its own trigger resolves.",
+        "kind": "number",
+        "label": "Creatures you control when the first trigger resolves",
+        "max": 999,
+        "min": 0,
+        "name": "trigger_1_creature_count",
+        "options": null,
+        "roll": null,
+        "setup": true,
+        "short_label": "creatures (1st)",
+        "visible_if": null
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": "Additional Trigger",
+        "default": 0,
+        "default_source": null,
+        "help_text": "Only if a second trigger resolves this turn (a second copy, a flicker, a similar effect) -- most turns won't have one.",
+        "kind": "counter",
+        "label": "Second Craterhoof-shaped trigger this turn?",
+        "max": 1,
+        "min": 0,
+        "name": "additional_triggers",
+        "options": null,
+        "roll": null,
+        "setup": false,
+        "short_label": "2nd trigger",
+        "visible_if": null
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": 0,
+        "default_source": null,
+        "help_text": "Re-confirm the count fresh -- it can differ from the first trigger.",
+        "kind": "number",
+        "label": "Creatures you control when the second trigger resolves",
+        "max": 999,
+        "min": 0,
+        "name": "trigger_2_creature_count",
+        "options": null,
+        "roll": null,
+        "setup": false,
+        "short_label": "creatures (2nd)",
+        "visible_if": {
+          "equals": 1,
+          "field": "additional_triggers"
+        }
+      }
+    ],
+    "id": "craterhoof-behemoth",
+    "name": "Craterhoof Behemoth",
+    "outputs": [
+      {
+        "kind": "number",
+        "label": "Power bonus per creature (trigger 1)",
+        "name": "power_bonus_trigger_1",
+        "primary": false,
+        "short_label": "bonus (1st)"
+      },
+      {
+        "kind": "number",
+        "label": "Total power after trigger 1",
+        "name": "power_after_trigger_1",
+        "primary": false,
+        "short_label": "after 1st"
+      },
+      {
+        "kind": "number",
+        "label": "Power bonus per creature (trigger 2)",
+        "name": "power_bonus_trigger_2",
+        "primary": false,
+        "short_label": "bonus (2nd)"
+      },
+      {
+        "kind": "number",
+        "label": "Total power after all triggers",
+        "name": "total_power_after_triggers",
+        "primary": true,
+        "short_label": "total power"
+      }
+    ],
+    "rules_text": "Haste. When this creature enters, creatures you control gain trample and get +X/+X until end of turn, where X is the number of creatures you control."
+  },
+  {
+    "alert": null,
+    "fields": [
+      {
+        "action_disabled_when": null,
+        "action_label": "Spell cast before this",
+        "default": 0,
+        "default_source": null,
+        "help_text": "Spells cast by *any* player this turn, not just you. Countered spells and spells cast from a graveyard or exile still count; the copies storm itself makes are not cast, so they never count.",
+        "kind": "counter",
+        "label": "Spells cast before this one this turn",
+        "max": 99,
+        "min": 0,
+        "name": "storm_count",
+        "options": null,
+        "roll": null,
+        "setup": false,
+        "short_label": "storm",
+        "visible_if": null
+      }
+    ],
+    "id": "grapeshot",
+    "name": "Grapeshot",
+    "outputs": [
+      {
+        "kind": "number",
+        "label": "Copies from storm",
+        "name": "copies_from_storm",
+        "primary": false,
+        "short_label": "copies"
+      },
+      {
+        "kind": "number",
+        "label": "Total resolutions",
+        "name": "total_copies",
+        "primary": false,
+        "short_label": "resolutions"
+      },
+      {
+        "kind": "number",
+        "label": "Total damage",
+        "name": "total_damage",
+        "primary": true,
+        "short_label": "damage"
+      }
+    ],
+    "rules_text": "Grapeshot deals 1 damage to any target. Storm (When you cast this spell, copy it for each spell cast before it this turn. You may choose new targets for the copies.)"
+  },
+  {
+    "alert": null,
+    "fields": [
+      {
+        "action_disabled_when": null,
+        "action_label": "Found a pip",
+        "default": 0,
+        "default_source": null,
+        "help_text": "Click once per colored mana symbol in the mana costs of permanents you control, for the color you're about to choose.",
+        "kind": "counter",
+        "label": "Devotion pips found",
+        "max": 99,
+        "min": 0,
+        "name": "devotion_count",
+        "options": null,
+        "roll": null,
+        "setup": false,
+        "short_label": "devotion",
+        "visible_if": null
+      }
+    ],
+    "id": "nykthos-shrine-to-nyx",
+    "name": "Nykthos, Shrine to Nyx",
+    "outputs": [
+      {
+        "kind": "number",
+        "label": "Mana produced",
+        "name": "mana_produced",
+        "primary": true,
+        "short_label": "mana"
+      },
+      {
+        "kind": "number",
+        "label": "Net mana after paying {2} to activate",
+        "name": "net_mana_after_activation_cost",
+        "primary": false,
+        "short_label": "net"
+      }
+    ],
+    "rules_text": "{T}: Add {C}. {2}, {T}: Choose a color. Add an amount of mana of that color equal to your devotion to that color. (Devotion to a color is the number of mana symbols of that color in the mana costs of permanents you control.)"
+  },
+  {
+    "alert": null,
+    "fields": [
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": 0,
+        "default_source": null,
+        "help_text": "From earlier turns. He's a 3/3 with none.",
+        "kind": "number",
+        "label": "+1/+1 counters already on him",
+        "max": 999,
+        "min": 0,
+        "name": "existing_counters",
+        "options": null,
+        "roll": null,
+        "setup": true,
+        "short_label": "counters",
+        "visible_if": null
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": 1,
+        "default_source": null,
+        "help_text": "1 normally. 2 with Ancient Greenwarden or another landfall doubler.",
+        "kind": "number",
+        "label": "Landfall triggers per land",
+        "max": 4,
+        "min": 1,
+        "name": "triggers_per_land",
+        "options": null,
+        "roll": null,
+        "setup": true,
+        "short_label": "per land",
+        "visible_if": null
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": "Land entered",
+        "default": 0,
+        "default_source": null,
+        "help_text": "Any land, not just Swamps, and not just your land drop for the turn. Assumes you take the drain every trigger -- declining one means no counters from it either.",
+        "kind": "counter",
+        "label": "Lands entered this turn",
+        "max": 99,
+        "min": 0,
+        "name": "lands_this_turn",
+        "options": null,
+        "roll": null,
+        "setup": false,
+        "short_label": "lands",
+        "visible_if": null
+      }
+    ],
+    "id": "ob-nixilis-the-fallen",
+    "name": "Ob Nixilis, the Fallen",
+    "outputs": [
+      {
+        "kind": "number",
+        "label": "Power and toughness",
+        "name": "power",
+        "primary": true,
+        "short_label": "power"
+      },
+      {
+        "kind": "number",
+        "label": "Landfall triggers",
+        "name": "landfall_triggers",
+        "primary": false,
+        "short_label": "triggers"
+      },
+      {
+        "kind": "number",
+        "label": "Counters added this turn",
+        "name": "counters_added",
+        "primary": false,
+        "short_label": "added"
+      },
+      {
+        "kind": "number",
+        "label": "Total +1/+1 counters",
+        "name": "total_counters",
+        "primary": false,
+        "short_label": "counters"
+      },
+      {
+        "kind": "number",
+        "label": "Life drained this turn",
+        "name": "life_drained",
+        "primary": false,
+        "short_label": "drained"
+      }
+    ],
+    "rules_text": "Landfall \u2014 Whenever a land you control enters, you may have target player lose 3 life. If you do, put three +1/+1 counters on Ob Nixilis, the Fallen."
+  },
+  {
+    "alert": null,
+    "fields": [
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": 0,
+        "default_source": null,
+        "help_text": null,
+        "kind": "number",
+        "label": "Lands you control right now",
+        "max": 99,
+        "min": 0,
+        "name": "current_land_count",
+        "options": null,
+        "roll": null,
+        "setup": true,
+        "short_label": "lands",
+        "visible_if": null
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": 1,
+        "default_source": null,
+        "help_text": "1 for Scute Swarm itself. Each copy has its own landfall trigger, which is why this doubles instead of staying flat once you hit six lands.",
+        "kind": "number",
+        "label": "Copies of Scute Swarm you control",
+        "max": 999999999,
+        "min": 0,
+        "name": "scute_swarm_count",
+        "options": null,
+        "roll": null,
+        "setup": true,
+        "short_label": "swarm",
+        "visible_if": null
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": 0,
+        "default_source": null,
+        "help_text": null,
+        "kind": "number",
+        "label": "1/1 Insect tokens you already control",
+        "max": 999999999,
+        "min": 0,
+        "name": "insect_token_count",
+        "options": null,
+        "roll": null,
+        "setup": true,
+        "short_label": "insects",
+        "visible_if": null
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": "Land played",
+        "default": 0,
+        "default_source": null,
+        "help_text": "Each land triggers landfall once per Scute Swarm copy you control at that moment -- that's the doubling.",
+        "kind": "counter",
+        "label": "Lands played this turn",
+        "max": 99,
+        "min": 0,
+        "name": "lands_played",
+        "options": null,
+        "roll": null,
+        "setup": false,
+        "short_label": "played",
+        "visible_if": null
+      }
+    ],
+    "id": "scute-swarm",
+    "name": "Scute Swarm",
+    "outputs": [
+      {
+        "kind": "number",
+        "label": "Lands after this turn",
+        "name": "final_land_count",
+        "primary": false,
+        "short_label": "lands"
+      },
+      {
+        "kind": "number",
+        "label": "Scute Swarm copies after this turn",
+        "name": "final_scute_swarm_count",
+        "primary": false,
+        "short_label": "swarm"
+      },
+      {
+        "kind": "number",
+        "label": "Insect tokens after this turn",
+        "name": "final_insect_count",
+        "primary": false,
+        "short_label": "insects"
+      },
+      {
+        "kind": "number",
+        "label": "Total power on board",
+        "name": "total_power",
+        "primary": true,
+        "short_label": "power"
+      }
+    ],
+    "rules_text": "Landfall \u2014 Whenever a land you control enters, create a 1/1 green Insect creature token. If you control six or more lands, create a token that's a copy of this creature instead."
+  }
+]
