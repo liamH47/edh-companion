@@ -1,3 +1,4 @@
+import { podSizes } from './pods'
 import { BYE_GAME_WINS, computeStandings } from './scoring'
 import { isBye, type Entrant, type Match, type Rng, type Standing, type Tournament } from './types'
 
@@ -56,6 +57,79 @@ export function seatPairings(entrants: Entrant[]): Match[] {
   )
   if (bySeat.length % 2 === 1) matches.push(makeBye(bySeat[bySeat.length - 1].id))
   return matches
+}
+
+/** Splits an ordered list of ids into consecutive pods of the given sizes. */
+function chunkInto(ids: string[], sizes: number[]): string[][] {
+  const chunks: string[][] = []
+  let offset = 0
+  for (const size of sizes) {
+    chunks.push(ids.slice(offset, offset + size))
+    offset += size
+  }
+  return chunks
+}
+
+/** Round 1 pods from seat order: seats 1-4 sit together, then 5-8, and so on. Unlike
+ * a draft pod there is nothing to spread apart -- seat order *is* who sat together. */
+export function seatPods(entrants: Entrant[]): Match[] {
+  const ids = [...entrants].sort((a, b) => a.seat - b.seat).map((entrant) => entrant.id)
+  return chunkInto(ids, podSizes(ids.length)).map(makeMatch)
+}
+
+/** Round 1 pods with no seating to speak of. */
+export function randomPods(entrants: Entrant[], rng: Rng): Match[] {
+  const ids = shuffle(entrants, rng).map((entrant) => entrant.id)
+  return chunkInto(ids, podSizes(ids.length)).map(makeMatch)
+}
+
+/**
+ * Pods for round 2 onward: standings order, then greedily filled preferring people
+ * who have not met.
+ *
+ * The objective is deliberately different from 1v1 Swiss. There, a repeat is binary
+ * and the backtracking search either avoids one or reports it couldn't. Here the point
+ * of the tool is mixing tables up, and pods make repeats arrive much sooner -- a
+ * four-player pod uses up six pairings at once, so an 8-player field exhausts every
+ * pairing after three rounds. So rather than searching for a perfect assignment that
+ * usually does not exist, this *minimises* repeats: each seat goes to the highest-ranked
+ * remaining player who has met the fewest of the pod so far. Taking the highest-ranked
+ * zero-repeat candidate is what keeps score groups together at the same time.
+ */
+export function podPairings(
+  tournament: Tournament,
+  roundNumber: number,
+  rng: Rng,
+): PairingOutcome {
+  const ordered = orderForPairing(activeEntrantsForRound(tournament, roundNumber), tournament, rng)
+  const remaining = [...ordered]
+  const matches: Match[] = []
+  let hadToRepeatPairing = false
+
+  for (const size of podSizes(ordered.length)) {
+    const members = [remaining.shift()!]
+
+    while (members.length < size) {
+      let bestIndex = 0
+      let fewestRepeats = Infinity
+      for (let i = 0; i < remaining.length; i++) {
+        const repeats = members.filter((id) => havePlayed(id, remaining[i], tournament)).length
+        if (repeats < fewestRepeats) {
+          fewestRepeats = repeats
+          bestIndex = i
+          // Nothing beats zero, and `remaining` is in standings order, so the first
+          // such candidate is also the best-ranked one.
+          if (repeats === 0) break
+        }
+      }
+      if (fewestRepeats > 0) hadToRepeatPairing = true
+      members.push(remaining.splice(bestIndex, 1)[0])
+    }
+
+    matches.push(makeMatch(members))
+  }
+
+  return { matches, hadToRepeatPairing }
 }
 
 /** Round 1 for events with no draft seating (Sealed): pair at random. */

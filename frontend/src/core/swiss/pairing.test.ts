@@ -1,10 +1,22 @@
 import { describe, expect, it } from 'vitest'
-import { makeEntrants, makeTournament, match, result, round, seededRng } from './fixtures'
+import {
+  makeEntrants,
+  makeTournament,
+  match,
+  pod,
+  podResult,
+  result,
+  round,
+  seededRng,
+} from './fixtures'
 import {
   activeEntrantsForRound,
   havePlayed,
+  podPairings,
   randomFirstRoundPairings,
+  randomPods,
   seatPairings,
+  seatPods,
   shuffle,
   swissPairings,
 } from './pairing'
@@ -288,5 +300,99 @@ describe('swissPairings', () => {
       seen.add(pairing.join(','))
     }
     expect(seen.size).toBeGreaterThan(1)
+  })
+})
+
+describe('Commander pods', () => {
+  it('seats round-1 pods in seat order, four then three', () => {
+    // Unlike a draft pod there is nothing to spread apart -- seat order *is* who sat
+    // down together.
+    const pods = seatPods(makeEntrants(7))
+
+    expect(pods.map((p) => p.entrantIds)).toEqual([
+      ['entrant-1', 'entrant-2', 'entrant-3', 'entrant-4'],
+      ['entrant-5', 'entrant-6', 'entrant-7'],
+    ])
+  })
+
+  it('reads seats rather than array order', () => {
+    const reversed = [...makeEntrants(6)].reverse()
+    expect(seatPods(reversed).map((p) => p.entrantIds)).toEqual([
+      ['entrant-1', 'entrant-2', 'entrant-3'],
+      ['entrant-4', 'entrant-5', 'entrant-6'],
+    ])
+  })
+
+  it('seats everyone exactly once when pods are randomised', () => {
+    const pods = randomPods(makeEntrants(7), seededRng([0.3, 0.8, 0.1, 0.6]))
+
+    expect(pods.map((p) => p.entrantIds.length).sort((a, b) => b - a)).toEqual([4, 3])
+    expect(new Set(pods.flatMap((p) => p.entrantIds)).size).toBe(7)
+  })
+
+  it('gives no pods for an empty field', () => {
+    expect(seatPods([])).toEqual([])
+    expect(randomPods([], seededRng())).toEqual([])
+  })
+
+  it('pods a later round from standings, largest pod first', () => {
+    const tournament = makeTournament({
+      eventFormat: 'commander',
+      entrants: makeEntrants(7),
+      rounds: [
+        round(1, [
+          pod(['entrant-1', 'entrant-2', 'entrant-3', 'entrant-4'], podResult(4, 0)),
+          pod(['entrant-5', 'entrant-6', 'entrant-7'], podResult(3, 0)),
+        ]),
+      ],
+    })
+
+    const { matches } = podPairings(tournament, 2, seededRng([0.5]))
+    expect(matches.map((m) => m.entrantIds.length)).toEqual([4, 3])
+    expect(new Set(matches.flatMap((m) => m.entrantIds)).size).toBe(7)
+  })
+
+  it('prefers pod-mates nobody has played yet', () => {
+    // entrant-1..4 played together, so round 2 should not rebuild that table.
+    const tournament = makeTournament({
+      eventFormat: 'commander',
+      entrants: makeEntrants(8),
+      rounds: [
+        round(1, [
+          pod(['entrant-1', 'entrant-2', 'entrant-3', 'entrant-4'], podResult(4, 0)),
+          pod(['entrant-5', 'entrant-6', 'entrant-7', 'entrant-8'], podResult(4, 0)),
+        ]),
+      ],
+    })
+
+    const { matches } = podPairings(tournament, 2, seededRng([0.5]))
+    for (const match of matches) {
+      const fromFirstPod = match.entrantIds.filter((id) =>
+        ['entrant-1', 'entrant-2', 'entrant-3', 'entrant-4'].includes(id),
+      )
+      // A pod of four drawn from two prior pods must repeat at least one pairing, but
+      // it should split as evenly as possible rather than rebuilding a whole table.
+      expect(fromFirstPod.length).toBeLessThanOrEqual(2)
+    }
+  })
+
+  it('excludes dropped entrants from later pods', () => {
+    const entrants = makeEntrants(7)
+    entrants[6] = { ...entrants[6], droppedAfterRound: 1 }
+    const tournament = makeTournament({
+      eventFormat: 'commander',
+      entrants,
+      rounds: [
+        round(1, [
+          pod(['entrant-1', 'entrant-2', 'entrant-3', 'entrant-4'], podResult(4, 0)),
+          pod(['entrant-5', 'entrant-6', 'entrant-7'], podResult(3, 0)),
+        ]),
+      ],
+    })
+
+    const { matches } = podPairings(tournament, 2, seededRng([0.5]))
+    expect(matches.flatMap((m) => m.entrantIds)).not.toContain('entrant-7')
+    // Six left, so the split becomes 3+3.
+    expect(matches.map((m) => m.entrantIds.length)).toEqual([3, 3])
   })
 })

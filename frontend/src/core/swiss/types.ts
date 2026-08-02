@@ -9,7 +9,20 @@
 
 export type TournamentMode = 'solo' | 'two-headed-giant'
 
-/** Best-of-three (draft/sealed default) or best-of-one (what 2HG plays). */
+/**
+ * What is being played. This affects exactly one thing in pairing -- how round 1 is
+ * seeded -- plus whether the field is split into pods at all:
+ *
+ * - `draft`       round 1 from draft seating, so the players furthest apart meet first
+ * - `sealed`      no meaningful seating; round 1 is random
+ * - `constructed` likewise random
+ * - `commander`   multiplayer pods rather than 1v1, every round
+ *
+ * Nothing else branches on it. Scoring, tiebreakers and drops are identical throughout.
+ */
+export type EventFormat = 'draft' | 'sealed' | 'constructed' | 'commander'
+
+/** Best-of-three (draft/sealed default) or best-of-one (what 2HG and Commander play). */
 export type MatchFormat = 'bo3' | 'bo1'
 
 export interface Entrant {
@@ -75,6 +88,7 @@ export interface Round {
 
 export interface Tournament {
   mode: TournamentMode
+  eventFormat: EventFormat
   format: MatchFormat
   totalRounds: number
   entrants: Entrant[]

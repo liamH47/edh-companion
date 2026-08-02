@@ -213,3 +213,60 @@ describe('TournamentSetupScreen', () => {
     expect(onStart.mock.calls[0][0].entrantMembers).toEqual([['Ava'], ['Ben']])
   })
 })
+
+describe('TournamentSetupScreen event format', () => {
+  it('offers all four formats and starts on Draft', () => {
+    render(<TournamentSetupScreen onStart={vi.fn()} />)
+
+    for (const label of ['Draft', 'Sealed', 'Constructed', 'Commander']) {
+      expect(screen.getByRole('radio', { name: label })).toBeInTheDocument()
+    }
+    expect(screen.getByRole('radio', { name: 'Draft' })).toBeChecked()
+  })
+
+  it('passes the chosen format through to the tournament', async () => {
+    const user = userEvent.setup()
+    const onStart = vi.fn()
+    render(<TournamentSetupScreen onStart={onStart} />)
+
+    await user.click(screen.getByRole('radio', { name: 'Commander' }))
+    for (const [index, name] of ['Ava', 'Ben', 'Cara', 'Dan'].entries()) {
+      await user.type(screen.getByRole('textbox', { name: `Player ${index + 1}` }), name)
+    }
+    await user.click(screen.getByRole('button', { name: 'Start with this seating' }))
+
+    expect(onStart).toHaveBeenCalledWith(
+      expect.objectContaining({ eventFormat: 'commander' }),
+      false,
+    )
+  })
+
+  it('explains podding once Commander is picked', async () => {
+    const user = userEvent.setup()
+    render(<TournamentSetupScreen onStart={vi.fn()} />)
+
+    expect(screen.queryByText(/Pods of four where possible/)).not.toBeInTheDocument()
+    await user.click(screen.getByRole('radio', { name: 'Commander' }))
+    expect(screen.getByText(/Pods of four where possible/)).toBeInTheDocument()
+  })
+
+  it('disables the match-length choice for Commander, which is a single game', async () => {
+    const user = userEvent.setup()
+    render(<TournamentSetupScreen onStart={vi.fn()} />)
+
+    await user.click(screen.getByRole('radio', { name: 'Commander' }))
+
+    expect(screen.getByRole('button', { name: 'Best of 3' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Best of 1' })).toBeDisabled()
+    expect(screen.getByText('A Commander pod is a single game.')).toBeInTheDocument()
+  })
+
+  it('changes the seat-order hint for a podded event', async () => {
+    const user = userEvent.setup()
+    render(<TournamentSetupScreen onStart={vi.fn()} />)
+
+    expect(screen.getByText(/round 1 pairs the players furthest apart/)).toBeInTheDocument()
+    await user.click(screen.getByRole('radio', { name: 'Commander' }))
+    expect(screen.getByText(/Seat order decides the first pods/)).toBeInTheDocument()
+  })
+})

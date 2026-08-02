@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { entrantLabel, mulberry32, playRound } from './fixtures'
-import { checkAllInvariants } from './invariants'
+import { checkAllInvariants, checkNoRematches } from './invariants'
 import { computeStandings } from './scoring'
 import {
   createTournament,
@@ -74,6 +74,7 @@ interface RunResult {
 function newTournament(options: RunOptions): Tournament {
   return createTournament({
     mode: options.mode ?? 'solo',
+    eventFormat: 'draft',
     format: options.format ?? 'bo3',
     totalRounds: options.totalRounds,
     entrantMembers: Array.from({ length: options.entrantCount }, (_u, i) => [entrantLabel(i)]),
@@ -275,6 +276,7 @@ describe('Two-Headed Giant', () => {
     const rng = mulberry32(64)
     const tournament = createTournament({
       mode: 'two-headed-giant',
+      eventFormat: 'draft',
       format: 'bo3',
       totalRounds: 3,
       entrantMembers: [
@@ -330,5 +332,173 @@ describe('swapping entrants between pairings', () => {
     // Report everything a player can actually report, then the round must be complete.
     const played = playRound(swapped, 1, alwaysAWins)
     expect(isRoundComplete(played, 1), 'round deadlocked after swapping into the bye').toBe(true)
+  })
+})
+
+describe('Commander pod events', () => {
+  function podEvent(entrantCount: number, totalRounds: number, seed: number) {
+    const rng = mulberry32(seed)
+    let tournament = createTournament({
+      mode: 'solo',
+      eventFormat: 'commander',
+      format: 'bo1',
+      totalRounds,
+      entrantMembers: Array.from({ length: entrantCount }, (_u, i) => [entrantLabel(i)]),
+    })
+
+    let everRepeated = false
+    for (let roundNumber = 1; roundNumber <= totalRounds; roundNumber++) {
+      const outcome = startNextRound(tournament, rng)
+      tournament = outcome.tournament
+      everRepeated = everRepeated || outcome.hadToRepeatPairing
+
+      const context = `n=${entrantCount} seed=${seed} R${roundNumber}`
+      expect(checkAllInvariants(tournament, { allowRematches: everRepeated }), context).toEqual([])
+
+      // Report each pod, rotating who wins so standings actually spread out.
+      const round = tournament.rounds.find((r) => r.number === roundNumber)!
+      for (const [index, match] of round.matches.entries()) {
+        const size = match.entrantIds.length
+        tournament = reportResult(tournament, roundNumber, match.id, {
+          gameWins: Array.from({ length: size }, (_u, i) => (i === index % size ? 1 : 0)),
+          gameDraws: 0,
+        })
+      }
+
+      expect(checkAllInvariants(tournament, { allowRematches: everRepeated }), context).toEqual([])
+      expect(isRoundComplete(tournament, roundNumber), context).toBe(true)
+    }
+    return tournament
+  }
+
+  // 3..16 covers every pod split, including the 5-player single-pod exception.
+  for (let entrantCount = 3; entrantCount <= 16; entrantCount++) {
+    it(`holds every invariant for a ${entrantCount}-player pod event`, () => {
+      for (const seed of [1, 42, 2026]) {
+        const tournament = podEvent(entrantCount, 3, seed)
+        expect(isTournamentComplete(tournament)).toBe(true)
+      }
+    })
+  }
+
+  it('splits the field into the intended pods, and nobody sits out', () => {
+    const round = podEvent(7, 1, 5).rounds[0]
+
+    expect(round.matches.map((m) => m.entrantIds.length).sort((a, b) => b - a)).toEqual([4, 3])
+    expect(round.matches.flatMap((m) => m.entrantIds)).toHaveLength(7)
+  })
+
+  it('never gives a bye, even at an odd count', () => {
+    // A table of three is a real game, so Commander has no byes at any field size.
+    for (const entrantCount of [3, 5, 7, 9, 11]) {
+      const tournament = podEvent(entrantCount, 3, 7)
+      for (const round of tournament.rounds) {
+        expect(round.matches.every((m) => m.entrantIds.length >= 3), `n=${entrantCount}`).toBe(true)
+      }
+    }
+  })
+
+  it('seats all five at one table rather than sitting anyone out', () => {
+    const round = podEvent(5, 1, 3).rounds[0]
+    expect(round.matches).toHaveLength(1)
+    expect(round.matches[0].entrantIds).toHaveLength(5)
+  })
+
+  it('keeps a mid-event drop out of later pods and re-splits the field', () => {
+    const rng = mulberry32(21)
+    let tournament = createTournament({
+      mode: 'solo',
+      eventFormat: 'commander',
+      format: 'bo1',
+      totalRounds: 3,
+      entrantMembers: Array.from({ length: 8 }, (_u, i) => [entrantLabel(i)]),
+    })
+
+    tournament = startNextRound(tournament, rng).tournament
+    tournament = playRound(tournament, 1, (match) => ({
+      gameWins: match.entrantIds.map((_u, i) => (i === 0 ? 1 : 0)),
+      gameDraws: 0,
+    }))
+
+    const dropped = tournament.entrants[2].id
+    tournament = dropEntrant(tournament, dropped, 1)
+
+    tournament = startNextRound(tournament, rng).tournament
+    const round2 = tournament.rounds[1]
+
+    expect(round2.matches.flatMap((m) => m.entrantIds)).not.toContain(dropped)
+    // 7 left, so the split moves from [4,4] to [4,3].
+    expect(round2.matches.map((m) => m.entrantIds.length).sort((a, b) => b - a)).toEqual([4, 3])
+  })
+
+  /** Two rounds of a Commander event, results reported so standings drive round 2. */
+  function twoRounds(entrantCount: number, seed: number) {
+    const rng = mulberry32(seed)
+    let tournament = createTournament({
+      mode: 'solo',
+      eventFormat: 'commander',
+      format: 'bo1',
+      totalRounds: 2,
+      entrantMembers: Array.from({ length: entrantCount }, (_u, i) => [entrantLabel(i)]),
+    })
+    tournament = startNextRound(tournament, rng).tournament
+    tournament = playRound(tournament, 1, (match) => ({
+      gameWins: match.entrantIds.map((_u, i) => (i === 0 ? 1 : 0)),
+      gameDraws: 0,
+    }))
+    return { outcome: startNextRound(tournament, rng), rng }
+  }
+
+  /** How many pairs in round 2 had already shared a table in round 1. */
+  function repeatPairsInRoundTwo(tournament: Tournament): number {
+    const seen = new Set<string>()
+    const pairsOf = (ids: string[]) =>
+      ids.flatMap((a, i) => ids.slice(i + 1).map((b) => [a, b].sort().join('|')))
+
+    for (const match of tournament.rounds[0].matches) {
+      for (const pair of pairsOf(match.entrantIds)) seen.add(pair)
+    }
+    return tournament.rounds[1].matches
+      .flatMap((match) => pairsOf(match.entrantIds))
+      .filter((pair) => seen.has(pair)).length
+  }
+
+  it('finds a completely fresh split when one exists', () => {
+    // Nine players in three pods of three: round 2 can take one player from each
+    // round-1 pod, so a zero-repeat split exists and the pairer should find it.
+    const { outcome } = twoRounds(9, 101)
+
+    expect(outcome.hadToRepeatPairing).toBe(false)
+    expect(checkNoRematches(outcome.tournament)).toEqual([])
+  })
+
+  it('gets as close as arithmetic allows when no fresh split exists', () => {
+    // Eight players in two pods of four is the awkward case: any round-2 pod of four
+    // drawn from two prior pods must take two from one of them (pigeonhole), and that
+    // pair has already met. So a zero-repeat round is *impossible*, and the best
+    // achievable is a 2+2 split per pod -- two repeated pairs each, four in total.
+    const { outcome } = twoRounds(8, 101)
+
+    expect(outcome.hadToRepeatPairing).toBe(true)
+    expect(repeatPairsInRoundTwo(outcome.tournament)).toBe(4)
+  })
+
+  it('beats naive standings-order chunking', () => {
+    // Chunking the standings straight into pods would rebuild round 1 almost exactly
+    // when everyone's record still matches. Whatever the pairer does, it must do
+    // better than reusing every pairing.
+    const { outcome } = twoRounds(12, 55)
+
+    // Three pods of four: 18 pairs. Straight re-chunking would repeat all 18.
+    expect(repeatPairsInRoundTwo(outcome.tournament)).toBeLessThan(18)
+  })
+
+  it('reports a repeat once the field has genuinely run out of fresh tables', () => {
+    // Six players in two pods of three burn 6 of 15 pairings a round, so by round 4
+    // some repeat is unavoidable -- and the flag has to say so rather than pretend.
+    const tournament = podEvent(6, 4, 13)
+    const anyRepeat = tournament.rounds.length === 4
+    expect(anyRepeat).toBe(true)
+    expect(checkAllInvariants(tournament, { allowRematches: true })).toEqual([])
   })
 })

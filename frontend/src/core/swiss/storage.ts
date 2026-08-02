@@ -56,6 +56,9 @@ function migrate(raw: Tournament | null): Tournament | null {
   // whose whole job is coping with data this version never wrote.
   return {
     ...raw,
+    // Saved before events had a format. Everything that existed then paired round 1
+    // from seat order, which is what `draft` means.
+    eventFormat: raw.eventFormat ?? 'draft',
     rounds: raw.rounds.map((round) => ({
       ...round,
       matches: round.matches.map((match) => (isLegacyMatch(match) ? migrateMatch(match) : match)),

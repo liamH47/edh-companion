@@ -7,7 +7,7 @@ import {
   type CreateTournamentInput,
 } from '../core/swiss/tournament'
 import { shuffle } from '../core/swiss/pairing'
-import type { MatchFormat, Rng, TournamentMode } from '../core/swiss/types'
+import type { EventFormat, MatchFormat, Rng, TournamentMode } from '../core/swiss/types'
 import { Button } from '../ui/Button'
 import { ChevronDownIcon, ChevronUpIcon, PlusIcon, TrashIcon } from '../ui/Icon'
 import { Pressable } from '../ui/Pressable'
@@ -41,8 +41,16 @@ const segmentClasses = 'min-h-12 flex-1 justify-center rounded-pill text-body fo
  * entered by hand with per-row move buttons -- the MTG Companion app only offers the
  * former, which is the gap this screen exists to close.
  */
+const EVENT_FORMATS: { value: EventFormat; label: string }[] = [
+  { value: 'draft', label: 'Draft' },
+  { value: 'sealed', label: 'Sealed' },
+  { value: 'constructed', label: 'Constructed' },
+  { value: 'commander', label: 'Commander' },
+]
+
 export function TournamentSetupScreen({ onStart, rng = Math.random }: TournamentSetupScreenProps) {
   const [mode, setMode] = useState<TournamentMode>('solo')
+  const [eventFormat, setEventFormat] = useState<EventFormat>('draft')
   const [format, setFormat] = useState<MatchFormat>('bo3')
   const [rounds, setRounds] = useState(DEFAULT_ROUNDS)
   const [entrants, setEntrants] = useState<DraftEntrant[]>([
@@ -54,6 +62,7 @@ export function TournamentSetupScreen({ onStart, rng = Math.random }: Tournament
   const [nextKey, setNextKey] = useState(5)
 
   const isTeams = mode === 'two-headed-giant'
+  const isPodded = eventFormat === 'commander'
   const entrantNoun = isTeams ? 'Team' : 'Player'
   const namedEntrants = entrants.filter((entrant) =>
     entrant.members.every((member) => member.trim() !== ''),
@@ -117,6 +126,7 @@ export function TournamentSetupScreen({ onStart, rng = Math.random }: Tournament
     onStart(
       {
         mode,
+        eventFormat,
         format,
         totalRounds: rounds,
         entrantMembers: namedEntrants.map((entrant) =>
@@ -152,6 +162,35 @@ export function TournamentSetupScreen({ onStart, rng = Math.random }: Tournament
       </div>
 
       <div className="flex flex-col gap-2">
+        <Text variant="bodyStrong">What are you playing?</Text>
+        <div role="radiogroup" aria-label="Event format" className="flex flex-wrap gap-1">
+          {EVENT_FORMATS.map((option) => {
+            const selected = eventFormat === option.value
+            return (
+              <Pressable
+                key={option.value}
+                role="radio"
+                aria-checked={selected}
+                onClick={() => setEventFormat(option.value)}
+                className={`min-h-12 grow basis-[calc(50%-0.25rem)] justify-center rounded-pill border text-body font-semibold ${
+                  selected
+                    ? 'border-accent bg-accent text-accent-text'
+                    : 'border-border bg-surface text-text'
+                }`}
+              >
+                {option.label}
+              </Pressable>
+            )
+          })}
+        </div>
+        {isPodded && (
+          <Text variant="body" color="muted">
+            Pods of four where possible, three otherwise — everyone plays every round.
+          </Text>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-2">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <Text variant="bodyStrong">{isTeams ? 'Teams' : 'Players'}, in seat order</Text>
           <Button variant="secondary" onClick={shuffleSeats}>
@@ -159,7 +198,9 @@ export function TournamentSetupScreen({ onStart, rng = Math.random }: Tournament
           </Button>
         </div>
         <Text variant="body" color="muted">
-          Seat order is how you sat to draft — round 1 pairs the players furthest apart.
+          {isPodded
+            ? 'Seat order decides the first pods — or start with random pairings instead.'
+            : 'Seat order is how you sat to draft — round 1 pairs the players furthest apart.'}
         </Text>
 
         <ul className="flex flex-col gap-2">
@@ -251,7 +292,7 @@ export function TournamentSetupScreen({ onStart, rng = Math.random }: Tournament
         >
           <Pressable
             aria-pressed={format === 'bo3'}
-            disabled={isTeams}
+            disabled={isTeams || isPodded}
             onClick={() => setFormat('bo3')}
             className={`${segmentClasses} ${
               format === 'bo3' ? 'bg-accent text-accent-text' : 'text-text-muted'
@@ -261,7 +302,7 @@ export function TournamentSetupScreen({ onStart, rng = Math.random }: Tournament
           </Pressable>
           <Pressable
             aria-pressed={format === 'bo1'}
-            disabled={isTeams}
+            disabled={isTeams || isPodded}
             onClick={() => setFormat('bo1')}
             className={`${segmentClasses} ${
               format === 'bo1' ? 'bg-accent text-accent-text' : 'text-text-muted'
@@ -270,9 +311,11 @@ export function TournamentSetupScreen({ onStart, rng = Math.random }: Tournament
             Best of 1
           </Pressable>
         </div>
-        {isTeams && (
+        {(isTeams || isPodded) && (
           <Text variant="body" color="muted">
-            Two-Headed Giant is always best of 1.
+            {isPodded
+              ? 'A Commander pod is a single game.'
+              : 'Two-Headed Giant is always best of 1.'}
           </Text>
         )}
       </div>

@@ -9,8 +9,8 @@ interface MatchResultSheetProps {
   onClose: () => void
   match: Match | null
   format: MatchFormat
-  aName: string
-  bName: string
+  /** Display names, positionally aligned with the match's `entrantIds`. */
+  names: string[]
   onReport: (result: MatchResult | null) => void
   /** Shown when this round already has later rounds paired from it, so the user can
    * choose between keeping those pairings and re-pairing from here. */
@@ -20,6 +20,25 @@ interface MatchResultSheetProps {
 interface ResultChoice {
   label: string
   result: MatchResult
+}
+
+/**
+ * A pod is a single game with one survivor, so the question is "who won?" rather than
+ * a scoreline -- listing every 4-player game-win permutation would be absurd. A draw
+ * covers the pod that ran out of time, which does happen in Commander.
+ */
+function podChoicesFor(names: string[]): ResultChoice[] {
+  const size = names.length
+  return [
+    ...names.map((name, index) => ({
+      label: `${name} won`,
+      result: {
+        gameWins: Array.from({ length: size }, (_unused, i) => (i === index ? 1 : 0)),
+        gameDraws: 0,
+      },
+    })),
+    { label: 'Draw', result: { gameWins: Array.from({ length: size }, () => 0), gameDraws: 1 } },
+  ]
 }
 
 /** Every scoreline a match of this length can end on, in the order a player thinks of
@@ -50,29 +69,32 @@ function sameResult(a: MatchResult | null, b: MatchResult): boolean {
   )
 }
 
-/** Reports or corrects one match. Scorelines are written from entrant A's side, which
- * is why A's name is always shown first above them. */
+/**
+ * Reports or corrects one match. For a 1v1, scorelines are written from the first
+ * entrant's side, which is why their name is shown first above them. For a pod, the
+ * choices are "who won" plus a draw -- see podChoicesFor.
+ */
 export function MatchResultSheet({
   open,
   onClose,
   match,
   format,
-  aName,
-  bName,
+  names,
   onReport,
   onRepair,
 }: MatchResultSheetProps) {
   if (match === null) return null
 
+  const isPod = match.entrantIds.length > 2
+  const choices = isPod ? podChoicesFor(names) : choicesFor(format)
+
   return (
     <Sheet open={open} onClose={onClose} title="Report result">
       <div className="flex flex-col gap-4">
-        <Text variant="bodyStrong">
-          {aName} vs {bName}
-        </Text>
+        <Text variant="bodyStrong">{names.join(' vs ')}</Text>
 
         <div className="flex flex-col gap-2">
-          {choicesFor(format).map((choice) => {
+          {choices.map((choice) => {
             const selected = sameResult(match.result, choice.result)
             return (
               <Pressable

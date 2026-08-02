@@ -64,6 +64,17 @@ export function RoundScreen({
   const nameById = new Map(tournament.entrants.map((entrant) => [entrant.id, entrant]))
   const nameOf = (id: string) => entrantName(nameById.get(id)!)
 
+  /** "Report A versus B" for a 1v1, "Report the pod with A, B, C" for a pod -- the
+   * accessible name has to distinguish tables, and a four-name "versus" chain reads
+   * badly aloud. */
+  const reportLabel = (match: Match) => {
+    if (isBye(match)) return `Report ${nameOf(match.entrantIds[0])} versus Bye`
+    if (match.entrantIds.length === 2) {
+      return `Report ${nameOf(match.entrantIds[0])} versus ${nameOf(match.entrantIds[1])}`
+    }
+    return `Report the pod with ${match.entrantIds.map(nameOf).join(', ')}`
+  }
+
   const complete = isRoundComplete(tournament, roundNumber)
   const isLatestRound = roundNumber === tournament.rounds.length
   const hasLaterRounds = roundNumber < tournament.rounds.length
@@ -95,19 +106,27 @@ export function RoundScreen({
             <Pressable
               onClick={() => !isBye(match) && setEditingMatchId(match.id)}
               disabled={isBye(match)}
-              aria-label={`Report ${nameOf(match.entrantIds[0])} versus ${
-                isBye(match) ? 'Bye' : nameOf(match.entrantIds[1])
-              }`}
+              aria-label={reportLabel(match)}
               className="min-h-12 min-w-0 flex-1 justify-between gap-3 rounded-lg border border-border bg-surface px-4 py-2 disabled:opacity-100"
             >
-              <span className="flex min-w-0 flex-col">
-                <Text variant="bodyStrong" className="truncate">
-                  {nameOf(match.entrantIds[0])}
+              {/* A 1v1 stacks the two sides, because the scoreline below is written
+                  from the top one's point of view. A pod has no such hierarchy --
+                  everyone is equally in it -- so it lists all its members at one
+                  weight rather than promoting whoever happens to be first. */}
+              {match.entrantIds.length > 2 ? (
+                <Text variant="bodyStrong" className="min-w-0 flex-1 truncate text-left">
+                  {match.entrantIds.map(nameOf).join(', ')}
                 </Text>
-                <Text variant="body" color="muted" className="truncate">
-                  {isBye(match) ? '—' : nameOf(match.entrantIds[1])}
-                </Text>
-              </span>
+              ) : (
+                <span className="flex min-w-0 flex-col">
+                  <Text variant="bodyStrong" className="truncate">
+                    {nameOf(match.entrantIds[0])}
+                  </Text>
+                  <Text variant="body" color="muted" className="truncate">
+                    {isBye(match) ? '—' : nameOf(match.entrantIds[1])}
+                  </Text>
+                </span>
+              )}
               <Text
                 variant="bodyStrong"
                 color={match.result === null ? 'muted' : 'accent'}
@@ -148,8 +167,7 @@ export function RoundScreen({
         onClose={() => setEditingMatchId(null)}
         match={editingMatch}
         format={tournament.format}
-        aName={editingMatch ? nameOf(editingMatch.entrantIds[0]) : ''}
-        bName={editingMatch ? nameOf(editingMatch.entrantIds[1]) : ''}
+        names={editingMatch ? editingMatch.entrantIds.map(nameOf) : []}
         onReport={(result) => editingMatch && onReport(roundNumber, editingMatch.id, result)}
         onRepair={hasLaterRounds ? () => onRepairFrom(roundNumber) : undefined}
       />

@@ -1,7 +1,15 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { makeEntrants, makeTournament, match, result, round } from '../core/swiss/fixtures'
+import {
+  makeEntrants,
+  makeTournament,
+  match,
+  pod,
+  podResult,
+  result,
+  round,
+} from '../core/swiss/fixtures'
 import { RoundScreen } from './RoundScreen'
 
 function renderRound(overrides: Partial<Parameters<typeof RoundScreen>[0]> = {}) {
@@ -189,5 +197,69 @@ describe('RoundScreen', () => {
     await user.click(screen.getByRole('button', { name: 'Report A versus B' }))
     await user.click(screen.getByRole('button', { name: 'Re-pair later rounds' }))
     expect(props.onRepairFrom).toHaveBeenCalledWith(1)
+  })
+})
+
+describe('RoundScreen with Commander pods', () => {
+  const POD_TOURNAMENT = makeTournament({
+    eventFormat: 'commander',
+    format: 'bo1',
+    entrants: makeEntrants(7),
+    rounds: [
+      round(1, [
+        pod(['entrant-1', 'entrant-2', 'entrant-3', 'entrant-4']),
+        pod(['entrant-5', 'entrant-6', 'entrant-7']),
+      ]),
+    ],
+  })
+
+  it('lists a pod at one weight, with nobody promoted above the rest', () => {
+    // A 1v1 stacks the two sides because the scoreline reads from the top one. A pod
+    // has no such hierarchy, so showing the first member as a headline would imply
+    // one that does not exist.
+    renderRound({ tournament: POD_TOURNAMENT })
+
+    expect(screen.getByText('A, B, C, D')).toBeInTheDocument()
+    expect(screen.getByText('E, F, G')).toBeInTheDocument()
+  })
+
+  it('still stacks the two sides of an ordinary 1v1 match', () => {
+    renderRound()
+    expect(screen.getByText('A')).toBeInTheDocument()
+    expect(screen.getByText('B')).toBeInTheDocument()
+  })
+
+  it('labels a pod by its members rather than as a versus pair', () => {
+    // A four-name "A versus B versus C versus D" chain reads badly aloud.
+    renderRound({ tournament: POD_TOURNAMENT })
+
+    expect(
+      screen.getByRole('button', { name: 'Report the pod with A, B, C, D' }),
+    ).toBeInTheDocument()
+  })
+
+  it('opens the who-won sheet for a pod', async () => {
+    const user = userEvent.setup()
+    renderRound({ tournament: POD_TOURNAMENT })
+
+    await user.click(screen.getByRole('button', { name: 'Report the pod with A, B, C, D' }))
+
+    const sheet = screen.getByRole('dialog', { name: 'Report result' })
+    expect(sheet).toBeVisible()
+    expect(sheet.querySelector('button')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'C won' })).toBeInTheDocument()
+  })
+
+  it('shows the winner rather than a scoreline once a pod is reported', () => {
+    const reported = makeTournament({
+      eventFormat: 'commander',
+      format: 'bo1',
+      entrants: makeEntrants(3),
+      rounds: [round(1, [pod(['entrant-1', 'entrant-2', 'entrant-3'], podResult(3, 1))])],
+    })
+    renderRound({ tournament: reported })
+
+    // gameWins [0,1,0] -> B is the sole maximum.
+    expect(screen.getByText('0-1-0')).toBeInTheDocument()
   })
 })
