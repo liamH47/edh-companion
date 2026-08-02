@@ -8,8 +8,7 @@
     ".": "./src/index.ts",
     "./swiss": "./src/swiss/index.ts",
     "./theme/tokens": "./src/theme/tokens.ts",
-    "./swiss/fixtures": "./src/swiss/fixtures.ts",
-    "./api": "./src/api.ts"
+    "./swiss/fixtures": "./src/swiss/fixtures.ts"
   },
   "scripts": {
     "test": "vitest run",

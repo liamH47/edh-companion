@@ -5,8 +5,6 @@ import type { CardMetadata, FieldValues, OutputValues } from './types'
 import { defaultValues, resolveAlertMessage, withDerivedValues } from './cardModel'
 import { getJSON, setJSON } from './storage'
 
-const PENDING_DELAY_MS = 250
-const RECALC_DEBOUNCE_MS = 200
 const SETUP_CONFIRMED_KEY = 'mtg-calc-setup-confirmed'
 
 function isSetupConfirmed(cardId: string): boolean {
@@ -31,18 +29,15 @@ export interface CardSession {
 }
 
 /**
- * Owns one card's live state: field values, the most recent calculate() result, and
- * whether this card's setup has been confirmed this session (SetupSheet reads
- * `setupConfirmed` to decide whether to auto-open -- screen-spec.md rule 4). Stays
- * server-authoritative (compute() lives once, in the backend) but fixes the plumbing
- * gaps the old fire-on-every-keystroke CardForm had:
- *  - requests are sequenced (a monotonic id + AbortController), so a slow response to
- *    an older change can never overwrite the result of a newer one
- *  - the network call is debounced 200ms from the last change; `values` updates
- *    immediately regardless, so typing or tapping never feels delayed
- *  - the last good `outputs` stay on screen through a recalculation -- `pending` only
- *    flips true once a request has been in flight for 250ms, so a fast round trip
- *    never flickers the stat tiles
+ * Owns one card's live state: field values, the current outputs, and whether this
+ * card's setup has been confirmed this session (SetupSheet reads `setupConfirmed` to
+ * decide whether to auto-open -- screen-spec.md rule 4).
+ *
+ * Compute is local and synchronous, so outputs are derived on the same render as the
+ * change that caused them. The request sequencing, 200ms debounce and delayed
+ * `pending` flag this hook used to carry existed only to hide a network round trip.
+ * With nothing to hide they are gone rather than left as machinery nobody could
+ * explain. `pending` stays in the interface, always false, so no screen had to change.
  *
  * Reads the current card via `cardRef.current` (updated every render) rather than
  * closing over the `card` param directly, and keys effects/callbacks on `card.id`
@@ -57,58 +52,29 @@ export function useCardSession(card: CardMetadata): CardSession {
 
   const [values, setValues] = useState<FieldValues>(() => defaultValues(card))
   const [outputs, setOutputs] = useState<OutputValues | null>(null)
-  const [pending, setPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [setupConfirmed, setSetupConfirmed] = useState(() => isSetupConfirmed(card.id))
 
-  const requestIdRef = useRef(0)
-  const abortControllerRef = useRef<AbortController | null>(null)
-  const debounceTimeoutRef = useRef<number | undefined>(undefined)
-  const pendingTimeoutRef = useRef<number | undefined>(undefined)
   const wasAlertActiveRef = useRef(false)
 
+  /** Recomputes, turning a validation failure into the error banner rather than
+   * letting it throw through the render. */
   const runCalculation = useCallback((nextValues: FieldValues) => {
-    abortControllerRef.current?.abort()
-    const controller = new AbortController()
-    abortControllerRef.current = controller
-    const requestId = ++requestIdRef.current
-
-    // Safe to set unconditionally: this timeout is always cleared (by the next
-    // runCalculation call, or by .finally() below) before a stale request could
-    // ever reach it, so by the time it fires it can only belong to this request.
-    clearTimeout(pendingTimeoutRef.current)
-    pendingTimeoutRef.current = setTimeout(() => setPending(true), PENDING_DELAY_MS)
-
-    computeCard(cardRef.current.id, nextValues, controller.signal)
-      .then((result) => {
-        if (requestIdRef.current !== requestId) return
-        setOutputs(result.outputs)
-        setError(null)
-      })
-      .catch((err: unknown) => {
-        if (controller.signal.aborted || requestIdRef.current !== requestId) return
-        setError(err instanceof Error ? err.message : String(err))
-      })
-      .finally(() => {
-        if (requestIdRef.current !== requestId) return
-        clearTimeout(pendingTimeoutRef.current)
-        setPending(false)
-      })
+    try {
+      setOutputs(computeCard(cardRef.current, nextValues))
+      setError(null)
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err))
+    }
   }, [])
 
   useEffect(() => {
     const initial = defaultValues(cardRef.current)
     setValues(initial)
-    setOutputs(null)
     setError(null)
     setSetupConfirmed(isSetupConfirmed(cardRef.current.id))
     wasAlertActiveRef.current = false
     runCalculation(initial)
-    return () => {
-      abortControllerRef.current?.abort()
-      clearTimeout(debounceTimeoutRef.current)
-      clearTimeout(pendingTimeoutRef.current)
-    }
   }, [card.id, runCalculation])
 
   const setField = useCallback(
@@ -118,11 +84,7 @@ export function useCardSession(card: CardMetadata): CardSession {
           ...previousValues,
           [name]: value,
         })
-        clearTimeout(debounceTimeoutRef.current)
-        debounceTimeoutRef.current = setTimeout(
-          () => runCalculation(nextValues),
-          RECALC_DEBOUNCE_MS,
-        )
+        runCalculation(nextValues)
         return nextValues
       })
     },
@@ -131,7 +93,6 @@ export function useCardSession(card: CardMetadata): CardSession {
 
   const resetTurn = useCallback(() => {
     const reset = defaultValues(cardRef.current)
-    clearTimeout(debounceTimeoutRef.current)
     setValues(reset)
     runCalculation(reset)
   }, [runCalculation])
@@ -153,7 +114,8 @@ export function useCardSession(card: CardMetadata): CardSession {
   return {
     values,
     outputs,
-    pending,
+    // Kept so no screen had to change; local compute is never in flight.
+    pending: false,
     error,
     alertMessage,
     setupConfirmed,

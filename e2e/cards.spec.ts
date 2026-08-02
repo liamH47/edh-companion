@@ -73,6 +73,23 @@ test.describe('Cards', () => {
     expect(remaining).toBeTruthy()
   })
 
+  test('computes with the API unreachable', async ({ page }) => {
+    // The point of moving compute into the bundle: the Cards tab used to need a
+    // connection for both the card list and every keystroke. Swiss and Coin Flip
+    // already survived an outage; now Cards does too.
+    await page.route('**/api/**', (route) => route.abort())
+
+    await page.goto('/cards/blood-artist')
+    const sheet = page.getByRole('dialog', { name: 'Board state' })
+    await sheet.getByRole('spinbutton', { name: 'Blood-Artist-style triggers you control' }).fill('3')
+    await sheet.getByRole('button', { name: 'Done' }).click()
+
+    await page.getByRole('spinbutton', { name: 'Creatures that died this event' }).fill('4')
+
+    // 4 x 3 = 12, computed entirely in the browser.
+    await expect(page.getByText('12', { exact: true })).toBeVisible()
+  })
+
   test('serves every card the API advertises', async ({ page, request }) => {
     // Guards the registry against the frontend: a card registered in Python but
     // unreachable in the shipped bundle is exactly the kind of packaging mismatch

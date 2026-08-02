@@ -109,7 +109,7 @@ const singleOutputCard: CardMetadata = {
 beforeEach(() => {
   compute.mockReset()
   setComputeBackend(compute)
-  compute.mockResolvedValue({ outputs: { damage_available: 50, current_life: 90 } })
+  compute.mockReturnValue({ damage_available: 50, current_life: 90 })
 })
 
 describe('CardScreen', () => {
@@ -156,17 +156,17 @@ describe('CardScreen', () => {
   })
 
   it('shows the alert banner and a role=alert once the alert output is true', async () => {
-    compute.mockResolvedValue({
-      outputs: { damage_available: 0, current_life: 0, game_lost: true },
-    })
+    compute.mockReturnValue({ damage_available: 0, current_life: 0, game_lost: true })
     render(<CardScreen card={aetherfluxLikeCard} />)
     expect(await screen.findByText('Oops, looks like you lose now')).toBeInTheDocument()
   })
 
-  it('shows an error banner when calculation fails', async () => {
-    compute.mockRejectedValue(new Error('network down'))
+  it('shows an error banner when the input is rejected', async () => {
+    compute.mockImplementation(() => {
+      throw new Error('count must be >= 0')
+    })
     render(<CardScreen card={aetherfluxLikeCard} />)
-    expect(await screen.findByText('network down')).toBeInTheDocument()
+    expect(await screen.findByText('count must be >= 0')).toBeInTheDocument()
   })
 
   it('renders a back button and calls onBack when clicked', async () => {
@@ -209,7 +209,7 @@ describe('CardScreen', () => {
   })
 
   it('renders an all-setup card inline with no summary bar or sheet', async () => {
-    compute.mockResolvedValue({ outputs: { total: 0 } })
+    compute.mockReturnValue({ total: 0 })
     render(<CardScreen card={allSetupCard} />)
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Edit board state' })).not.toBeInTheDocument()
@@ -217,7 +217,7 @@ describe('CardScreen', () => {
   })
 
   it('renders only the hero for a single-output card, no stat strip', async () => {
-    compute.mockResolvedValue({ outputs: { total_life_drained: 6 } })
+    compute.mockReturnValue({ total_life_drained: 6 })
     render(<CardScreen card={singleOutputCard} />)
     expect(await screen.findByText('6')).toBeInTheDocument()
     // Only the hero's own render of "6" should exist -- no duplicate stat tile.
