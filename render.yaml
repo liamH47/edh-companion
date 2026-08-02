@@ -6,7 +6,16 @@ services:
     dockerfilePath: ./Dockerfile
     dockerContext: .
     healthCheckPath: /healthz
-    # Deploys are triggered by the `deploy` job in .github/workflows/ci.yml, which only
-    # runs after the backend and frontend checks pass. Turning this back on would let an
-    # untested push to main ship straight to production.
-    autoDeploy: false
+    # Deploy only after every GitHub check on the commit passes -- Render watches the
+    # Checks API and holds the deploy until CI is green. `autoDeployTrigger: commit`
+    # would ship untested code straight to production, which is what this replaces.
+    #
+    # Two behaviours worth knowing:
+    #  - Zero checks detected on a commit means NO deploy, silently. Fail-safe, but if
+    #    deploys ever stop mysteriously, check that CI actually ran on that commit.
+    #  - Render counts a check as passed if it concluded success, neutral, OR skipped.
+    #    So a conditionally-skipped job never blocks a deploy -- don't rely on one as a
+    #    gate.
+    #
+    # Replaces the deprecated `autoDeploy` boolean, which had no CI-aware value.
+    autoDeployTrigger: checksPass

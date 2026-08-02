@@ -49,17 +49,29 @@ project (an unrelated org's access was a concern), so this part is manual:
 
 ## Normal deploy flow (after first-time setup)
 
-**Deploys are gated on CI.** `autoDeploy` is `false` in `render.yaml`; what ships to Render
-is the `deploy` job in `.github/workflows/ci.yml`, which runs only on `main` and only after
-the backend and frontend jobs pass. So the flow is:
+**Deploys are gated on CI.** `render.yaml` sets `autoDeployTrigger: checksPass`, so Render
+watches the GitHub Checks API and deploys a commit on `main` only once every check on it is
+green. There is no deploy job in the workflow and no deploy hook — Render does the gating.
+So the flow is:
 
 ```
 git push origin <branch>     # open a PR; CI runs
 # merge the PR once checks are green
 ```
 
-Merging to `main` runs CI once more and, if green, POSTs to the Render deploy hook. A red
-build on `main` deploys nothing and leaves the previous release live.
+Merging to `main` runs CI once more; Render holds the deploy until those checks conclude. A
+red build on `main` deploys nothing and leaves the previous release live.
+
+Two behaviours of `checksPass` worth internalising:
+
+- **Zero checks detected on a commit means no deploy, silently.** That's the safe
+  direction, but if deploys ever stop mysteriously, first confirm CI actually ran on that
+  commit rather than assuming Render is broken.
+- **Render counts a check as passed if it concluded `success`, `neutral`, or `skipped`.**
+  A conditionally-skipped job therefore never blocks a deploy — don't rely on one as a gate.
+- **Every check on the commit gates the deploy, not a chosen subset.** Adding a slow job to
+  the push-to-`main` trigger slows every deploy, and a flaky one blocks them. Keep mobile
+  E2E on `workflow_dispatch` for this reason.
 
 Watch the deploy in the Render dashboard (Events tab) or via:
 ```
@@ -69,122 +81,86 @@ render deploys list mtg-calc
 
 ### One-time CI setup (manual — do this yourself)
 
-Three steps. **Do them in this order**, and finish step 1 *before* merging the PR that
-introduced CI — the deploy job runs on that merge, and without the secret it fails.
-
-None of this is recoverable-by-code: these live in the Render and GitHub dashboards, not in
-the repo.
+Two steps, both in dashboards rather than the repo.
 
 ---
 
-#### Step 1 — Add the Render deploy hook as a GitHub secret
+#### Step 1 — Confirm the Render service picked up `checksPass`
 
-*Why:* `render.yaml` no longer auto-deploys, so the only thing that ships to production is
-the `deploy` job POSTing to this URL. No secret, no deploys.
+*Why:* `render.yaml` declares `autoDeployTrigger: checksPass`, but Blueprint sync does
+**not** reliably push deploy settings onto a service that already exists. If the dashboard
+still says "On Commit", every push to `main` deploys immediately without waiting for CI —
+the exact hole this is meant to close. Verify rather than assume.
 
-**1a. Get the hook URL from Render.**
-
-1. Go to <https://dashboard.render.com> and open the **`mtg-calc`** service.
-2. **Settings** tab (top nav of the service, not the account-level settings).
-3. Scroll to **Deploy Hook**.
-4. Click the copy icon. The URL looks like:
-   `https://api.render.com/deploy/srv-abc123def456?key=XyZ...`
-
-> **Treat this URL as a password.** The `key=` query param *is* the auth — anyone holding
-> the full URL can trigger a production deploy. Don't paste it into a chat, an issue, or a
-> commit. If it leaks, regenerate it on that same Render settings page and update the
-> GitHub secret.
-
-**1b. Store it in GitHub.**
-
-Fastest, and it keeps the value off your screen and out of your shell history — run this at
-the repo root and paste the URL at the prompt:
-
-```
-gh secret set RENDER_DEPLOY_HOOK_URL
-```
-
-Or via the web UI: repo → **Settings** → **Secrets and variables** → **Actions** →
-**New repository secret**. Name it exactly `RENDER_DEPLOY_HOOK_URL` (the workflow reads
-that name), paste the URL as the value, **Add secret**.
-
-**Verify:** `gh secret list` shows `RENDER_DEPLOY_HOOK_URL` with an updated timestamp. You
-cannot read the value back — that's expected.
-
----
-
-#### Step 2 — Turn off Auto-Deploy in the Render dashboard
-
-*Why:* `render.yaml` sets `autoDeploy: false`, but Blueprint sync does **not** reliably
-push that key onto a service that already exists. If the dashboard still says "Yes", every
-push to `main` deploys immediately — racing the CI-gated deploy and shipping code whose
-tests haven't finished. That's the exact hole this work closes, so verify it rather than
-assuming.
-
-1. Render dashboard → **`mtg-calc`** service → **Settings**.
+1. <https://dashboard.render.com> → the **`mtg-calc`** service → **Settings**.
 2. Find **Build & Deploy** → **Auto-Deploy**.
-3. If it is "Yes" / "On Commit", click **Edit** and set it to **No** / **Off**. Save.
+3. It should read **After CI Checks Pass**. If it says "On Commit" (or "Yes"), click
+   **Edit**, change it, and save.
 
-**Verify:** the Settings page reads `Auto-Deploy: No`. Optionally push a trivial commit to
-a branch (not `main`) and confirm no deploy appears in the **Events** tab.
+**Verify:** push a commit to `main` and watch the Render **Events** tab — the deploy should
+appear only after the GitHub Actions run concludes, not within seconds of the push.
 
 ---
 
-#### Step 3 — Protect `main`
+#### Step 2 — Protect `main`
 
-*Why:* until this exists, CI is advisory. Nothing stops a direct `git push origin main`
-that skips every check — including the deploy job's own gate.
+*Why:* `checksPass` gates what Render deploys, not what reaches `main`. Without branch
+protection a direct `git push origin main` still lands unreviewed, untested code on the
+default branch — Render just declines to ship it, which is a confusing failure mode rather
+than a prevented one.
 
 Status checks only appear in the picker **after they have run at least once** on the repo.
 CI has already run, so both will be searchable.
 
 1. Repo → **Settings** → **Rules** → **Rulesets** → **New ruleset** → **New branch ruleset**.
-   (On older repos this may be **Settings** → **Branches** → **Add branch protection rule**;
-   the options below have the same names either way.)
+   (Older repos may show **Settings** → **Branches** → **Add branch protection rule**; the
+   option names below are the same either way.)
 2. **Name:** `main protection`. **Enforcement status:** Active.
 3. **Target branches** → Add target → **Include default branch**.
-4. Enable these rules:
-   - **Require a pull request before merging** (Required approvals: `0` is fine for a solo
-     repo — the point is forcing the PR, which is what makes checks run).
-   - **Require status checks to pass** → **Add checks**, then search for and add both:
+4. Enable:
+   - **Require a pull request before merging** (Required approvals `0` is fine solo — the
+     point is forcing the PR, which is what makes checks run).
+   - **Require status checks to pass** → **Add checks**, then add both:
      - `Backend (ruff, mypy, pytest)`
      - `Frontend (tsc, oxlint, vitest)`
    - **Block force pushes**.
 5. **Create**.
 
 > **Gotcha:** as repo owner you can bypass rulesets by default. Leave the **Bypass list**
-> empty if you want the rules to actually apply to you — otherwise the protection is
-> decorative for the only person using the repo.
+> empty or the protection is decorative for the only person using the repo.
 
-**Verify:** the negative test is the real one.
+**Verify** with the negative test:
 ```
 git checkout main && git pull
 echo "# test" >> README.md
 git commit -am "should be rejected" && git push origin main
 ```
-Expect a rejection citing the protected branch. Then undo the local commit:
+Expect a rejection citing the protected branch, then undo it:
 ```
 git reset --hard origin/main
 ```
 
 ---
 
-#### After all three: confirm the whole chain works
+#### On deploy hooks
 
-Merge a small PR and watch it flow through:
+This setup uses none. A deploy hook is a URL whose `key=` query param is the entire
+credential — anyone holding it can trigger a production deploy, it never expires, and it
+works **regardless of the Auto-Deploy setting**. Switching to `checksPass` does not disable
+existing hooks.
 
-1. GitHub **Actions** tab → the run for the merge commit → all three jobs, with
-   **Deploy to Render** green (not `skipping` — that only happens on `pull_request` events).
-2. Render **Events** tab → a new deploy appears within a few seconds of that job.
-3. `curl https://<your-app>.onrender.com/healthz` → `{"status":"ok"}`.
+If a hook URL has ever been shared — pasted into a chat, an issue, a commit, a screenshot —
+regenerate it: Render → service → **Settings** → **Deploy Hook** → **Regenerate**. That
+invalidates the old URL immediately. Nothing in this repo depends on one.
 
-If the deploy job is red with a `RENDER_DEPLOY_HOOK_URL is not set` error, step 1 didn't
-take — re-check the secret name for typos.
+---
 
 ### Deploying without a code change
 
 To redeploy the current `main` (e.g. after a rollback, or to pick up an env var change),
-POST to the deploy hook directly, or use the Render dashboard's "Manual Deploy" button.
+use the Render dashboard's **Manual Deploy** button (service → Manual Deploy → Deploy
+latest commit). That path bypasses the CI gate by design, so prefer it only when you know
+the commit is already green.
 
 ## Verifying a deploy
 
@@ -208,8 +184,8 @@ Render keeps a history of previous successful deploys per service, and rolling b
 3. Click it → **Rollback to this deploy** (Render redeploys that exact previous build).
 4. Re-run the verification steps above against the rolled-back version.
 
-A bad deploy cannot re-ship on its own — `autoDeploy` is off and only a green CI run on
-`main` triggers the hook — so a rollback stays rolled back while you fix forward.
+A bad deploy cannot re-ship on its own — Render only deploys a `main` commit whose checks
+are green — so a rollback stays rolled back while you fix forward.
 
 For a code-level rollback (not just Render's deploy history), standard git revert works
 fine too. It goes through CI like any other change, so the reverted state is tested before
@@ -238,12 +214,14 @@ git revert <bad-commit-sha>
   `docker run --rm -it mtg-calc sh` (once Docker's available locally) and `ls app/static`
   is the fastest way to check.
 - **New card/feature works locally but not in prod**: confirm it's on `main` *and* that the
-  CI run for that merge went green all the way through the `deploy` job — a red backend or
-  frontend job skips the deploy entirely, so `main` can be ahead of what's live. Check the
-  Actions tab first, Render's Events tab second.
-- **CI green but no deploy fired**: the `deploy` job only runs on `push` events to `main`,
-  not on `pull_request`. If it ran and failed, the most likely cause is a missing or
-  rotated `RENDER_DEPLOY_HOOK_URL` secret — the job prints an explicit error for that case.
+  CI run for that merge was green — a red job means Render never deploys, so `main` can sit
+  ahead of what's live indefinitely. Check the Actions tab first, Render's Events tab second.
+- **CI green but no deploy fired**: check Auto-Deploy still reads "After CI Checks Pass" in
+  the Render dashboard (Blueprint sync doesn't reliably update an existing service). If a
+  commit somehow reported *zero* checks, Render deliberately does nothing and says nothing —
+  confirm the workflow actually triggered on that commit.
+- **A deploy fired despite a failing job**: Render counts `success`, `neutral`, and
+  `skipped` as passing. A job that was skipped rather than run does not block a deploy.
 
 ## Known limitations of this deployment (by design, for now)
 

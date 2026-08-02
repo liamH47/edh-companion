@@ -86,23 +86,10 @@ jobs:
       - name: Test
         run: npx vitest run --coverage
 
-  deploy:
-    name: Deploy to Render
-    runs-on: ubuntu-latest
-    needs: [backend, frontend]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    steps:
-      - name: Trigger Render deploy
-        env:
-          DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-        run: |
-          if [ -z "$DEPLOY_HOOK" ]; then
-            echo "::error::RENDER_DEPLOY_HOOK_URL secret is not set. Add it in"
-            echo "::error::Settings > Secrets and variables > Actions. Get the URL from"
-            echo "::error::the Render dashboard: service > Settings > Deploy Hook."
-            exit 1
-          fi
-          # --fail so a non-2xx from Render fails the job rather than silently
-          # reporting success on an error page.
-          curl --fail --silent --show-error --request POST "$DEPLOY_HOOK"
-          echo "Deploy triggered. Watch it in the Render dashboard (Events tab)."
+# There is deliberately no deploy job. `render.yaml` sets
+# `autoDeployTrigger: checksPass`, so Render watches the GitHub Checks API and deploys
+# a commit on main once these jobs are green -- no deploy hook, and therefore no
+# long-lived credential in repo secrets to leak or rotate.
+#
+# Consequence: every check reported on a commit gates the deploy, not a chosen subset.
+# Keep slow or flaky jobs (mobile E2E) off the push-to-main trigger.
