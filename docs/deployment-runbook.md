@@ -69,18 +69,117 @@ render deploys list mtg-calc
 
 ### One-time CI setup (manual — do this yourself)
 
-1. **Add the deploy hook secret.** Render dashboard → the `mtg-calc` service → Settings →
-   Deploy Hook → copy the URL. Then in GitHub: Settings → Secrets and variables → Actions →
-   New repository secret, named `RENDER_DEPLOY_HOOK_URL`. The `deploy` job fails with an
-   explicit error if this is missing, so a misconfiguration is loud rather than silent.
-2. **Turn off Render's own auto-deploy in the dashboard too.** `render.yaml` sets
-   `autoDeploy: false`, but a service created before that change may still have it enabled
-   in its settings — Blueprint sync does not always override it. Check
-   Settings → Build & Deploy → Auto-Deploy is "No".
-3. **Protect `main`.** GitHub → Settings → Branches → add a rule for `main`: require pull
-   requests, and require the `Backend (ruff, mypy, pytest)` and
-   `Frontend (tsc, oxlint, vitest)` status checks to pass. Without this, CI is advisory —
-   someone can still push straight to `main`.
+Three steps. **Do them in this order**, and finish step 1 *before* merging the PR that
+introduced CI — the deploy job runs on that merge, and without the secret it fails.
+
+None of this is recoverable-by-code: these live in the Render and GitHub dashboards, not in
+the repo.
+
+---
+
+#### Step 1 — Add the Render deploy hook as a GitHub secret
+
+*Why:* `render.yaml` no longer auto-deploys, so the only thing that ships to production is
+the `deploy` job POSTing to this URL. No secret, no deploys.
+
+**1a. Get the hook URL from Render.**
+
+1. Go to <https://dashboard.render.com> and open the **`mtg-calc`** service.
+2. **Settings** tab (top nav of the service, not the account-level settings).
+3. Scroll to **Deploy Hook**.
+4. Click the copy icon. The URL looks like:
+   `https://api.render.com/deploy/srv-abc123def456?key=XyZ...`
+
+> **Treat this URL as a password.** The `key=` query param *is* the auth — anyone holding
+> the full URL can trigger a production deploy. Don't paste it into a chat, an issue, or a
+> commit. If it leaks, regenerate it on that same Render settings page and update the
+> GitHub secret.
+
+**1b. Store it in GitHub.**
+
+Fastest, and it keeps the value off your screen and out of your shell history — run this at
+the repo root and paste the URL at the prompt:
+
+```
+gh secret set RENDER_DEPLOY_HOOK_URL
+```
+
+Or via the web UI: repo → **Settings** → **Secrets and variables** → **Actions** →
+**New repository secret**. Name it exactly `RENDER_DEPLOY_HOOK_URL` (the workflow reads
+that name), paste the URL as the value, **Add secret**.
+
+**Verify:** `gh secret list` shows `RENDER_DEPLOY_HOOK_URL` with an updated timestamp. You
+cannot read the value back — that's expected.
+
+---
+
+#### Step 2 — Turn off Auto-Deploy in the Render dashboard
+
+*Why:* `render.yaml` sets `autoDeploy: false`, but Blueprint sync does **not** reliably
+push that key onto a service that already exists. If the dashboard still says "Yes", every
+push to `main` deploys immediately — racing the CI-gated deploy and shipping code whose
+tests haven't finished. That's the exact hole this work closes, so verify it rather than
+assuming.
+
+1. Render dashboard → **`mtg-calc`** service → **Settings**.
+2. Find **Build & Deploy** → **Auto-Deploy**.
+3. If it is "Yes" / "On Commit", click **Edit** and set it to **No** / **Off**. Save.
+
+**Verify:** the Settings page reads `Auto-Deploy: No`. Optionally push a trivial commit to
+a branch (not `main`) and confirm no deploy appears in the **Events** tab.
+
+---
+
+#### Step 3 — Protect `main`
+
+*Why:* until this exists, CI is advisory. Nothing stops a direct `git push origin main`
+that skips every check — including the deploy job's own gate.
+
+Status checks only appear in the picker **after they have run at least once** on the repo.
+CI has already run, so both will be searchable.
+
+1. Repo → **Settings** → **Rules** → **Rulesets** → **New ruleset** → **New branch ruleset**.
+   (On older repos this may be **Settings** → **Branches** → **Add branch protection rule**;
+   the options below have the same names either way.)
+2. **Name:** `main protection`. **Enforcement status:** Active.
+3. **Target branches** → Add target → **Include default branch**.
+4. Enable these rules:
+   - **Require a pull request before merging** (Required approvals: `0` is fine for a solo
+     repo — the point is forcing the PR, which is what makes checks run).
+   - **Require status checks to pass** → **Add checks**, then search for and add both:
+     - `Backend (ruff, mypy, pytest)`
+     - `Frontend (tsc, oxlint, vitest)`
+   - **Block force pushes**.
+5. **Create**.
+
+> **Gotcha:** as repo owner you can bypass rulesets by default. Leave the **Bypass list**
+> empty if you want the rules to actually apply to you — otherwise the protection is
+> decorative for the only person using the repo.
+
+**Verify:** the negative test is the real one.
+```
+git checkout main && git pull
+echo "# test" >> README.md
+git commit -am "should be rejected" && git push origin main
+```
+Expect a rejection citing the protected branch. Then undo the local commit:
+```
+git reset --hard origin/main
+```
+
+---
+
+#### After all three: confirm the whole chain works
+
+Merge a small PR and watch it flow through:
+
+1. GitHub **Actions** tab → the run for the merge commit → all three jobs, with
+   **Deploy to Render** green (not `skipping` — that only happens on `pull_request` events).
+2. Render **Events** tab → a new deploy appears within a few seconds of that job.
+3. `curl https://<your-app>.onrender.com/healthz` → `{"status":"ok"}`.
+
+If the deploy job is red with a `RENDER_DEPLOY_HOOK_URL is not set` error, step 1 didn't
+take — re-check the secret name for typos.
 
 ### Deploying without a code change
 
