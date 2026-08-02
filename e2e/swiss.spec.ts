@@ -12,6 +12,7 @@ import { expect, type Page, test } from '@playwright/test'
  */
 
 const PLAYERS = ['Ava', 'Ben', 'Cara', 'Dan', 'Eve', 'Finn']
+const EIGHT_PLAYERS = [...PLAYERS, 'Gus', 'Hana']
 
 /** Round 1 of a 6-player pod: seats 1v4, 2v5, 3v6. */
 const ROUND_ONE_PAIRINGS = [
@@ -20,16 +21,25 @@ const ROUND_ONE_PAIRINGS = [
   ['Cara', 'Finn'],
 ] as const
 
-async function startTournament(page: Page) {
+/** Round 1 of an 8-player pod: seats 1v5, 2v6, 3v7, 4v8. */
+const EIGHT_ROUND_ONE_PAIRINGS = [
+  ['Ava', 'Eve'],
+  ['Ben', 'Finn'],
+  ['Cara', 'Gus'],
+  ['Dan', 'Hana'],
+] as const
+
+/** The setup screen starts with 4 rows, so anything larger adds rows first. */
+async function startTournament(page: Page, players: string[] = PLAYERS) {
   await page.goto('/')
   await page.getByRole('button', { name: 'Pairings' }).click()
   await expect(page.getByRole('heading', { name: 'New tournament' })).toBeVisible()
 
-  // The setup screen starts with 4 rows; a 6-player pod needs two more.
-  await page.getByRole('button', { name: 'Add player' }).click()
-  await page.getByRole('button', { name: 'Add player' }).click()
+  for (let added = 4; added < players.length; added++) {
+    await page.getByRole('button', { name: 'Add player' }).click()
+  }
 
-  for (const [index, name] of PLAYERS.entries()) {
+  for (const [index, name] of players.entries()) {
     await page.getByRole('textbox', { name: `Player ${index + 1}` }).fill(name)
   }
 
@@ -77,6 +87,40 @@ test.describe('Swiss pairings', () => {
     await expect(page.getByText('1-0-0', { exact: true })).toHaveCount(3)
     await expect(page.getByText('0-1-0', { exact: true })).toHaveCount(3)
     await expect(page.getByText('3 pts')).toHaveCount(3)
+  })
+
+  test('runs an 8-player event through to standings', async ({ page }) => {
+    // The most common real field size for this tool, and the one where seat pairing
+    // spans the widest gap (seat i plays seat i+4).
+    await startTournament(page, EIGHT_PLAYERS)
+
+    await expect(page.getByRole('heading', { name: 'Round 1 of 3' })).toBeVisible()
+    await expect(page.getByRole('button', { name: /^Report .+ versus .+$/ })).toHaveCount(4)
+
+    for (const [a, b] of EIGHT_ROUND_ONE_PAIRINGS) {
+      await expect(page.getByRole('button', { name: `Report ${a} versus ${b}` })).toBeVisible()
+    }
+
+    for (const [a, b] of EIGHT_ROUND_ONE_PAIRINGS) {
+      await reportMatch(page, a, b, '2-0')
+    }
+
+    await page.getByRole('button', { name: 'Start round 2' }).click()
+    await expect(page.getByRole('heading', { name: 'Round 2 of 3' })).toBeVisible()
+    await expect(page.getByRole('button', { name: /^Report .+ versus .+$/ })).toHaveCount(4)
+
+    await page.getByRole('button', { name: 'Standings', exact: true }).click()
+    await expect(page.getByRole('heading', { name: 'Standings' })).toBeVisible()
+    await expect(page.getByText('1-0-0', { exact: true })).toHaveCount(4)
+    await expect(page.getByText('0-1-0', { exact: true })).toHaveCount(4)
+  })
+
+  test('gives exactly one player a bye in an odd field', async ({ page }) => {
+    // Seven players is four matches: three real pairings plus a bye for the last seat.
+    await startTournament(page, PLAYERS.concat('Gus').slice(0, 7))
+
+    await expect(page.getByRole('heading', { name: 'Round 1 of 3' })).toBeVisible()
+    await expect(page.getByText('Bye')).toHaveCount(1)
   })
 
   test('survives a reload mid-event', async ({ page }) => {

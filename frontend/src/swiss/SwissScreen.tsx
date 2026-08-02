@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useTournament } from '../core/swiss/useTournament'
-import { entrantName } from '../core/swiss/types'
+import { entrantName, type Rng } from '../core/swiss/types'
 import { Button } from '../ui/Button'
 import { Pressable } from '../ui/Pressable'
 import { Sheet } from '../ui/Sheet'
@@ -11,13 +11,20 @@ import { TournamentSetupScreen } from './TournamentSetupScreen'
 
 type View = 'round' | 'standings'
 
+interface SwissScreenProps {
+  /** Injected in tests so a multi-round event is reproducible. Rounds 2+ shuffle
+   * within score groups, so with the real Math.random nothing past round 1 can be
+   * asserted exactly. */
+  rng?: Rng
+}
+
 /**
  * The Swiss tab. Owns the tournament session and picks between setup, the current
  * round, and standings. No network anywhere below this point -- pairing and scoring
  * are pure functions in core/swiss, so a draft keeps working with the backend down.
  */
-export function SwissScreen() {
-  const session = useTournament()
+export function SwissScreen({ rng = Math.random }: SwissScreenProps = {}) {
+  const session = useTournament(rng)
   const [view, setView] = useState<View>('round')
   const [visibleRound, setVisibleRound] = useState(1)
   const [managingEntrants, setManagingEntrants] = useState(false)
@@ -27,6 +34,7 @@ export function SwissScreen() {
   if (tournament === null) {
     return (
       <TournamentSetupScreen
+        rng={rng}
         onStart={(input, seatingIsRandom) => {
           session.start(input)
           session.nextRound(seatingIsRandom ? 'random' : 'draft-seating')

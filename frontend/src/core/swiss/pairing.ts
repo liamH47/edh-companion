@@ -20,13 +20,16 @@ function matchId(aEntrantId: string, bEntrantId: string | null): string {
   return `${aEntrantId}-vs-${bEntrantId ?? 'bye'}`
 }
 
-function makeMatch(aEntrantId: string, bEntrantId: string): Match {
+/** Exported so anything that rewrites a pairing (swapPairing) rebuilds through here
+ * rather than spreading the old match, which would keep an id naming the wrong
+ * players. */
+export function makeMatch(aEntrantId: string, bEntrantId: string): Match {
   return { id: matchId(aEntrantId, bEntrantId), aEntrantId, bEntrantId, result: null }
 }
 
 /** A bye is recorded as a 2-0 win straight away -- there's no match to play and
  * nothing for the player to report. */
-function makeBye(entrantId: string): Match {
+export function makeBye(entrantId: string): Match {
   return {
     id: matchId(entrantId, null),
     aEntrantId: entrantId,
@@ -157,26 +160,41 @@ export function swissPairings(
 ): PairingOutcome {
   const ordered = orderForPairing(activeEntrantsForRound(tournament, roundNumber), tournament, rng)
 
-  const matches: Match[] = []
-  let pairable = ordered
-
-  if (pairable.length % 2 === 1) {
-    // Lowest-ranked first, so the bye goes to whoever is doing worst; skipping anyone
-    // who already had one keeps it from landing on the same player twice.
-    const byeCandidates = [...pairable].reverse()
-    const byeId = byeCandidates.find((id) => !hasHadBye(id, tournament)) ?? byeCandidates[0]
-    matches.push(makeBye(byeId))
-    pairable = pairable.filter((id) => id !== byeId)
+  if (ordered.length % 2 === 0) {
+    const withoutRematches = pairRecursively(ordered, tournament, false)
+    if (withoutRematches !== null) {
+      return { matches: withoutRematches, hadToRepeatPairing: false }
+    }
+    // Cannot be null: the field is even, and with rematches allowed every partner is
+    // legal, so the first branch of the search always succeeds.
+    return { matches: pairRecursively(ordered, tournament, true)!, hadToRepeatPairing: true }
   }
 
-  const withoutRematches = pairRecursively(pairable, tournament, false)
-  if (withoutRematches !== null) {
-    return { matches: [...matches, ...withoutRematches], hadToRepeatPairing: false }
+  // An odd field means someone sits out, and *who* is a real choice rather than a
+  // foregone one. Preference order is lowest-ranked first (the bye goes to whoever is
+  // doing worst), skipping anyone who already had one. But a given bye choice can
+  // leave behind a set that cannot be paired without a rematch when a different,
+  // equally legal choice could -- so try them in preference order and take the first
+  // that pairs cleanly, rather than committing to the first and reporting a repeat
+  // that was never necessary.
+  const byPreference = [...ordered].reverse()
+  const withoutByeYet = byPreference.filter((id) => !hasHadBye(id, tournament))
+  const candidates = withoutByeYet.length > 0 ? withoutByeYet : byPreference
+
+  for (const byeId of candidates) {
+    const rest = ordered.filter((id) => id !== byeId)
+    const paired = pairRecursively(rest, tournament, false)
+    if (paired !== null) {
+      return { matches: [makeBye(byeId), ...paired], hadToRepeatPairing: false }
+    }
   }
 
-  // Cannot be null: `pairable` has even length by now (an odd field had its bye
-  // removed above), and with rematches allowed every partner is legal, so the very
-  // first branch of the search always succeeds.
-  const withRematches = pairRecursively(pairable, tournament, true)!
-  return { matches: [...matches, ...withRematches], hadToRepeatPairing: true }
+  // No legal bye avoids a rematch, so fall back to the preferred recipient and repeat
+  // a pairing. Never null, for the same reason as the even case above.
+  const byeId = candidates[0]
+  const rest = ordered.filter((id) => id !== byeId)
+  return {
+    matches: [makeBye(byeId), ...pairRecursively(rest, tournament, true)!],
+    hadToRepeatPairing: true,
+  }
 }

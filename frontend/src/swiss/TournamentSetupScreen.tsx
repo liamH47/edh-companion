@@ -6,7 +6,8 @@ import {
   recommendedRounds,
   type CreateTournamentInput,
 } from '../core/swiss/tournament'
-import type { MatchFormat, TournamentMode } from '../core/swiss/types'
+import { shuffle } from '../core/swiss/pairing'
+import type { MatchFormat, Rng, TournamentMode } from '../core/swiss/types'
 import { Button } from '../ui/Button'
 import { ChevronDownIcon, ChevronUpIcon, PlusIcon, TrashIcon } from '../ui/Icon'
 import { Pressable } from '../ui/Pressable'
@@ -16,6 +17,8 @@ import { TextField } from '../ui/TextField'
 
 interface TournamentSetupScreenProps {
   onStart: (input: CreateTournamentInput, seatingIsRandom: boolean) => void
+  /** Injectable so a test can assert a specific seating rather than "some order". */
+  rng?: Rng
 }
 
 const MIN_ENTRANTS = 2
@@ -38,7 +41,7 @@ const segmentClasses = 'min-h-12 flex-1 justify-center rounded-pill text-body fo
  * entered by hand with per-row move buttons -- the MTG Companion app only offers the
  * former, which is the gap this screen exists to close.
  */
-export function TournamentSetupScreen({ onStart }: TournamentSetupScreenProps) {
+export function TournamentSetupScreen({ onStart, rng = Math.random }: TournamentSetupScreenProps) {
   const [mode, setMode] = useState<TournamentMode>('solo')
   const [format, setFormat] = useState<MatchFormat>('bo3')
   const [rounds, setRounds] = useState(DEFAULT_ROUNDS)
@@ -104,15 +107,10 @@ export function TournamentSetupScreen({ onStart }: TournamentSetupScreenProps) {
     })
   }
 
+  // core/swiss/pairing's shuffle rather than a second hand-rolled Fisher-Yates, so
+  // there is one shuffle in the codebase and it is the tested one.
   const shuffleSeats = () => {
-    setEntrants((current) => {
-      const next = [...current]
-      for (let i = next.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1))
-        ;[next[i], next[j]] = [next[j], next[i]]
-      }
-      return next
-    })
+    setEntrants((current) => shuffle(current, rng))
   }
 
   const submit = (seatingIsRandom: boolean) => {
