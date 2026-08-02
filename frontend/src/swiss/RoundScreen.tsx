@@ -1,0 +1,175 @@
+import { useState } from 'react'
+import { entrantIdsInRound, isRoundComplete } from '../core/swiss/tournament'
+import { entrantName, type Match, type MatchResult, type Tournament } from '../core/swiss/types'
+import { Button } from '../ui/Button'
+import { Chip } from '../ui/Chip'
+import { ShuffleIcon } from '../ui/Icon'
+import { Pressable } from '../ui/Pressable'
+import { Sheet } from '../ui/Sheet'
+import { Text } from '../ui/Text'
+import { MatchResultSheet } from './MatchResultSheet'
+
+interface RoundScreenProps {
+  tournament: Tournament
+  roundNumber: number
+  hadToRepeatPairing: boolean
+  onReport: (roundNumber: number, matchId: string, result: MatchResult | null) => void
+  onRepairFrom: (roundNumber: number) => void
+  onSwap: (roundNumber: number, entrantAId: string, entrantBId: string) => void
+  onNextRound: () => void
+}
+
+function scoreline(match: Match): string {
+  if (match.bEntrantId === null) return 'Bye'
+  if (match.result === null) return 'Not reported'
+  const { aGameWins, bGameWins, gameDraws } = match.result
+  return gameDraws > 0 && aGameWins === bGameWins
+    ? 'Draw'
+    : `${aGameWins}-${bGameWins}`
+}
+
+/**
+ * One round's pairings: tap a match to report or correct it, swap two entrants if the
+ * generated pairing needs a human fix, then move on. Editing a result from an earlier
+ * round is the same flow -- MatchResultSheet offers the re-pair option when later
+ * rounds already exist.
+ */
+export function RoundScreen({
+  tournament,
+  roundNumber,
+  hadToRepeatPairing,
+  onReport,
+  onRepairFrom,
+  onSwap,
+  onNextRound,
+}: RoundScreenProps) {
+  const [editingMatchId, setEditingMatchId] = useState<string | null>(null)
+  const [swapFromId, setSwapFromId] = useState<string | null>(null)
+
+  const round = tournament.rounds.find((candidate) => candidate.number === roundNumber)
+  if (!round) {
+    return (
+      <Text variant="body" color="muted">
+        Round {roundNumber} hasn&apos;t started yet.
+      </Text>
+    )
+  }
+
+  const nameById = new Map(tournament.entrants.map((entrant) => [entrant.id, entrant]))
+  const nameOf = (id: string | null) => (id === null ? 'Bye' : entrantName(nameById.get(id)!))
+
+  const complete = isRoundComplete(tournament, roundNumber)
+  const isLatestRound = roundNumber === tournament.rounds.length
+  const hasLaterRounds = roundNumber < tournament.rounds.length
+  const moreRoundsToPlay = tournament.rounds.length < tournament.totalRounds
+  const editingMatch = round.matches.find((match) => match.id === editingMatchId) ?? null
+
+  const swapTargets = entrantIdsInRound(tournament, roundNumber).filter((id) => id !== swapFromId)
+
+  return (
+    <section className="flex flex-col gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <Text as="h2" variant="title">
+          Round {roundNumber} of {tournament.totalRounds}
+        </Text>
+        <Chip>{complete ? 'Complete' : 'In progress'}</Chip>
+      </div>
+
+      {hadToRepeatPairing && isLatestRound && (
+        <div role="alert" className="rounded-lg border border-border bg-surface-raised px-4 py-3">
+          <Text variant="body" color="muted">
+            Everyone left had already played each other, so this round repeats a pairing.
+          </Text>
+        </div>
+      )}
+
+      <ul className="flex flex-col gap-2">
+        {round.matches.map((match) => (
+          <li key={match.id} className="flex items-stretch gap-2">
+            <Pressable
+              onClick={() => match.bEntrantId !== null && setEditingMatchId(match.id)}
+              disabled={match.bEntrantId === null}
+              aria-label={`Report ${nameOf(match.aEntrantId)} versus ${nameOf(match.bEntrantId)}`}
+              className="min-h-12 min-w-0 flex-1 justify-between gap-3 rounded-lg border border-border bg-surface px-4 py-2 disabled:opacity-100"
+            >
+              <span className="flex min-w-0 flex-col">
+                <Text variant="bodyStrong" className="truncate">
+                  {nameOf(match.aEntrantId)}
+                </Text>
+                <Text variant="body" color="muted" className="truncate">
+                  {match.bEntrantId === null ? '—' : nameOf(match.bEntrantId)}
+                </Text>
+              </span>
+              <Text
+                variant="bodyStrong"
+                color={match.result === null ? 'muted' : 'accent'}
+                className="shrink-0"
+              >
+                {scoreline(match)}
+              </Text>
+            </Pressable>
+            {!complete && match.bEntrantId !== null && (
+              <Pressable
+                aria-label={`Swap ${nameOf(match.aEntrantId)} with another entrant`}
+                onClick={() => setSwapFromId(match.aEntrantId)}
+                className="min-h-12 min-w-12 shrink-0 justify-center rounded-lg border border-border text-text-muted"
+              >
+                <ShuffleIcon />
+              </Pressable>
+            )}
+          </li>
+        ))}
+      </ul>
+
+      {/* Only the round's own primary action lives down here -- standings are always
+          one tap away from the pill row above, so repeating them would put two
+          competing buttons in the thumb zone. */}
+      {complete && isLatestRound && moreRoundsToPlay && (
+        <div
+          className="flex flex-col gap-2"
+          style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+        >
+          <Button size="lg" fullWidth onClick={onNextRound}>
+            Start round {roundNumber + 1}
+          </Button>
+        </div>
+      )}
+
+      <MatchResultSheet
+        open={editingMatch !== null}
+        onClose={() => setEditingMatchId(null)}
+        match={editingMatch}
+        format={tournament.format}
+        aName={editingMatch ? nameOf(editingMatch.aEntrantId) : ''}
+        bName={editingMatch ? nameOf(editingMatch.bEntrantId) : ''}
+        onReport={(result) => editingMatch && onReport(roundNumber, editingMatch.id, result)}
+        onRepair={hasLaterRounds ? () => onRepairFrom(roundNumber) : undefined}
+      />
+
+      <Sheet
+        open={swapFromId !== null}
+        onClose={() => setSwapFromId(null)}
+        title={`Swap ${swapFromId ? nameOf(swapFromId) : ''} with`}
+      >
+        <div className="flex flex-col gap-2">
+          <Text variant="body" color="muted">
+            Both matches lose their reported result, since they no longer describe who played.
+          </Text>
+          {swapTargets.map((id) => (
+            <Pressable
+              key={id}
+              onClick={() => {
+                // Non-null: this sheet only renders while swapFromId is set.
+                onSwap(roundNumber, swapFromId!, id)
+                setSwapFromId(null)
+              }}
+              className="min-h-12 justify-start rounded-lg border border-border bg-surface px-4"
+            >
+              <Text variant="body">{nameOf(id)}</Text>
+            </Pressable>
+          ))}
+        </div>
+      </Sheet>
+    </section>
+  )
+}

@@ -1,117 +1,124 @@
 import { useEffect, useState } from 'react'
 import { listCards } from './api'
-import { CardForm } from './CardForm'
+import { CardPickerScreen } from './cards/CardPickerScreen'
+import { CardScreen } from './cards/CardScreen'
 import { CoinFlip } from './CoinFlip'
+import { useNavigation } from './core/navigation/useNavigation'
+import { recordCardOpened } from './core/recentCards'
+import { SwissScreen } from './swiss/SwissScreen'
+import { TabBar, type TabName } from './TabBar'
 import { ThemeToggle } from './ThemeToggle'
+import { Text } from './ui/Text'
 import type { CardMetadata } from './types'
 
-type View = 'calculator' | 'coin-flip'
+/**
+ * The card list is the only thing here that needs the network, so it is fetched and
+ * error-handled *inside* the card routes rather than gating the whole app. The Coin
+ * Flip and Pairings tabs are entirely local, and a backend outage must not take them
+ * down with it -- running a draft on bad reception is exactly when Pairings matters.
+ */
+function CardRoutes({
+  cards,
+  error,
+  route,
+  onSelectCard,
+  onBack,
+}: {
+  cards: CardMetadata[] | null
+  error: string | null
+  route: { name: 'card-picker' } | { name: 'card'; cardId: string }
+  onSelectCard: (cardId: string) => void
+  onBack: () => void
+}) {
+  if (error !== null) {
+    return (
+      <div role="alert" className="rounded-lg border border-danger-border bg-danger-surface px-4 py-3">
+        <Text variant="body" color="danger">
+          Failed to load cards: {error}
+        </Text>
+      </div>
+    )
+  }
+
+  if (cards === null) {
+    return (
+      <Text variant="body" color="muted">
+        Loading…
+      </Text>
+    )
+  }
+
+  // A card route whose id no longer matches any registered card (a stale deep link)
+  // falls back to the picker in place, without rewriting the URL -- rare enough
+  // (cards aren't removed from the registry in normal operation) that a redirect
+  // isn't worth the extra history entry.
+  const selectedCard = route.name === 'card' ? cards.find((card) => card.id === route.cardId) : null
+
+  if (selectedCard) {
+    return <CardScreen key={selectedCard.id} card={selectedCard} onBack={onBack} />
+  }
+  return <CardPickerScreen cards={cards} onSelectCard={onSelectCard} />
+}
 
 function App() {
   const [cards, setCards] = useState<CardMetadata[] | null>(null)
-  const [selectedCardId, setSelectedCardId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [view, setView] = useState<View>('calculator')
+  const { route, goToCardPicker, goToCard, goToCoinFlip, goToSwiss } = useNavigation()
 
   useEffect(() => {
     listCards()
-      .then((fetchedCards) => {
-        setCards(fetchedCards)
-        setSelectedCardId(fetchedCards[0]?.id ?? null)
-      })
+      .then(setCards)
       .catch((err: unknown) => setError(err instanceof Error ? err.message : String(err)))
   }, [])
 
-  if (error) {
-    return (
-      <main className="flex min-h-screen items-center justify-center px-4">
-        <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-300">
-          Failed to load cards: {error}
-        </p>
-      </main>
-    )
+  const handleSelectCard = (cardId: string) => {
+    recordCardOpened(cardId)
+    goToCard(cardId)
   }
 
-  if (!cards || !selectedCardId) {
-    return (
-      <main className="flex min-h-screen items-center justify-center px-4">
-        <p className="text-slate-500 dark:text-slate-400">Loading…</p>
-      </main>
-    )
+  const handleSelectTab = (tab: TabName) => {
+    if (tab === 'cards') goToCardPicker()
+    else if (tab === 'coin') goToCoinFlip()
+    else goToSwiss()
   }
 
-  // selectedCardId is only ever set to an id already present in `cards` (see above and the
-  // <select> below), so a lookup miss here isn't a real, reachable state to guard against.
-  const selectedCard = cards.find((card) => card.id === selectedCardId)!
+  const activeTab: TabName =
+    route.name === 'coin-flip' ? 'coin' : route.name === 'swiss' ? 'swiss' : 'cards'
+
+  // The card screen owns its own bottom-pinned ActionBar, so the tab bar would
+  // compete with it for the same thumb-zone space -- hide it there (screen-spec.md).
+  const onOpenCardScreen =
+    route.name === 'card' && cards !== null && cards.some((card) => card.id === route.cardId)
+  const showTabBar = !onOpenCardScreen
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-xl flex-col gap-6 px-4 py-10 sm:px-6">
+    <main
+      className={`mx-auto flex min-h-screen w-full max-w-xl flex-col gap-4 bg-canvas px-4 py-4 sm:px-6 sm:py-8 ${
+        showTabBar ? 'pb-[calc(4rem+env(safe-area-inset-bottom))]' : ''
+      }`}
+    >
       <header className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold tracking-tight">Commander&apos;s Companion</h1>
+        <h1 className="text-xl font-semibold tracking-tight text-text sm:text-2xl">
+          Commander&apos;s Companion
+        </h1>
         <ThemeToggle />
       </header>
 
-      <div
-        role="tablist"
-        aria-label="View"
-        className="flex gap-1 rounded-lg bg-slate-100 p-1 dark:bg-slate-800"
-      >
-        <button
-          type="button"
-          role="tab"
-          aria-selected={view === 'calculator'}
-          onClick={() => setView('calculator')}
-          className={
-            view === 'calculator'
-              ? 'flex-1 rounded-md bg-white px-3 py-1.5 text-sm font-medium text-slate-900 shadow-sm dark:bg-slate-700 dark:text-slate-100'
-              : 'flex-1 rounded-md px-3 py-1.5 text-sm font-medium text-slate-600 dark:text-slate-400'
-          }
-        >
-          Aetherflux
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={view === 'coin-flip'}
-          onClick={() => setView('coin-flip')}
-          className={
-            view === 'coin-flip'
-              ? 'flex-1 rounded-md bg-white px-3 py-1.5 text-sm font-medium text-slate-900 shadow-sm dark:bg-slate-700 dark:text-slate-100'
-              : 'flex-1 rounded-md px-3 py-1.5 text-sm font-medium text-slate-600 dark:text-slate-400'
-          }
-        >
-          Coin Flip
-        </button>
-      </div>
-
-      {view === 'calculator' ? (
-        <>
-          {cards.length > 1 && (
-            <label className="flex flex-col gap-1 text-sm font-medium text-slate-700 dark:text-slate-300">
-              Card
-              <select
-                value={selectedCardId}
-                onChange={(event) => setSelectedCardId(event.target.value)}
-                className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
-              >
-                {cards.map((card) => (
-                  <option key={card.id} value={card.id}>
-                    {card.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-          )}
-
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-800/50">
-            <CardForm key={selectedCardId} card={selectedCard} />
-          </div>
-        </>
-      ) : (
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-800/50">
-          <CoinFlip />
-        </div>
+      {(route.name === 'card-picker' || route.name === 'card') && (
+        <CardRoutes
+          cards={cards}
+          error={error}
+          route={route}
+          onSelectCard={handleSelectCard}
+          onBack={goToCardPicker}
+        />
       )}
+
+      {route.name === 'coin-flip' && <CoinFlip />}
+
+      {route.name === 'swiss' && <SwissScreen />}
+
+      {showTabBar && <TabBar active={activeTab} onSelect={handleSelectTab} />}
     </main>
   )
 }

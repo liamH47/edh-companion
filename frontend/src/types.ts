@@ -1,4 +1,4 @@
-export type FieldKind = 'number' | 'boolean' | 'select' | 'counter'
+export type FieldKind = 'number' | 'boolean' | 'select' | 'counter' | 'sequence'
 
 export interface SelectOption {
   value: string
@@ -28,12 +28,21 @@ export interface FieldSpec {
   default_source: string | null
   action_label: string | null
   action_disabled_when: ActionGuard | null
+  setup: boolean
+  short_label: string | null
 }
 
 export interface OutputSpec {
   name: string
   label: string
   kind: 'number' | 'text'
+  short_label: string | null
+  primary: boolean
+}
+
+export interface AlertSpec {
+  output: string
+  message: string
 }
 
 export interface CardMetadata {
@@ -42,6 +51,7 @@ export interface CardMetadata {
   rules_text: string
   fields: FieldSpec[]
   outputs: OutputSpec[]
+  alert: AlertSpec | null
 }
 
 export type FieldValues = Record<string, unknown>

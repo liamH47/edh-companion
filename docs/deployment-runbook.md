@@ -1,16 +1,12 @@
 # Deployment & rollback runbook
 
 Covers the "quick and cheap" deployment path: a single Docker container (frontend +
-backend combined, see `Dockerfile`) deployed to [Render](https://render.com)'s free web
-service tier, declared via `render.yaml` (a Render Blueprint). This is intentionally
-separate from the larger local-kind/Terraform/AWS portfolio track described in the main
-project plan — it exists to get a real, working URL live quickly.
+backend combined, see `Dockerfile`) deployed to [Render](https://render.com) (Starter plan),
+declared via `render.yaml` (a Render Blueprint). This app's own infrastructure stays
+intentionally simple — the k8s/Terraform/observability portfolio work now lives in a separate
+project entirely, not attached to this one.
 
-**Caveat**: the steps below have not been end-to-end verified against a real deploy as of
-writing (no Docker installed locally to build-test the image, and GitHub/Render access was
-deliberately kept out of this session — see "First-time setup"). Treat this as a solid
-starting runbook, not a proven one; update it with anything that turns out to be wrong the
-first time through.
+This has been verified end-to-end against a real deploy: the app is live and working.
 
 ## Architecture in one paragraph
 
@@ -108,9 +104,10 @@ git push origin main
 - **App builds but health check never passes**: almost always a `PORT` mismatch — confirm
   the Dockerfile's `CMD` is still reading `$PORT` (Render sets this to `10000` by default;
   see the Dockerfile comment) rather than a hardcoded port.
-- **App works but is slow on first request after a while**: expected on Render's free tier
-  — free web services sleep after ~15 minutes of inactivity and take 30-60s to wake on the
-  next request. Not a bug; upgrading off the free plan removes this if it becomes annoying.
+- **App works but is slow on first request after a while**: this deployment is on the Starter
+  plan (no sleep-on-inactivity), so this would now indicate a real issue — check Render's
+  dashboard for restarts/OOM kills rather than assuming it's expected. (Free-tier services do
+  sleep after ~15 min of inactivity with a 30-60s cold start; that's not this deployment.)
 - **Static assets 404 in production but work in local dev**: check that
   `backend/app/frontend.py`'s `mount_frontend` is finding a non-empty `app/static/`
   directory inside the image — this is where the Dockerfile copies `frontend/dist` to. A
@@ -122,8 +119,8 @@ git push origin main
 
 ## Known limitations of this deployment (by design, for now)
 
-- Single instance, no autoscaling (free tier). The k8s/HPA milestones in the main project
-  plan cover that separately, later, against a different target.
+- Single instance, no autoscaling (Starter plan). The k8s/HPA work described in the SRE/SWE
+  portfolio plan lives in a separate project entirely now, not attached to this app.
 - No persistent storage or database — this app doesn't need any (all state is client-side
   per browser session), so this isn't a gap, just worth noting if that ever changes.
 - No custom domain configured yet; Render's `onrender.com` subdomain is fine for sharing

@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import './theme/tokens.css';
 
 /* Redefine `dark:` to key off a `.dark` class (toggled by ThemeToggle) instead of
    only prefers-color-scheme, so the user's choice can override the system setting. */
@@ -13,5 +14,16 @@ html.dark {
 }
 
 body {
-  @apply bg-slate-50 text-slate-900 antialiased transition-colors duration-200 dark:bg-slate-900 dark:text-slate-100;
+  /* Not @apply: Tailwind's production build resolves @apply against @theme values
+     before it has fully processed the separately-@imported tokens.css, so a custom
+     color utility here (bg-canvas, text-text) fails to resolve at build time even
+     though the same classes work fine applied directly in JSX. var() sidesteps it. */
+  background-color: var(--color-canvas);
+  color: var(--color-text);
+  @apply antialiased transition-colors duration-200;
+  font-variant-numeric: tabular-nums;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
 }

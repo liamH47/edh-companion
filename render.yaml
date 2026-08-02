@@ -2,7 +2,7 @@ services:
   - name: mtg-calc
     type: web
     runtime: docker
-    plan: free
+    plan: starter
     dockerfilePath: ./Dockerfile
     dockerContext: .
     healthCheckPath: /healthz
