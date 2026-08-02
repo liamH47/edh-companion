@@ -1,4 +1,11 @@
-import { randomFirstRoundPairings, seatPairings, shuffle, swissPairings } from './pairing'
+import {
+  makeBye,
+  makeMatch,
+  randomFirstRoundPairings,
+  seatPairings,
+  shuffle,
+  swissPairings,
+} from './pairing'
 import type { MatchFormat, MatchResult, Rng, Tournament, TournamentMode } from './types'
 
 /**
@@ -227,14 +234,19 @@ export function swapPairing(
             ...candidate,
             matches: candidate.matches.map((match) => {
               if (match.id !== matchA.id && match.id !== matchB.id) return match
-              // The result belongs to the pairing, not the players -- swapping who is
-              // playing whom invalidates whatever was reported for those two matches.
-              return {
-                ...match,
-                aEntrantId: substitute(match.aEntrantId)!,
-                bEntrantId: substitute(match.bEntrantId),
-                result: null,
-              }
+              const nextA = substitute(match.aEntrantId)!
+              const nextB = substitute(match.bEntrantId)
+              // Rebuilt through the pairing constructors rather than spread, for two
+              // reasons. The id is derived from the participants, so spreading keeps
+              // one that names the players who *used* to be here -- and every result
+              // lookup is keyed on it. And a bye has to come back already reported:
+              // the UI offers no way to report one, so an unreported bye can never be
+              // completed and the round can never advance.
+              //
+              // For a real match the result is still dropped, because it belongs to
+              // the pairing rather than the players -- it no longer describes who
+              // played whom.
+              return nextB === null ? makeBye(nextA) : makeMatch(nextA, nextB)
             }),
           },
     ),

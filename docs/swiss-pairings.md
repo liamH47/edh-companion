@@ -71,17 +71,27 @@ Sealed has no meaningful draft seating, so `randomFirstRoundPairings` is offered
    list sorted on only the four real tiebreakers, relying on `Array.sort` being stable
    (ES2019+). Using the final rank directly would make every pairing a fixed function of
    the results, and the same two players would meet over and over in a small pod.
-3. If the field is odd, the bye goes to the **lowest-ranked entrant who hasn't had one**.
-4. Pair the rest by backtracking search that never repeats a prior opponent. Because the
-   list is standings-ordered, trying partners in order means the closest-ranked legal
-   opponent is tried first — which is what keeps score groups together and floats the odd
-   player down a group, with no explicit score-group bookkeeping.
-5. If no rematch-free pairing exists at all (a small pod that has played itself out), it
-   retries allowing rematches and reports `hadToRepeatPairing` so the UI can say so
-   rather than silently repeating a matchup.
+3. Pair by backtracking search that never repeats a prior opponent. Because the list is
+   standings-ordered, trying partners in order means the closest-ranked legal opponent is
+   tried first — which is what keeps score groups together and floats the odd player down
+   a group, with no explicit score-group bookkeeping.
+4. If the field is odd, someone takes a bye, preferring the **lowest-ranked entrant who
+   hasn't had one**. That preference is not absolute: a given bye choice can strand the
+   remaining players in a set that cannot be paired without a rematch when another
+   eligible choice could have been paired cleanly. So candidates are tried in preference
+   order and the first that yields a rematch-free pairing wins. No rule is relaxed — the
+   bye still goes to someone who hasn't had one whenever that is possible at all.
+5. If no rematch-free pairing exists under *any* legal bye (a small pod that has played
+   itself out), it retries allowing rematches and reports `hadToRepeatPairing` so the UI
+   can say so rather than silently repeating a matchup.
 
 The search is exhaustive, which is fine at pod scale — 8 entrants is a handful of
 branches, not a search space.
+
+> Choosing the bye before searching, and never reconsidering, is what the code used to
+> do. It could report `hadToRepeatPairing` in an odd field where a rematch-free pairing
+> genuinely existed under a different, equally legal bye — telling players a repeat was
+> unavoidable when it wasn't.
 
 ## Drops
 
@@ -100,6 +110,40 @@ Rounds already generated from that result are a separate question, and the user 
   only rounds not yet generated use the corrected data.
 - **Re-pair from round N** — `repairRoundsFrom` discards every later round and rebuilds
   them from the corrected standings.
+
+## Swapping two entrants in a round
+
+`swapPairing` exists for when a generated pairing needs a human override. Both affected
+matches are **rebuilt** through `makeMatch`/`makeBye` rather than spread from the old
+objects, which matters for two reasons that are easy to get wrong:
+
+- **Match ids are derived from their participants** (`a-vs-b`, or `a-vs-bye`), and every
+  result lookup is keyed on `(round, matchId)`. Spreading the old match keeps an id
+  naming the players who used to be there.
+- **A bye must come back already reported** as its 2–0. The UI offers no way to report a
+  bye — there's no match to play — so an unreported bye can never be completed, and
+  `isRoundComplete` stays false forever. The round deadlocks with no way out.
+
+A real match does still lose its result, because the result described a pairing that no
+longer exists.
+
+## Testing
+
+Unit specs cover each function; `swiss.integration.test.ts` covers whole events —
+2 to 16 entrants × both formats × five seeds, run to `recommendedRounds`, with every
+invariant in `invariants.ts` asserted after each pairing *and* after each round's results
+land. That loop (report → pair from those results → report again) is what makes rounds 3+
+meaningful, and it is the thing no unit test was reaching.
+
+Everything is seeded via `mulberry32`, so a failure prints a player count and a seed that
+reproduce it exactly. Note `seededRng` cycles a fixed list and is only suitable for a
+single call site — `shuffle` consumes n−1 draws per call, so across rounds it correlates
+and quietly makes a sweep test far weaker than it looks.
+
+The invariant checkers **return violations rather than throwing**, so each one is unit
+tested against a deliberately broken tournament in `invariants.test.ts`. A checker only
+ever fed valid input returns "no violations" for every case and detects nothing while
+looking like it works.
 
 ## Round counts
 
