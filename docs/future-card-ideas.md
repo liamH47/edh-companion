@@ -30,6 +30,7 @@ similar shape:
 | Scute Swarm | `scute_swarm.py` | Threshold-gated simulation that can't be a closed-form sum |
 | Tendrils of Agony | `tendrils_of_agony.py` | Third storm card — a drain, with a lethal alert |
 | Empty the Warrens | `empty_the_warrens.py` | Fourth storm card — tokens |
+| Kalonian Hydra | `kalonian_hydra.py` | Geometric compounding: a repeatable trigger that doubles a board-wide aggregate, where only part of the total participates |
 
 **`storm.py`** is a shared non-card helper (the same supporting role `validation.py`
 plays), and it paid off exactly as predicted: Tendrils of Agony and Empty the Warrens
@@ -39,6 +40,12 @@ the same.
 Note that a card now needs **two** implementations — Python in `backend/app/cards/` and
 TypeScript in `packages/core/src/cards/compute/`. That is not a discipline problem: the
 parity suite fails until both exist, and the generated corpus proves they agree.
+
+**Splitting an aggregate when only part of it participates** is what Kalonian Hydra adds.
+Its trigger doubles +1/+1 counters, not power, so a 6/6 with no counters contributes six
+power that never moves while a 0/0 Hydra under four counters doubles every swing. One
+"total power" field would have doubled the wrong number. Whenever an effect keys off a
+subset of what the player is tracking, ask whether that subset needs its own field.
 
 **The `sequence` field kind** (see `schema.py`) is the tool for any card where a turn is
 an ordered chain rather than a tally. Comet needs it because its 4–5 branch deals damage

@@ -5,6 +5,7 @@ import { compute as cometStellarPup } from './compute/comet-stellar-pup'
 import { compute as craterhoofBehemoth } from './compute/craterhoof-behemoth'
 import { compute as emptyTheWarrens } from './compute/empty-the-warrens'
 import { compute as grapeshot } from './compute/grapeshot'
+import { compute as kalonianHydra } from './compute/kalonian-hydra'
 import { compute as nykthosShrineToNyx } from './compute/nykthos-shrine-to-nyx'
 import { compute as obNixilisTheFallen } from './compute/ob-nixilis-the-fallen'
 import { compute as scuteSwarm } from './compute/scute-swarm'
@@ -32,6 +33,7 @@ export const COMPUTE_BY_CARD_ID: Record<string, ComputeFn> = {
   'craterhoof-behemoth': craterhoofBehemoth,
   'empty-the-warrens': emptyTheWarrens,
   grapeshot,
+  'kalonian-hydra': kalonianHydra,
   'nykthos-shrine-to-nyx': nykthosShrineToNyx,
   'ob-nixilis-the-fallen': obNixilisTheFallen,
   'scute-swarm': scuteSwarm,
