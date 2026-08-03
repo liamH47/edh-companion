@@ -63,9 +63,12 @@ test.describe('Cards', () => {
     await rollButton.click()
 
     // The face is decided up front but only revealed when the tumble ends, so the
-    // log gains exactly one entry, whatever it landed on.
+    // log gains exactly one entry, whatever it landed on. Each entry reads as
+    // "<face> · <what it does>" (e.g. "4 · damage"), not a bare digit.
     await expect(page.getByText('Nothing yet.')).toBeHidden()
-    await expect(page.getByRole('listitem').filter({ hasText: /^[1-6]$/ })).toHaveCount(1)
+    await expect(
+      page.getByRole('listitem').filter({ hasText: /^[1-6] · [a-z]+$/ }),
+    ).toHaveCount(1)
 
     // One activation a turn unless a 6 buys more, so the die is now either spent or
     // recharged -- never in between.

@@ -33,6 +33,8 @@ const EIGHT_ROUND_ONE_PAIRINGS = [
 async function startTournament(page: Page, players: string[] = PLAYERS) {
   await page.goto('/')
   await page.getByRole('button', { name: 'Pairings' }).click()
+  // The Pairings tab now opens on a chooser (casual pods vs Swiss); pick Swiss.
+  await page.getByRole('button', { name: 'Swiss tournament' }).click()
   await expect(page.getByRole('heading', { name: 'New tournament' })).toBeVisible()
 
   for (let added = 4; added < players.length; added++) {
@@ -154,6 +156,8 @@ test.describe('Commander pods', () => {
 
   async function startPodEvent(page: Page, players: string[]) {
     await page.goto('/swiss')
+    // The Pairings tab now opens on a chooser (casual pods vs Swiss); pick Swiss.
+    await page.getByRole('button', { name: 'Swiss tournament' }).click()
     await expect(page.getByRole('heading', { name: 'New tournament' })).toBeVisible()
     await page.getByRole('radio', { name: 'Commander' }).click()
 

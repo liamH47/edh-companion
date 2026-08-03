@@ -21,7 +21,9 @@ test.describe('Deep links and static serving', () => {
   test('serves the app at the pairings route on a cold load', async ({ page }) => {
     await page.goto('/swiss')
 
-    await expect(page.getByRole('heading', { name: 'New tournament' })).toBeVisible()
+    // The Pairings tab opens on its chooser (casual pods vs Swiss); seeing it proves
+    // the route served the app rather than a 404.
+    await expect(page.getByRole('heading', { name: 'Pairings' })).toBeVisible()
   })
 
   test('falls back to the picker for an unknown card id', async ({ page }) => {
