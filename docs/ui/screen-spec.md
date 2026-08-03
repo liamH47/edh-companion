@@ -112,6 +112,15 @@ card with zero per-card branching in the UI layer.
    disables the action button when the named *output* (not input) is below the threshold, and
    defaults to disabled (not permissive) while `outputs` is still `null` on first load.
 
+> **Addendum — the `sequence` kind and the `ActionBar`.** The rules above predate a fifth
+> `FieldKind`, `sequence`, which records an ordered log of appended entries (Comet's die
+> rolls). Its append controls live in the `ActionBar`: a `roll`-declaring sequence gets a die
+> the app rolls itself; any other gets one `lg` button per `SelectOption`. A live `counter`
+> with an `action_label` gets its action button plus an inline `UndoIcon` decrement. The
+> log-and-undo readout is `FieldControl`'s `sequence` case. All of this honours the same guard
+> and formatting rules above — see `component-spec.md` (`FieldControl`, `ActionBar`) for the
+> full shape.
+
 ## Worked examples
 
 **Aetherflux Reservoir** (5 fields: 3 setup, 2 live; 7 outputs, 1 primary, 1 alert): sheet
@@ -167,6 +176,11 @@ portable to React Native.
 
 Switching to Two-Headed Giant grows every row to two name fields and forces best-of-one
 (`createTournament` enforces this too, so the UI can't get out of step with the model).
+
+Each row's three 48px controls — move up, move down, remove — are otherwise identical circles a
+thumb-width apart, so the destructive one is tinted `text-danger` to read apart from the two
+neutral reorder buttons. Names are capped at 40 characters at the input so one long entry can't
+overflow a pairing row or the report sheet.
 
 ## RoundScreen
 

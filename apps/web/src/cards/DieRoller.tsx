@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { tapHaptic } from '@mtg/core'
-import { prefersReducedMotion } from '@mtg/core'
+import { revealDuration } from '@mtg/core'
 import { motion } from '@mtg/core/theme/tokens'
 import { Button } from '../ui/Button'
 import { Text } from '../ui/Text'
@@ -21,8 +21,6 @@ const PIP_POSITIONS = [
   [28, 72], [50, 72], [72, 72],
 ] as const
 
-const TUMBLE_DURATION_MS = 900
-const REDUCED_TUMBLE_DURATION_MS = 150
 /** How often the shown face changes while tumbling. Slow enough to read as distinct
  * faces rather than a grey blur, fast enough to feel like a real roll. */
 const FACE_SWAP_INTERVAL_MS = 70
@@ -114,7 +112,7 @@ export function DieRoller({
   const timeoutRef = useRef<number | undefined>(undefined)
   const intervalRef = useRef<number | undefined>(undefined)
 
-  const durationMs = prefersReducedMotion() ? REDUCED_TUMBLE_DURATION_MS : TUMBLE_DURATION_MS
+  const durationMs = revealDuration()
 
   useEffect(() => {
     return () => {

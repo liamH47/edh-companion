@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { StatTile } from './ui/StatTile'
 import { flipCoin, type CoinSide } from '@mtg/core'
-import { formatNumber, heroFontSize, prefersReducedMotion, type HeroFontSize } from '@mtg/core'
+import { formatNumber, heroFontSize, revealDuration, type HeroFontSize } from '@mtg/core'
 import { motion } from '@mtg/core/theme/tokens'
 import { playLoseSound, playWinSound } from '@mtg/core'
 import { SoundToggle } from './SoundToggle'
@@ -11,8 +11,6 @@ import { Surface } from './ui/Surface'
 import { Text } from './ui/Text'
 
 const SPIN_TURNS = 4
-const FLIP_DURATION_MS = 900
-const REDUCED_FLIP_DURATION_MS = 150
 
 // Okaun, Eye of Chaos: base 3/3, doubles power and toughness on every coin flip won
 // (by anyone) until end of turn. Zndrsplt, Eye of Wisdom (1/4) draws a card on the same
@@ -86,7 +84,7 @@ export function CoinFlip() {
   const [losses, setLosses] = useState(0)
   const [lastResult, setLastResult] = useState<FlipResult | null>(null)
   const timeoutRef = useRef<number | undefined>(undefined)
-  const durationMs = prefersReducedMotion() ? REDUCED_FLIP_DURATION_MS : FLIP_DURATION_MS
+  const durationMs = revealDuration()
   const okaunPower = OKAUN_BASE_POWER * 2 ** wins
   const okaunDisplay = `${formatNumber(okaunPower)}/${formatNumber(okaunPower)}`
 

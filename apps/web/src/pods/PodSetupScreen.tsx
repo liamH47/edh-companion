@@ -101,7 +101,7 @@ export function PodSetupScreen({ onStart, onBack }: PodSetupScreenProps) {
                 aria-label={`Remove player ${index + 1}`}
                 disabled={players.length <= MIN_PLAYERS}
                 onClick={() => removePlayer(player.key)}
-                className="min-h-12 min-w-12 shrink-0 justify-center rounded-full border border-border text-text-muted disabled:text-disabled-text"
+                className="min-h-12 min-w-12 shrink-0 justify-center rounded-full border border-border text-danger disabled:text-disabled-text"
               >
                 <TrashIcon />
               </Pressable>

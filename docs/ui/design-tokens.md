@@ -106,3 +106,9 @@ either an inline numeric style or JS timing, not a Tailwind class:
   are cubic-bezier strings. `src/core/motion.ts` exports `transitionDuration(token)`, which
   returns `0` under `prefers-reduced-motion: reduce` instead of a shortened duration — reduced
   motion means *no* motion here, not less of it.
+- **The one exception is an outcome-reveal animation** — the coin flip and the die roll —
+  exported as `revealDuration()` (`REVEAL_DURATION_MS`/`REDUCED_REVEAL_DURATION_MS`). Here the
+  animation *is* the result being shown, so at `0` the answer would just appear with no sense a
+  flip or roll happened, which reads as a bug rather than an accessibility win. Under reduced
+  motion it *shortens* (900 → 150ms) rather than collapsing. Use `revealDuration()`, not a
+  hardcoded pair, for any future roll/flip so the exception stays in one place.

@@ -245,7 +245,9 @@ export function TournamentSetupScreen({ onStart, rng = Math.random }: Tournament
                   aria-label={`Remove ${entrantNoun} ${index + 1}`}
                   disabled={entrants.length <= MIN_ENTRANTS}
                   onClick={() => removeEntrant(entrant.key)}
-                  className="min-h-12 min-w-12 justify-center rounded-full border border-border text-text-muted disabled:text-disabled-text"
+                  // Danger-tinted so the destructive control reads apart from the two
+                  // identical neutral reorder buttons a thumb-width away (screen-spec.md).
+                  className="min-h-12 min-w-12 justify-center rounded-full border border-border text-danger disabled:text-disabled-text"
                 >
                   <TrashIcon />
                 </Pressable>
