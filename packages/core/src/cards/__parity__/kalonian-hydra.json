@@ -1,0 +1,1125 @@
+{
+  "cardId": "kalonian-hydra",
+  "cases": [
+    {
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": 4,
+        "total_power_before": 4
+      },
+      "outputs": {
+        "counters_after": 4,
+        "power_gained": 0,
+        "total_power_after": 4
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "attacks_this_turn"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": 4,
+        "total_power_before": 4
+      }
+    },
+    {
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": 4,
+        "total_power_before": 4
+      },
+      "outputs": {
+        "counters_after": 256,
+        "power_gained": 252,
+        "total_power_after": 256
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "attacks_this_turn"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": 4,
+        "total_power_before": 4
+      }
+    },
+    {
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": 0,
+        "total_power_before": 4
+      },
+      "outputs": {
+        "counters_after": 0,
+        "power_gained": 0,
+        "total_power_after": 4
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "attacks_this_turn"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": 0,
+        "total_power_before": 4
+      }
+    },
+    {
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": 0,
+        "total_power_before": 4
+      },
+      "outputs": {
+        "counters_after": 0,
+        "power_gained": 0,
+        "total_power_after": 4
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "attacks_this_turn"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": 0,
+        "total_power_before": 4
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "counters_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": -1,
+        "total_power_before": 4
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "counters_before"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": -1,
+        "total_power_before": 4
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "counters_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": -1,
+        "total_power_before": 4
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "counters_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": -1,
+        "total_power_before": 4
+      }
+    },
+    {
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": 999,
+        "total_power_before": 4
+      },
+      "outputs": {
+        "counters_after": 999,
+        "power_gained": 0,
+        "total_power_after": 4
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "attacks_this_turn"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": 999,
+        "total_power_before": 4
+      }
+    },
+    {
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": 999,
+        "total_power_before": 4
+      },
+      "outputs": {
+        "counters_after": 63936,
+        "power_gained": 62937,
+        "total_power_after": 62941
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "attacks_this_turn"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": 999,
+        "total_power_before": 4
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "counters_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": 1000,
+        "total_power_before": 4
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "counters_before"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": 1000,
+        "total_power_before": 4
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "counters_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": 1000,
+        "total_power_before": 4
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "counters_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": 1000,
+        "total_power_before": 4
+      }
+    },
+    {
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": 4,
+        "total_power_before": 0
+      },
+      "outputs": {
+        "counters_after": 4,
+        "power_gained": 0,
+        "total_power_after": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "attacks_this_turn"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": 4,
+        "total_power_before": 0
+      }
+    },
+    {
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": 4,
+        "total_power_before": 0
+      },
+      "outputs": {
+        "counters_after": 256,
+        "power_gained": 252,
+        "total_power_after": 252
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "attacks_this_turn"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": 4,
+        "total_power_before": 0
+      }
+    },
+    {
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": 0,
+        "total_power_before": 0
+      },
+      "outputs": {
+        "counters_after": 0,
+        "power_gained": 0,
+        "total_power_after": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "attacks_this_turn"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": 0,
+        "total_power_before": 0
+      }
+    },
+    {
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": 0,
+        "total_power_before": 0
+      },
+      "outputs": {
+        "counters_after": 0,
+        "power_gained": 0,
+        "total_power_after": 0
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "attacks_this_turn"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": 0,
+        "total_power_before": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "counters_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": -1,
+        "total_power_before": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "counters_before"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": -1,
+        "total_power_before": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "counters_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": -1,
+        "total_power_before": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "counters_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": -1,
+        "total_power_before": 0
+      }
+    },
+    {
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": 999,
+        "total_power_before": 0
+      },
+      "outputs": {
+        "counters_after": 999,
+        "power_gained": 0,
+        "total_power_after": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "attacks_this_turn"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": 999,
+        "total_power_before": 0
+      }
+    },
+    {
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": 999,
+        "total_power_before": 0
+      },
+      "outputs": {
+        "counters_after": 63936,
+        "power_gained": 62937,
+        "total_power_after": 62937
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "attacks_this_turn"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": 999,
+        "total_power_before": 0
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "counters_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": 1000,
+        "total_power_before": 0
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "counters_before"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": 1000,
+        "total_power_before": 0
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "counters_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": 1000,
+        "total_power_before": 0
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "counters_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": 1000,
+        "total_power_before": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": 4,
+        "total_power_before": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": 4,
+        "total_power_before": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": 4,
+        "total_power_before": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": 4,
+        "total_power_before": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": 0,
+        "total_power_before": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": 0,
+        "total_power_before": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": 0,
+        "total_power_before": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": 0,
+        "total_power_before": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": -1,
+        "total_power_before": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": -1,
+        "total_power_before": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": -1,
+        "total_power_before": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": -1,
+        "total_power_before": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": 999,
+        "total_power_before": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": 999,
+        "total_power_before": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": 999,
+        "total_power_before": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": 999,
+        "total_power_before": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": 1000,
+        "total_power_before": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": 1000,
+        "total_power_before": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": 1000,
+        "total_power_before": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": 1000,
+        "total_power_before": -1
+      }
+    },
+    {
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": 4,
+        "total_power_before": 9999
+      },
+      "outputs": {
+        "counters_after": 4,
+        "power_gained": 0,
+        "total_power_after": 9999
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "attacks_this_turn"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": 4,
+        "total_power_before": 9999
+      }
+    },
+    {
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": 4,
+        "total_power_before": 9999
+      },
+      "outputs": {
+        "counters_after": 256,
+        "power_gained": 252,
+        "total_power_after": 10251
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "attacks_this_turn"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": 4,
+        "total_power_before": 9999
+      }
+    },
+    {
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": 0,
+        "total_power_before": 9999
+      },
+      "outputs": {
+        "counters_after": 0,
+        "power_gained": 0,
+        "total_power_after": 9999
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "attacks_this_turn"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": 0,
+        "total_power_before": 9999
+      }
+    },
+    {
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": 0,
+        "total_power_before": 9999
+      },
+      "outputs": {
+        "counters_after": 0,
+        "power_gained": 0,
+        "total_power_after": 9999
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "attacks_this_turn"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": 0,
+        "total_power_before": 9999
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "counters_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": -1,
+        "total_power_before": 9999
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "counters_before"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": -1,
+        "total_power_before": 9999
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "counters_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": -1,
+        "total_power_before": 9999
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "counters_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": -1,
+        "total_power_before": 9999
+      }
+    },
+    {
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": 999,
+        "total_power_before": 9999
+      },
+      "outputs": {
+        "counters_after": 999,
+        "power_gained": 0,
+        "total_power_after": 9999
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "attacks_this_turn"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": 999,
+        "total_power_before": 9999
+      }
+    },
+    {
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": 999,
+        "total_power_before": 9999
+      },
+      "outputs": {
+        "counters_after": 63936,
+        "power_gained": 62937,
+        "total_power_after": 72936
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "attacks_this_turn"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": 999,
+        "total_power_before": 9999
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "counters_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": 1000,
+        "total_power_before": 9999
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "counters_before"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": 1000,
+        "total_power_before": 9999
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "counters_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": 1000,
+        "total_power_before": 9999
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "counters_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": 1000,
+        "total_power_before": 9999
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": 4,
+        "total_power_before": 10000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": 4,
+        "total_power_before": 10000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": 4,
+        "total_power_before": 10000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": 4,
+        "total_power_before": 10000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": 0,
+        "total_power_before": 10000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": 0,
+        "total_power_before": 10000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": 0,
+        "total_power_before": 10000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": 0,
+        "total_power_before": 10000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": -1,
+        "total_power_before": 10000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": -1,
+        "total_power_before": 10000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": -1,
+        "total_power_before": 10000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": -1,
+        "total_power_before": 10000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": 999,
+        "total_power_before": 10000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": 999,
+        "total_power_before": 10000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": 999,
+        "total_power_before": 10000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": 999,
+        "total_power_before": 10000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 0,
+        "counters_before": 1000,
+        "total_power_before": 10000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": -1,
+        "counters_before": 1000,
+        "total_power_before": 10000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 6,
+        "counters_before": 1000,
+        "total_power_before": 10000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before"
+      },
+      "inputs": {
+        "attacks_this_turn": 7,
+        "counters_before": 1000,
+        "total_power_before": 10000
+      }
+    }
+  ],
+  "generatedFrom": "backend/app/cards/kalonian_hydra.py",
+  "note": "Generated by backend/tools/generate_parity_corpus.py. Do not edit by hand."
+}

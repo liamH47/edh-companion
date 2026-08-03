@@ -11,6 +11,7 @@ import cometStellarPup from './__parity__/comet-stellar-pup.json'
 import craterhoofBehemoth from './__parity__/craterhoof-behemoth.json'
 import emptyTheWarrens from './__parity__/empty-the-warrens.json'
 import grapeshot from './__parity__/grapeshot.json'
+import kalonianHydra from './__parity__/kalonian-hydra.json'
 import nykthosShrineToNyx from './__parity__/nykthos-shrine-to-nyx.json'
 import obNixilisTheFallen from './__parity__/ob-nixilis-the-fallen.json'
 import scuteSwarm from './__parity__/scute-swarm.json'
@@ -51,6 +52,7 @@ const CORPORA: Corpus[] = [
   craterhoofBehemoth,
   emptyTheWarrens,
   grapeshot,
+  kalonianHydra,
   nykthosShrineToNyx,
   obNixilisTheFallen,
   scuteSwarm,
