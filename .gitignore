@@ -39,3 +39,8 @@ Thumbs.db
 # Local env overrides
 .env
 .env.local
+
+# Per-developer Claude Code settings. The shared config -- .claude/agents/ and
+# .claude/skills/ -- is committed deliberately, so everyone gets the same rules
+# checker and the same card-adding workflow.
+.claude/settings.local.json
