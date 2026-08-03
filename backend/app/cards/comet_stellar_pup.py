@@ -34,6 +34,11 @@ FACES_SQUIRRELS = frozenset({"1", "2"})
 FACES_RETURN = frozenset({"3"})
 FACES_DAMAGE = frozenset({"4", "5"})
 
+# What each face does, so the roll log reads back as "4 · damage, 6 · bonus" rather
+# than a bare "4, 6" the player has to re-derive against the ability text mid-turn. The
+# value stays the face number -- only the display label carries the branch.
+FACE_LABELS = {1: "squirrels", 2: "squirrels", 3: "return", 4: "damage", 5: "damage", 6: "bonus"}
+
 METADATA = CardMetadata(
     id="comet-stellar-pup",
     name="Comet, Stellar Pup",
@@ -68,7 +73,8 @@ METADATA = CardMetadata(
             default=[],
             max=MAX_ROLLS_PER_TURN,
             options=[
-                SelectOption(value=str(face), label=str(face)) for face in range(1, DIE_FACES + 1)
+                SelectOption(value=str(face), label=f"{face} · {FACE_LABELS[face]}")
+                for face in range(1, DIE_FACES + 1)
             ],
             roll=RollSpec(faces=DIE_FACES, action_label="Roll the die"),
             action_disabled_when=ActionGuard(output="activations_remaining", less_than=1),

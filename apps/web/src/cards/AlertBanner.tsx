@@ -1,3 +1,4 @@
+import { Surface } from '../ui/Surface'
 import { Text } from '../ui/Text'
 
 interface AlertBannerProps {
@@ -11,13 +12,10 @@ export function AlertBanner({ message }: AlertBannerProps) {
   if (!message) return null
 
   return (
-    <div
-      role="alert"
-      className="rounded-lg border border-danger-border bg-danger-surface px-4 py-3 text-center"
-    >
+    <Surface tone="danger" radius="lg" role="alert" className="text-center">
       <Text variant="bodyStrong" color="danger">
         {message}
       </Text>
-    </div>
+    </Surface>
   )
 }

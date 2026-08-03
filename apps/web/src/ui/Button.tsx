@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import { motion } from '@mtg/core/theme/tokens'
 
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost'
 export type ButtonSize = 'md' | 'lg'
@@ -35,11 +36,14 @@ export function Button({
   fullWidth = false,
   type = 'button',
   className = '',
+  style,
   children,
   ...rest
 }: ButtonProps) {
   const classes = [
-    'rounded-pill transition-transform duration-150 active:scale-[0.97]',
+    // Press-feedback duration comes from the motion token (inline, the RN-portable way)
+    // rather than a hardcoded `duration-150` that matched no token (portability-rules.md).
+    'rounded-pill transition-transform active:scale-[0.97]',
     'motion-reduce:transition-none motion-reduce:active:scale-100',
     'disabled:cursor-not-allowed',
     variantClasses[variant],
@@ -50,7 +54,12 @@ export function Button({
     .filter(Boolean)
     .join(' ')
   return (
-    <button type={type} className={classes} {...rest}>
+    <button
+      type={type}
+      className={classes}
+      style={{ transitionDuration: `${motion.duration.fast}ms`, ...style }}
+      {...rest}
+    >
       {children}
     </button>
   )

@@ -37,11 +37,26 @@ export function resetStorageBackend(): void {
 }
 
 export function getItem(key: string): string | null {
-  return backend.getItem(key)
+  // Reading storage can throw where access is denied outright (a sandboxed or
+  // partitioned iframe, an enterprise-locked webview). Treat that as "nothing saved"
+  // rather than letting it escape a render-time read (useTournament/useCardSession/the
+  // route decision all read during render).
+  try {
+    return backend.getItem(key)
+  } catch {
+    return null
+  }
 }
 
 export function setItem(key: string, value: string): void {
-  backend.setItem(key, value)
+  // Writing can throw the same way, plus on a full quota. Persistence is a nice-to-have;
+  // crashing a setState updater mid-tournament (there is no error boundary below core)
+  // is not -- so degrade to "this session isn't saved" and keep the app usable.
+  try {
+    backend.setItem(key, value)
+  } catch {
+    // Intentionally swallowed: the in-memory React state is still correct for the session.
+  }
 }
 
 export function getJSON<T>(key: string, fallback: T): T {

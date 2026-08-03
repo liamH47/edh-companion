@@ -25,6 +25,9 @@ function blankPlayer(key: number): DraftPlayer {
 /** Enough rows for the small end of a playgroup, without a wall of empty fields. */
 const INITIAL_ROWS = 4
 
+/** Long enough for any real name, short enough that one entry can't blow out a pod row. */
+const NAME_MAX_LENGTH = 40
+
 /** How this many players will split, in words -- shown live so the group can see the
  * tables before committing. `podSizes` is the same splitter the rounds use. */
 function podShape(count: number): string {
@@ -91,6 +94,7 @@ export function PodSetupScreen({ onStart, onBack }: PodSetupScreenProps) {
                 label={`Player ${index + 1}`}
                 hideLabel
                 placeholder={`Player ${index + 1}`}
+                maxLength={NAME_MAX_LENGTH}
                 className="min-w-0 flex-1"
               />
               <Pressable

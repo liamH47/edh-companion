@@ -17,6 +17,10 @@ interface TournamentSetupScreenProps {
 
 const MIN_ENTRANTS = 2
 
+/** Long enough for any real name, short enough that one entry can't overflow a pairing
+ * row or the report sheet. */
+const NAME_MAX_LENGTH = 40
+
 interface DraftEntrant {
   /** Stable across reorders so React keys don't remount a field mid-typing. */
   key: number
@@ -215,6 +219,7 @@ export function TournamentSetupScreen({ onStart, rng = Math.random }: Tournament
                         : `${entrantNoun} ${index + 1}`
                     }
                     hideLabel
+                    maxLength={NAME_MAX_LENGTH}
                     placeholder={isTeams ? `Player ${memberIndex + 1}` : `${entrantNoun} ${index + 1}`}
                   />
                 ))}

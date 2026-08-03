@@ -4,6 +4,7 @@ import { useCardSession } from '@mtg/core'
 import type { CardMetadata } from '@mtg/core'
 import { ChevronLeftIcon, InfoIcon } from '../ui/Icon'
 import { Pressable } from '../ui/Pressable'
+import { Surface } from '../ui/Surface'
 import { Text } from '../ui/Text'
 import { ActionBar } from './ActionBar'
 import { AlertBanner } from './AlertBanner'
@@ -78,11 +79,11 @@ export function CardScreen({ card, onBack }: CardScreenProps) {
       />
 
       {session.error && (
-        <div role="alert" className="rounded-lg border border-danger-border bg-danger-surface px-4 py-3">
+        <Surface tone="danger" radius="lg" role="alert">
           <Text variant="body" color="danger">
             {session.error}
           </Text>
-        </div>
+        </Surface>
       )}
 
       <AlertBanner message={session.alertMessage} />

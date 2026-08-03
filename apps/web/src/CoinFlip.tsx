@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { StatTile } from './ui/StatTile'
 import { flipCoin, type CoinSide } from '@mtg/core'
-import { prefersReducedMotion } from '@mtg/core'
+import { formatNumber, heroFontSize, prefersReducedMotion, type HeroFontSize } from '@mtg/core'
 import { motion } from '@mtg/core/theme/tokens'
 import { playLoseSound, playWinSound } from '@mtg/core'
 import { SoundToggle } from './SoundToggle'
@@ -18,6 +18,16 @@ const REDUCED_FLIP_DURATION_MS = 150
 // (by anyone) until end of turn. Zndrsplt, Eye of Wisdom (1/4) draws a card on the same
 // trigger, so "wins" below doubles as "cards drawn" -- no separate counter needed.
 const OKAUN_BASE_POWER = 3
+
+// Okaun's power doubles every win, so it reaches the same scale a card's hero number can.
+// Reuse the card hero's font ladder rather than a fixed size, so "3,145,728/3,145,728"
+// steps down instead of overflowing the 320px card -- and formatNumber switches to
+// exponential past a safe integer instead of a 16-plus-digit run.
+const OKAUN_SIZE_CLASS: Record<HeroFontSize, string> = {
+  lg: 'text-3xl',
+  md: 'text-2xl',
+  sm: 'text-xl',
+}
 
 /** Smallest forward rotation (in whole extra spins) that lands on the given side. */
 function rotationFor(currentRotation: number, outcome: CoinSide): number {
@@ -78,6 +88,7 @@ export function CoinFlip() {
   const timeoutRef = useRef<number | undefined>(undefined)
   const durationMs = prefersReducedMotion() ? REDUCED_FLIP_DURATION_MS : FLIP_DURATION_MS
   const okaunPower = OKAUN_BASE_POWER * 2 ** wins
+  const okaunDisplay = `${formatNumber(okaunPower)}/${formatNumber(okaunPower)}`
 
   useEffect(() => {
     return () => window.clearTimeout(timeoutRef.current)
@@ -119,8 +130,13 @@ export function CoinFlip() {
         <Text as="div" variant="label" color="accent">
           Okaun&apos;s power/toughness
         </Text>
-        <Text as="div" variant="statTile" color="accent" className="text-3xl">
-          {okaunPower}/{okaunPower}
+        <Text
+          as="div"
+          variant="statTile"
+          color="accent"
+          className={`${OKAUN_SIZE_CLASS[heroFontSize(okaunPower)]} tabular-nums`}
+        >
+          {okaunDisplay}
         </Text>
         <Text as="div" variant="body" color="accent" className="mt-1 opacity-80">
           Zndrsplt draws a card on every win, too
