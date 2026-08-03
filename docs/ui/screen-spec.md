@@ -8,22 +8,37 @@ with route names chosen to map 1:1 onto future Expo Router file routes:
 
 ```
 (tabs)/cards   → CardPickerScreen   search + list of cards, most-recently-used first
-(tabs)/coin    → CoinFlipScreen     CoinFlip.tsx
+(tabs)/coin    → CoinFlipScreen     CoinFlip.tsx — plain by default, commander behind a toggle
 (tabs)/swiss   → SwissScreen        Swiss tournament pairings (see the section below)
+(tabs)/dice    → DiceScreen         DiceScreen.tsx — d6 / 2d6 / d20 roller
 cards/[id]     → CardScreen         pushed; hides the bottom tab bar
 ```
 
-Bottom tab bar (3 destinations) replaces the original top tablist — thumb-zone reachable,
-and it's the shape Expo Router expects. `CardScreen` hides it so the tab bar never competes
-with the action bar for the bottom of the screen. On launch, the last-used card opens directly
-(no extra tap versus today's 2-card case).
+Bottom tab bar (4 destinations) replaces the original top tablist — thumb-zone reachable,
+and it's the shape Expo Router expects. Four `flex-1` tabs still clear the 48px hit-target
+minimum at a phone width; 3–5 is the comfortable bottom-nav range before an overflow
+affordance is needed. `CardScreen` hides it so the tab bar never competes with the action
+bar for the bottom of the screen. On launch, the last-used card opens directly (no extra
+tap versus today's 2-card case).
 
 Web-only browser history sync (`pushState`/`popstate`, so Back works and a card is linkable)
 lives in `src/core/navigation/useNavigation.ts` — the one file an RN port rewrites wholesale.
+`App.tsx` maps a route to its highlighted tab with a `switch`, not a ternary chain, so adding
+a route without mapping it is a type error rather than a silently wrong highlight.
 
 `App.tsx` fetches the card list *inside* the card routes rather than gating the whole app on
-it. Coin Flip and Swiss are entirely local, and a backend outage must not take them down —
-running a draft on bad reception is exactly when Swiss matters.
+it. Coin Flip, Swiss, and Dice are entirely local, and a backend outage must not take them
+down — running a draft on bad reception is exactly when Swiss matters.
+
+### Coin Flip: two layouts behind one route
+
+Plain by default: a single **Flip** button and a bare "Heads!/Tails!" — no call buttons, no
+tally, no reset. A real coin's call is made out loud between players before the flip, so the
+faithful shape is `Flip → result`, and the common table use is just "who goes first". A
+persisted commander toggle (`coin.ts`, defaulting **off** via a `=== 'on'` allow-list, not
+`sound.ts`'s `!== 'off'`) swaps in the Krark coin art, Okaun's doubling power/toughness, the
+Zndrsplt note, a win/loss tally, and Call Heads / Call Tails. Switching modes remounts the
+subtree (`key`), so it is always a fresh start.
 
 ## CardScreen layout
 

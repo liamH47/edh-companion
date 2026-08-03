@@ -2,6 +2,9 @@ import { setSoundBackend } from '@mtg/core'
 
 const WIN_SOUND_URL = '/sounds/win.mp3'
 const LOSE_SOUND_URL = '/sounds/lose.mp3'
+// A WAV, not an mp3: it was synthesized from the stdlib rather than transcoded, since the
+// build VM has no ffmpeg. `new Audio(url)` plays either format the same way.
+const ROLL_SOUND_URL = '/sounds/roll.wav'
 
 /**
  * The web half of the sound seam: preference and the enabled check live in
@@ -21,5 +24,6 @@ export function registerWebSound(): void {
   setSoundBackend({
     playWin: () => playClip(WIN_SOUND_URL),
     playLose: () => playClip(LOSE_SOUND_URL),
+    playRoll: () => playClip(ROLL_SOUND_URL),
   })
 }

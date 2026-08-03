@@ -113,6 +113,28 @@ express directly (two `Pressable`s in a row), and reads better at a glance acros
 `true` renders on the left. Selected segment: `bg-accent text-accent-text`. Both segments carry
 `aria-pressed`.
 
+### SegmentedControl
+
+Single choice among **three or more** options, rendered as a `role="radiogroup"` of pill
+segments (`role="radio"` + `aria-checked`). Lives in `src/ui/` rather than a screen because
+three features use the shape (the Swiss event-format selector, the Swiss match-length row, and
+the Dice mode selector) — the `StatTile` precedent for extracting at the third use. Keep
+`Toggle` for genuinely two-way boolean choices.
+
+| Prop | Type | Default |
+|---|---|---|
+| `options` | `SegmentedOption<T>[]` (`{ value: T; label: string }`) | — |
+| `value` | `T` | — |
+| `onChange` | `(value: T) => void` | — |
+| `label` | `string` | — (`role="radiogroup"` aria-label) |
+| `disabled` | `boolean` | `false` |
+| `itemBasis` | `string` | `'calc(50% - 0.25rem)'` — two-column wrap; pass `'0'` for one equal row |
+
+Selected segment: `border-accent bg-accent text-accent-text`. `itemBasis` is an inline
+`flex-basis` (not a Tailwind `basis-[...]` class) so it can vary at runtime without the JIT
+missing it. RN notes: the radiogroup wrapper becomes a `View`; each segment is a `Pressable`
+with `accessibilityRole="radio"`.
+
 ### Chip
 
 Small pill for compact facts (a setup-summary segment, a future card-category tag). Renders as
@@ -303,6 +325,23 @@ Bottom-pinned row in the thumb zone. Three field shapes feed it, all honouring t
   Life" costs 100 life) is fixable in the thumb zone rather than by scrolling up to the stepper.
 - a live `sequence` declaring `roll` → a `DieRoller` the app rolls itself (Comet); the per-option
   buttons are suppressed so nobody can report a roll the app didn't make.
+
+### TumblingDie / DieRoller / DiceScreen
+
+`TumblingDie` (`cards/TumblingDie.tsx`) is the die as pure visual: it flickers through faces
+while `rolling`, then reveals `face` with a state-driven scale "pop" (overshoot then settle —
+not a CSS `@keyframes` bounce, which has no RN equivalent). It decides nothing: no RNG, no
+result callback, no announcement. Owners drive `face`/`rolling`. Faces > 6, and any face a d6
+has no pip layout for, render as a numeral.
+
+- `DieRoller` (`cards/DieRoller.tsx`) keeps the self-deciding shape for the Comet card path:
+  it owns the RNG (`rollDie`), the reveal timer, the `aria-live` announcement, and the
+  Comet-specific "No activations left this turn." copy, rendering `TumblingDie` for visuals.
+- `DiceScreen` (`DiceScreen.tsx`) is the standalone d6 / 2d6 / d20 roller behind the Dice tab.
+  A `SegmentedControl` picks the mode (disabled while rolling). One "Roll" decides all dice up
+  front via `rollDice` and reveals them off a single shared timer, so 2d6's sum is committed in
+  one atomic update with one combined `aria-live` and a **visible** sum. The loss sound plays
+  only on a d20 natural 1 or 2d6 snake eyes; a plain d6 always plays the neutral roll sound.
 - any other live `sequence` → one `lg` button per declared `SelectOption`, two per row, each
   appending that option to the log.
 

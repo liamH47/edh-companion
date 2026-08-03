@@ -95,7 +95,19 @@ describe('App', () => {
 
     await user.click(screen.getByRole('button', { name: 'Coin Flip' }))
 
-    expect(screen.getByRole('button', { name: 'Call Heads' })).toBeInTheDocument()
+    // Opens on the plain flip by default, not the commander experience.
+    expect(screen.getByRole('button', { name: 'Flip' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Cards' })).toBeInTheDocument()
+  })
+
+  it('opens the dice tab and keeps the tab bar', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.click(screen.getByRole('button', { name: 'Dice' }))
+
+    expect(screen.getByRole('radiogroup', { name: 'Dice' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Roll' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Cards' })).toBeInTheDocument()
   })
 

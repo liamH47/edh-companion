@@ -20,7 +20,7 @@ import { useCardSession } from './useCardSession'
  * was always the point -- values, outputs, setup confirmation, and the alert edge.
  */
 const compute = vi.fn()
-const soundBackend = { playWin: vi.fn(), playLose: vi.fn() }
+const soundBackend = { playWin: vi.fn(), playLose: vi.fn(), playRoll: vi.fn() }
 
 function makeCard(overrides: Partial<CardMetadata> = {}): CardMetadata {
   return {

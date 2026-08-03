@@ -5,6 +5,7 @@ import type { EventFormat, MatchFormat, Rng, TournamentMode } from '@mtg/core/sw
 import { Button } from '../ui/Button'
 import { ChevronDownIcon, ChevronUpIcon, PlusIcon, TrashIcon } from '../ui/Icon'
 import { Pressable } from '../ui/Pressable'
+import { SegmentedControl } from '../ui/SegmentedControl'
 import { Stepper } from '../ui/Stepper'
 import { Text } from '../ui/Text'
 import { TextField } from '../ui/TextField'
@@ -161,26 +162,12 @@ export function TournamentSetupScreen({ onStart, rng = Math.random }: Tournament
 
       <div className="flex flex-col gap-2">
         <Text variant="bodyStrong">What are you playing?</Text>
-        <div role="radiogroup" aria-label="Event format" className="flex flex-wrap gap-1">
-          {EVENT_FORMATS.map((option) => {
-            const selected = eventFormat === option.value
-            return (
-              <Pressable
-                key={option.value}
-                role="radio"
-                aria-checked={selected}
-                onClick={() => setEventFormat(option.value)}
-                className={`min-h-12 grow basis-[calc(50%-0.25rem)] justify-center rounded-pill border text-body font-semibold ${
-                  selected
-                    ? 'border-accent bg-accent text-accent-text'
-                    : 'border-border bg-surface text-text'
-                }`}
-              >
-                {option.label}
-              </Pressable>
-            )
-          })}
-        </div>
+        <SegmentedControl
+          options={EVENT_FORMATS}
+          value={eventFormat}
+          onChange={setEventFormat}
+          label="Event format"
+        />
         {isPodded && (
           <Text variant="body" color="muted">
             Pods of four where possible, three otherwise — everyone plays every round.

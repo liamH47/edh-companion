@@ -1,14 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { StatTile } from './ui/StatTile'
-import { flipCoin, type CoinSide } from '@mtg/core'
+import {
+  flipCoin,
+  isCommanderModeEnabled,
+  setCommanderModeEnabled,
+  type CoinSide,
+} from '@mtg/core'
 import { formatNumber, heroFontSize, revealDuration, type HeroFontSize } from '@mtg/core'
 import { motion } from '@mtg/core/theme/tokens'
 import { playLoseSound, playWinSound } from '@mtg/core'
-import { SoundToggle } from './SoundToggle'
 import { Button } from './ui/Button'
 import { Surface } from './ui/Surface'
 import { Text } from './ui/Text'
+import { Toggle } from './ui/Toggle'
 
 const SPIN_TURNS = 4
 
@@ -44,6 +49,26 @@ function CoinBase({ children }: { children: ReactNode }) {
   )
 }
 
+/** A plain gold coin with a large H / T, for the default flip that isn't about any
+ * particular commander. */
+function GenericFace({ letter }: { letter: string }) {
+  return (
+    <CoinBase>
+      <text
+        x="50"
+        y="50"
+        textAnchor="middle"
+        dominantBaseline="central"
+        fontSize="46"
+        fontWeight="bold"
+        fill="#6b5010"
+      >
+        {letter}
+      </text>
+    </CoinBase>
+  )
+}
+
 function KrarkFace() {
   return (
     <CoinBase>
@@ -71,19 +96,121 @@ function KrarkThumb() {
   )
 }
 
+/** The tumbling coin itself: a 3D flip around Y that lands showing `front` or `back`.
+ * Shared by both modes so the animation lives in one place. */
+function FlipCoin({
+  rotation,
+  durationMs,
+  front,
+  back,
+}: {
+  rotation: number
+  durationMs: number
+  front: ReactNode
+  back: ReactNode
+}) {
+  return (
+    <div style={{ perspective: '800px' }}>
+      <div
+        className="relative h-32 w-32"
+        style={{
+          transformStyle: 'preserve-3d',
+          transform: `rotateY(${rotation}deg)`,
+          transition: `transform ${durationMs}ms ${motion.easing.standard}`,
+        }}
+      >
+        <div className="absolute inset-0" style={{ backfaceVisibility: 'hidden' }}>
+          {front}
+        </div>
+        <div
+          className="absolute inset-0"
+          style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+        >
+          {back}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * The default flip: press once, see Heads or Tails. No call, no tally, no reset -- a real
+ * coin never hears the call (it's made out loud between players), so this is the faithful
+ * shape, and the common table use is just "who goes first".
+ */
+function PlainCoin() {
+  const [rotation, setRotation] = useState(0)
+  const [isFlipping, setIsFlipping] = useState(false)
+  const [result, setResult] = useState<CoinSide | null>(null)
+  const timeoutRef = useRef<number | undefined>(undefined)
+  const inFlight = useRef(false)
+  const durationMs = revealDuration()
+
+  useEffect(() => {
+    return () => window.clearTimeout(timeoutRef.current)
+  }, [])
+
+  const flip = () => {
+    // Guard the sole, repeatedly-mashed button against a double-tap starting two flips.
+    if (inFlight.current) return
+    inFlight.current = true
+    const outcome = flipCoin()
+    setRotation((current) => rotationFor(current, outcome))
+    setIsFlipping(true)
+    timeoutRef.current = window.setTimeout(() => {
+      setResult(outcome)
+      setIsFlipping(false)
+      inFlight.current = false
+    }, durationMs)
+  }
+
+  return (
+    <section className="flex flex-col items-center gap-5 py-4">
+      <Text variant="body" color="muted">
+        Flip to decide who goes first.
+      </Text>
+
+      <FlipCoin
+        rotation={rotation}
+        durationMs={durationMs}
+        front={<GenericFace letter="H" />}
+        back={<GenericFace letter="T" />}
+      />
+
+      <Button size="lg" onClick={flip} disabled={isFlipping}>
+        {isFlipping ? 'Flipping…' : 'Flip'}
+      </Button>
+
+      <div aria-live="polite" className="h-8 text-center">
+        {result && !isFlipping && (
+          <Text as="p" variant="bodyStrong">
+            {result === 'heads' ? 'Heads!' : 'Tails!'}
+          </Text>
+        )}
+      </div>
+    </section>
+  )
+}
+
 interface FlipResult {
   call: CoinSide
   side: CoinSide
   won: boolean
 }
 
-export function CoinFlip() {
+/**
+ * The commander experience: Krark's Thumb coin art, Okaun's doubling power/toughness,
+ * Zndrsplt's card draw, and a win/loss tally. Called-side matters here, so the flip is
+ * driven by Call Heads / Call Tails.
+ */
+function CommanderCoin() {
   const [rotation, setRotation] = useState(0)
   const [isFlipping, setIsFlipping] = useState(false)
   const [wins, setWins] = useState(0)
   const [losses, setLosses] = useState(0)
   const [lastResult, setLastResult] = useState<FlipResult | null>(null)
   const timeoutRef = useRef<number | undefined>(undefined)
+  const inFlight = useRef(false)
   const durationMs = revealDuration()
   const okaunPower = OKAUN_BASE_POWER * 2 ** wins
   const okaunDisplay = `${formatNumber(okaunPower)}/${formatNumber(okaunPower)}`
@@ -93,6 +220,8 @@ export function CoinFlip() {
   }, [])
 
   const handleCall = (call: CoinSide) => {
+    if (inFlight.current) return
+    inFlight.current = true
     const outcome = flipCoin()
     setRotation((current) => rotationFor(current, outcome))
     setIsFlipping(true)
@@ -102,6 +231,7 @@ export function CoinFlip() {
       setWins((current) => (won ? current + 1 : current))
       setLosses((current) => (won ? current : current + 1))
       setIsFlipping(false)
+      inFlight.current = false
       if (won) playWinSound()
       else playLoseSound()
     }, durationMs)
@@ -109,6 +239,7 @@ export function CoinFlip() {
 
   const handleReset = () => {
     window.clearTimeout(timeoutRef.current)
+    inFlight.current = false
     setIsFlipping(false)
     setWins(0)
     setLosses(0)
@@ -117,12 +248,9 @@ export function CoinFlip() {
 
   return (
     <section className="flex flex-col items-center gap-4 py-4">
-      <div className="flex w-full max-w-xs items-center justify-between gap-4">
-        <Text variant="body" color="muted">
-          Heads: Krark&apos;s face. Tails: Krark&apos;s thumb.
-        </Text>
-        <SoundToggle />
-      </div>
+      <Text variant="body" color="muted">
+        Heads: Krark&apos;s face. Tails: Krark&apos;s thumb.
+      </Text>
 
       <Surface level="raised" radius="lg" className="w-full max-w-xs text-center">
         <Text as="div" variant="label" color="accent">
@@ -155,26 +283,12 @@ export function CoinFlip() {
         </div>
       </div>
 
-      <div style={{ perspective: '800px' }}>
-        <div
-          className="relative h-32 w-32"
-          style={{
-            transformStyle: 'preserve-3d',
-            transform: `rotateY(${rotation}deg)`,
-            transition: `transform ${durationMs}ms ${motion.easing.standard}`,
-          }}
-        >
-          <div className="absolute inset-0" style={{ backfaceVisibility: 'hidden' }}>
-            <KrarkFace />
-          </div>
-          <div
-            className="absolute inset-0"
-            style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
-          >
-            <KrarkThumb />
-          </div>
-        </div>
-      </div>
+      <FlipCoin
+        rotation={rotation}
+        durationMs={durationMs}
+        front={<KrarkFace />}
+        back={<KrarkThumb />}
+      />
 
       <div className="flex w-full max-w-xs gap-3">
         <Button onClick={() => handleCall('heads')} disabled={isFlipping} fullWidth>
@@ -201,6 +315,38 @@ export function CoinFlip() {
       <Button variant="secondary" onClick={handleReset}>
         New Turn
       </Button>
+    </section>
+  )
+}
+
+/**
+ * The coin flip screen. Plain by default; the Krark/Okaun/Zndrsplt commander experience
+ * is behind a persisted toggle. Each mode is keyed so switching remounts it -- a fresh
+ * start every time, which also clears any in-flight flip's timer and (for commander mode)
+ * zeroes the tally rather than restoring a stale one.
+ */
+export function CoinFlip() {
+  const [commanderMode, setCommanderMode] = useState(() => isCommanderModeEnabled())
+
+  const changeMode = (next: boolean) => {
+    setCommanderMode(next)
+    setCommanderModeEnabled(next)
+  }
+
+  return (
+    <section className="flex flex-col items-center gap-4 py-2">
+      <div className="w-full max-w-xs">
+        {/* Inverted so "Plain" sits on the left as the default-highlighted option. */}
+        <Toggle
+          value={!commanderMode}
+          onChange={(plain) => changeMode(!plain)}
+          label="Coin mode"
+          trueLabel="Plain"
+          falseLabel="Commander"
+        />
+      </div>
+
+      {commanderMode ? <CommanderCoin key="commander" /> : <PlainCoin key="plain" />}
     </section>
   )
 }

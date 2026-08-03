@@ -1,9 +1,11 @@
 # Coin flip (plain) and dice roller — design
 
-Status: **reviewed and reconciled, not yet implemented.** Written into the repo so it
-survives a session restart — the design reached quorum in a cloud session that committed
-no code, and the plan was lost each time the session re-fired. It is recorded here so that
-does not happen again.
+Status: **implemented.** Originally recovered from a cloud session that reached quorum but
+committed no code, so the plan was lost on each re-fire; recorded here, re-reviewed by the
+three specialist agents, then built. Kept as the record of why the screens are shaped this
+way. One deliberate divergence from the reviewed plan is noted under "Review refinements":
+the single-timer `DiceScreen` design removes the two-timer race the `rollId` gate was meant
+to cover, so no `rollId` gate was needed.
 
 The three specialist agents (`card-interaction-designer`, `ui-reviewer`,
 `edge-case-hunter`) re-reviewed this against the real code. Their refinements are folded

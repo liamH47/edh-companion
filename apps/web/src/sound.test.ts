@@ -1,5 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { playLoseSound, playWinSound, resetSoundBackend, setSoundEnabled } from '@mtg/core'
+import {
+  playLoseSound,
+  playRollSound,
+  playWinSound,
+  resetSoundBackend,
+  setSoundEnabled,
+} from '@mtg/core'
 import { registerWebSound } from './sound'
 
 /**
@@ -44,10 +50,16 @@ describe('registerWebSound', () => {
     expect(played).toEqual(['/sounds/lose.mp3'])
   })
 
+  it('plays the roll clip', () => {
+    playRollSound()
+    expect(played).toEqual(['/sounds/roll.wav'])
+  })
+
   it('plays nothing while sound is switched off', () => {
     setSoundEnabled(false)
     playWinSound()
     playLoseSound()
+    playRollSound()
     expect(played).toEqual([])
   })
 
