@@ -3,10 +3,12 @@ import { compute as bloodArtist } from './compute/blood-artist'
 import { compute as brainFreeze } from './compute/brain-freeze'
 import { compute as cometStellarPup } from './compute/comet-stellar-pup'
 import { compute as craterhoofBehemoth } from './compute/craterhoof-behemoth'
+import { compute as emptyTheWarrens } from './compute/empty-the-warrens'
 import { compute as grapeshot } from './compute/grapeshot'
 import { compute as nykthosShrineToNyx } from './compute/nykthos-shrine-to-nyx'
 import { compute as obNixilisTheFallen } from './compute/ob-nixilis-the-fallen'
 import { compute as scuteSwarm } from './compute/scute-swarm'
+import { compute as tendrilsOfAgony } from './compute/tendrils-of-agony'
 import type { FieldValues, OutputValues } from '../types'
 
 export type ComputeFn = (inputs: FieldValues) => OutputValues
@@ -28,10 +30,12 @@ export const COMPUTE_BY_CARD_ID: Record<string, ComputeFn> = {
   'brain-freeze': brainFreeze,
   'comet-stellar-pup': cometStellarPup,
   'craterhoof-behemoth': craterhoofBehemoth,
+  'empty-the-warrens': emptyTheWarrens,
   grapeshot,
   'nykthos-shrine-to-nyx': nykthosShrineToNyx,
   'ob-nixilis-the-fallen': obNixilisTheFallen,
   'scute-swarm': scuteSwarm,
+  'tendrils-of-agony': tendrilsOfAgony,
 }
 
 export function computeFor(cardId: string): ComputeFn {

@@ -41,7 +41,7 @@ METADATA = CardMetadata(
             min=0,
             max=MAX_STORM_COUNT,
             action_label="Spell cast before this",
-            help_text="Spells cast by *any* player this turn, not just you. Countered spells "
+            help_text="Spells cast by every player this turn, not just you. Countered spells "
             "and spells cast from a graveyard or exile still count; the copies storm itself "
             "makes are not cast, so they never count.",
         ),
