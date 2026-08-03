@@ -26,9 +26,12 @@ export function setSoundEnabled(enabled: boolean): void {
 export interface SoundBackend {
   playWin(): void
   playLose(): void
+  /** A neutral clip for a plain event with no win/lose meaning -- a dice roll that isn't
+   * a nat-1 or snake eyes. Kept separate from win/lose, which are call-specific. */
+  playRoll(): void
 }
 
-const silent: SoundBackend = { playWin: () => {}, playLose: () => {} }
+const silent: SoundBackend = { playWin: () => {}, playLose: () => {}, playRoll: () => {} }
 let backend: SoundBackend = silent
 
 export function setSoundBackend(next: SoundBackend): void {
@@ -46,4 +49,8 @@ export function playWinSound(): void {
 
 export function playLoseSound(): void {
   if (isSoundEnabled()) backend.playLose()
+}
+
+export function playRollSound(): void {
+  if (isSoundEnabled()) backend.playRoll()
 }

@@ -18,6 +18,7 @@ export interface Navigation {
   goToCard: (cardId: string) => void
   goToCoinFlip: () => void
   goToSwiss: () => void
+  goToDice: () => void
 }
 
 /**
@@ -44,6 +45,7 @@ export function useNavigation(): Navigation {
   const goToCard = useCallback((cardId: string) => navigate({ name: 'card', cardId }), [navigate])
   const goToCoinFlip = useCallback(() => navigate({ name: 'coin-flip' }), [navigate])
   const goToSwiss = useCallback(() => navigate({ name: 'swiss' }), [navigate])
+  const goToDice = useCallback(() => navigate({ name: 'dice' }), [navigate])
 
-  return { route, goToCardPicker, goToCard, goToCoinFlip, goToSwiss }
+  return { route, goToCardPicker, goToCard, goToCoinFlip, goToSwiss, goToDice }
 }

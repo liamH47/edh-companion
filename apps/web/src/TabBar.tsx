@@ -1,7 +1,7 @@
 import { Pressable } from './ui/Pressable'
 import { Text } from './ui/Text'
 
-export type TabName = 'cards' | 'coin' | 'swiss'
+export type TabName = 'cards' | 'coin' | 'swiss' | 'dice'
 
 interface TabBarProps {
   active: TabName
@@ -12,6 +12,7 @@ const TABS: { name: TabName; label: string }[] = [
   { name: 'cards', label: 'Cards' },
   { name: 'coin', label: 'Coin Flip' },
   { name: 'swiss', label: 'Pairings' },
+  { name: 'dice', label: 'Dice' },
 ]
 
 /** Bottom tab bar, thumb-zone reachable. Hidden on the card screen itself (App.tsx)

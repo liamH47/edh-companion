@@ -1,12 +1,31 @@
 import { CARDS } from '@mtg/core'
 import { recordCardOpened } from '@mtg/core'
+import type { Route } from '@mtg/core'
 import { CardPickerScreen } from './cards/CardPickerScreen'
 import { CardScreen } from './cards/CardScreen'
 import { CoinFlip } from './CoinFlip'
 import { useNavigation } from './core/navigation/useNavigation'
+import { DiceScreen } from './DiceScreen'
 import { PairingsScreen } from './pairings/PairingsScreen'
+import { SoundToggle } from './SoundToggle'
 import { TabBar, type TabName } from './TabBar'
 import { ThemeToggle } from './ThemeToggle'
+
+/** Which tab is highlighted for a given route. A `switch` rather than a ternary chain so
+ * adding a route without mapping it is a type error, not a silently wrong highlight. */
+function tabForRoute(name: Route['name']): TabName {
+  switch (name) {
+    case 'coin-flip':
+      return 'coin'
+    case 'swiss':
+      return 'swiss'
+    case 'dice':
+      return 'dice'
+    case 'card-picker':
+    case 'card':
+      return 'cards'
+  }
+}
 
 /**
  * Every tab is now entirely local -- card metadata is bundled and compute runs in the
@@ -14,7 +33,7 @@ import { ThemeToggle } from './ThemeToggle'
  * used to carry existed only for the card-list fetch, which no longer happens.
  */
 function App() {
-  const { route, goToCardPicker, goToCard, goToCoinFlip, goToSwiss } = useNavigation()
+  const { route, goToCardPicker, goToCard, goToCoinFlip, goToSwiss, goToDice } = useNavigation()
 
   const handleSelectCard = (cardId: string) => {
     recordCardOpened(cardId)
@@ -22,13 +41,17 @@ function App() {
   }
 
   const handleSelectTab = (tab: TabName) => {
-    if (tab === 'cards') goToCardPicker()
-    else if (tab === 'coin') goToCoinFlip()
-    else goToSwiss()
+    switch (tab) {
+      case 'cards':
+        return goToCardPicker()
+      case 'coin':
+        return goToCoinFlip()
+      case 'swiss':
+        return goToSwiss()
+      case 'dice':
+        return goToDice()
+    }
   }
-
-  const activeTab: TabName =
-    route.name === 'coin-flip' ? 'coin' : route.name === 'swiss' ? 'swiss' : 'cards'
 
   // A card route whose id matches no card (a stale deep link) falls back to the picker
   // in place, without rewriting the URL.
@@ -48,7 +71,10 @@ function App() {
         <h1 className="text-xl font-semibold tracking-tight text-text sm:text-2xl">
           Commander&apos;s Companion
         </h1>
-        <ThemeToggle />
+        <div className="flex items-center gap-2">
+          <SoundToggle />
+          <ThemeToggle />
+        </div>
       </header>
 
       {(route.name === 'card-picker' || route.name === 'card') &&
@@ -62,7 +88,9 @@ function App() {
 
       {route.name === 'swiss' && <PairingsScreen />}
 
-      {showTabBar && <TabBar active={activeTab} onSelect={handleSelectTab} />}
+      {route.name === 'dice' && <DiceScreen />}
+
+      {showTabBar && <TabBar active={tabForRoute(route.name)} onSelect={handleSelectTab} />}
     </main>
   )
 }
