@@ -58,6 +58,8 @@ export interface CardMetadata {
   id: string
   name: string
   rules_text: string
+  /** Scryfall print id, or null for an entry with no card behind it. See cardImage.ts. */
+  scryfall_id: string | null
   fields: FieldSpec[]
   outputs: OutputSpec[]
   alert: AlertSpec | null

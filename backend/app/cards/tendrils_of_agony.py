@@ -20,6 +20,7 @@ STARTING_COMMANDER_LIFE = 40
 METADATA = CardMetadata(
     id="tendrils-of-agony",
     name="Tendrils of Agony",
+    scryfall_id="6f26faca-f338-4ce5-a218-6a61d40fc50a",
     rules_text=(
         "Target player loses 2 life and you gain 2 life. Storm (When you cast this "
         "spell, copy it for each spell cast before it this turn. You may choose new "

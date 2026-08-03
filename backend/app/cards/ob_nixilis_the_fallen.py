@@ -16,6 +16,7 @@ MAX_TRIGGERS_PER_LAND = 4
 METADATA = CardMetadata(
     id="ob-nixilis-the-fallen",
     name="Ob Nixilis, the Fallen",
+    scryfall_id="dc9d3ada-9d0d-489a-89b7-08f53f6601e1",
     rules_text=(
         "Landfall — Whenever a land you control enters, you may have target player lose 3 "
         "life. If you do, put three +1/+1 counters on Ob Nixilis, the Fallen."

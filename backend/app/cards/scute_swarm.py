@@ -23,6 +23,7 @@ MAX_LANDS_PLAYED = 12
 METADATA = CardMetadata(
     id="scute-swarm",
     name="Scute Swarm",
+    scryfall_id="ea630ba1-22f9-4a10-bdc6-0d03128214f4",
     rules_text=(
         "Landfall — Whenever a land you control enters, create a 1/1 green Insect "
         "creature token. If you control six or more lands, create a token that's a copy "

@@ -291,7 +291,7 @@ Bottom-pinned row: the live counter's action button (if the card has exactly one
 turn" button below it. Padded with `env(safe-area-inset-bottom)` so it clears a phone's gesture
 bar.
 
-### CardPickerScreen / RulesTextPopover
+### CardPickerScreen / CardDetailSheet / CardImage
 
 Specified in `screen-spec.md` alongside navigation, since they're screen-level, not reusable
 components.

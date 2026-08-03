@@ -13,6 +13,7 @@ MAX_STORM_COUNT = 99
 METADATA = CardMetadata(
     id="grapeshot",
     name="Grapeshot",
+    scryfall_id="e3e2d90a-3557-49d5-9986-cb50fd31f396",
     rules_text=(
         "Grapeshot deals 1 damage to any target. Storm (When you cast this spell, copy "
         "it for each spell cast before it this turn. You may choose new targets for the "

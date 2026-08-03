@@ -15,6 +15,7 @@ MAX_ADDITIONAL_TRIGGERS = 1
 METADATA = CardMetadata(
     id="craterhoof-behemoth",
     name="Craterhoof Behemoth",
+    scryfall_id="276f5cee-a501-4658-bd4d-7a044bf1ccbc",
     rules_text=(
         "Haste. When this creature enters, creatures you control gain trample and get "
         "+X/+X until end of turn, where X is the number of creatures you control."

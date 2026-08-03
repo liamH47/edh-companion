@@ -67,8 +67,18 @@ git remote is `edh-companion`, the Render service is `mtg-calc`, and the app hea
 listing.
 
 **Wizards' Fan Content Policy** permits the verbatim Oracle text every card module carries,
-but only for non-commercial fan content: ship free, no ads, no IAP, no card art, no mana
-symbols, with the standard disclaimer in an About screen and both store listings.
+but only for non-commercial fan content: ship free, no ads, no IAP, with the standard
+disclaimer in an About screen and both store listings. Wizards' own logos and trademarks
+stay out, and nothing may amount to a proxy.
+
+**Card images are permitted**, which an earlier version of this file got wrong by being
+cautious rather than by checking. Scryfall serves its image database specifically for
+building Magic software under that policy, on terms this app has to keep meeting: do not
+crop or cover the copyright and artist line, do not distort or recolor, no watermarks over
+the top, and nothing implying anyone other than Wizards created the card. Showing the
+**full** card image satisfies all of them at once. Those rules live in
+`packages/core/src/cardImage.ts`, next to the code that builds the URL, so they are found
+by anyone changing it.
 
 ## Decisions already made
 

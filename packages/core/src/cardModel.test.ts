@@ -49,6 +49,7 @@ function card(overrides: Partial<CardMetadata> = {}): CardMetadata {
     id: 'test-card',
     name: 'Test Card',
     rules_text: '...',
+    scryfall_id: null,
     fields: [],
     outputs: [],
     alert: null,

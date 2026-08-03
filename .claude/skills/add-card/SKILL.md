@@ -27,6 +27,9 @@ for the minimal case, `brain_freeze.py` for a storm card, `scute_swarm.py` for a
 - Module docstring naming the card **and its wrinkle** — why it is worth a calculator.
 - `MAX_*` constants rather than inline literals.
 - `METADATA: CardMetadata` with `rules_text` as the **verbatim** Oracle text.
+- `scryfall_id` — the card's Scryfall print id, which drives the "View card" image.
+  `api.scryfall.com/cards/named?exact=<Name>` returns it as `id`. `test_registry.py`
+  fails if a registered card has none, or if what it has is not a UUID.
 - `short_label` on every field and output; exactly one `primary=True` output.
 - `help_text` is rendered as **plain text, not markdown** — asterisks show up literally.
 - `AlertSpec` only for a genuine state change worth a banner (lethal, died), not a stat.

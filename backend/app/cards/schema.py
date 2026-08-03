@@ -147,6 +147,10 @@ class CardMetadata(BaseModel):
     id: str
     name: str
     rules_text: str
+    # Scryfall print id, used to build the card-image URL the "View card" button opens.
+    # Optional: a future entry could be a format mechanic (commander tax) with no card
+    # behind it, and the button simply does not render for those.
+    scryfall_id: str | None = None
     fields: list[FieldSpec]
     outputs: list[OutputSpec]
     alert: AlertSpec | None = None
