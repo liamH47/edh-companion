@@ -63,6 +63,21 @@ system's "one card = one module" framing slightly — `CardMetadata.rules_text`/
 would describe a rule instead of a card. Worth deciding deliberately if/when it gets
 built, rather than by accident.
 
+## Choosing bounds
+
+A `FieldSpec`'s `min`/`max` is **a promise about what the UI has to survive**, not just
+input validation. Pick the smallest number still beyond any real game, not the largest
+that fits in an int.
+
+The rule: past **a million** of anything — power, life, damage, tokens — the exact figure
+has stopped mattering and you have simply won. `backend/tests/test_practical_bounds.py`
+enforces that by feeding every card its declared maxima and checking the answer stays
+readable, so this is a build failure rather than a convention.
+
+Watch for bounds that get amplified. Craterhoof *squares* its creature count into the
+total, and Scute Swarm *doubles* per land drop — both shipped with generous-looking
+input caps that produced two million and 6.3×10⁵⁰ respectively.
+
 ## Adding a card
 
 1. Write `backend/app/cards/<card>.py` exporting `METADATA: CardMetadata` and

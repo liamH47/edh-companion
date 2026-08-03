@@ -79,8 +79,9 @@ EXTRA_CASES: dict[str, list[dict[str, Any]]] = {
             "insect_token_count": 0,
             "lands_played": 1,
         },
-        # The reason the TypeScript port needs bigint: 999,999,999 doubled 99 times is
-        # around 2^129, and Python computes it exactly while a JS number cannot.
+        # The configuration this card originally shipped with. Now rejected by its
+        # bounds, and worth keeping so the corpus pins that both implementations refuse
+        # it identically rather than one of them quietly computing 2^129.
         {
             "current_land_count": 6,
             "scute_swarm_count": 999_999_999,

@@ -10,9 +10,15 @@ from .schema import CardMetadata, FieldKind, FieldSpec, OutputSpec
 
 LANDFALL_THRESHOLD = 6
 MAX_LAND_COUNT = 99
-MAX_SWARM_COUNT = 999_999_999
-MAX_INSECT_COUNT = 999_999_999
-MAX_LANDS_PLAYED = 99
+# Bounds are a promise the UI has to survive, so they are set to the smallest number
+# still beyond any real game rather than the largest that fits in an int. The swarm
+# doubles per land drop, so `lands_played` dominates: 12 land drops in one turn is
+# already a dedicated loop, and 99 copies is a board nobody is counting by hand.
+# Together they cap the answer near 400,000 -- past which the exact figure has stopped
+# mattering and you have simply won.
+MAX_SWARM_COUNT = 99
+MAX_INSECT_COUNT = 999
+MAX_LANDS_PLAYED = 12
 
 METADATA = CardMetadata(
     id="scute-swarm",
