@@ -13,7 +13,9 @@ entirely offline — card metadata is bundled and compute runs in the browser, s
 needs a connection.
 
 - **11 cards**, each a Python module plus a mirrored TypeScript implementation
-- **Swiss pairings** with 1v1 and Commander pods, drops, re-pairing, and MTR tiebreakers
+- **Pairings** tab with two flows: **casual Commander pods** (generate tables and reshuffle
+  each round to minimise repeat tablemates — no scoring) and full **Swiss** with 1v1 and
+  Commander pods, drops, re-pairing, and MTR tiebreakers
 - **Coin flip** with Okaun/Zndrsplt tracking
 - Every deploy gated on CI: backend lint/types/tests, both frontend packages at 100%
   coverage, a parity corpus proving Python and TypeScript agree, and Playwright end-to-end

@@ -8,6 +8,7 @@ import aetherfluxReservoir from './__parity__/aetherflux-reservoir.json'
 import bloodArtist from './__parity__/blood-artist.json'
 import brainFreeze from './__parity__/brain-freeze.json'
 import cometStellarPup from './__parity__/comet-stellar-pup.json'
+import commanderTax from './__parity__/commander-tax.json'
 import craterhoofBehemoth from './__parity__/craterhoof-behemoth.json'
 import emptyTheWarrens from './__parity__/empty-the-warrens.json'
 import grapeshot from './__parity__/grapeshot.json'
@@ -49,6 +50,7 @@ const CORPORA: Corpus[] = [
   bloodArtist,
   brainFreeze,
   cometStellarPup,
+  commanderTax,
   craterhoofBehemoth,
   emptyTheWarrens,
   grapeshot,

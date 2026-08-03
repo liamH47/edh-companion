@@ -16,6 +16,9 @@ interface SwissScreenProps {
    * within score groups, so with the real Math.random nothing past round 1 can be
    * asserted exactly. */
   rng?: Rng
+  /** Return to the pairings chooser. Optional so the screen still stands alone in its
+   * own tests; when set, a back link appears above the setup form. */
+  onExit?: () => void
 }
 
 /**
@@ -23,7 +26,7 @@ interface SwissScreenProps {
  * round, and standings. No network anywhere below this point -- pairing and scoring
  * are pure functions in core/swiss, so a draft keeps working with the backend down.
  */
-export function SwissScreen({ rng = Math.random }: SwissScreenProps = {}) {
+export function SwissScreen({ rng = Math.random, onExit }: SwissScreenProps = {}) {
   const session = useTournament(rng)
   const [view, setView] = useState<View>('round')
   const [visibleRound, setVisibleRound] = useState(1)
@@ -33,15 +36,22 @@ export function SwissScreen({ rng = Math.random }: SwissScreenProps = {}) {
 
   if (tournament === null) {
     return (
-      <TournamentSetupScreen
-        rng={rng}
-        onStart={(input, seatingIsRandom) => {
-          session.start(input)
-          session.nextRound(seatingIsRandom ? 'random' : 'draft-seating')
-          setVisibleRound(1)
-          setView('round')
-        }}
-      />
+      <div className="flex flex-col gap-4">
+        {onExit && (
+          <Button variant="ghost" onClick={onExit} className="self-start">
+            ‹ Pairings
+          </Button>
+        )}
+        <TournamentSetupScreen
+          rng={rng}
+          onStart={(input, seatingIsRandom) => {
+            session.start(input)
+            session.nextRound(seatingIsRandom ? 'random' : 'draft-seating')
+            setVisibleRound(1)
+            setView('round')
+          }}
+        />
+      </div>
     )
   }
 

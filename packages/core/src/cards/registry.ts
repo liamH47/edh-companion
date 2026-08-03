@@ -2,6 +2,7 @@ import { compute as aetherfluxReservoir } from './compute/aetherflux-reservoir'
 import { compute as bloodArtist } from './compute/blood-artist'
 import { compute as brainFreeze } from './compute/brain-freeze'
 import { compute as cometStellarPup } from './compute/comet-stellar-pup'
+import { compute as commanderTax } from './compute/commander-tax'
 import { compute as craterhoofBehemoth } from './compute/craterhoof-behemoth'
 import { compute as emptyTheWarrens } from './compute/empty-the-warrens'
 import { compute as grapeshot } from './compute/grapeshot'
@@ -30,6 +31,7 @@ export const COMPUTE_BY_CARD_ID: Record<string, ComputeFn> = {
   'blood-artist': bloodArtist,
   'brain-freeze': brainFreeze,
   'comet-stellar-pup': cometStellarPup,
+  'commander-tax': commanderTax,
   'craterhoof-behemoth': craterhoofBehemoth,
   'empty-the-warrens': emptyTheWarrens,
   grapeshot,

@@ -2,6 +2,8 @@ import { isActionGuardBlocked, sequenceValue } from '@mtg/core'
 import { tapHaptic } from '@mtg/core'
 import type { FieldSpec, FieldValues, OutputValues } from '@mtg/core'
 import { Button } from '../ui/Button'
+import { UndoIcon } from '../ui/Icon'
+import { Pressable } from '../ui/Pressable'
 import { DieRoller } from './DieRoller'
 
 interface ActionBarProps {
@@ -43,19 +45,35 @@ export function ActionBar({
         const count = typeof values[field.name] === 'number' ? (values[field.name] as number) : 0
         const atMax = field.max != null && count >= field.max
         const disabled = atMax || isActionGuardBlocked(field, outputs)
+        // A tally button is tapped once per real event, so an overshoot (a double-tap on
+        // "Pay 50 Life" costs 100 life) needs an undo right here in the thumb zone, not a
+        // scroll up to the field's stepper. Mirrors the sequence log's own undo.
+        const atMin = count <= (field.min ?? 0)
         return (
-          <Button
-            key={field.name}
-            size="lg"
-            fullWidth
-            disabled={disabled}
-            onClick={() => {
-              tapHaptic()
-              onFieldChange(field.name, count + 1)
-            }}
-          >
-            {field.action_label}
-          </Button>
+          <div key={field.name} className="flex gap-2">
+            <Button
+              size="lg"
+              className="flex-1"
+              disabled={disabled}
+              onClick={() => {
+                tapHaptic()
+                onFieldChange(field.name, count + 1)
+              }}
+            >
+              {field.action_label}
+            </Button>
+            <Pressable
+              aria-label={`Undo ${field.action_label}`}
+              disabled={atMin}
+              onClick={() => {
+                tapHaptic()
+                onFieldChange(field.name, count - 1)
+              }}
+              className="min-h-12 min-w-12 shrink-0 justify-center rounded-pill border border-border text-text-muted disabled:text-disabled-text"
+            >
+              <UndoIcon />
+            </Pressable>
+          </div>
         )
       })}
 

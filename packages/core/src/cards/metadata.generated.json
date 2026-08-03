@@ -44,7 +44,7 @@
         "action_label": null,
         "default": 0,
         "default_source": null,
-        "help_text": null,
+        "help_text": "Every spell cast this turn before Aetherflux was on the battlefield \u2014 including the cast of Aetherflux itself. It doesn't trigger its own ability, but it still counts toward the spell total that later triggers gain life for.",
         "kind": "number",
         "label": "Spells already cast before it entered",
         "max": 99,
@@ -202,7 +202,7 @@
         "short_label": "drained"
       }
     ],
-    "rules_text": "Whenever Blood Artist or another creature dies, target player loses 1 life and you gain 1 life.",
+    "rules_text": "Whenever this creature or another creature dies, target player loses 1 life and you gain 1 life.",
     "scryfall_id": "b5275d76-2947-4219-be21-614c7421614a"
   },
   {
@@ -320,27 +320,27 @@
         "name": "rolls",
         "options": [
           {
-            "label": "1",
+            "label": "1 \u00b7 squirrels",
             "value": "1"
           },
           {
-            "label": "2",
+            "label": "2 \u00b7 squirrels",
             "value": "2"
           },
           {
-            "label": "3",
+            "label": "3 \u00b7 return",
             "value": "3"
           },
           {
-            "label": "4",
+            "label": "4 \u00b7 damage",
             "value": "4"
           },
           {
-            "label": "5",
+            "label": "5 \u00b7 damage",
             "value": "5"
           },
           {
-            "label": "6",
+            "label": "6 \u00b7 bonus",
             "value": "6"
           }
         ],
@@ -401,6 +401,82 @@
     ],
     "rules_text": "0: Roll a six-sided die. 1 or 2 \u2014 [+2], then create two 1/1 green Squirrel creature tokens. They gain haste until end of turn. 3 \u2014 [\u22121], then return a card with mana value 2 or less from your graveyard to your hand. 4 or 5 \u2014 Comet deals damage equal to the number of loyalty counters on him to a creature or player, then [\u22122]. 6 \u2014 [+1], and you may activate Comet's loyalty ability two more times this turn.",
     "scryfall_id": "a76fa8d4-923d-4afc-ba47-ba10fc0fe46e"
+  },
+  {
+    "alert": null,
+    "fields": [
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": 4,
+        "default_source": null,
+        "help_text": "Your commander's printed total mana value, before any tax or reduction.",
+        "kind": "number",
+        "label": "Commander's mana value",
+        "max": 20,
+        "min": 0,
+        "name": "base_commander_cost",
+        "options": null,
+        "roll": null,
+        "setup": true,
+        "short_label": "base cost",
+        "visible_if": null
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": 0,
+        "default_source": null,
+        "help_text": "Total generic reduction from effects you control (Jodah, Emerald Medallion, ...). Applied to the whole cost, never below zero.",
+        "kind": "number",
+        "label": "Cost reduction you control",
+        "max": 20,
+        "min": 0,
+        "name": "flat_cost_reduction",
+        "options": null,
+        "roll": null,
+        "setup": false,
+        "short_label": "reduction",
+        "visible_if": null
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": "Cast from command zone",
+        "default": 0,
+        "default_source": null,
+        "help_text": "How many times you've already cast your commander from the command zone this game -- tap once each time you cast it. The next cast is taxed on this.",
+        "kind": "counter",
+        "label": "Times already cast from the command zone",
+        "max": 30,
+        "min": 0,
+        "name": "times_cast_from_command_zone",
+        "options": null,
+        "roll": null,
+        "setup": false,
+        "short_label": "prior casts",
+        "visible_if": null
+      }
+    ],
+    "id": "commander-tax",
+    "name": "Commander Tax",
+    "outputs": [
+      {
+        "kind": "number",
+        "label": "Commander tax",
+        "name": "commander_tax",
+        "primary": false,
+        "short_label": "tax"
+      },
+      {
+        "kind": "number",
+        "label": "Next cast costs",
+        "name": "current_cast_cost",
+        "primary": true,
+        "short_label": "next cost"
+      }
+    ],
+    "rules_text": "Each time you cast your commander from the command zone, it costs {2} more for each previous time you've cast it from the command zone this game.",
+    "scryfall_id": null
   },
   {
     "alert": null,

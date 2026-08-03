@@ -75,6 +75,41 @@ describe('ActionBar', () => {
     expect(onFieldChange).toHaveBeenCalledWith('activations', 2)
   })
 
+  it('renders an undo beside the action button that decrements the field', async () => {
+    const user = userEvent.setup()
+    const onFieldChange = vi.fn()
+    const fields = [
+      field({ name: 'activations', kind: 'counter', label: 'Activations', action_label: 'Pay 50 Life' }),
+    ]
+    render(
+      <ActionBar
+        liveFields={fields}
+        values={{ activations: 2 }}
+        outputs={null}
+        onFieldChange={onFieldChange}
+        onNewTurn={() => {}}
+      />,
+    )
+    await user.click(screen.getByRole('button', { name: 'Undo Pay 50 Life' }))
+    expect(onFieldChange).toHaveBeenCalledWith('activations', 1)
+  })
+
+  it('disables the undo at the field minimum', () => {
+    const fields = [
+      field({
+        name: 'activations',
+        kind: 'counter',
+        label: 'Activations',
+        action_label: 'Pay 50 Life',
+        min: 0,
+      }),
+    ]
+    render(
+      <ActionBar liveFields={fields} values={{ activations: 0 }} outputs={null} onFieldChange={() => {}} onNewTurn={() => {}} />,
+    )
+    expect(screen.getByRole('button', { name: 'Undo Pay 50 Life' })).toBeDisabled()
+  })
+
   it('treats a missing/non-numeric value as 0 when incrementing', async () => {
     const user = userEvent.setup()
     const onFieldChange = vi.fn()

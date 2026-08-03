@@ -37,12 +37,22 @@ def test_get_card_returns_none_for_unknown_id() -> None:
     assert get_card("nonexistent-card") is None
 
 
+# Entries that are format mechanics rather than cards, so they have no Scryfall image
+# and no id. Listed explicitly and by name, so a *real* card added without a scryfall_id
+# still fails the check below instead of hiding among these.
+_FORMAT_MECHANIC_IDS = {"commander-tax"}
+
+
 def test_every_card_carries_a_scryfall_id() -> None:
     # The "View card" button renders only when this is set, so a card added without one
     # loses the image silently rather than failing. The schema keeps it optional on
-    # purpose -- a future entry could be a format mechanic (commander tax) with no card
-    # behind it -- which is exactly why the registry needs its own check.
-    missing = [card.id for card in list_cards() if not card.scryfall_id]
+    # purpose -- a format mechanic (commander tax) has no card behind it -- so only those
+    # allowlisted above may omit it; everything else must carry one.
+    missing = [
+        card.id
+        for card in list_cards()
+        if not card.scryfall_id and card.id not in _FORMAT_MECHANIC_IDS
+    ]
     assert not missing, f"cards with no Scryfall id: {missing}"
 
 

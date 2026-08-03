@@ -21,7 +21,9 @@ Flat panel: a bordered, tinted background at one of two elevation levels.
 |---|---|---|---|
 | `level` | `'base' \| 'raised'` | `'base'` | `base` = `bg-surface`; `raised` = `bg-surface-raised` (one step up, e.g. a sheet inside a screen) |
 | `radius` | `'sm' \| 'md' \| 'lg'` | `'md'` | |
+| `tone` | `'default' \| 'danger'` | `'default'` | `danger` swaps in `bg-danger-surface`/`border-danger-border`, replacing the `level` classes — the shape every alert banner needs, so they compose this rather than hand-rolling a div |
 | `padded` | `boolean` | `true` | Applies `p-4` (16px) when true |
+| `role` | `string` | — | ARIA role passthrough, e.g. `alert` for a danger banner; maps to `accessibilityRole` in RN |
 | `className` | `string` | `''` | Appended after the generated classes (can override) |
 | `children` | `ReactNode` | — | |
 
@@ -174,10 +176,12 @@ number). Props: `label`, `value` (`number | string`), `pending` (dims without bl
 
 ### Icon
 
-Base `<svg>` shell (20px, stroke-based, `currentColor`, `aria-hidden`) plus five concrete icons
-built on it: `ChevronLeftIcon` (back nav), `InfoIcon` (rules-text popover), `PencilIcon` (edit
+Base `<svg>` shell (20px, stroke-based, `currentColor`, `aria-hidden`) plus concrete icons built
+on it: `ChevronLeftIcon` (back nav), `InfoIcon` (rules-text popover), `PencilIcon` (edit
 affordance on the setup summary bar), `CloseIcon` (`Sheet`'s close button), `SearchIcon` (card
-picker). Each concrete icon accepts `size`/`className`/`...svgProps`, no `children`.
+picker), `PlusIcon`/`TrashIcon` (add/remove entrant rows), `ChevronUpIcon`/`ChevronDownIcon`
+(reorder), `ShuffleIcon` (swap pairing / reshuffle), `UndoIcon` (`sequence` log and counter-action
+undo), and `TrophyIcon`. Each concrete icon accepts `size`/`className`/`...svgProps`, no `children`.
 
 RN notes: `Icon`'s `<svg>` → `Svg`, `<path>`/`<circle>` → `Path`/`Circle` from
 `react-native-svg`; path data (`d`) is unchanged.
@@ -252,7 +256,7 @@ own `onClose`.
 
 ### FieldControl
 
-The `FieldSpec.kind` switch — replaces `Field.tsx`. Same four-way dispatch, now built from
+The `FieldSpec.kind` switch — replaces `Field.tsx`. A five-way dispatch, built from
 primitives instead of raw `<input>`/`<select>`:
 
 - `boolean` → `Toggle`
@@ -262,6 +266,10 @@ primitives instead of raw `<input>`/`<select>`:
 - `counter` → `Stepper` for the value, plus a full-width `Button` below it when `action_label`
   is set, `disabled` driven by the existing `isActionGuardBlocked` logic from `cardModel.ts`
   (moved verbatim from today's `Field.tsx`)
+- `sequence` → an ordered log of the appended entries (Comet's die rolls) rendered as `Chip`s,
+  each labelled by its `SelectOption.label`, with a trailing `UndoIcon` button that pops the
+  last entry. The appending itself happens in `ActionBar` (a die the app rolls, or one button
+  per option), not here — this control is the read-back-and-undo half.
 
 | Prop | Type |
 |---|---|
@@ -286,10 +294,20 @@ card declares no `alert`. Sound (`playLoseSound`) fires on the false→true edge
 
 ### ActionBar
 
-Bottom-pinned row: the live counter's action button (if the card has exactly one — see
-`screen-spec.md` for the multi-counter case) sized `lg`/`fullWidth`, plus a `secondary` "New
-turn" button below it. Padded with `env(safe-area-inset-bottom)` so it clears a phone's gesture
-bar.
+Bottom-pinned row in the thumb zone. Three field shapes feed it, all honouring the same
+`action_disabled_when` guard:
+
+- a live `counter` with an `action_label` → an `lg` action button (`flex-1`, e.g. "Pay 50 Life")
+  paired with a smaller `UndoIcon` `Pressable` beside it that decrements the counter, disabled at
+  the field `min`. The undo mirrors the `sequence` log's own undo, so a mis-tap (a double "Pay 50
+  Life" costs 100 life) is fixable in the thumb zone rather than by scrolling up to the stepper.
+- a live `sequence` declaring `roll` → a `DieRoller` the app rolls itself (Comet); the per-option
+  buttons are suppressed so nobody can report a roll the app didn't make.
+- any other live `sequence` → one `lg` button per declared `SelectOption`, two per row, each
+  appending that option to the log.
+
+A `secondary` "New turn" button sits last. Padded with `env(safe-area-inset-bottom)` so it
+clears a phone's gesture bar. (`screen-spec.md` covers the multi-counter ordering.)
 
 ### CardPickerScreen / CardDetailSheet / CardImage
 

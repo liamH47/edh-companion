@@ -4,7 +4,7 @@ import { CardPickerScreen } from './cards/CardPickerScreen'
 import { CardScreen } from './cards/CardScreen'
 import { CoinFlip } from './CoinFlip'
 import { useNavigation } from './core/navigation/useNavigation'
-import { SwissScreen } from './swiss/SwissScreen'
+import { PairingsScreen } from './pairings/PairingsScreen'
 import { TabBar, type TabName } from './TabBar'
 import { ThemeToggle } from './ThemeToggle'
 
@@ -60,7 +60,7 @@ function App() {
 
       {route.name === 'coin-flip' && <CoinFlip />}
 
-      {route.name === 'swiss' && <SwissScreen />}
+      {route.name === 'swiss' && <PairingsScreen />}
 
       {showTabBar && <TabBar active={activeTab} onSelect={handleSelectTab} />}
     </main>

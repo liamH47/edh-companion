@@ -53,6 +53,9 @@ METADATA = CardMetadata(
             default=0,
             min=0,
             max=MAX_SPELLS_PER_TURN,
+            help_text="Every spell cast this turn before Aetherflux was on the battlefield "
+            "— including the cast of Aetherflux itself. It doesn't trigger its own ability, "
+            "but it still counts toward the spell total that later triggers gain life for.",
             visible_if=VisibleIf(field="was_in_play_at_turn_start", equals=False),
             setup=True,
         ),

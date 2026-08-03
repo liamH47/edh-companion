@@ -91,7 +91,9 @@ export function MatchResultSheet({
   return (
     <Sheet open={open} onClose={onClose} title="Report result">
       <div className="flex flex-col gap-4">
-        <Text variant="bodyStrong">{names.join(' vs ')}</Text>
+        <Text variant="bodyStrong" className="break-words">
+          {names.join(' vs ')}
+        </Text>
 
         <div className="flex flex-col gap-2">
           {choices.map((choice) => {
@@ -104,7 +106,7 @@ export function MatchResultSheet({
                   onReport(choice.result)
                   onClose()
                 }}
-                className={`min-h-12 justify-center rounded-pill border text-body font-semibold ${
+                className={`min-h-12 justify-center break-words px-4 py-2 text-center rounded-pill border text-body font-semibold ${
                   selected
                     ? 'border-accent bg-accent text-accent-text'
                     : 'border-border bg-surface text-text'

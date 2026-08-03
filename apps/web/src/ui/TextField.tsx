@@ -10,6 +10,9 @@ interface TextFieldProps {
   hideLabel?: boolean
   placeholder?: string
   type?: 'text' | 'search'
+  /** Caps how many characters can be typed. Entrant/team names use it so one long
+   * entry can't overflow a pairing row or a report sheet. */
+  maxLength?: number
   /** Rendered inside the field, before the input -- e.g. a SearchIcon. */
   leading?: ReactNode
   className?: string
@@ -30,6 +33,7 @@ export function TextField({
   hideLabel = false,
   placeholder,
   type = 'text',
+  maxLength,
   leading,
   className = '',
 }: TextFieldProps) {
@@ -47,6 +51,7 @@ export function TextField({
           value={value}
           onChange={(event: ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
           placeholder={placeholder}
+          maxLength={maxLength}
           aria-label={hideLabel ? label : undefined}
           className="min-w-0 flex-1 bg-transparent text-body text-text outline-none placeholder:text-text-muted"
         />

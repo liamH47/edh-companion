@@ -56,4 +56,26 @@ describe('storage', () => {
     resetStorageBackend()
     expect(getItem('key')).toBeNull()
   })
+
+  it('degrades to null rather than throwing when the backend read is denied', () => {
+    // A sandboxed/partitioned iframe or locked-down webview throws on storage access.
+    setStorageBackend({
+      getItem: () => {
+        throw new Error('denied')
+      },
+      setItem: () => {},
+    })
+    expect(getItem('key')).toBeNull()
+  })
+
+  it('swallows a denied or quota-full write rather than crashing the caller', () => {
+    setStorageBackend({
+      getItem: () => null,
+      setItem: () => {
+        throw new Error('quota exceeded')
+      },
+    })
+    expect(() => setItem('key', 'value')).not.toThrow()
+    expect(() => setJSON('key', { a: 1 })).not.toThrow()
+  })
 })
