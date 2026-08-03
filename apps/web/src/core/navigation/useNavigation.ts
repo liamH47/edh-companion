@@ -3,13 +3,18 @@ import { getRecentCardIds } from '@mtg/core'
 import { pathToRoute, routeToPath, type Route } from '@mtg/core'
 
 function initialRoute(): Route {
-  const fromPath = pathToRoute(window.location.pathname)
+  const path = window.location.pathname
+  const fromPath = pathToRoute(path)
   if (fromPath.name !== 'card-picker') return fromPath
-  // Landed on the bare root with no route encoded in the URL: jump straight into
-  // the last-opened card instead of the picker, so a returning user doesn't pay an
-  // extra tap every launch (screen-spec.md).
-  const [mostRecentCardId] = getRecentCardIds()
-  return mostRecentCardId ? { name: 'card', cardId: mostRecentCardId } : { name: 'card-picker' }
+  // Only the bare root jumps straight into the last-opened card, so a returning user
+  // doesn't pay an extra tap on a cold launch (screen-spec.md). An explicit `/cards` --
+  // reached via Back or the Cards tab -- stays on the list, so refreshing the list does
+  // not teleport back into a card.
+  if (path === '/') {
+    const [mostRecentCardId] = getRecentCardIds()
+    if (mostRecentCardId) return { name: 'card', cardId: mostRecentCardId }
+  }
+  return { name: 'card-picker' }
 }
 
 export interface Navigation {

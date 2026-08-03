@@ -18,8 +18,11 @@ Bottom tab bar (4 destinations) replaces the original top tablist — thumb-zone
 and it's the shape Expo Router expects. Four `flex-1` tabs still clear the 48px hit-target
 minimum at a phone width; 3–5 is the comfortable bottom-nav range before an overflow
 affordance is needed. `CardScreen` hides it so the tab bar never competes with the action
-bar for the bottom of the screen. On launch, the last-used card opens directly (no extra
-tap versus today's 2-card case).
+bar for the bottom of the screen. On a cold launch at the **bare root `/`**, the last-used
+card opens directly (no extra tap versus today's 2-card case). The picker has its own path,
+`/cards` — reached via Back or the Cards tab — which does *not* auto-open a card, so
+navigating back to the list and refreshing stays on the list. Only `/` triggers the
+last-card redirect; `/cards` and any unrecognized path resolve to the picker as-is.
 
 Web-only browser history sync (`pushState`/`popstate`, so Back works and a card is linkable)
 lives in `src/core/navigation/useNavigation.ts` — the one file an RN port rewrites wholesale.

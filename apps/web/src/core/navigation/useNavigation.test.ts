@@ -32,6 +32,15 @@ describe('useNavigation', () => {
     expect(result.current.route).toEqual({ name: 'card', cardId: 'craterhoof-behemoth' })
   })
 
+  it('stays on the picker at /cards even when a recent card exists', () => {
+    // Going back to the list and refreshing must not teleport into the last card: the
+    // explicit /cards path is not the bare root, so it does not trigger the redirect.
+    recordCardOpened('aetherflux-reservoir')
+    window.history.pushState(null, '', '/cards')
+    const { result } = renderHook(() => useNavigation())
+    expect(result.current.route).toEqual({ name: 'card-picker' })
+  })
+
   it('starts at coin-flip when the URL is /coin-flip', () => {
     window.history.pushState(null, '', '/coin-flip')
     const { result } = renderHook(() => useNavigation())
@@ -65,12 +74,12 @@ describe('useNavigation', () => {
     expect(window.location.pathname).toBe('/swiss')
   })
 
-  it('goToCardPicker updates the route and pushes /', () => {
+  it('goToCardPicker updates the route and pushes /cards', () => {
     const { result } = renderHook(() => useNavigation())
     act(() => result.current.goToCard('aetherflux-reservoir'))
     act(() => result.current.goToCardPicker())
     expect(result.current.route).toEqual({ name: 'card-picker' })
-    expect(window.location.pathname).toBe('/')
+    expect(window.location.pathname).toBe('/cards')
   })
 
   it('follows browser back/forward via popstate', () => {

@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest'
 import { pathToRoute, routeToPath } from './navigation'
 
 describe('routeToPath', () => {
-  it('maps card-picker to the root path', () => {
-    expect(routeToPath({ name: 'card-picker' })).toBe('/')
+  it('maps card-picker to /cards, distinct from the bare root', () => {
+    expect(routeToPath({ name: 'card-picker' })).toBe('/cards')
   })
 
   it('maps a card route to /cards/:id', () => {
@@ -28,6 +28,10 @@ describe('routeToPath', () => {
 describe('pathToRoute', () => {
   it('maps the root path to card-picker', () => {
     expect(pathToRoute('/')).toEqual({ name: 'card-picker' })
+  })
+
+  it('maps /cards to card-picker', () => {
+    expect(pathToRoute('/cards')).toEqual({ name: 'card-picker' })
   })
 
   it('maps /coin-flip to coin-flip', () => {

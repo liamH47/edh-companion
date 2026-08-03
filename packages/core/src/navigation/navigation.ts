@@ -17,7 +17,10 @@ export type Route =
 export function routeToPath(route: Route): string {
   switch (route.name) {
     case 'card-picker':
-      return '/'
+      // Its own path, distinct from the bare root `/`. The root auto-opens the last-used
+      // card on a cold launch; the picker needs a URL that doesn't, so navigating back to
+      // the list and refreshing stays on the list rather than teleporting into a card.
+      return '/cards'
     case 'card':
       return `/cards/${route.cardId}`
     case 'coin-flip':
@@ -35,5 +38,8 @@ export function pathToRoute(path: string): Route {
   if (path === '/dice') return { name: 'dice' }
   const match = /^\/cards\/([^/]+)$/.exec(path)
   if (match) return { name: 'card', cardId: match[1] }
+  // `/cards`, the bare root `/`, and anything unrecognized all resolve to the picker.
+  // The root vs `/cards` distinction (cold-launch redirect) is made in useNavigation,
+  // which is the only place with a reason to read the last-used card.
   return { name: 'card-picker' }
 }
