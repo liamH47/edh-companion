@@ -37,6 +37,7 @@ FACES_DAMAGE = frozenset({"4", "5"})
 METADATA = CardMetadata(
     id="comet-stellar-pup",
     name="Comet, Stellar Pup",
+    scryfall_id="a76fa8d4-923d-4afc-ba47-ba10fc0fe46e",
     rules_text=(
         "0: Roll a six-sided die. "
         "1 or 2 — [+2], then create two 1/1 green Squirrel creature tokens. They gain haste "

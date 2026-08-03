@@ -25,18 +25,24 @@ translation of the card rather than the card itself. Finding those gaps is the j
 
 ## The three constraints, in the order they kill ideas
 
-**1. No card art, no mana symbols. Ever.**
+**1. Stay inside the Fan Content Policy — but know what it actually allows.**
 
-Every card module carries verbatim Oracle text, which Wizards' Fan Content Policy permits
-only for non-commercial fan content: free, no ads, no IAP, **no card images, no mana
-symbols**. `docs/roadmap.md` calls this the most plausible non-technical way this project
-dies. So "show a picture of the card" is not a design question you get to weigh — it is
-already answered.
+The app ships free, no ads, no IAP, with the standard disclaimer. That much is settled.
 
-What survives the constraint is often most of the idea. A card-*shaped* surface, with the
-app's own typography, the card's name and Oracle text set in real type, and a loyalty
-number in the corner, is legal, portable, and reads as the card at arm's length. Reach for
-the version that keeps the physicality and drops the asset.
+**Card images are permitted**, which is easy to get wrong in the cautious direction.
+Scryfall provides its image database specifically for building Magic software under the
+Fan Content Policy, with rules that are concrete: do not crop or cover the copyright and
+artist line, do not distort or recolor, do not add your own watermarks or logos, and do
+not imply anyone other than Wizards created the card. Using the **full card image**
+satisfies all of them at once, which is why it is the default choice — an `art_crop`
+additionally obliges you to surface the artist and copyright elsewhere in the same view.
+
+What is genuinely off the table: Wizards' own logos and trademarks, and anything that
+amounts to a proxy or to repackaging Scryfall's data without adding value.
+
+So "show the card" is a live design option. What you still have to answer is where the
+image comes from at runtime, because this app works **entirely offline** — a view that is
+blank without a network is a worse answer than one that never promised the image.
 
 **2. No per-card branching in the UI.**
 

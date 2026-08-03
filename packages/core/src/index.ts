@@ -8,6 +8,7 @@
  * `navigator` do not compile here. Reaching for one means adding a seam instead --
  * which is what keeps this importable from React Native unchanged.
  */
+export * from './cardImage'
 export * from './cardModel'
 export * from './cards/cards'
 export * from './compute'

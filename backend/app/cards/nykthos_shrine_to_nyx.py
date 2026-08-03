@@ -12,6 +12,7 @@ MAX_DEVOTION_COUNT = 99
 METADATA = CardMetadata(
     id="nykthos-shrine-to-nyx",
     name="Nykthos, Shrine to Nyx",
+    scryfall_id="834b27a0-dfd7-4f96-8cde-cacac4b24acc",
     rules_text=(
         "{T}: Add {C}. {2}, {T}: Choose a color. Add an amount of mana of that color "
         "equal to your devotion to that color. (Devotion to a color is the number of "

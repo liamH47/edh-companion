@@ -12,6 +12,7 @@ MAX_DRAIN_EFFECT_COUNT = 20
 METADATA = CardMetadata(
     id="blood-artist",
     name="Blood Artist",
+    scryfall_id="b5275d76-2947-4219-be21-614c7421614a",
     rules_text=(
         "Whenever Blood Artist or another creature dies, target player loses 1 life and "
         "you gain 1 life."

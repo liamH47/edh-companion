@@ -43,6 +43,7 @@ const aetherfluxLikeCard: CardMetadata = {
   id: 'aetherflux-reservoir',
   name: 'Aetherflux Reservoir',
   rules_text: 'Whenever you cast a spell, you gain 1 life for each spell cast this turn.',
+  scryfall_id: '96b6b2e1-c3e6-464c-8a13-b15deb34e862',
   fields: [
     field({
       name: 'starting_life',
@@ -92,6 +93,7 @@ const allSetupCard: CardMetadata = {
   id: 'all-setup',
   name: 'All Setup Card',
   rules_text: '...',
+  scryfall_id: null,
   fields: [field({ name: 'power', kind: 'number', label: 'Power', setup: true })],
   outputs: [output({ name: 'total', label: 'Total', primary: true })],
   alert: null,
@@ -101,6 +103,7 @@ const singleOutputCard: CardMetadata = {
   id: 'single-output',
   name: 'Single Output Card',
   rules_text: '...',
+  scryfall_id: null,
   fields: [field({ name: 'creatures_died', kind: 'number', label: 'Creatures died' })],
   outputs: [output({ name: 'total_life_drained', label: 'Total life drained', primary: true })],
   alert: null,
@@ -182,13 +185,14 @@ describe('CardScreen', () => {
     expect(screen.queryByRole('button', { name: 'Back' })).not.toBeInTheDocument()
   })
 
-  it('opens the rules text popover from the info button, and closes it again', async () => {
+  it('opens the card detail sheet from the header button, and closes it again', async () => {
     const user = userEvent.setup()
     render(<CardScreen card={aetherfluxLikeCard} />)
     await screen.findByRole('dialog', { name: 'Board state' })
     await user.click(screen.getByRole('button', { name: 'Done' }))
 
-    await user.click(screen.getByRole('button', { name: 'Rules text' }))
+    await user.click(screen.getByRole('button', { name: 'View card' }))
+    expect(screen.getByRole('img', { name: 'Aetherflux Reservoir, as printed' })).toBeInTheDocument()
     expect(
       screen.getByText('Whenever you cast a spell, you gain 1 life for each spell cast this turn.'),
     ).toBeInTheDocument()

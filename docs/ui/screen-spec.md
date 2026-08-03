@@ -29,7 +29,7 @@ running a draft on bad reception is exactly when Swiss matters.
 
 ```
 ┌──────────────────────────────┐
-│ ‹  Aetherflux Reservoir    ⓘ │  header: back, title, rules-text info button
+│ ‹  Aetherflux Reservoir    ⓘ │  header: back, title, "View card" button
 ├──────────────────────────────┤
 │ 40 life · in play ✓       ✎ │  SetupSummaryBar (only if setup fields exist)
 ├──────────────────────────────┤
@@ -48,8 +48,20 @@ running a draft on bad reception is exactly when Swiss matters.
 └──────────────────────────────┘
 ```
 
-`RulesTextPopover`: the header's info button opens a small popover/sheet showing
-`card.rules_text` — currently fetched but never displayed anywhere; this is where it surfaces.
+`CardDetailSheet`: the header's info button (labelled "View card") opens a `Sheet` holding the
+card's printed image above its verbatim `card.rules_text`.
+
+The order is deliberate. The image comes from Scryfall and so is the one thing in the app that
+needs a network; the Oracle text is bundled and always renders. So `CardImage` degrades to a
+one-line note and the text below it carries the sheet on its own — a missing image reads as "no
+picture today", never as a broken screen. The text also stays selectable and screen-reader
+readable in a way a picture of it never is.
+
+`CardImage` renders inside a box fixed at the printed 488×680 ratio with `object-contain`.
+That is a rule, not a preference: Scryfall's terms forbid distorting, cropping or recoloring
+card images. `packages/core/src/cardImage.ts` documents the full set next to the URL builder.
+A card whose `scryfall_id` is null (a future format-mechanic entry with no card behind it)
+renders the note instead.
 
 `CardPickerScreen`: a search field (filters by `card.name`, client-side, case-insensitive) over
 a vertical list of cards, most-recently-opened first (tracked in `src/core/storage.ts`, not the

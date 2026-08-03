@@ -23,6 +23,7 @@ MAX_ATTACKS = 6
 METADATA = CardMetadata(
     id="kalonian-hydra",
     name="Kalonian Hydra",
+    scryfall_id="1d21ae20-2ef5-4dc0-aced-97497e6a8025",
     rules_text=(
         "Trample\n"
         "This creature enters with four +1/+1 counters on it.\n"

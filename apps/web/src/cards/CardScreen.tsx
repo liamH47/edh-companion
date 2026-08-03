@@ -9,7 +9,7 @@ import { ActionBar } from './ActionBar'
 import { AlertBanner } from './AlertBanner'
 import { FieldControl } from './FieldControl'
 import { HeroStat } from './HeroStat'
-import { RulesTextPopover } from './RulesTextPopover'
+import { CardDetailSheet } from './CardDetailSheet'
 import { SetupSheet } from './SetupSheet'
 import { SetupSummaryBar } from './SetupSummaryBar'
 import { StatStrip } from './StatStrip'
@@ -63,7 +63,7 @@ export function CardScreen({ card, onBack }: CardScreenProps) {
           {card.name}
         </Text>
         <Pressable
-          aria-label="Rules text"
+          aria-label="View card"
           onClick={() => setRulesOpen(true)}
           className="min-h-12 min-w-12 justify-center rounded-full text-text-muted hover:text-text"
         >
@@ -121,12 +121,7 @@ export function CardScreen({ card, onBack }: CardScreenProps) {
         onDone={session.confirmSetup}
       />
 
-      <RulesTextPopover
-        open={rulesOpen}
-        onClose={() => setRulesOpen(false)}
-        title={card.name}
-        rulesText={card.rules_text}
-      />
+      <CardDetailSheet open={rulesOpen} onClose={() => setRulesOpen(false)} card={card} />
     </section>
   )
 }

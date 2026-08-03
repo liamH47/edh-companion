@@ -15,6 +15,7 @@ COMMANDER_DECK_SIZE = 99
 METADATA = CardMetadata(
     id="brain-freeze",
     name="Brain Freeze",
+    scryfall_id="3a2d7cf9-dddb-4de3-b4f2-c52e3ec8fb4b",
     rules_text=(
         "Target player mills three cards. Storm (When you cast this spell, copy it for "
         "each spell cast before it this turn. You may choose new targets for the copies.)"
