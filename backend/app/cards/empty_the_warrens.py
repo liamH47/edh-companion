@@ -1,22 +1,26 @@
-"""Grapeshot: 1 damage per resolution, once for the original spell and once for each
-storm copy -- so the total scales with spells cast *before* it this turn, by anyone at
-the table, not just the caster."""
+"""Empty the Warrens: two Goblins per resolution, once for the original spell and once
+for each storm copy -- so a modest storm count still empties into a board that wins on
+its own a turn later.
+
+Unlike the other storm cards here, this one doesn't target, so its reminder text has no
+"you may choose new targets" clause and every resolution lands the same way.
+"""
 
 from typing import Any
 
 from .schema import CardMetadata, FieldKind, FieldSpec, OutputSpec
 from .storm import total_copies
 
-DAMAGE_PER_COPY = 1
+GOBLINS_PER_COPY = 2
+GOBLIN_POWER = 1
 MAX_STORM_COUNT = 99
 
 METADATA = CardMetadata(
-    id="grapeshot",
-    name="Grapeshot",
+    id="empty-the-warrens",
+    name="Empty the Warrens",
     rules_text=(
-        "Grapeshot deals 1 damage to any target. Storm (When you cast this spell, copy "
-        "it for each spell cast before it this turn. You may choose new targets for the "
-        "copies.)"
+        "Create two 1/1 red Goblin creature tokens. Storm (When you cast this spell, "
+        "copy it for each spell cast before it this turn.)"
     ),
     fields=[
         FieldSpec(
@@ -37,10 +41,15 @@ METADATA = CardMetadata(
         OutputSpec(name="copies_from_storm", label="Copies from storm", short_label="copies"),
         OutputSpec(name="total_copies", label="Total resolutions", short_label="resolutions"),
         OutputSpec(
-            name="total_damage",
-            label="Total damage",
-            short_label="damage",
+            name="goblins_created",
+            label="Goblins created",
+            short_label="goblins",
             primary=True,
+        ),
+        OutputSpec(
+            name="damage_next_turn",
+            label="Damage if they all attack",
+            short_label="next turn",
         ),
     ],
 )
@@ -50,9 +59,13 @@ def compute(inputs: dict[str, Any]) -> dict[str, Any]:
     storm_count = int(inputs["storm_count"])
 
     resolutions = total_copies(storm_count)
+    goblins_created = resolutions * GOBLINS_PER_COPY
 
     return {
         "copies_from_storm": storm_count,
         "total_copies": resolutions,
-        "total_damage": resolutions * DAMAGE_PER_COPY,
+        "goblins_created": goblins_created,
+        # They enter without haste, so this is next turn's number, not this turn's --
+        # which is the whole reason the count matters when you cast it.
+        "damage_next_turn": goblins_created * GOBLIN_POWER,
     }
