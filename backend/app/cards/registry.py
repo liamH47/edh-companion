@@ -10,10 +10,12 @@ from . import (
     brain_freeze,
     comet_stellar_pup,
     craterhoof_behemoth,
+    empty_the_warrens,
     grapeshot,
     nykthos_shrine_to_nyx,
     ob_nixilis_the_fallen,
     scute_swarm,
+    tendrils_of_agony,
 )
 from .schema import CardMetadata
 
@@ -25,10 +27,12 @@ _MODULES: list[ModuleType] = [
     brain_freeze,
     comet_stellar_pup,
     craterhoof_behemoth,
+    empty_the_warrens,
     grapeshot,
     nykthos_shrine_to_nyx,
     ob_nixilis_the_fallen,
     scute_swarm,
+    tendrils_of_agony,
 ]
 
 

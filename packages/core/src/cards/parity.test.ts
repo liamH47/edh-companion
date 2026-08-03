@@ -9,10 +9,12 @@ import bloodArtist from './__parity__/blood-artist.json'
 import brainFreeze from './__parity__/brain-freeze.json'
 import cometStellarPup from './__parity__/comet-stellar-pup.json'
 import craterhoofBehemoth from './__parity__/craterhoof-behemoth.json'
+import emptyTheWarrens from './__parity__/empty-the-warrens.json'
 import grapeshot from './__parity__/grapeshot.json'
 import nykthosShrineToNyx from './__parity__/nykthos-shrine-to-nyx.json'
 import obNixilisTheFallen from './__parity__/ob-nixilis-the-fallen.json'
 import scuteSwarm from './__parity__/scute-swarm.json'
+import tendrilsOfAgony from './__parity__/tendrils-of-agony.json'
 
 /**
  * Proves the TypeScript card implementations agree with Python's, which remains the
@@ -47,10 +49,12 @@ const CORPORA: Corpus[] = [
   brainFreeze,
   cometStellarPup,
   craterhoofBehemoth,
+  emptyTheWarrens,
   grapeshot,
   nykthosShrineToNyx,
   obNixilisTheFallen,
   scuteSwarm,
+  tendrilsOfAgony,
 ] as Corpus[]
 
 /** Key order differs between a Python dict and a TypeScript object literal, and that

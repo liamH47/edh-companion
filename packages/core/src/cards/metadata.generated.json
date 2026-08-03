@@ -231,7 +231,7 @@
         "action_label": "Spell cast before this",
         "default": 0,
         "default_source": null,
-        "help_text": "Spells cast by *any* player this turn, not just you. Countered spells and spells cast from a graveyard or exile still count; the copies storm itself makes are not cast, so they never count.",
+        "help_text": "Spells cast by every player this turn, not just you. Countered spells and spells cast from a graveyard or exile still count; the copies storm itself makes are not cast, so they never count.",
         "kind": "counter",
         "label": "Spells cast before this one this turn",
         "max": 99,
@@ -515,7 +515,62 @@
         "action_label": "Spell cast before this",
         "default": 0,
         "default_source": null,
-        "help_text": "Spells cast by *any* player this turn, not just you. Countered spells and spells cast from a graveyard or exile still count; the copies storm itself makes are not cast, so they never count.",
+        "help_text": "Spells cast by every player this turn, not just you. Countered spells and spells cast from a graveyard or exile still count; the copies storm itself makes are not cast, so they never count.",
+        "kind": "counter",
+        "label": "Spells cast before this one this turn",
+        "max": 99,
+        "min": 0,
+        "name": "storm_count",
+        "options": null,
+        "roll": null,
+        "setup": false,
+        "short_label": "storm",
+        "visible_if": null
+      }
+    ],
+    "id": "empty-the-warrens",
+    "name": "Empty the Warrens",
+    "outputs": [
+      {
+        "kind": "number",
+        "label": "Copies from storm",
+        "name": "copies_from_storm",
+        "primary": false,
+        "short_label": "copies"
+      },
+      {
+        "kind": "number",
+        "label": "Total resolutions",
+        "name": "total_copies",
+        "primary": false,
+        "short_label": "resolutions"
+      },
+      {
+        "kind": "number",
+        "label": "Goblins created",
+        "name": "goblins_created",
+        "primary": true,
+        "short_label": "goblins"
+      },
+      {
+        "kind": "number",
+        "label": "Damage if they all attack",
+        "name": "damage_next_turn",
+        "primary": false,
+        "short_label": "next turn"
+      }
+    ],
+    "rules_text": "Create two 1/1 red Goblin creature tokens. Storm (When you cast this spell, copy it for each spell cast before it this turn.)"
+  },
+  {
+    "alert": null,
+    "fields": [
+      {
+        "action_disabled_when": null,
+        "action_label": "Spell cast before this",
+        "default": 0,
+        "default_source": null,
+        "help_text": "Spells cast by every player this turn, not just you. Countered spells and spells cast from a graveyard or exile still count; the copies storm itself makes are not cast, so they never count.",
         "kind": "counter",
         "label": "Spells cast before this one this turn",
         "max": 99,
@@ -797,5 +852,87 @@
       }
     ],
     "rules_text": "Landfall \u2014 Whenever a land you control enters, create a 1/1 green Insect creature token. If you control six or more lands, create a token that's a copy of this creature instead."
+  },
+  {
+    "alert": {
+      "message": "That kills them",
+      "output": "is_lethal"
+    },
+    "fields": [
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": 40,
+        "default_source": null,
+        "help_text": "40 is a fresh Commander life total -- lower it to whatever they're actually on.",
+        "kind": "number",
+        "label": "Life total you're aiming at",
+        "max": 999,
+        "min": 0,
+        "name": "target_life",
+        "options": null,
+        "roll": null,
+        "setup": true,
+        "short_label": "their life",
+        "visible_if": null
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": "Spell cast before this",
+        "default": 0,
+        "default_source": null,
+        "help_text": "Spells cast by every player this turn, not just you. Countered spells and spells cast from a graveyard or exile still count; the copies storm itself makes are not cast, so they never count.",
+        "kind": "counter",
+        "label": "Spells cast before this one this turn",
+        "max": 99,
+        "min": 0,
+        "name": "storm_count",
+        "options": null,
+        "roll": null,
+        "setup": false,
+        "short_label": "storm",
+        "visible_if": null
+      }
+    ],
+    "id": "tendrils-of-agony",
+    "name": "Tendrils of Agony",
+    "outputs": [
+      {
+        "kind": "number",
+        "label": "Copies from storm",
+        "name": "copies_from_storm",
+        "primary": false,
+        "short_label": "copies"
+      },
+      {
+        "kind": "number",
+        "label": "Total resolutions",
+        "name": "total_copies",
+        "primary": false,
+        "short_label": "resolutions"
+      },
+      {
+        "kind": "number",
+        "label": "Life drained",
+        "name": "life_drained",
+        "primary": true,
+        "short_label": "drained"
+      },
+      {
+        "kind": "number",
+        "label": "Life you gain",
+        "name": "life_gained",
+        "primary": false,
+        "short_label": "you gain"
+      },
+      {
+        "kind": "number",
+        "label": "Life they're left on",
+        "name": "target_life_after",
+        "primary": false,
+        "short_label": "they end"
+      }
+    ],
+    "rules_text": "Target player loses 2 life and you gain 2 life. Storm (When you cast this spell, copy it for each spell cast before it this turn. You may choose new targets for the copies.)"
   }
 ]

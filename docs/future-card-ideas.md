@@ -28,10 +28,17 @@ similar shape:
 | Blood Artist | `blood_artist.py` | The minimal case — two inputs, one product |
 | Nykthos, Shrine to Nyx | `nykthos_shrine_to_nyx.py` | A pure tally, where the tedium is counting, not computing |
 | Scute Swarm | `scute_swarm.py` | Threshold-gated simulation that can't be a closed-form sum |
+| Tendrils of Agony | `tendrils_of_agony.py` | Third storm card — a drain, with a lethal alert |
+| Empty the Warrens | `empty_the_warrens.py` | Fourth storm card — tokens |
 
 **`storm.py`** is a shared non-card helper (the same supporting role `validation.py`
-plays). Tendrils of Agony (life) and Empty the Warrens (tokens) are now nearly free —
-each is a `METADATA` block plus a one-line per-copy effect.
+plays), and it paid off exactly as predicted: Tendrils of Agony and Empty the Warrens
+were each a `METADATA` block plus a one-line per-copy effect. Any future storm card is
+the same.
+
+Note that a card now needs **two** implementations — Python in `backend/app/cards/` and
+TypeScript in `packages/core/src/cards/compute/`. That is not a discipline problem: the
+parity suite fails until both exist, and the generated corpus proves they agree.
 
 **The `sequence` field kind** (see `schema.py`) is the tool for any card where a turn is
 an ordered chain rather than a tally. Comet needs it because its 4–5 branch deals damage
@@ -68,4 +75,10 @@ built, rather than by accident.
    Coverage is enforced at 100% branch, so every branch of `compute()` needs a case,
    including a `test_compute_at_upper_bound`.
 
-The frontend needs no changes at all unless the card requires a new `FieldKind`.
+4. Mirror `compute()` in `packages/core/src/cards/compute/<card-id>.ts` and register it
+   in `packages/core/src/cards/registry.ts`. The parity suite fails until you do — the
+   registry-completeness check compares the TypeScript registry against the backend's.
+5. Regenerate: `cd backend && uv run python tools/generate_parity_corpus.py`. CI's
+   `--check` fails if you forget, and the corpus is what proves the two agree.
+
+No UI changes are needed unless the card requires a new `FieldKind`.
