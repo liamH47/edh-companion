@@ -105,7 +105,9 @@ describe('App', () => {
 
     await user.click(screen.getByRole('button', { name: 'Pairings' }))
 
-    expect(screen.getByRole('heading', { name: 'New tournament' })).toBeInTheDocument()
+    // The tab opens on the pods/Swiss chooser rather than straight into Swiss setup.
+    expect(screen.getByRole('heading', { name: 'Pairings' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Commander pods' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Cards' })).toBeInTheDocument()
   })
 

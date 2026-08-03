@@ -21,9 +21,11 @@ export default defineConfig({
         'src/test/setup.ts',
         'src/index.ts',
         'src/swiss/index.ts',
+        'src/pods/index.ts',
         // Type-only modules compile to nothing, so v8 reports 0% rather than 100%.
         'src/types.ts',
         'src/swiss/types.ts',
+        'src/pods/types.ts',
         '**/*.test.ts',
       ],
     },
