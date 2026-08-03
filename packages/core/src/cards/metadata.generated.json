@@ -408,6 +408,82 @@
       {
         "action_disabled_when": null,
         "action_label": null,
+        "default": 4,
+        "default_source": null,
+        "help_text": "Your commander's printed total mana value, before any tax or reduction.",
+        "kind": "number",
+        "label": "Commander's mana value",
+        "max": 20,
+        "min": 0,
+        "name": "base_commander_cost",
+        "options": null,
+        "roll": null,
+        "setup": true,
+        "short_label": "base cost",
+        "visible_if": null
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": 0,
+        "default_source": null,
+        "help_text": "Total generic reduction from effects you control (Jodah, Emerald Medallion, ...). Applied to the whole cost, never below zero.",
+        "kind": "number",
+        "label": "Cost reduction you control",
+        "max": 20,
+        "min": 0,
+        "name": "flat_cost_reduction",
+        "options": null,
+        "roll": null,
+        "setup": false,
+        "short_label": "reduction",
+        "visible_if": null
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": "Cast from command zone",
+        "default": 0,
+        "default_source": null,
+        "help_text": "How many times you've already cast your commander from the command zone this game -- tap once each time you cast it. The next cast is taxed on this.",
+        "kind": "counter",
+        "label": "Times already cast from the command zone",
+        "max": 30,
+        "min": 0,
+        "name": "times_cast_from_command_zone",
+        "options": null,
+        "roll": null,
+        "setup": false,
+        "short_label": "prior casts",
+        "visible_if": null
+      }
+    ],
+    "id": "commander-tax",
+    "name": "Commander Tax",
+    "outputs": [
+      {
+        "kind": "number",
+        "label": "Commander tax",
+        "name": "commander_tax",
+        "primary": false,
+        "short_label": "tax"
+      },
+      {
+        "kind": "number",
+        "label": "Next cast costs",
+        "name": "current_cast_cost",
+        "primary": true,
+        "short_label": "next cost"
+      }
+    ],
+    "rules_text": "Each time you cast your commander from the command zone, it costs {2} more for each previous time you've cast it from the command zone this game.",
+    "scryfall_id": null
+  },
+  {
+    "alert": null,
+    "fields": [
+      {
+        "action_disabled_when": null,
+        "action_label": null,
         "default": 0,
         "default_source": null,
         "help_text": null,
