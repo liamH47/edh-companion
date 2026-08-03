@@ -132,17 +132,42 @@ export function resolveAlertMessage(card: CardMetadata, outputs: OutputValues | 
 
 const numberFormatter = new Intl.NumberFormat('en-US')
 
+/**
+ * A card's number, as it should appear on screen.
+ *
+ * Grouped digits normally. Past `Number.MAX_SAFE_INTEGER` it switches to exponential,
+ * for two reasons that point the same way.
+ *
+ * The digits stop being real: Scute Swarm's declared bounds reach about 2^129, whose
+ * exact value ends `...185614012416`, but the float renders as
+ * `19,807,040,608,759,044,000,000,000,000,000,000,000`. Those trailing zeros are an
+ * artefact of the representation, and printing them claims precision that does not
+ * exist. `1.98e+37` is the honest answer.
+ *
+ * And it is 50 characters wide, on a screen about 420 wide. No font-size ladder saves
+ * that.
+ */
 export function formatNumber(value: number): string {
+  if (!Number.isSafeInteger(value)) return value.toExponential(2)
   return numberFormatter.format(value)
 }
 
 export type HeroFontSize = 'sm' | 'md' | 'lg'
 
-/** Steps the hero number's font size down as it gains digits, so a 6-digit Scute
- * Swarm total doesn't overflow the space a 2-digit Aetherflux total fits easily. */
+/**
+ * Steps the hero number's font size down as it gets wider, so a 6-digit Scute Swarm
+ * total doesn't overflow the space a 2-digit Aetherflux total fits easily.
+ *
+ * Measures the **rendered** string, including its separators, because that is what has
+ * to fit. Counting digits instead quietly did the wrong thing above 1e21, where
+ * `String(value)` is exponential notation -- so it measured the length of
+ * `"1.9807040608759044e+37"` (22) rather than the 38 digits actually there, and landed
+ * on the right bucket by accident.
+ */
 export function heroFontSize(value: number): HeroFontSize {
-  const digitCount = Math.trunc(Math.abs(value)).toString().length
-  if (digitCount <= 4) return 'lg'
-  if (digitCount <= 6) return 'md'
+  const width = formatNumber(value).length
+  // Thresholds are the rendered widths of the old digit counts: "9,999" and "999,999".
+  if (width <= 5) return 'lg'
+  if (width <= 7) return 'md'
   return 'sm'
 }
