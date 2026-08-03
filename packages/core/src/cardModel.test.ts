@@ -394,3 +394,53 @@ describe('heroFontSize', () => {
     expect(heroFontSize(-1000000)).toBe('sm')
   })
 })
+
+const numberFormatter = new Intl.NumberFormat('en-US')
+
+describe('numbers too large to be exact', () => {
+  // Scute Swarm's declared bounds reach about 2^129. These are unreachable in a real
+  // game, but the bounds promise them, so the display has to survive them.
+  const SCUTE_MAX = 19807040608759043769819903185614012416
+
+  it('renders an unsafe integer in exponential form', () => {
+    // Past 2^53 the trailing digits are an artefact of the float, not the answer --
+    // printing them would claim precision that does not exist.
+    expect(formatNumber(SCUTE_MAX)).toBe('1.98e+37')
+  })
+
+  it('keeps the rendered width readable at any magnitude', () => {
+    // The grouped form is 50 characters, on a screen about 420 wide.
+    expect(numberFormatter.format(SCUTE_MAX).length).toBeGreaterThan(40)
+    expect(formatNumber(SCUTE_MAX).length).toBeLessThan(12)
+  })
+
+  it('still groups every value that is exact', () => {
+    expect(formatNumber(Number.MAX_SAFE_INTEGER)).toBe('9,007,199,254,740,991')
+    expect(formatNumber(1234567)).toBe('1,234,567')
+  })
+
+  it('handles a negative unsafe integer', () => {
+    expect(formatNumber(-SCUTE_MAX)).toBe('-1.98e+37')
+  })
+})
+
+describe('heroFontSize measures the rendered string', () => {
+  it('steps down as the number gets wider', () => {
+    expect(heroFontSize(0)).toBe('lg')
+    expect(heroFontSize(9999)).toBe('lg')
+    expect(heroFontSize(10000)).toBe('md') // "10,000" -- 6 characters
+    expect(heroFontSize(999999)).toBe('md')
+    expect(heroFontSize(1000000)).toBe('sm') // "1,000,000" -- 9 characters
+  })
+
+  it('accounts for a minus sign, which takes real width', () => {
+    // Nykthos deliberately reports a negative net, so this is a live case.
+    expect(heroFontSize(-9999)).toBe('md')
+  })
+
+  it('shrinks for an unsafe integer rather than measuring exponential notation', () => {
+    // The old implementation counted the characters of "1.98...e+37" (22) instead of
+    // the 38 digits, and reached the right bucket by luck.
+    expect(heroFontSize(19807040608759043769819903185614012416)).toBe('sm')
+  })
+})

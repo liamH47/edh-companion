@@ -140,24 +140,35 @@ describe.each(CORPORA.map((corpus) => [corpus.cardId, corpus] as const))(
   },
 )
 
-describe('the case that needs bigint', () => {
-  it('agrees on a swarm doubled past 2^53', () => {
-    // 999,999,999 copies doubled 99 times is around 2^129. Python computes it exactly;
-    // a JavaScript number cannot. Both sides land on the same double only because the
-    // TypeScript port does the arithmetic in bigint and converts once, at the end.
-    const scute = CORPORA.find((c) => c.cardId === 'scute-swarm')!
-    const extreme = scute.cases.find(
-      (c) => c.inputs.scute_swarm_count === 999999999 && c.inputs.lands_played === 99,
-    )
-    expect(extreme, 'the extreme case must be in the corpus').toBeDefined()
-
+describe('the swarm bound that used to explode', () => {
+  it('refuses the input that once produced a 50-character answer', () => {
+    // Scute Swarm shipped allowing 999,999,999 copies and 99 land drops, which doubles
+    // to about 6.3e50 -- arithmetically correct and completely unusable. The bounds now
+    // refuse it, and both implementations refuse it the same way.
     const card = cardById.get('scute-swarm')!
-    const outputs = computeFor('scute-swarm')(validateInputs(card.fields, extreme!.inputs))
+    expect(() =>
+      validateInputs(card.fields, {
+        current_land_count: 6,
+        scute_swarm_count: 999999999,
+        insect_token_count: 0,
+        lands_played: 99,
+      }),
+    ).toThrow(InputError)
+  })
 
-    expect(outputs.final_scute_swarm_count).toBe(extreme!.outputs!.final_scute_swarm_count)
-    expect(outputs.total_power).toBe(extreme!.outputs!.total_power)
-    // Sanity: this really is past the safe-integer range, so the test is exercising
-    // what it claims to.
-    expect(Number(outputs.final_scute_swarm_count)).toBeGreaterThan(Number.MAX_SAFE_INTEGER)
+  it('keeps the answer readable at the declared maximum', () => {
+    // The bound is a promise about what the screen has to survive, so check the promise
+    // rather than trusting the number in the spec.
+    const card = cardById.get('scute-swarm')!
+    const maxInputs: FieldValues = {}
+    for (const field of card.fields) maxInputs[field.name] = field.max ?? field.default
+
+    const outputs = computeFor('scute-swarm')(validateInputs(card.fields, maxInputs))
+    const biggest = Math.max(
+      ...Object.values(outputs).filter((v): v is number => typeof v === 'number'),
+    )
+
+    expect(biggest).toBeLessThan(1_000_000)
+    expect(biggest).toBeLessThan(Number.MAX_SAFE_INTEGER)
   })
 })
