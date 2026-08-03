@@ -5,16 +5,16 @@ const LANDFALL_THRESHOLD = 6
 /**
  * Mirrors backend/app/cards/scute_swarm.py.
  *
- * Computed in `bigint`, not `number`, and that is not defensive: the swarm doubles per
- * land drop, and the declared bounds allow 999,999,999 copies with 99 lands played --
- * about 2^129. Python's integers are arbitrary precision and compute that exactly; a
- * JavaScript `number` loses precision above 2^53 and would silently drift.
+ * Computed in `bigint` rather than `number`. The current bounds cap the answer near
+ * 400,000, so this is no longer load-bearing -- but the doubling is exactly the shape
+ * where loosening a bound silently reintroduces the problem, and it once did: the card
+ * shipped allowing 999,999,999 copies over 99 land drops, about 2^129, which Python
+ * computed exactly while a JavaScript `number` drifted.
  *
- * Converting with `Number()` only at the return boundary is what keeps the two in
- * agreement rather than merely close. `Number(bigint)` rounds to the nearest double,
- * and `JSON.parse` of Python's exact decimal rounds to the nearest double too -- so
- * both land on the same value. Summing `total_power` in bigint *before* converting
- * matters for the same reason: converting each side first would round twice.
+ * Three `n` suffixes to make that failure mode unreachable is a fair trade. Converting
+ * with `Number()` only at the return boundary is what keeps the two implementations in
+ * agreement rather than merely close, and summing `total_power` in bigint *before*
+ * converting matters for the same reason -- converting each side first rounds twice.
  */
 export function compute(inputs: FieldValues): OutputValues {
   let landCount = BigInt(Number(inputs.current_land_count))

@@ -31,14 +31,14 @@
       "inputs": {
         "current_land_count": 0,
         "insect_token_count": 0,
-        "lands_played": 99,
+        "lands_played": 12,
         "scute_swarm_count": 1
       },
       "outputs": {
         "final_insect_count": 5,
-        "final_land_count": 99,
-        "final_scute_swarm_count": 19807040628566084398385987584,
-        "total_power": 19807040628566084398385987589
+        "final_land_count": 12,
+        "final_scute_swarm_count": 128,
+        "total_power": 133
       }
     },
     {
@@ -49,7 +49,7 @@
       "inputs": {
         "current_land_count": 0,
         "insect_token_count": 0,
-        "lands_played": 100,
+        "lands_played": 13,
         "scute_swarm_count": 1
       }
     },
@@ -85,7 +85,7 @@
       "inputs": {
         "current_land_count": 0,
         "insect_token_count": -1,
-        "lands_played": 99,
+        "lands_played": 12,
         "scute_swarm_count": 1
       }
     },
@@ -97,22 +97,22 @@
       "inputs": {
         "current_land_count": 0,
         "insect_token_count": -1,
-        "lands_played": 100,
+        "lands_played": 13,
         "scute_swarm_count": 1
       }
     },
     {
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": 0,
         "scute_swarm_count": 1
       },
       "outputs": {
-        "final_insect_count": 999999999,
+        "final_insect_count": 999,
         "final_land_count": 0,
         "final_scute_swarm_count": 1,
-        "total_power": 1000000000
+        "total_power": 1000
       }
     },
     {
@@ -122,7 +122,7 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": -1,
         "scute_swarm_count": 1
       }
@@ -130,15 +130,15 @@
     {
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 999999999,
-        "lands_played": 99,
+        "insect_token_count": 999,
+        "lands_played": 12,
         "scute_swarm_count": 1
       },
       "outputs": {
-        "final_insect_count": 1000000004,
-        "final_land_count": 99,
-        "final_scute_swarm_count": 19807040628566084398385987584,
-        "total_power": 19807040628566084399385987588
+        "final_insect_count": 1004,
+        "final_land_count": 12,
+        "final_scute_swarm_count": 128,
+        "total_power": 1132
       }
     },
     {
@@ -148,8 +148,8 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 999999999,
-        "lands_played": 100,
+        "insect_token_count": 999,
+        "lands_played": 13,
         "scute_swarm_count": 1
       }
     },
@@ -160,7 +160,7 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": 0,
         "scute_swarm_count": 1
       }
@@ -172,7 +172,7 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": -1,
         "scute_swarm_count": 1
       }
@@ -184,8 +184,8 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 1000000000,
-        "lands_played": 99,
+        "insect_token_count": 1000,
+        "lands_played": 12,
         "scute_swarm_count": 1
       }
     },
@@ -196,8 +196,8 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 1000000000,
-        "lands_played": 100,
+        "insect_token_count": 1000,
+        "lands_played": 13,
         "scute_swarm_count": 1
       }
     },
@@ -231,12 +231,12 @@
       "inputs": {
         "current_land_count": 0,
         "insect_token_count": 0,
-        "lands_played": 99,
+        "lands_played": 12,
         "scute_swarm_count": 0
       },
       "outputs": {
         "final_insect_count": 0,
-        "final_land_count": 99,
+        "final_land_count": 12,
         "final_scute_swarm_count": 0,
         "total_power": 0
       }
@@ -249,7 +249,7 @@
       "inputs": {
         "current_land_count": 0,
         "insect_token_count": 0,
-        "lands_played": 100,
+        "lands_played": 13,
         "scute_swarm_count": 0
       }
     },
@@ -285,7 +285,7 @@
       "inputs": {
         "current_land_count": 0,
         "insect_token_count": -1,
-        "lands_played": 99,
+        "lands_played": 12,
         "scute_swarm_count": 0
       }
     },
@@ -297,22 +297,22 @@
       "inputs": {
         "current_land_count": 0,
         "insect_token_count": -1,
-        "lands_played": 100,
+        "lands_played": 13,
         "scute_swarm_count": 0
       }
     },
     {
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": 0,
         "scute_swarm_count": 0
       },
       "outputs": {
-        "final_insect_count": 999999999,
+        "final_insect_count": 999,
         "final_land_count": 0,
         "final_scute_swarm_count": 0,
-        "total_power": 999999999
+        "total_power": 999
       }
     },
     {
@@ -322,7 +322,7 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": -1,
         "scute_swarm_count": 0
       }
@@ -330,15 +330,15 @@
     {
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 999999999,
-        "lands_played": 99,
+        "insect_token_count": 999,
+        "lands_played": 12,
         "scute_swarm_count": 0
       },
       "outputs": {
-        "final_insect_count": 999999999,
-        "final_land_count": 99,
+        "final_insect_count": 999,
+        "final_land_count": 12,
         "final_scute_swarm_count": 0,
-        "total_power": 999999999
+        "total_power": 999
       }
     },
     {
@@ -348,8 +348,8 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 999999999,
-        "lands_played": 100,
+        "insect_token_count": 999,
+        "lands_played": 13,
         "scute_swarm_count": 0
       }
     },
@@ -360,7 +360,7 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": 0,
         "scute_swarm_count": 0
       }
@@ -372,7 +372,7 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": -1,
         "scute_swarm_count": 0
       }
@@ -384,8 +384,8 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 1000000000,
-        "lands_played": 99,
+        "insect_token_count": 1000,
+        "lands_played": 12,
         "scute_swarm_count": 0
       }
     },
@@ -396,8 +396,8 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 1000000000,
-        "lands_played": 100,
+        "insect_token_count": 1000,
+        "lands_played": 13,
         "scute_swarm_count": 0
       }
     },
@@ -433,7 +433,7 @@
       "inputs": {
         "current_land_count": 0,
         "insect_token_count": 0,
-        "lands_played": 99,
+        "lands_played": 12,
         "scute_swarm_count": -1
       }
     },
@@ -445,7 +445,7 @@
       "inputs": {
         "current_land_count": 0,
         "insect_token_count": 0,
-        "lands_played": 100,
+        "lands_played": 13,
         "scute_swarm_count": -1
       }
     },
@@ -481,7 +481,7 @@
       "inputs": {
         "current_land_count": 0,
         "insect_token_count": -1,
-        "lands_played": 99,
+        "lands_played": 12,
         "scute_swarm_count": -1
       }
     },
@@ -493,7 +493,7 @@
       "inputs": {
         "current_land_count": 0,
         "insect_token_count": -1,
-        "lands_played": 100,
+        "lands_played": 13,
         "scute_swarm_count": -1
       }
     },
@@ -504,7 +504,7 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": 0,
         "scute_swarm_count": -1
       }
@@ -516,7 +516,7 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": -1,
         "scute_swarm_count": -1
       }
@@ -528,8 +528,8 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 999999999,
-        "lands_played": 99,
+        "insect_token_count": 999,
+        "lands_played": 12,
         "scute_swarm_count": -1
       }
     },
@@ -540,8 +540,8 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 999999999,
-        "lands_played": 100,
+        "insect_token_count": 999,
+        "lands_played": 13,
         "scute_swarm_count": -1
       }
     },
@@ -552,7 +552,7 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": 0,
         "scute_swarm_count": -1
       }
@@ -564,7 +564,7 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": -1,
         "scute_swarm_count": -1
       }
@@ -576,8 +576,8 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 1000000000,
-        "lands_played": 99,
+        "insect_token_count": 1000,
+        "lands_played": 12,
         "scute_swarm_count": -1
       }
     },
@@ -588,8 +588,8 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 1000000000,
-        "lands_played": 100,
+        "insect_token_count": 1000,
+        "lands_played": 13,
         "scute_swarm_count": -1
       }
     },
@@ -598,13 +598,13 @@
         "current_land_count": 0,
         "insect_token_count": 0,
         "lands_played": 0,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       },
       "outputs": {
         "final_insect_count": 0,
         "final_land_count": 0,
-        "final_scute_swarm_count": 999999999,
-        "total_power": 999999999
+        "final_scute_swarm_count": 99,
+        "total_power": 99
       }
     },
     {
@@ -616,21 +616,21 @@
         "current_land_count": 0,
         "insect_token_count": 0,
         "lands_played": -1,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
       "inputs": {
         "current_land_count": 0,
         "insect_token_count": 0,
-        "lands_played": 99,
-        "scute_swarm_count": 999999999
+        "lands_played": 12,
+        "scute_swarm_count": 99
       },
       "outputs": {
-        "final_insect_count": 4999999995,
-        "final_land_count": 99,
-        "final_scute_swarm_count": 19807040608759043769819903185614012416,
-        "total_power": 19807040608759043769819903190614012411
+        "final_insect_count": 495,
+        "final_land_count": 12,
+        "final_scute_swarm_count": 12672,
+        "total_power": 13167
       }
     },
     {
@@ -641,8 +641,8 @@
       "inputs": {
         "current_land_count": 0,
         "insect_token_count": 0,
-        "lands_played": 100,
-        "scute_swarm_count": 999999999
+        "lands_played": 13,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -654,7 +654,7 @@
         "current_land_count": 0,
         "insect_token_count": -1,
         "lands_played": 0,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
@@ -666,7 +666,7 @@
         "current_land_count": 0,
         "insect_token_count": -1,
         "lands_played": -1,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
@@ -677,8 +677,8 @@
       "inputs": {
         "current_land_count": 0,
         "insect_token_count": -1,
-        "lands_played": 99,
-        "scute_swarm_count": 999999999
+        "lands_played": 12,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -689,22 +689,22 @@
       "inputs": {
         "current_land_count": 0,
         "insect_token_count": -1,
-        "lands_played": 100,
-        "scute_swarm_count": 999999999
+        "lands_played": 13,
+        "scute_swarm_count": 99
       }
     },
     {
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": 0,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       },
       "outputs": {
-        "final_insect_count": 999999999,
+        "final_insect_count": 999,
         "final_land_count": 0,
-        "final_scute_swarm_count": 999999999,
-        "total_power": 1999999998
+        "final_scute_swarm_count": 99,
+        "total_power": 1098
       }
     },
     {
@@ -714,23 +714,23 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": -1,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 999999999,
-        "lands_played": 99,
-        "scute_swarm_count": 999999999
+        "insect_token_count": 999,
+        "lands_played": 12,
+        "scute_swarm_count": 99
       },
       "outputs": {
-        "final_insect_count": 5999999994,
-        "final_land_count": 99,
-        "final_scute_swarm_count": 19807040608759043769819903185614012416,
-        "total_power": 19807040608759043769819903191614012410
+        "final_insect_count": 1494,
+        "final_land_count": 12,
+        "final_scute_swarm_count": 12672,
+        "total_power": 14166
       }
     },
     {
@@ -740,9 +740,9 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 999999999,
-        "lands_played": 100,
-        "scute_swarm_count": 999999999
+        "insect_token_count": 999,
+        "lands_played": 13,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -752,9 +752,9 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": 0,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
@@ -764,9 +764,9 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": -1,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
@@ -776,9 +776,9 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 1000000000,
-        "lands_played": 99,
-        "scute_swarm_count": 999999999
+        "insect_token_count": 1000,
+        "lands_played": 12,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -788,9 +788,9 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 1000000000,
-        "lands_played": 100,
-        "scute_swarm_count": 999999999
+        "insect_token_count": 1000,
+        "lands_played": 13,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -802,7 +802,7 @@
         "current_land_count": 0,
         "insect_token_count": 0,
         "lands_played": 0,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -814,7 +814,7 @@
         "current_land_count": 0,
         "insect_token_count": 0,
         "lands_played": -1,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -825,8 +825,8 @@
       "inputs": {
         "current_land_count": 0,
         "insect_token_count": 0,
-        "lands_played": 99,
-        "scute_swarm_count": 1000000000
+        "lands_played": 12,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -837,8 +837,8 @@
       "inputs": {
         "current_land_count": 0,
         "insect_token_count": 0,
-        "lands_played": 100,
-        "scute_swarm_count": 1000000000
+        "lands_played": 13,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -850,7 +850,7 @@
         "current_land_count": 0,
         "insect_token_count": -1,
         "lands_played": 0,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -862,7 +862,7 @@
         "current_land_count": 0,
         "insect_token_count": -1,
         "lands_played": -1,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -873,8 +873,8 @@
       "inputs": {
         "current_land_count": 0,
         "insect_token_count": -1,
-        "lands_played": 99,
-        "scute_swarm_count": 1000000000
+        "lands_played": 12,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -885,8 +885,8 @@
       "inputs": {
         "current_land_count": 0,
         "insect_token_count": -1,
-        "lands_played": 100,
-        "scute_swarm_count": 1000000000
+        "lands_played": 13,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -896,9 +896,9 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": 0,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -908,9 +908,9 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": -1,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -920,9 +920,9 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 999999999,
-        "lands_played": 99,
-        "scute_swarm_count": 1000000000
+        "insect_token_count": 999,
+        "lands_played": 12,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -932,9 +932,9 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 999999999,
-        "lands_played": 100,
-        "scute_swarm_count": 1000000000
+        "insect_token_count": 999,
+        "lands_played": 13,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -944,9 +944,9 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": 0,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -956,9 +956,9 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": -1,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -968,9 +968,9 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 1000000000,
-        "lands_played": 99,
-        "scute_swarm_count": 1000000000
+        "insect_token_count": 1000,
+        "lands_played": 12,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -980,9 +980,9 @@
       },
       "inputs": {
         "current_land_count": 0,
-        "insect_token_count": 1000000000,
-        "lands_played": 100,
-        "scute_swarm_count": 1000000000
+        "insect_token_count": 1000,
+        "lands_played": 13,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -994,18 +994,6 @@
         "current_land_count": -1,
         "insect_token_count": 0,
         "lands_played": 0,
-        "scute_swarm_count": 1
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "current_land_count"
-      },
-      "inputs": {
-        "current_land_count": -1,
-        "insect_token_count": 0,
-        "lands_played": -1,
         "scute_swarm_count": 1
       }
     },
@@ -1017,7 +1005,7 @@
       "inputs": {
         "current_land_count": -1,
         "insect_token_count": 0,
-        "lands_played": 99,
+        "lands_played": -1,
         "scute_swarm_count": 1
       }
     },
@@ -1029,7 +1017,19 @@
       "inputs": {
         "current_land_count": -1,
         "insect_token_count": 0,
-        "lands_played": 100,
+        "lands_played": 12,
+        "scute_swarm_count": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "current_land_count"
+      },
+      "inputs": {
+        "current_land_count": -1,
+        "insect_token_count": 0,
+        "lands_played": 13,
         "scute_swarm_count": 1
       }
     },
@@ -1065,7 +1065,7 @@
       "inputs": {
         "current_land_count": -1,
         "insect_token_count": -1,
-        "lands_played": 99,
+        "lands_played": 12,
         "scute_swarm_count": 1
       }
     },
@@ -1077,7 +1077,7 @@
       "inputs": {
         "current_land_count": -1,
         "insect_token_count": -1,
-        "lands_played": 100,
+        "lands_played": 13,
         "scute_swarm_count": 1
       }
     },
@@ -1088,7 +1088,7 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": 0,
         "scute_swarm_count": 1
       }
@@ -1100,7 +1100,7 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": -1,
         "scute_swarm_count": 1
       }
@@ -1112,8 +1112,8 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 999999999,
-        "lands_played": 99,
+        "insect_token_count": 999,
+        "lands_played": 12,
         "scute_swarm_count": 1
       }
     },
@@ -1124,8 +1124,8 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 999999999,
-        "lands_played": 100,
+        "insect_token_count": 999,
+        "lands_played": 13,
         "scute_swarm_count": 1
       }
     },
@@ -1136,7 +1136,7 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": 0,
         "scute_swarm_count": 1
       }
@@ -1148,7 +1148,7 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": -1,
         "scute_swarm_count": 1
       }
@@ -1160,8 +1160,8 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 1000000000,
-        "lands_played": 99,
+        "insect_token_count": 1000,
+        "lands_played": 12,
         "scute_swarm_count": 1
       }
     },
@@ -1172,8 +1172,8 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 1000000000,
-        "lands_played": 100,
+        "insect_token_count": 1000,
+        "lands_played": 13,
         "scute_swarm_count": 1
       }
     },
@@ -1209,7 +1209,7 @@
       "inputs": {
         "current_land_count": -1,
         "insect_token_count": 0,
-        "lands_played": 99,
+        "lands_played": 12,
         "scute_swarm_count": 0
       }
     },
@@ -1221,7 +1221,7 @@
       "inputs": {
         "current_land_count": -1,
         "insect_token_count": 0,
-        "lands_played": 100,
+        "lands_played": 13,
         "scute_swarm_count": 0
       }
     },
@@ -1257,7 +1257,7 @@
       "inputs": {
         "current_land_count": -1,
         "insect_token_count": -1,
-        "lands_played": 99,
+        "lands_played": 12,
         "scute_swarm_count": 0
       }
     },
@@ -1269,7 +1269,7 @@
       "inputs": {
         "current_land_count": -1,
         "insect_token_count": -1,
-        "lands_played": 100,
+        "lands_played": 13,
         "scute_swarm_count": 0
       }
     },
@@ -1280,7 +1280,7 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": 0,
         "scute_swarm_count": 0
       }
@@ -1292,7 +1292,7 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": -1,
         "scute_swarm_count": 0
       }
@@ -1304,8 +1304,8 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 999999999,
-        "lands_played": 99,
+        "insect_token_count": 999,
+        "lands_played": 12,
         "scute_swarm_count": 0
       }
     },
@@ -1316,8 +1316,8 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 999999999,
-        "lands_played": 100,
+        "insect_token_count": 999,
+        "lands_played": 13,
         "scute_swarm_count": 0
       }
     },
@@ -1328,7 +1328,7 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": 0,
         "scute_swarm_count": 0
       }
@@ -1340,7 +1340,7 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": -1,
         "scute_swarm_count": 0
       }
@@ -1352,8 +1352,8 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 1000000000,
-        "lands_played": 99,
+        "insect_token_count": 1000,
+        "lands_played": 12,
         "scute_swarm_count": 0
       }
     },
@@ -1364,8 +1364,8 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 1000000000,
-        "lands_played": 100,
+        "insect_token_count": 1000,
+        "lands_played": 13,
         "scute_swarm_count": 0
       }
     },
@@ -1401,7 +1401,7 @@
       "inputs": {
         "current_land_count": -1,
         "insect_token_count": 0,
-        "lands_played": 99,
+        "lands_played": 12,
         "scute_swarm_count": -1
       }
     },
@@ -1413,7 +1413,7 @@
       "inputs": {
         "current_land_count": -1,
         "insect_token_count": 0,
-        "lands_played": 100,
+        "lands_played": 13,
         "scute_swarm_count": -1
       }
     },
@@ -1449,7 +1449,7 @@
       "inputs": {
         "current_land_count": -1,
         "insect_token_count": -1,
-        "lands_played": 99,
+        "lands_played": 12,
         "scute_swarm_count": -1
       }
     },
@@ -1461,7 +1461,7 @@
       "inputs": {
         "current_land_count": -1,
         "insect_token_count": -1,
-        "lands_played": 100,
+        "lands_played": 13,
         "scute_swarm_count": -1
       }
     },
@@ -1472,7 +1472,7 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": 0,
         "scute_swarm_count": -1
       }
@@ -1484,7 +1484,7 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": -1,
         "scute_swarm_count": -1
       }
@@ -1496,8 +1496,8 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 999999999,
-        "lands_played": 99,
+        "insect_token_count": 999,
+        "lands_played": 12,
         "scute_swarm_count": -1
       }
     },
@@ -1508,8 +1508,8 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 999999999,
-        "lands_played": 100,
+        "insect_token_count": 999,
+        "lands_played": 13,
         "scute_swarm_count": -1
       }
     },
@@ -1520,7 +1520,7 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": 0,
         "scute_swarm_count": -1
       }
@@ -1532,7 +1532,7 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": -1,
         "scute_swarm_count": -1
       }
@@ -1544,8 +1544,8 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 1000000000,
-        "lands_played": 99,
+        "insect_token_count": 1000,
+        "lands_played": 12,
         "scute_swarm_count": -1
       }
     },
@@ -1556,8 +1556,8 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 1000000000,
-        "lands_played": 100,
+        "insect_token_count": 1000,
+        "lands_played": 13,
         "scute_swarm_count": -1
       }
     },
@@ -1570,7 +1570,7 @@
         "current_land_count": -1,
         "insect_token_count": 0,
         "lands_played": 0,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
@@ -1582,7 +1582,7 @@
         "current_land_count": -1,
         "insect_token_count": 0,
         "lands_played": -1,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
@@ -1593,8 +1593,8 @@
       "inputs": {
         "current_land_count": -1,
         "insect_token_count": 0,
-        "lands_played": 99,
-        "scute_swarm_count": 999999999
+        "lands_played": 12,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -1605,8 +1605,8 @@
       "inputs": {
         "current_land_count": -1,
         "insect_token_count": 0,
-        "lands_played": 100,
-        "scute_swarm_count": 999999999
+        "lands_played": 13,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -1618,7 +1618,7 @@
         "current_land_count": -1,
         "insect_token_count": -1,
         "lands_played": 0,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
@@ -1630,7 +1630,7 @@
         "current_land_count": -1,
         "insect_token_count": -1,
         "lands_played": -1,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
@@ -1641,8 +1641,8 @@
       "inputs": {
         "current_land_count": -1,
         "insect_token_count": -1,
-        "lands_played": 99,
-        "scute_swarm_count": 999999999
+        "lands_played": 12,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -1653,8 +1653,8 @@
       "inputs": {
         "current_land_count": -1,
         "insect_token_count": -1,
-        "lands_played": 100,
-        "scute_swarm_count": 999999999
+        "lands_played": 13,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -1664,9 +1664,9 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": 0,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
@@ -1676,9 +1676,9 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": -1,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
@@ -1688,9 +1688,9 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 999999999,
-        "lands_played": 99,
-        "scute_swarm_count": 999999999
+        "insect_token_count": 999,
+        "lands_played": 12,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -1700,9 +1700,9 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 999999999,
-        "lands_played": 100,
-        "scute_swarm_count": 999999999
+        "insect_token_count": 999,
+        "lands_played": 13,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -1712,9 +1712,9 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": 0,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
@@ -1724,9 +1724,9 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": -1,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
@@ -1736,9 +1736,9 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 1000000000,
-        "lands_played": 99,
-        "scute_swarm_count": 999999999
+        "insect_token_count": 1000,
+        "lands_played": 12,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -1748,9 +1748,9 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 1000000000,
-        "lands_played": 100,
-        "scute_swarm_count": 999999999
+        "insect_token_count": 1000,
+        "lands_played": 13,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -1762,7 +1762,7 @@
         "current_land_count": -1,
         "insect_token_count": 0,
         "lands_played": 0,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -1774,7 +1774,7 @@
         "current_land_count": -1,
         "insect_token_count": 0,
         "lands_played": -1,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -1785,8 +1785,8 @@
       "inputs": {
         "current_land_count": -1,
         "insect_token_count": 0,
-        "lands_played": 99,
-        "scute_swarm_count": 1000000000
+        "lands_played": 12,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -1797,8 +1797,8 @@
       "inputs": {
         "current_land_count": -1,
         "insect_token_count": 0,
-        "lands_played": 100,
-        "scute_swarm_count": 1000000000
+        "lands_played": 13,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -1810,7 +1810,7 @@
         "current_land_count": -1,
         "insect_token_count": -1,
         "lands_played": 0,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -1822,7 +1822,7 @@
         "current_land_count": -1,
         "insect_token_count": -1,
         "lands_played": -1,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -1833,8 +1833,8 @@
       "inputs": {
         "current_land_count": -1,
         "insect_token_count": -1,
-        "lands_played": 99,
-        "scute_swarm_count": 1000000000
+        "lands_played": 12,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -1845,8 +1845,8 @@
       "inputs": {
         "current_land_count": -1,
         "insect_token_count": -1,
-        "lands_played": 100,
-        "scute_swarm_count": 1000000000
+        "lands_played": 13,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -1856,9 +1856,9 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": 0,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -1868,9 +1868,9 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": -1,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -1880,9 +1880,9 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 999999999,
-        "lands_played": 99,
-        "scute_swarm_count": 1000000000
+        "insect_token_count": 999,
+        "lands_played": 12,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -1892,9 +1892,9 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 999999999,
-        "lands_played": 100,
-        "scute_swarm_count": 1000000000
+        "insect_token_count": 999,
+        "lands_played": 13,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -1904,9 +1904,9 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": 0,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -1916,9 +1916,9 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": -1,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -1928,9 +1928,9 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 1000000000,
-        "lands_played": 99,
-        "scute_swarm_count": 1000000000
+        "insect_token_count": 1000,
+        "lands_played": 12,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -1940,9 +1940,9 @@
       },
       "inputs": {
         "current_land_count": -1,
-        "insect_token_count": 1000000000,
-        "lands_played": 100,
-        "scute_swarm_count": 1000000000
+        "insect_token_count": 1000,
+        "lands_played": 13,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -1975,14 +1975,14 @@
       "inputs": {
         "current_land_count": 99,
         "insect_token_count": 0,
-        "lands_played": 99,
+        "lands_played": 12,
         "scute_swarm_count": 1
       },
       "outputs": {
         "final_insect_count": 0,
-        "final_land_count": 198,
-        "final_scute_swarm_count": 633825300114114700748351602688,
-        "total_power": 633825300114114700748351602688
+        "final_land_count": 111,
+        "final_scute_swarm_count": 4096,
+        "total_power": 4096
       }
     },
     {
@@ -1993,7 +1993,7 @@
       "inputs": {
         "current_land_count": 99,
         "insect_token_count": 0,
-        "lands_played": 100,
+        "lands_played": 13,
         "scute_swarm_count": 1
       }
     },
@@ -2029,7 +2029,7 @@
       "inputs": {
         "current_land_count": 99,
         "insect_token_count": -1,
-        "lands_played": 99,
+        "lands_played": 12,
         "scute_swarm_count": 1
       }
     },
@@ -2041,22 +2041,22 @@
       "inputs": {
         "current_land_count": 99,
         "insect_token_count": -1,
-        "lands_played": 100,
+        "lands_played": 13,
         "scute_swarm_count": 1
       }
     },
     {
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": 0,
         "scute_swarm_count": 1
       },
       "outputs": {
-        "final_insect_count": 999999999,
+        "final_insect_count": 999,
         "final_land_count": 99,
         "final_scute_swarm_count": 1,
-        "total_power": 1000000000
+        "total_power": 1000
       }
     },
     {
@@ -2066,7 +2066,7 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": -1,
         "scute_swarm_count": 1
       }
@@ -2074,15 +2074,15 @@
     {
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 999999999,
-        "lands_played": 99,
+        "insect_token_count": 999,
+        "lands_played": 12,
         "scute_swarm_count": 1
       },
       "outputs": {
-        "final_insect_count": 999999999,
-        "final_land_count": 198,
-        "final_scute_swarm_count": 633825300114114700748351602688,
-        "total_power": 633825300114114700749351602687
+        "final_insect_count": 999,
+        "final_land_count": 111,
+        "final_scute_swarm_count": 4096,
+        "total_power": 5095
       }
     },
     {
@@ -2092,8 +2092,8 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 999999999,
-        "lands_played": 100,
+        "insect_token_count": 999,
+        "lands_played": 13,
         "scute_swarm_count": 1
       }
     },
@@ -2104,7 +2104,7 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": 0,
         "scute_swarm_count": 1
       }
@@ -2116,7 +2116,7 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": -1,
         "scute_swarm_count": 1
       }
@@ -2128,8 +2128,8 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 1000000000,
-        "lands_played": 99,
+        "insect_token_count": 1000,
+        "lands_played": 12,
         "scute_swarm_count": 1
       }
     },
@@ -2140,8 +2140,8 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 1000000000,
-        "lands_played": 100,
+        "insect_token_count": 1000,
+        "lands_played": 13,
         "scute_swarm_count": 1
       }
     },
@@ -2175,12 +2175,12 @@
       "inputs": {
         "current_land_count": 99,
         "insect_token_count": 0,
-        "lands_played": 99,
+        "lands_played": 12,
         "scute_swarm_count": 0
       },
       "outputs": {
         "final_insect_count": 0,
-        "final_land_count": 198,
+        "final_land_count": 111,
         "final_scute_swarm_count": 0,
         "total_power": 0
       }
@@ -2193,7 +2193,7 @@
       "inputs": {
         "current_land_count": 99,
         "insect_token_count": 0,
-        "lands_played": 100,
+        "lands_played": 13,
         "scute_swarm_count": 0
       }
     },
@@ -2229,7 +2229,7 @@
       "inputs": {
         "current_land_count": 99,
         "insect_token_count": -1,
-        "lands_played": 99,
+        "lands_played": 12,
         "scute_swarm_count": 0
       }
     },
@@ -2241,22 +2241,22 @@
       "inputs": {
         "current_land_count": 99,
         "insect_token_count": -1,
-        "lands_played": 100,
+        "lands_played": 13,
         "scute_swarm_count": 0
       }
     },
     {
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": 0,
         "scute_swarm_count": 0
       },
       "outputs": {
-        "final_insect_count": 999999999,
+        "final_insect_count": 999,
         "final_land_count": 99,
         "final_scute_swarm_count": 0,
-        "total_power": 999999999
+        "total_power": 999
       }
     },
     {
@@ -2266,7 +2266,7 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": -1,
         "scute_swarm_count": 0
       }
@@ -2274,15 +2274,15 @@
     {
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 999999999,
-        "lands_played": 99,
+        "insect_token_count": 999,
+        "lands_played": 12,
         "scute_swarm_count": 0
       },
       "outputs": {
-        "final_insect_count": 999999999,
-        "final_land_count": 198,
+        "final_insect_count": 999,
+        "final_land_count": 111,
         "final_scute_swarm_count": 0,
-        "total_power": 999999999
+        "total_power": 999
       }
     },
     {
@@ -2292,8 +2292,8 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 999999999,
-        "lands_played": 100,
+        "insect_token_count": 999,
+        "lands_played": 13,
         "scute_swarm_count": 0
       }
     },
@@ -2304,7 +2304,7 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": 0,
         "scute_swarm_count": 0
       }
@@ -2316,7 +2316,7 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": -1,
         "scute_swarm_count": 0
       }
@@ -2328,8 +2328,8 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 1000000000,
-        "lands_played": 99,
+        "insect_token_count": 1000,
+        "lands_played": 12,
         "scute_swarm_count": 0
       }
     },
@@ -2340,8 +2340,8 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 1000000000,
-        "lands_played": 100,
+        "insect_token_count": 1000,
+        "lands_played": 13,
         "scute_swarm_count": 0
       }
     },
@@ -2377,7 +2377,7 @@
       "inputs": {
         "current_land_count": 99,
         "insect_token_count": 0,
-        "lands_played": 99,
+        "lands_played": 12,
         "scute_swarm_count": -1
       }
     },
@@ -2389,7 +2389,7 @@
       "inputs": {
         "current_land_count": 99,
         "insect_token_count": 0,
-        "lands_played": 100,
+        "lands_played": 13,
         "scute_swarm_count": -1
       }
     },
@@ -2425,7 +2425,7 @@
       "inputs": {
         "current_land_count": 99,
         "insect_token_count": -1,
-        "lands_played": 99,
+        "lands_played": 12,
         "scute_swarm_count": -1
       }
     },
@@ -2437,7 +2437,7 @@
       "inputs": {
         "current_land_count": 99,
         "insect_token_count": -1,
-        "lands_played": 100,
+        "lands_played": 13,
         "scute_swarm_count": -1
       }
     },
@@ -2448,7 +2448,7 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": 0,
         "scute_swarm_count": -1
       }
@@ -2460,7 +2460,7 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": -1,
         "scute_swarm_count": -1
       }
@@ -2472,8 +2472,8 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 999999999,
-        "lands_played": 99,
+        "insect_token_count": 999,
+        "lands_played": 12,
         "scute_swarm_count": -1
       }
     },
@@ -2484,8 +2484,8 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 999999999,
-        "lands_played": 100,
+        "insect_token_count": 999,
+        "lands_played": 13,
         "scute_swarm_count": -1
       }
     },
@@ -2496,7 +2496,7 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": 0,
         "scute_swarm_count": -1
       }
@@ -2508,7 +2508,7 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": -1,
         "scute_swarm_count": -1
       }
@@ -2520,8 +2520,8 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 1000000000,
-        "lands_played": 99,
+        "insect_token_count": 1000,
+        "lands_played": 12,
         "scute_swarm_count": -1
       }
     },
@@ -2532,8 +2532,8 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 1000000000,
-        "lands_played": 100,
+        "insect_token_count": 1000,
+        "lands_played": 13,
         "scute_swarm_count": -1
       }
     },
@@ -2542,13 +2542,13 @@
         "current_land_count": 99,
         "insect_token_count": 0,
         "lands_played": 0,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       },
       "outputs": {
         "final_insect_count": 0,
         "final_land_count": 99,
-        "final_scute_swarm_count": 999999999,
-        "total_power": 999999999
+        "final_scute_swarm_count": 99,
+        "total_power": 99
       }
     },
     {
@@ -2560,21 +2560,21 @@
         "current_land_count": 99,
         "insect_token_count": 0,
         "lands_played": -1,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
       "inputs": {
         "current_land_count": 99,
         "insect_token_count": 0,
-        "lands_played": 99,
-        "scute_swarm_count": 999999999
+        "lands_played": 12,
+        "scute_swarm_count": 99
       },
       "outputs": {
         "final_insect_count": 0,
-        "final_land_count": 198,
-        "final_scute_swarm_count": 633825299480289400634236901939648397312,
-        "total_power": 633825299480289400634236901939648397312
+        "final_land_count": 111,
+        "final_scute_swarm_count": 405504,
+        "total_power": 405504
       }
     },
     {
@@ -2585,8 +2585,8 @@
       "inputs": {
         "current_land_count": 99,
         "insect_token_count": 0,
-        "lands_played": 100,
-        "scute_swarm_count": 999999999
+        "lands_played": 13,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -2598,7 +2598,7 @@
         "current_land_count": 99,
         "insect_token_count": -1,
         "lands_played": 0,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
@@ -2610,7 +2610,7 @@
         "current_land_count": 99,
         "insect_token_count": -1,
         "lands_played": -1,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
@@ -2621,8 +2621,8 @@
       "inputs": {
         "current_land_count": 99,
         "insect_token_count": -1,
-        "lands_played": 99,
-        "scute_swarm_count": 999999999
+        "lands_played": 12,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -2633,22 +2633,22 @@
       "inputs": {
         "current_land_count": 99,
         "insect_token_count": -1,
-        "lands_played": 100,
-        "scute_swarm_count": 999999999
+        "lands_played": 13,
+        "scute_swarm_count": 99
       }
     },
     {
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": 0,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       },
       "outputs": {
-        "final_insect_count": 999999999,
+        "final_insect_count": 999,
         "final_land_count": 99,
-        "final_scute_swarm_count": 999999999,
-        "total_power": 1999999998
+        "final_scute_swarm_count": 99,
+        "total_power": 1098
       }
     },
     {
@@ -2658,23 +2658,23 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": -1,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 999999999,
-        "lands_played": 99,
-        "scute_swarm_count": 999999999
+        "insect_token_count": 999,
+        "lands_played": 12,
+        "scute_swarm_count": 99
       },
       "outputs": {
-        "final_insect_count": 999999999,
-        "final_land_count": 198,
-        "final_scute_swarm_count": 633825299480289400634236901939648397312,
-        "total_power": 633825299480289400634236901940648397311
+        "final_insect_count": 999,
+        "final_land_count": 111,
+        "final_scute_swarm_count": 405504,
+        "total_power": 406503
       }
     },
     {
@@ -2684,9 +2684,9 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 999999999,
-        "lands_played": 100,
-        "scute_swarm_count": 999999999
+        "insect_token_count": 999,
+        "lands_played": 13,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -2696,9 +2696,9 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": 0,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
@@ -2708,9 +2708,9 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": -1,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
@@ -2720,9 +2720,9 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 1000000000,
-        "lands_played": 99,
-        "scute_swarm_count": 999999999
+        "insect_token_count": 1000,
+        "lands_played": 12,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -2732,9 +2732,9 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 1000000000,
-        "lands_played": 100,
-        "scute_swarm_count": 999999999
+        "insect_token_count": 1000,
+        "lands_played": 13,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -2746,7 +2746,7 @@
         "current_land_count": 99,
         "insect_token_count": 0,
         "lands_played": 0,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -2758,7 +2758,7 @@
         "current_land_count": 99,
         "insect_token_count": 0,
         "lands_played": -1,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -2769,8 +2769,8 @@
       "inputs": {
         "current_land_count": 99,
         "insect_token_count": 0,
-        "lands_played": 99,
-        "scute_swarm_count": 1000000000
+        "lands_played": 12,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -2781,8 +2781,8 @@
       "inputs": {
         "current_land_count": 99,
         "insect_token_count": 0,
-        "lands_played": 100,
-        "scute_swarm_count": 1000000000
+        "lands_played": 13,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -2794,7 +2794,7 @@
         "current_land_count": 99,
         "insect_token_count": -1,
         "lands_played": 0,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -2806,7 +2806,7 @@
         "current_land_count": 99,
         "insect_token_count": -1,
         "lands_played": -1,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -2817,8 +2817,8 @@
       "inputs": {
         "current_land_count": 99,
         "insect_token_count": -1,
-        "lands_played": 99,
-        "scute_swarm_count": 1000000000
+        "lands_played": 12,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -2829,8 +2829,8 @@
       "inputs": {
         "current_land_count": 99,
         "insect_token_count": -1,
-        "lands_played": 100,
-        "scute_swarm_count": 1000000000
+        "lands_played": 13,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -2840,9 +2840,9 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": 0,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -2852,9 +2852,9 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": -1,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -2864,9 +2864,9 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 999999999,
-        "lands_played": 99,
-        "scute_swarm_count": 1000000000
+        "insect_token_count": 999,
+        "lands_played": 12,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -2876,9 +2876,9 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 999999999,
-        "lands_played": 100,
-        "scute_swarm_count": 1000000000
+        "insect_token_count": 999,
+        "lands_played": 13,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -2888,9 +2888,9 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": 0,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -2900,9 +2900,9 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": -1,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -2912,9 +2912,9 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 1000000000,
-        "lands_played": 99,
-        "scute_swarm_count": 1000000000
+        "insect_token_count": 1000,
+        "lands_played": 12,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -2924,9 +2924,9 @@
       },
       "inputs": {
         "current_land_count": 99,
-        "insect_token_count": 1000000000,
-        "lands_played": 100,
-        "scute_swarm_count": 1000000000
+        "insect_token_count": 1000,
+        "lands_played": 13,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -2938,18 +2938,6 @@
         "current_land_count": 100,
         "insect_token_count": 0,
         "lands_played": 0,
-        "scute_swarm_count": 1
-      }
-    },
-    {
-      "error": {
-        "code": "above_max",
-        "field": "current_land_count"
-      },
-      "inputs": {
-        "current_land_count": 100,
-        "insect_token_count": 0,
-        "lands_played": -1,
         "scute_swarm_count": 1
       }
     },
@@ -2961,7 +2949,7 @@
       "inputs": {
         "current_land_count": 100,
         "insect_token_count": 0,
-        "lands_played": 99,
+        "lands_played": -1,
         "scute_swarm_count": 1
       }
     },
@@ -2973,7 +2961,19 @@
       "inputs": {
         "current_land_count": 100,
         "insect_token_count": 0,
-        "lands_played": 100,
+        "lands_played": 12,
+        "scute_swarm_count": 1
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "current_land_count"
+      },
+      "inputs": {
+        "current_land_count": 100,
+        "insect_token_count": 0,
+        "lands_played": 13,
         "scute_swarm_count": 1
       }
     },
@@ -3009,7 +3009,7 @@
       "inputs": {
         "current_land_count": 100,
         "insect_token_count": -1,
-        "lands_played": 99,
+        "lands_played": 12,
         "scute_swarm_count": 1
       }
     },
@@ -3021,7 +3021,7 @@
       "inputs": {
         "current_land_count": 100,
         "insect_token_count": -1,
-        "lands_played": 100,
+        "lands_played": 13,
         "scute_swarm_count": 1
       }
     },
@@ -3032,7 +3032,7 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": 0,
         "scute_swarm_count": 1
       }
@@ -3044,7 +3044,7 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": -1,
         "scute_swarm_count": 1
       }
@@ -3056,8 +3056,8 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 999999999,
-        "lands_played": 99,
+        "insect_token_count": 999,
+        "lands_played": 12,
         "scute_swarm_count": 1
       }
     },
@@ -3068,8 +3068,8 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 999999999,
-        "lands_played": 100,
+        "insect_token_count": 999,
+        "lands_played": 13,
         "scute_swarm_count": 1
       }
     },
@@ -3080,7 +3080,7 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": 0,
         "scute_swarm_count": 1
       }
@@ -3092,7 +3092,7 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": -1,
         "scute_swarm_count": 1
       }
@@ -3104,8 +3104,8 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 1000000000,
-        "lands_played": 99,
+        "insect_token_count": 1000,
+        "lands_played": 12,
         "scute_swarm_count": 1
       }
     },
@@ -3116,8 +3116,8 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 1000000000,
-        "lands_played": 100,
+        "insect_token_count": 1000,
+        "lands_played": 13,
         "scute_swarm_count": 1
       }
     },
@@ -3153,7 +3153,7 @@
       "inputs": {
         "current_land_count": 100,
         "insect_token_count": 0,
-        "lands_played": 99,
+        "lands_played": 12,
         "scute_swarm_count": 0
       }
     },
@@ -3165,7 +3165,7 @@
       "inputs": {
         "current_land_count": 100,
         "insect_token_count": 0,
-        "lands_played": 100,
+        "lands_played": 13,
         "scute_swarm_count": 0
       }
     },
@@ -3201,7 +3201,7 @@
       "inputs": {
         "current_land_count": 100,
         "insect_token_count": -1,
-        "lands_played": 99,
+        "lands_played": 12,
         "scute_swarm_count": 0
       }
     },
@@ -3213,7 +3213,7 @@
       "inputs": {
         "current_land_count": 100,
         "insect_token_count": -1,
-        "lands_played": 100,
+        "lands_played": 13,
         "scute_swarm_count": 0
       }
     },
@@ -3224,7 +3224,7 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": 0,
         "scute_swarm_count": 0
       }
@@ -3236,7 +3236,7 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": -1,
         "scute_swarm_count": 0
       }
@@ -3248,8 +3248,8 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 999999999,
-        "lands_played": 99,
+        "insect_token_count": 999,
+        "lands_played": 12,
         "scute_swarm_count": 0
       }
     },
@@ -3260,8 +3260,8 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 999999999,
-        "lands_played": 100,
+        "insect_token_count": 999,
+        "lands_played": 13,
         "scute_swarm_count": 0
       }
     },
@@ -3272,7 +3272,7 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": 0,
         "scute_swarm_count": 0
       }
@@ -3284,7 +3284,7 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": -1,
         "scute_swarm_count": 0
       }
@@ -3296,8 +3296,8 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 1000000000,
-        "lands_played": 99,
+        "insect_token_count": 1000,
+        "lands_played": 12,
         "scute_swarm_count": 0
       }
     },
@@ -3308,8 +3308,8 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 1000000000,
-        "lands_played": 100,
+        "insect_token_count": 1000,
+        "lands_played": 13,
         "scute_swarm_count": 0
       }
     },
@@ -3345,7 +3345,7 @@
       "inputs": {
         "current_land_count": 100,
         "insect_token_count": 0,
-        "lands_played": 99,
+        "lands_played": 12,
         "scute_swarm_count": -1
       }
     },
@@ -3357,7 +3357,7 @@
       "inputs": {
         "current_land_count": 100,
         "insect_token_count": 0,
-        "lands_played": 100,
+        "lands_played": 13,
         "scute_swarm_count": -1
       }
     },
@@ -3393,7 +3393,7 @@
       "inputs": {
         "current_land_count": 100,
         "insect_token_count": -1,
-        "lands_played": 99,
+        "lands_played": 12,
         "scute_swarm_count": -1
       }
     },
@@ -3405,7 +3405,7 @@
       "inputs": {
         "current_land_count": 100,
         "insect_token_count": -1,
-        "lands_played": 100,
+        "lands_played": 13,
         "scute_swarm_count": -1
       }
     },
@@ -3416,7 +3416,7 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": 0,
         "scute_swarm_count": -1
       }
@@ -3428,7 +3428,7 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": -1,
         "scute_swarm_count": -1
       }
@@ -3440,8 +3440,8 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 999999999,
-        "lands_played": 99,
+        "insect_token_count": 999,
+        "lands_played": 12,
         "scute_swarm_count": -1
       }
     },
@@ -3452,8 +3452,8 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 999999999,
-        "lands_played": 100,
+        "insect_token_count": 999,
+        "lands_played": 13,
         "scute_swarm_count": -1
       }
     },
@@ -3464,7 +3464,7 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": 0,
         "scute_swarm_count": -1
       }
@@ -3476,7 +3476,7 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": -1,
         "scute_swarm_count": -1
       }
@@ -3488,8 +3488,8 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 1000000000,
-        "lands_played": 99,
+        "insect_token_count": 1000,
+        "lands_played": 12,
         "scute_swarm_count": -1
       }
     },
@@ -3500,8 +3500,8 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 1000000000,
-        "lands_played": 100,
+        "insect_token_count": 1000,
+        "lands_played": 13,
         "scute_swarm_count": -1
       }
     },
@@ -3514,7 +3514,7 @@
         "current_land_count": 100,
         "insect_token_count": 0,
         "lands_played": 0,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
@@ -3526,7 +3526,7 @@
         "current_land_count": 100,
         "insect_token_count": 0,
         "lands_played": -1,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
@@ -3537,8 +3537,8 @@
       "inputs": {
         "current_land_count": 100,
         "insect_token_count": 0,
-        "lands_played": 99,
-        "scute_swarm_count": 999999999
+        "lands_played": 12,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -3549,8 +3549,8 @@
       "inputs": {
         "current_land_count": 100,
         "insect_token_count": 0,
-        "lands_played": 100,
-        "scute_swarm_count": 999999999
+        "lands_played": 13,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -3562,7 +3562,7 @@
         "current_land_count": 100,
         "insect_token_count": -1,
         "lands_played": 0,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
@@ -3574,7 +3574,7 @@
         "current_land_count": 100,
         "insect_token_count": -1,
         "lands_played": -1,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
@@ -3585,8 +3585,8 @@
       "inputs": {
         "current_land_count": 100,
         "insect_token_count": -1,
-        "lands_played": 99,
-        "scute_swarm_count": 999999999
+        "lands_played": 12,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -3597,8 +3597,8 @@
       "inputs": {
         "current_land_count": 100,
         "insect_token_count": -1,
-        "lands_played": 100,
-        "scute_swarm_count": 999999999
+        "lands_played": 13,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -3608,9 +3608,9 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": 0,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
@@ -3620,9 +3620,9 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": -1,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
@@ -3632,9 +3632,9 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 999999999,
-        "lands_played": 99,
-        "scute_swarm_count": 999999999
+        "insect_token_count": 999,
+        "lands_played": 12,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -3644,9 +3644,9 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 999999999,
-        "lands_played": 100,
-        "scute_swarm_count": 999999999
+        "insect_token_count": 999,
+        "lands_played": 13,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -3656,9 +3656,9 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": 0,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
@@ -3668,9 +3668,9 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": -1,
-        "scute_swarm_count": 999999999
+        "scute_swarm_count": 99
       }
     },
     {
@@ -3680,9 +3680,9 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 1000000000,
-        "lands_played": 99,
-        "scute_swarm_count": 999999999
+        "insect_token_count": 1000,
+        "lands_played": 12,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -3692,9 +3692,9 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 1000000000,
-        "lands_played": 100,
-        "scute_swarm_count": 999999999
+        "insect_token_count": 1000,
+        "lands_played": 13,
+        "scute_swarm_count": 99
       }
     },
     {
@@ -3706,7 +3706,7 @@
         "current_land_count": 100,
         "insect_token_count": 0,
         "lands_played": 0,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -3718,7 +3718,7 @@
         "current_land_count": 100,
         "insect_token_count": 0,
         "lands_played": -1,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -3729,8 +3729,8 @@
       "inputs": {
         "current_land_count": 100,
         "insect_token_count": 0,
-        "lands_played": 99,
-        "scute_swarm_count": 1000000000
+        "lands_played": 12,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -3741,8 +3741,8 @@
       "inputs": {
         "current_land_count": 100,
         "insect_token_count": 0,
-        "lands_played": 100,
-        "scute_swarm_count": 1000000000
+        "lands_played": 13,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -3754,7 +3754,7 @@
         "current_land_count": 100,
         "insect_token_count": -1,
         "lands_played": 0,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -3766,7 +3766,7 @@
         "current_land_count": 100,
         "insect_token_count": -1,
         "lands_played": -1,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -3777,8 +3777,8 @@
       "inputs": {
         "current_land_count": 100,
         "insect_token_count": -1,
-        "lands_played": 99,
-        "scute_swarm_count": 1000000000
+        "lands_played": 12,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -3789,8 +3789,8 @@
       "inputs": {
         "current_land_count": 100,
         "insect_token_count": -1,
-        "lands_played": 100,
-        "scute_swarm_count": 1000000000
+        "lands_played": 13,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -3800,9 +3800,9 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": 0,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -3812,9 +3812,9 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 999999999,
+        "insect_token_count": 999,
         "lands_played": -1,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -3824,9 +3824,9 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 999999999,
-        "lands_played": 99,
-        "scute_swarm_count": 1000000000
+        "insect_token_count": 999,
+        "lands_played": 12,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -3836,9 +3836,9 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 999999999,
-        "lands_played": 100,
-        "scute_swarm_count": 1000000000
+        "insect_token_count": 999,
+        "lands_played": 13,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -3848,9 +3848,9 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": 0,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -3860,9 +3860,9 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 1000000000,
+        "insect_token_count": 1000,
         "lands_played": -1,
-        "scute_swarm_count": 1000000000
+        "scute_swarm_count": 100
       }
     },
     {
@@ -3872,9 +3872,9 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 1000000000,
-        "lands_played": 99,
-        "scute_swarm_count": 1000000000
+        "insect_token_count": 1000,
+        "lands_played": 12,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -3884,9 +3884,9 @@
       },
       "inputs": {
         "current_land_count": 100,
-        "insect_token_count": 1000000000,
-        "lands_played": 100,
-        "scute_swarm_count": 1000000000
+        "insect_token_count": 1000,
+        "lands_played": 13,
+        "scute_swarm_count": 100
       }
     },
     {
@@ -3918,17 +3918,15 @@
       }
     },
     {
+      "error": {
+        "code": "above_max",
+        "field": "scute_swarm_count"
+      },
       "inputs": {
         "current_land_count": 6,
         "insect_token_count": 0,
         "lands_played": 99,
         "scute_swarm_count": 999999999
-      },
-      "outputs": {
-        "final_insect_count": 0,
-        "final_land_count": 105,
-        "final_scute_swarm_count": 633825299480289400634236901939648397312,
-        "total_power": 633825299480289400634236901939648397312
       }
     }
   ],

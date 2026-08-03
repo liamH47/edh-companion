@@ -6,7 +6,9 @@ from typing import Any
 
 from .schema import CardMetadata, FieldKind, FieldSpec, OutputSpec, VisibleIf
 
-MAX_CREATURE_COUNT = 999
+# Each trigger squares this into the total (X creatures each gaining +X/+X), so the
+# cap is squared too. 99 creatures is already a board that has won without attacking.
+MAX_CREATURE_COUNT = 99
 MAX_TOTAL_POWER = 9_999
 MAX_ADDITIONAL_TRIGGERS = 1
 
