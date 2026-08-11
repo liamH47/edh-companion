@@ -126,7 +126,11 @@ export function podPairings(
       members.push(remaining.splice(bestIndex, 1)[0])
     }
 
-    matches.push(makeMatch(members))
+    // A pod that comes out to a single player (a Commander field dropped down to one
+    // survivor) has no table to sit at. Record it as a bye -- which carries a result and
+    // so completes the round -- rather than a one-entrant `makeMatch`, whose null result
+    // the UI can never report, deadlocking the tournament.
+    matches.push(members.length === 1 ? makeBye(members[0]) : makeMatch(members))
   }
 
   return { matches, hadToRepeatPairing }

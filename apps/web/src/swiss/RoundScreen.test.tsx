@@ -147,6 +147,30 @@ describe('RoundScreen', () => {
     expect(screen.queryByRole('button', { name: /Start round/ })).not.toBeInTheDocument()
   })
 
+  it('falls back to the raw id rather than crashing when a match names an unknown entrant', () => {
+    // A stale or hand-edited saved tournament can carry a match id that is no longer in
+    // the entrants list. That must degrade to a bare id, not throw through the top-level
+    // ErrorBoundary and blank the whole app.
+    renderRound({
+      tournament: makeTournament({
+        entrants: makeEntrants(2),
+        rounds: [round(1, [match('entrant-1', 'entrant-999', null)])],
+      }),
+    })
+    expect(screen.getByText('entrant-999')).toBeInTheDocument()
+  })
+
+  it('reports an empty field instead of offering a round when everyone has dropped', () => {
+    renderRound({
+      tournament: makeTournament({
+        entrants: makeEntrants(2).map((entrant) => ({ ...entrant, droppedAfterRound: 1 })),
+        rounds: [round(1, [match('entrant-1', 'entrant-2', result(2, 0))])],
+      }),
+    })
+    expect(screen.queryByRole('button', { name: /Start round/ })).not.toBeInTheDocument()
+    expect(screen.getByText(/no field left to pair/)).toBeInTheDocument()
+  })
+
 
   it('swaps two entrants between matches', async () => {
     const user = userEvent.setup()

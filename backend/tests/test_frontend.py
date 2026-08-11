@@ -56,3 +56,38 @@ def test_mount_frontend_serves_a_real_file_outside_the_assets_mount(tmp_path: Pa
     response = TestClient(app).get("/favicon.svg")
     assert response.status_code == 200
     assert "svg" in response.text
+
+
+def test_mount_frontend_does_not_serve_files_via_dotdot_traversal(tmp_path: Path) -> None:
+    # A secret sits one directory above the served dist root. `..` segments in the URL
+    # must not climb out to it -- they fall through to the SPA shell instead.
+    dist = tmp_path / "static"
+    dist.mkdir()
+    (dist / "index.html").write_text("<html>root</html>")
+    (tmp_path / "secret.txt").write_text("TOP SECRET")
+    app = FastAPI()
+    mount_frontend(app, dist)
+
+    client = TestClient(app)
+    for path in ("/../secret.txt", "/..%2fsecret.txt", "/subdir/../../secret.txt"):
+        response = client.get(path)
+        assert "TOP SECRET" not in response.text
+        assert "root" in response.text
+
+
+def test_mount_frontend_does_not_serve_files_via_absolute_path(tmp_path: Path) -> None:
+    # `dist / "/abs/path"` collapses to "/abs/path" under pathlib -- the guard must reject
+    # an absolute candidate rather than reading it off the real filesystem.
+    dist = tmp_path / "static"
+    dist.mkdir()
+    (dist / "index.html").write_text("<html>root</html>")
+    secret = tmp_path / "secret.txt"
+    secret.write_text("TOP SECRET")
+    app = FastAPI()
+    mount_frontend(app, dist)
+
+    # A leading double slash makes Starlette's `full_path` an absolute path.
+    response = TestClient(app).get(f"/{secret}")
+    assert "TOP SECRET" not in response.text
+    assert response.status_code == 200
+    assert "root" in response.text

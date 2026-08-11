@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { entrantIdsInRound, isRoundComplete } from '@mtg/core/swiss'
+import { activeEntrantsForRound, entrantIdsInRound, isRoundComplete } from '@mtg/core/swiss'
 import { entrantName, isBye, type Match, type MatchResult, type Tournament } from '@mtg/core/swiss'
 import { Button } from '../ui/Button'
 import { Chip } from '../ui/Chip'
@@ -56,7 +56,14 @@ export function RoundScreen({
   }
 
   const nameById = new Map(tournament.entrants.map((entrant) => [entrant.id, entrant]))
-  const nameOf = (id: string) => entrantName(nameById.get(id)!)
+  // A missing id degrades to the raw id rather than throwing -- the same guard
+  // PodRoundScreen already applies. Without it a single dangling entrantId (a stale or
+  // hand-edited saved tournament) throws through the one top-level ErrorBoundary and
+  // blanks the entire app, not just this screen.
+  const nameOf = (id: string) => {
+    const entrant = nameById.get(id)
+    return entrant ? entrantName(entrant) : id
+  }
 
   /** "Report A versus B" for a 1v1, "Report the pod with A, B, C" for a pod -- the
    * accessible name has to distinguish tables, and a four-name "versus" chain reads
@@ -73,6 +80,9 @@ export function RoundScreen({
   const isLatestRound = roundNumber === tournament.rounds.length
   const hasLaterRounds = roundNumber < tournament.rounds.length
   const moreRoundsToPlay = tournament.rounds.length < tournament.totalRounds
+  // If everyone left has dropped, the next round has no field to pair. Offering "Start
+  // round" would spawn an empty round the pairer refuses to build anyway.
+  const hasFieldForNextRound = activeEntrantsForRound(tournament, roundNumber + 1).length > 0
   const editingMatch = round.matches.find((match) => match.id === editingMatchId) ?? null
 
   const swapTargets = entrantIdsInRound(tournament, roundNumber).filter((id) => id !== swapFromId)
@@ -89,7 +99,7 @@ export function RoundScreen({
       {hadToRepeatPairing && isLatestRound && (
         <div role="alert" className="rounded-lg border border-border bg-surface-raised px-4 py-3">
           <Text variant="body" color="muted">
-            Everyone left had already played each other, so this round repeats a pairing.
+            Not enough fresh matchups remained, so this round repeats a pairing.
           </Text>
         </div>
       )}
@@ -150,9 +160,17 @@ export function RoundScreen({
           className="flex flex-col gap-2"
           style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
         >
-          <Button size="lg" fullWidth onClick={onNextRound}>
-            Start round {roundNumber + 1}
-          </Button>
+          {hasFieldForNextRound ? (
+            <Button size="lg" fullWidth onClick={onNextRound}>
+              Start round {roundNumber + 1}
+            </Button>
+          ) : (
+            <div role="alert" className="rounded-lg border border-border bg-surface-raised px-4 py-3">
+              <Text variant="body" color="muted">
+                Every remaining entrant has dropped, so there is no field left to pair.
+              </Text>
+            </div>
+          )}
         </div>
       )}
 
