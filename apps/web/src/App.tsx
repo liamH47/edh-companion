@@ -68,11 +68,17 @@ function App() {
         showTabBar ? 'pb-[calc(4rem+env(safe-area-inset-bottom))]' : ''
       }`}
     >
-      <header className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold tracking-tight text-text sm:text-2xl">
+      {/* Two mirrored flex-1 regions centre the title. On a narrow screen the icon
+          cluster's min-width wins its side, drifting the title a few px left of true
+          centre -- deliberately preferred over absolute centring, which collides the
+          title with the icons at exactly those widths. Optically centred beats
+          mathematically centred here. */}
+      <header className="flex items-center">
+        <div className="flex-1" aria-hidden="true" />
+        <h1 className="text-center text-xl font-semibold tracking-tight text-text sm:text-2xl">
           Commander&apos;s Companion
         </h1>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-1 items-center justify-end gap-2">
           <SoundToggle />
           <ThemeToggle />
         </div>

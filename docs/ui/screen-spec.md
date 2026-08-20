@@ -110,6 +110,12 @@ For a card that DOES reset each turn but carries some state across the boundary,
 with). Frontend-only, like `default_source`; compute() never knows where a value came
 from.
 
+## The read/act divider
+
+A hairline (`border-t border-border`) separates the state block (hero, strip, card art)
+from the live-field stack on every card screen: state above the line, controls below
+it, so the hero never blends into the fields at equal visual weight.
+
 ## The 9 generic rules
 
 These are implemented once in `src/core/cardModel.ts` and must hold for every current and future

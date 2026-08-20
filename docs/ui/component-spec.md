@@ -326,6 +326,17 @@ Bottom-pinned row in the thumb zone. Three field shapes feed it, all honouring t
 - a live `sequence` declaring `roll` → a `DieRoller` the app rolls itself (Comet); the per-option
   buttons are suppressed so nobody can report a roll the app didn't make.
 
+### Compact stats (StatTile / StatStrip / HeroStat)
+
+`StatStrip` centres its wrapping row (`justify-center`) so the tiles share the hero's
+axis -- two tiles hugging the left edge under a dead-centred hero is what made the
+Dungeons screen read as disjointed. All three take a `compact` prop: smaller type and
+padding so the stats read as annotation rather than a peer panel. CardScreen sets it
+declaratively -- `show_hero_art` compacts the strip under card art, and a live field
+with a `map` folds hero and strip into one centred row above the map (the map is the
+screen's main event; a full-height hero pushed it below the fold). The compact hero
+keeps the accent value and the polite live region -- primary, just not tall.
+
 ### Die3D / DieRoller / DiceScreen
 
 `Die3D` (`cards/Die3D.tsx`) is the die as a real solid, purely visual: a cube for six or

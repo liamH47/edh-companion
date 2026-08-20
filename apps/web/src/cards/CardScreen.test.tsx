@@ -279,6 +279,44 @@ describe('CardScreen', () => {
     expect(screen.queryByAltText(/as printed/)).not.toBeInTheDocument()
   })
 
+  it('folds hero and strip into one compact row when a live field is mapped', async () => {
+    compute.mockReturnValue({ completed: 1, rooms: 2 })
+    const dungeonLike: CardMetadata = {
+      ...singleOutputCard,
+      id: 'dungeon-like',
+      fields: [
+        field({
+          name: 'path',
+          kind: 'sequence',
+          label: 'Path',
+          options: [
+            { value: 'a', label: 'A' },
+            { value: 'b', label: 'B' },
+          ],
+          map: {
+            entry: 'a',
+            scryfall_id: null,
+            nodes: [
+              { id: 'a', column: 0, row: 0, art: null },
+              { id: 'b', column: 1, row: 0, art: null },
+            ],
+            edges: [{ source: 'a', target: 'b' }],
+          },
+        }),
+      ],
+      outputs: [
+        output({ name: 'completed', primary: true }),
+        output({ name: 'rooms', label: 'Rooms', short_label: 'rooms' }),
+      ],
+    }
+    render(<CardScreen card={dungeonLike} />)
+    // The compact hero row renders instead of the full-height centred column...
+    expect(await screen.findByTestId('hero-compact')).toBeInTheDocument()
+    // ...with the strip beside it, and the map still below as the main event.
+    expect(screen.getByText('rooms')).toBeInTheDocument()
+    expect(screen.getByTestId('dungeon-map-path')).toBeInTheDocument()
+  })
+
   it('resets values via New turn without reopening the setup sheet', async () => {
     const user = userEvent.setup()
     render(<CardScreen card={aetherfluxLikeCard} />)
