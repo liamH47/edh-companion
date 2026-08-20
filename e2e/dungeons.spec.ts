@@ -51,5 +51,23 @@ test.describe('dungeons', () => {
     await expect(phandelver.getByRole('button', { name: 'Cave Entrance, venture here' })).toBeVisible()
     // The hero is the completed count, and it survived the switch.
     await expect(page.getByText('1', { exact: true }).first()).toBeVisible()
+
+    // Multi-dungeon: switching away did NOT wipe the Tomb walk. A player in several
+    // dungeons at once (or checking another dungeon's shape) keeps every position.
+    await page.getByRole('radio', { name: 'Tomb of Annihilation' }).click()
+    await expect(
+      page
+        .getByTestId('dungeon-map-tomb_path')
+        .getByRole('button', { name: 'Cradle of the Death God, current' }),
+    ).toBeVisible()
+
+    // And the whole board state survives a reload -- localStorage persistence.
+    await page.reload()
+    await expect(
+      page
+        .getByTestId('dungeon-map-tomb_path')
+        .getByRole('button', { name: 'Cradle of the Death God, current' }),
+    ).toBeVisible()
+    await expect(page.getByText('You are here: Cradle of the Death God')).toBeVisible()
   })
 })

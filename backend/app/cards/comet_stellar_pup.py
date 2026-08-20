@@ -71,7 +71,7 @@ METADATA = CardMetadata(
         ),
         FieldSpec(
             name="loyalty_adjustment",
-            label="Loyalty change from outside his abilities",
+            label="Other loyalty changes",
             short_label="adjust",
             kind=FieldKind.NUMBER,
             default=0,

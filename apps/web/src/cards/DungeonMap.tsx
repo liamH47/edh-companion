@@ -150,6 +150,9 @@ function CardArtMap({
   onImageError,
 }: MapVariantProps & { url: string; onImageError: () => void }) {
   const { entries, current, labelForValue, stateOf } = useRoomStates(field, spec, value)
+  // Overlays wait for the pixels: rings and badges floating over the image's blank
+  // placeholder box read as broken during a slow load.
+  const [loaded, setLoaded] = useState(false)
 
   return (
     <div data-testid={`dungeon-map-${field.name}`}>
@@ -157,11 +160,13 @@ function CardArtMap({
         <img
           src={url}
           alt="The dungeon, as printed"
+          onLoad={() => setLoaded(true)}
           onError={onImageError}
           loading="lazy"
           className="w-full rounded-xl object-contain aspect-[488/680]"
         />
-        {spec.nodes.map((node) => {
+        {loaded &&
+          spec.nodes.map((node) => {
           if (!node.art) return null
           const state = stateOf(node.id)
           const label = labelForValue.get(node.id) ?? node.id

@@ -9,7 +9,7 @@ import { act, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { resetComputeBackend, setComputeBackend } from './compute'
 import { setSoundBackend } from './sound'
-import { resetStorageBackend } from './storage'
+import { resetStorageBackend, setJSON } from './storage'
 import type { CardMetadata } from './types'
 import { useCardSession } from './useCardSession'
 
@@ -184,6 +184,54 @@ describe('resetTurn', () => {
   })
 })
 
+describe('persistence', () => {
+  it('hydrates a later session from what the last one stored', () => {
+    compute.mockReturnValue({ total: 5 })
+    const first = renderHook(() => useCardSession(makeCard()))
+    act(() => first.result.current.setField('count', 42))
+    first.unmount()
+
+    // A fresh mount of the same card (same storage) picks the value back up --
+    // mid-dungeon state survives a reload.
+    const second = renderHook(() => useCardSession(makeCard()))
+    expect(second.result.current.values).toEqual({ count: 42 })
+  })
+
+  it('drops stored keys the card no longer declares', () => {
+    compute.mockReturnValue({ total: 5 })
+    setJSON('mtg-calc-card-values', { 'test-card': { count: 7, ghost: 99 } })
+    const { result } = renderHook(() => useCardSession(makeCard()))
+    expect(result.current.values).toEqual({ count: 7 })
+  })
+
+  it('backfills a stored session missing a newer field with its default', () => {
+    compute.mockReturnValue({ total: 5 })
+    setJSON('mtg-calc-card-values', { 'test-card': { ghost: 99 } })
+    const { result } = renderHook(() => useCardSession(makeCard()))
+    expect(result.current.values).toEqual({ count: 0 })
+  })
+
+  it('falls back to defaults when the stored state no longer computes', () => {
+    setJSON('mtg-calc-card-values', { 'test-card': { count: 7 } })
+    // A schema change since the save: the stored shape now always throws (hydration
+    // probes it once per mount and once per card switch). The player gets defaults,
+    // not an error banner.
+    compute.mockImplementation((_card: CardMetadata, inputs: FieldValues) => {
+      if (inputs.count === 7) throw new Error('stale shape')
+      return { total: 5 }
+    })
+    const { result } = renderHook(() => useCardSession(makeCard()))
+    expect(result.current.values).toEqual({ count: 0 })
+    expect(result.current.error).toBeNull()
+  })
+
+  it('starts from defaults when nothing is stored', () => {
+    compute.mockReturnValue({ total: 5 })
+    const { result } = renderHook(() => useCardSession(makeCard()))
+    expect(result.current.values).toEqual({ count: 0 })
+  })
+})
+
 describe('setupConfirmed', () => {
   it('defaults to false for a card with no stored confirmation', () => {
     const { result } = renderHook(() => useCardSession(makeCard()))
@@ -210,7 +258,7 @@ describe('setupConfirmed', () => {
 })
 
 describe('alert and the lose-sound edge', () => {
-  const alertCard = makeCard({ alert: { output: 'game_lost', message: 'You lose' } })
+  const alertCard = makeCard({ alert: { output: 'game_lost', message: 'You lose', tone: 'danger' } })
 
   it('exposes the alert message only when the alert output is true', () => {
     compute.mockReturnValue({ total: 0, game_lost: false })
@@ -235,6 +283,29 @@ describe('alert and the lose-sound edge', () => {
     // Still true on the next change -- edge-triggered, not level-triggered.
     act(() => result.current.setField('count', 2))
     expect(soundBackend.playLose).toHaveBeenCalledTimes(1)
+  })
+
+  it('plays the win sound, not the lose sound, for a success-tone alert', () => {
+    const successCard = makeCard({
+      alert: { output: 'dungeon_complete', message: 'Dungeon complete', tone: 'success' },
+    })
+    compute.mockReturnValue({ total: 0, dungeon_complete: false })
+    const { result, rerender } = renderHook(() => useCardSession(successCard))
+
+    compute.mockReturnValue({ total: 0, dungeon_complete: true })
+    act(() => result.current.setField('count', 1))
+    rerender()
+
+    // Completing a dungeon must not sound like losing a coin flip.
+    expect(soundBackend.playWin).toHaveBeenCalledTimes(1)
+    expect(soundBackend.playLose).not.toHaveBeenCalled()
+    expect(result.current.alertTone).toBe('success')
+  })
+
+  it('exposes a null tone while no alert is active', () => {
+    compute.mockReturnValue({ total: 0, game_lost: false })
+    const { result } = renderHook(() => useCardSession(alertCard))
+    expect(result.current.alertTone).toBeNull()
   })
 
   it('does not evaluate an alert for a card that declares none', () => {

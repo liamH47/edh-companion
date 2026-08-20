@@ -54,16 +54,25 @@ describe('FieldControl', () => {
       expect(screen.getByRole('spinbutton', { name: 'Life' })).toHaveValue(0)
     })
 
-    it('renders help text when present', () => {
+    it('folds help text behind the info toggle', async () => {
+      const user = userEvent.setup()
       const f = field({ name: 'life', kind: 'number', label: 'Life', help_text: 'Starting total' })
       render(<FieldControl field={f} value={0} onChange={() => {}} />)
+      // Hidden by default -- the paragraphs were the biggest space cost on a phone.
+      expect(screen.queryByText('Starting total')).not.toBeInTheDocument()
+      const toggle = screen.getByRole('button', { name: 'About Life' })
+      expect(toggle).toHaveAttribute('aria-expanded', 'false')
+      await user.click(toggle)
       expect(screen.getByText('Starting total')).toBeInTheDocument()
+      expect(toggle).toHaveAttribute('aria-expanded', 'true')
+      await user.click(toggle)
+      expect(screen.queryByText('Starting total')).not.toBeInTheDocument()
     })
 
-    it('renders no help text paragraph when absent', () => {
+    it('renders no info toggle when there is no help text', () => {
       const f = field({ name: 'life', kind: 'number', label: 'Life' })
       render(<FieldControl field={f} value={0} onChange={() => {}} />)
-      expect(screen.queryByText('Starting total')).not.toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: 'About Life' })).not.toBeInTheDocument()
     })
   })
 
@@ -113,6 +122,40 @@ describe('FieldControl', () => {
       const f = field({ name: 'mode', kind: 'select', label: 'Mode', options: null })
       render(<FieldControl field={f} value={null} onChange={() => {}} />)
       expect(screen.queryAllByRole('radio')).toHaveLength(0)
+    })
+  })
+
+  describe('select with many options', () => {
+    it('renders one scrollable row instead of wrapping to several', () => {
+      const f = field({
+        name: 'which',
+        kind: 'select',
+        label: 'Which',
+        options: [
+          { value: 'a', label: 'A' },
+          { value: 'b', label: 'B' },
+          { value: 'c', label: 'C' },
+          { value: 'd', label: 'D' },
+        ],
+      })
+      render(<FieldControl field={f} value="a" onChange={() => {}} />)
+      const group = screen.getByRole('radiogroup', { name: 'Which' })
+      expect(group.className).toContain('overflow-x-auto')
+      expect(group.className).not.toContain('flex-wrap')
+    })
+
+    it('keeps the wrap for short lists', () => {
+      const f = field({
+        name: 'which',
+        kind: 'select',
+        label: 'Which',
+        options: [
+          { value: 'a', label: 'A' },
+          { value: 'b', label: 'B' },
+        ],
+      })
+      render(<FieldControl field={f} value="a" onChange={() => {}} />)
+      expect(screen.getByRole('radiogroup', { name: 'Which' }).className).toContain('flex-wrap')
     })
   })
 

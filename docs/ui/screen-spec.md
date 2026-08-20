@@ -116,6 +116,20 @@ A hairline (`border-t border-border`) separates the state block (hero, strip, ca
 from the live-field stack on every card screen: state above the line, controls below
 it, so the hero never blends into the fields at equal visual weight.
 
+## Persistence
+
+Card sessions persist per card id through the storage seam (`mtg-calc-card-values`):
+a reload -- or a phone browser evicting the tab mid-game -- resumes exactly where the
+player left off. Hydration is defensive: keys the card no longer declares are dropped,
+and stored state that no longer computes (a schema change since the save) falls back
+to defaults rather than greeting the player with an error banner. Hidden mapped fields
+additionally keep their value when `visible_if` hides them, so a player in several
+dungeons at once keeps every walk; every other hidden field still resets to its
+default (Aetherflux relies on that).
+
+Alerts carry a `tone`: "danger" (a loss) takes the danger banner and the lose sound,
+"success" (a dungeon completed) the accent banner and the win sound.
+
 ## The 9 generic rules
 
 These are implemented once in `src/core/cardModel.ts` and must hold for every current and future

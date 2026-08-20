@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { CardMetadata, FieldSpec, OutputSpec } from '@mtg/core'
@@ -91,7 +91,7 @@ const aetherfluxLikeCard: CardMetadata = {
     output({ name: 'damage_available', label: 'Damage available', short_label: 'damage', primary: true }),
     output({ name: 'current_life', label: 'Current life total', short_label: 'life' }),
   ],
-  alert: { output: 'game_lost', message: 'Oops, looks like you lose now' },
+  alert: { output: 'game_lost', message: 'Oops, looks like you lose now', tone: 'danger' },
 }
 
 const allSetupCard: CardMetadata = {
@@ -249,6 +249,7 @@ describe('CardScreen', () => {
     render(<CardScreen card={cometLike} />)
     // The card IS the hero: full-size art with the badge over its printed loyalty box.
     expect(await screen.findByTestId('card-art-hero')).toBeInTheDocument()
+    fireEvent.load(screen.getByAltText('Single Output Card, as printed'))
     expect(screen.getByTestId('loyalty-shield')).toBeInTheDocument()
     expect(screen.getByAltText('Single Output Card, as printed')).toBeInTheDocument()
   })

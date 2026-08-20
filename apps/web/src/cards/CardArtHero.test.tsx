@@ -22,6 +22,9 @@ describe('CardArtHero', () => {
   it('renders the card large with the live loyalty over the printed loyalty box', () => {
     render(<CardArtHero card={makeCard()} label="loyalty" value={7} pending={false} dead={false} />)
     expect(screen.getByAltText('Comet-Like, as printed')).toBeInTheDocument()
+    // The badge waits for the pixels -- floating over the placeholder reads as broken.
+    expect(screen.queryByTestId('loyalty-shield')).not.toBeInTheDocument()
+    fireEvent.load(screen.getByAltText('Comet-Like, as printed'))
     // The badge overlays the image: it lives inside the art container.
     const hero = screen.getByTestId('card-art-hero')
     expect(hero.querySelector('[data-testid="loyalty-shield"]')).not.toBeNull()
@@ -30,6 +33,7 @@ describe('CardArtHero', () => {
 
   it('dims the badge, not the art, while a recalculation is pending', () => {
     render(<CardArtHero card={makeCard()} label="loyalty" value={7} pending dead={false} />)
+    fireEvent.load(screen.getByAltText('Comet-Like, as printed'))
     expect(screen.getByTestId('loyalty-shield').className).toContain('opacity-60')
   })
 

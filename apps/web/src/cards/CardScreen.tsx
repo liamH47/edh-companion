@@ -92,7 +92,7 @@ export function CardScreen({ card, onBack }: CardScreenProps) {
         </Surface>
       )}
 
-      <AlertBanner message={session.alertMessage} />
+      <AlertBanner message={session.alertMessage} tone={session.alertTone} />
 
       {/* The hero slot, driven by schema capabilities with zero per-card branching.
           A screen whose main event is a mapped field (a dungeon) folds hero and strip
@@ -125,7 +125,7 @@ export function CardScreen({ card, onBack }: CardScreenProps) {
               label={hero.short_label ?? hero.label}
               value={heroValue}
               pending={session.pending}
-              dead={session.alertMessage !== null}
+              dead={session.alertTone === 'danger'}
             />
           ) : card.show_hero_art ? (
             <div className="flex items-center justify-center gap-4">
@@ -143,7 +143,7 @@ export function CardScreen({ card, onBack }: CardScreenProps) {
               label={hero.short_label ?? hero.label}
               value={heroValue}
               pending={session.pending}
-              dead={session.alertMessage !== null}
+              dead={session.alertTone === 'danger'}
             />
           ) : (
             <HeroStat

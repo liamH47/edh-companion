@@ -99,6 +99,9 @@ export interface OutputSpec {
 export interface AlertSpec {
   output: string
   message: string
+  /** "danger" (a loss): danger banner + lose sound. "success" (a dungeon completed):
+   * accent banner + win sound. Completing a dungeon must not sound like losing. */
+  tone: 'danger' | 'success'
 }
 
 export interface CardMetadata {

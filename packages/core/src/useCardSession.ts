@@ -1,11 +1,37 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { computeCard } from './compute'
-import { playLoseSound } from './sound'
+import { playLoseSound, playWinSound } from './sound'
 import type { CardMetadata, FieldValues, OutputValues } from './types'
-import { defaultValues, resolveAlertMessage, withDerivedValues } from './cardModel'
+import { defaultValues, resolveAlertMessage, resolveAlertTone, withDerivedValues } from './cardModel'
 import { getJSON, setJSON } from './storage'
 
 const SETUP_CONFIRMED_KEY = 'mtg-calc-setup-confirmed'
+const CARD_VALUES_KEY = 'mtg-calc-card-values'
+
+/** Stored field values for this card, merged over its defaults -- only keys the card
+ * still declares survive, so a renamed field cannot resurrect a stale value. Returns
+ * null when nothing usable is stored or the stored state no longer computes (a schema
+ * change since it was saved): the caller falls back to defaults rather than greeting
+ * the player with an error banner. */
+function hydrateValues(card: CardMetadata): FieldValues | null {
+  const stored = getJSON<Record<string, FieldValues>>(CARD_VALUES_KEY, {})[card.id]
+  if (!stored) return null
+  const merged = { ...defaultValues(card) }
+  for (const field of card.fields) {
+    if (field.name in stored) merged[field.name] = stored[field.name]
+  }
+  try {
+    computeCard(card, merged)
+  } catch {
+    return null
+  }
+  return merged
+}
+
+function persistValues(cardId: string, values: FieldValues): void {
+  const current = getJSON<Record<string, FieldValues>>(CARD_VALUES_KEY, {})
+  setJSON(CARD_VALUES_KEY, { ...current, [cardId]: values })
+}
 
 function isSetupConfirmed(cardId: string): boolean {
   return getJSON<Record<string, boolean>>(SETUP_CONFIRMED_KEY, {})[cardId] === true
@@ -22,6 +48,8 @@ export interface CardSession {
   pending: boolean
   error: string | null
   alertMessage: string | null
+  /** The active alert's tone, for banner styling; null while no alert is active. */
+  alertTone: 'danger' | 'success' | null
   setupConfirmed: boolean
   setField: (name: string, value: unknown) => void
   resetTurn: () => void
@@ -50,7 +78,9 @@ export function useCardSession(card: CardMetadata): CardSession {
   const cardRef = useRef(card)
   cardRef.current = card
 
-  const [values, setValues] = useState<FieldValues>(() => defaultValues(card))
+  const [values, setValues] = useState<FieldValues>(
+    () => hydrateValues(card) ?? defaultValues(card),
+  )
   const [outputs, setOutputs] = useState<OutputValues | null>(null)
   // Mirrors `outputs` for callbacks that must read the latest result without keying
   // themselves on it (resetTurn's carry-over) -- same pattern as cardRef.
@@ -73,7 +103,10 @@ export function useCardSession(card: CardMetadata): CardSession {
   }, [])
 
   useEffect(() => {
-    const initial = defaultValues(cardRef.current)
+    // Pick up where the player left off: mid-dungeon state and half-finished turns
+    // survive a reload (and a phone browser evicting the tab at a table). Defaults
+    // only when nothing usable is stored.
+    const initial = hydrateValues(cardRef.current) ?? defaultValues(cardRef.current)
     setValues(initial)
     setError(null)
     setSetupConfirmed(isSetupConfirmed(cardRef.current.id))
@@ -121,12 +154,25 @@ export function useCardSession(card: CardMetadata): CardSession {
     setSetupConfirmed(true)
   }, [])
 
+  // Persist after every change, keyed by card id. Cheap: 14 cards' worth of small
+  // value maps, written through the synchronous storage seam.
+  useEffect(() => {
+    persistValues(cardRef.current.id, values)
+  }, [values])
+
   const alertMessage = resolveAlertMessage(card, outputs)
   const alertActive = alertMessage != null
+  const alertTone = resolveAlertTone(cardRef.current, outputs)
   // Edge-triggered, not level-triggered: play the sound once when the alert first
-  // becomes active, not on every recalculation while it stays active.
+  // becomes active, not on every recalculation while it stays active. The tone picks
+  // the clip -- completing a dungeon must not sound like losing a coin flip.
+  const alertToneRef = useRef(alertTone)
+  alertToneRef.current = alertTone
   useEffect(() => {
-    if (alertActive && !wasAlertActiveRef.current) playLoseSound()
+    if (alertActive && !wasAlertActiveRef.current) {
+      if (alertToneRef.current === 'success') playWinSound()
+      else playLoseSound()
+    }
     wasAlertActiveRef.current = alertActive
   }, [alertActive])
 
@@ -137,6 +183,7 @@ export function useCardSession(card: CardMetadata): CardSession {
     pending: false,
     error,
     alertMessage,
+    alertTone,
     setupConfirmed,
     setField,
     resetTurn,
