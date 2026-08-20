@@ -31,6 +31,7 @@ from typing import Any
 from .schema import (
     ActionGuard,
     AlertSpec,
+    ArtBox,
     CardMetadata,
     FieldKind,
     FieldSpec,
@@ -45,49 +46,137 @@ from .schema import (
 MAX_DUNGEONS_COMPLETED = 99
 
 # Room graphs, verbatim from the printed cards. Each entry: room id -> (label, column,
-# row, successors). Column is depth (0 = entry); row places siblings left-to-right.
-# A room with no successors is the bottommost room -- completion, not a dead end.
-_DUNGEONS: dict[str, dict[str, tuple[str, int, int, tuple[str, ...]]]] = {
+# row, successors, art box). Column is depth (0 = entry); row places siblings
+# left-to-right. The art box is the room's region on the printed card image, as
+# (x, y, w, h) fractions of its width/height -- measured against Scryfall's 488x680
+# `normal` scans so the venture marker lands on the card's own room box. A room with
+# no successors is the bottommost room -- completion, not a dead end.
+_Box = tuple[float, float, float, float]
+_Room = tuple[str, int, int, tuple[str, ...], _Box]
+
+_DUNGEONS: dict[str, dict[str, _Room]] = {
     "phandelver": {
-        "cave-entrance": ("Cave Entrance", 0, 0, ("goblin-lair", "mine-tunnels")),
-        "goblin-lair": ("Goblin Lair", 1, 0, ("storeroom", "dark-pool")),
-        "mine-tunnels": ("Mine Tunnels", 1, 1, ("dark-pool", "fungi-cavern")),
-        "storeroom": ("Storeroom", 2, 0, ("temple-of-dumathoin",)),
-        "dark-pool": ("Dark Pool", 2, 1, ("temple-of-dumathoin",)),
-        "fungi-cavern": ("Fungi Cavern", 2, 2, ("temple-of-dumathoin",)),
-        "temple-of-dumathoin": ("Temple of Dumathoin", 3, 0, ()),
+        "cave-entrance": (
+            "Cave Entrance",
+            0,
+            0,
+            ("goblin-lair", "mine-tunnels"),
+            (0.08, 0.155, 0.84, 0.135),
+        ),
+        "goblin-lair": (
+            "Goblin Lair",
+            1,
+            0,
+            ("storeroom", "dark-pool"),
+            (0.08, 0.305, 0.41, 0.165),
+        ),
+        "mine-tunnels": (
+            "Mine Tunnels",
+            1,
+            1,
+            ("dark-pool", "fungi-cavern"),
+            (0.51, 0.305, 0.41, 0.165),
+        ),
+        "storeroom": ("Storeroom", 2, 0, ("temple-of-dumathoin",), (0.08, 0.487, 0.26, 0.225)),
+        "dark-pool": ("Dark Pool", 2, 1, ("temple-of-dumathoin",), (0.352, 0.487, 0.296, 0.2)),
+        "fungi-cavern": (
+            "Fungi Cavern",
+            2,
+            2,
+            ("temple-of-dumathoin",),
+            (0.66, 0.487, 0.26, 0.225),
+        ),
+        "temple-of-dumathoin": ("Temple of Dumathoin", 3, 0, (), (0.08, 0.728, 0.84, 0.13)),
     },
     "tomb": {
-        "trapped-entry": ("Trapped Entry", 0, 0, ("veils-of-fear", "oubliette")),
-        "veils-of-fear": ("Veils of Fear", 1, 0, ("sandfall-cell",)),
+        "trapped-entry": (
+            "Trapped Entry",
+            0,
+            0,
+            ("veils-of-fear", "oubliette"),
+            (0.08, 0.155, 0.84, 0.12),
+        ),
+        "veils-of-fear": ("Veils of Fear", 1, 0, ("sandfall-cell",), (0.08, 0.295, 0.4, 0.2)),
         # The hard path: one brutal room where the cheap path takes two, joining the
-        # same bottom -- the fork is asymmetric by design, not a diamond.
-        "oubliette": ("Oubliette", 1, 1, ("cradle-of-the-death-god",)),
-        "sandfall-cell": ("Sandfall Cell", 2, 0, ("cradle-of-the-death-god",)),
-        "cradle-of-the-death-god": ("Cradle of the Death God", 3, 0, ()),
+        # same bottom -- the fork is asymmetric by design, not a diamond, and its
+        # printed room spans both middle tiers of the card.
+        "oubliette": ("Oubliette", 1, 1, ("cradle-of-the-death-god",), (0.5, 0.295, 0.42, 0.39)),
+        "sandfall-cell": (
+            "Sandfall Cell",
+            2,
+            0,
+            ("cradle-of-the-death-god",),
+            (0.08, 0.5, 0.4, 0.185),
+        ),
+        "cradle-of-the-death-god": ("Cradle of the Death God", 3, 0, (), (0.08, 0.7, 0.84, 0.145)),
     },
     "mad-mage": {
-        "yawning-portal": ("Yawning Portal", 0, 0, ("dungeon-level",)),
-        "dungeon-level": ("Dungeon Level", 1, 0, ("goblin-bazaar", "twisted-caverns")),
-        "goblin-bazaar": ("Goblin Bazaar", 2, 0, ("lost-level",)),
-        "twisted-caverns": ("Twisted Caverns", 2, 1, ("lost-level",)),
-        "lost-level": ("Lost Level", 3, 0, ("runestone-caverns", "muirals-graveyard")),
-        "runestone-caverns": ("Runestone Caverns", 4, 0, ("deep-mines",)),
-        "muirals-graveyard": ("Muiral's Graveyard", 4, 1, ("deep-mines",)),
-        "deep-mines": ("Deep Mines", 5, 0, ("mad-wizards-lair",)),
-        "mad-wizards-lair": ("Mad Wizard's Lair", 6, 0, ()),
+        "yawning-portal": ("Yawning Portal", 0, 0, ("dungeon-level",), (0.08, 0.145, 0.84, 0.08)),
+        "dungeon-level": (
+            "Dungeon Level",
+            1,
+            0,
+            ("goblin-bazaar", "twisted-caverns"),
+            (0.08, 0.235, 0.84, 0.062),
+        ),
+        "goblin-bazaar": ("Goblin Bazaar", 2, 0, ("lost-level",), (0.08, 0.303, 0.4, 0.14)),
+        "twisted-caverns": ("Twisted Caverns", 2, 1, ("lost-level",), (0.49, 0.303, 0.43, 0.14)),
+        "lost-level": (
+            "Lost Level",
+            3,
+            0,
+            ("runestone-caverns", "muirals-graveyard"),
+            (0.08, 0.452, 0.84, 0.062),
+        ),
+        "runestone-caverns": (
+            "Runestone Caverns",
+            4,
+            0,
+            ("deep-mines",),
+            (0.08, 0.525, 0.42, 0.14),
+        ),
+        "muirals-graveyard": (
+            "Muiral's Graveyard",
+            4,
+            1,
+            ("deep-mines",),
+            (0.51, 0.525, 0.41, 0.14),
+        ),
+        "deep-mines": ("Deep Mines", 5, 0, ("mad-wizards-lair",), (0.08, 0.69, 0.84, 0.062)),
+        "mad-wizards-lair": ("Mad Wizard's Lair", 6, 0, (), (0.08, 0.762, 0.84, 0.11)),
     },
     "undercity": {
-        "secret-entrance": ("Secret Entrance", 0, 0, ("forge", "lost-well")),
-        "forge": ("Forge", 1, 0, ("trap", "arena")),
-        "lost-well": ("Lost Well", 1, 1, ("arena", "stash")),
-        "trap": ("Trap!", 2, 0, ("archives",)),
-        "arena": ("Arena", 2, 1, ("archives", "catacombs")),
-        "stash": ("Stash", 2, 2, ("catacombs",)),
-        "archives": ("Archives", 3, 0, ("throne-of-the-dead-three",)),
-        "catacombs": ("Catacombs", 3, 1, ("throne-of-the-dead-three",)),
-        "throne-of-the-dead-three": ("Throne of the Dead Three", 4, 0, ()),
+        "secret-entrance": (
+            "Secret Entrance",
+            0,
+            0,
+            ("forge", "lost-well"),
+            (0.08, 0.198, 0.84, 0.105),
+        ),
+        "forge": ("Forge", 1, 0, ("trap", "arena"), (0.08, 0.315, 0.41, 0.1)),
+        "lost-well": ("Lost Well", 1, 1, ("arena", "stash"), (0.51, 0.315, 0.41, 0.1)),
+        "trap": ("Trap!", 2, 0, ("archives",), (0.08, 0.43, 0.3, 0.12)),
+        "arena": ("Arena", 2, 1, ("archives", "catacombs"), (0.393, 0.422, 0.19, 0.135)),
+        "stash": ("Stash", 2, 2, ("catacombs",), (0.598, 0.435, 0.322, 0.11)),
+        "archives": ("Archives", 3, 0, ("throne-of-the-dead-three",), (0.08, 0.598, 0.4, 0.098)),
+        "catacombs": ("Catacombs", 3, 1, ("throne-of-the-dead-three",), (0.5, 0.572, 0.42, 0.14)),
+        "throne-of-the-dead-three": (
+            "Throne of the Dead Three",
+            4,
+            0,
+            (),
+            (0.08, 0.726, 0.84, 0.165),
+        ),
     },
+}
+
+# The printed card each map depicts (Scryfall token-card ids; Undercity is the front
+# face of the Undercity // The Initiative double-faced token).
+_DUNGEON_CARDS = {
+    "phandelver": "59b11ff8-f118-4978-87dd-509dc0c8c932",
+    "tomb": "70b284bd-7a8f-4b60-8238-f746bdc5b236",
+    "mad-mage": "6f509dbe-6ec7-4438-ab36-e20be46c9922",
+    "undercity": "2c65185b-6cf0-451d-985e-56aa45d9a57d",
 }
 
 _DUNGEON_LABELS = {
@@ -98,7 +187,7 @@ _DUNGEON_LABELS = {
 }
 
 _ENTRIES = {
-    dungeon: next(room for room, (_, column, _row, _s) in rooms.items() if column == 0)
+    dungeon: next(room for room, (_, column, _row, _s, _box) in rooms.items() if column == 0)
     for dungeon, rooms in _DUNGEONS.items()
 }
 
@@ -126,13 +215,14 @@ def _path_field(dungeon: str) -> FieldSpec:
         visible_if=VisibleIf(field="which_dungeon", equals=dungeon),
         map=MapSpec(
             entry=_ENTRIES[dungeon],
+            scryfall_id=_DUNGEON_CARDS[dungeon],
             nodes=[
-                MapNode(id=room, column=column, row=row)
-                for room, (_label, column, row, _successors) in rooms.items()
+                MapNode(id=room, column=column, row=row, art=ArtBox(x=x, y=y, w=w, h=h))
+                for room, (_label, column, row, _successors, (x, y, w, h)) in rooms.items()
             ],
             edges=[
                 MapEdge(source=room, target=target)
-                for room, (_label, _column, _row, successors) in rooms.items()
+                for room, (_label, _column, _row, successors, _box) in rooms.items()
                 for target in successors
             ],
         ),
