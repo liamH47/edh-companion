@@ -9,6 +9,7 @@ function makeCard(overrides: Partial<CardMetadata> = {}): CardMetadata {
     name: 'Aetherflux Reservoir',
     rules_text: 'Whenever you cast a spell, you gain 1 life.',
     scryfall_id: '96b6b2e1-c3e6-464c-8a13-b15deb34e862',
+    show_hero_art: false,
     fields: [],
     outputs: [],
     alert: null,

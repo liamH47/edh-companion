@@ -28,6 +28,7 @@ function makeCard(overrides: Partial<CardMetadata> = {}): CardMetadata {
     name: 'Test Card',
     rules_text: '...',
     scryfall_id: null,
+    show_hero_art: false,
     fields: [
       {
         name: 'count',
@@ -47,7 +48,14 @@ function makeCard(overrides: Partial<CardMetadata> = {}): CardMetadata {
         short_label: null,
       },
     ],
-    outputs: [{ name: 'total', label: 'Total', kind: 'number', short_label: null, primary: true }],
+    outputs: [{
+        name: 'total',
+        label: 'Total',
+        kind: 'number',
+        short_label: null,
+        primary: true,
+        hero_shape: 'number',
+      }],
     alert: null,
     ...overrides,
   }

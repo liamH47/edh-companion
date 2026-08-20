@@ -9,6 +9,7 @@ function output(overrides: Partial<OutputSpec> & Pick<OutputSpec, 'name'>): Outp
     kind: 'number',
     short_label: null,
     primary: false,
+    hero_shape: 'number',
     ...overrides,
   }
 }

@@ -11,6 +11,7 @@ function makeCard(overrides: Partial<CardMetadata> = {}): CardMetadata {
     name: 'Kalonian Hydra',
     rules_text: 'Trample',
     scryfall_id: SCRYFALL_ID,
+    show_hero_art: false,
     fields: [],
     outputs: [],
     alert: null,

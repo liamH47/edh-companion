@@ -9,7 +9,10 @@ import { Text } from '../ui/Text'
 import { ActionBar } from './ActionBar'
 import { AlertBanner } from './AlertBanner'
 import { FieldControl } from './FieldControl'
+import { CardArtHero } from './CardArtHero'
+import { CardImage } from './CardImage'
 import { HeroStat } from './HeroStat'
+import { LoyaltyShield } from './LoyaltyShield'
 import { CardDetailSheet } from './CardDetailSheet'
 import { SetupSheet } from './SetupSheet'
 import { SetupSummaryBar } from './SetupSummaryBar'
@@ -88,7 +91,40 @@ export function CardScreen({ card, onBack }: CardScreenProps) {
 
       <AlertBanner message={session.alertMessage} />
 
-      <HeroStat label={hero.short_label ?? hero.label} value={heroValue} pending={session.pending} />
+      {/* The hero slot, driven by two schema flags with zero per-card branching. A
+          shield hero with inline art becomes CardArtHero: the printed card, large,
+          with the live loyalty drawn over its printed loyalty box (a recorded
+          decision -- see cardImage.ts) and a standalone-shield fallback offline. Art
+          without a shield keeps a small image beside the plain hero. */}
+      {card.show_hero_art && hero.hero_shape === 'shield' ? (
+        <CardArtHero
+          card={card}
+          label={hero.short_label ?? hero.label}
+          value={heroValue}
+          pending={session.pending}
+          dead={session.alertMessage !== null}
+        />
+      ) : card.show_hero_art ? (
+        <div className="flex items-center justify-center gap-4">
+          <div className="w-28 flex-none">
+            <CardImage card={card} />
+          </div>
+          <HeroStat
+            label={hero.short_label ?? hero.label}
+            value={heroValue}
+            pending={session.pending}
+          />
+        </div>
+      ) : hero.hero_shape === 'shield' ? (
+        <LoyaltyShield
+          label={hero.short_label ?? hero.label}
+          value={heroValue}
+          pending={session.pending}
+          dead={session.alertMessage !== null}
+        />
+      ) : (
+        <HeroStat label={hero.short_label ?? hero.label} value={heroValue} pending={session.pending} />
+      )}
 
       <StatStrip outputs={nonPrimaryOutputs(card)} values={session.outputs} pending={session.pending} />
 

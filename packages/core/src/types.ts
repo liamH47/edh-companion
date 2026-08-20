@@ -47,6 +47,10 @@ export interface OutputSpec {
   kind: 'number' | 'text'
   short_label: string | null
   primary: boolean
+  /** How the hero renders this output when it is the primary: the plain HeroStat, or a
+   * planeswalker loyalty shield (Comet). Presentation only -- deliberately not part of
+   * `kind`, which is the value's data type. */
+  hero_shape: 'number' | 'shield'
 }
 
 export interface AlertSpec {
@@ -60,6 +64,9 @@ export interface CardMetadata {
   rules_text: string
   /** Scryfall print id, or null for an entry with no card behind it. See cardImage.ts. */
   scryfall_id: string | null
+  /** Show the card image inline beside the hero, not only behind "View card". The
+   * screen must keep working without the image (CardImage's fallback). */
+  show_hero_art: boolean
   fields: FieldSpec[]
   outputs: OutputSpec[]
   alert: AlertSpec | null

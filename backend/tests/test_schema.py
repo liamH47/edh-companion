@@ -62,6 +62,33 @@ def test_card_metadata_rejects_more_than_one_primary_output() -> None:
         )
 
 
+def test_card_metadata_allows_a_shaped_primary_hero() -> None:
+    card = CardMetadata(
+        id="test-card",
+        name="Test Card",
+        rules_text="...",
+        fields=[],
+        outputs=[OutputSpec(name="loyalty", label="Loyalty", primary=True, hero_shape="shield")],
+    )
+    assert card.outputs[0].hero_shape == "shield"
+
+
+def test_card_metadata_rejects_hero_shape_on_a_non_primary_output() -> None:
+    # A shield on an equal-weight stat tile would silently never render; the schema
+    # refuses it at import time instead.
+    with pytest.raises(ValueError, match="hero_shape on non-primary"):
+        CardMetadata(
+            id="test-card",
+            name="Test Card",
+            rules_text="...",
+            fields=[],
+            outputs=[
+                OutputSpec(name="a", label="A", primary=True),
+                OutputSpec(name="b", label="B", hero_shape="shield"),
+            ],
+        )
+
+
 def test_card_metadata_alert_defaults_to_none() -> None:
     card = CardMetadata(id="test-card", name="Test Card", rules_text="...", fields=[], outputs=[])
     assert card.alert is None

@@ -6,7 +6,16 @@ import type { CardMetadata } from '@mtg/core'
 import { CardPickerScreen } from './CardPickerScreen'
 
 function makeCard(id: string, name: string): CardMetadata {
-  return { id, name, rules_text: '...', scryfall_id: null, fields: [], outputs: [], alert: null }
+  return {
+    id,
+    name,
+    rules_text: '...',
+    scryfall_id: null,
+    show_hero_art: false,
+    fields: [],
+    outputs: [],
+    alert: null,
+  }
 }
 
 const cards = [

@@ -43,6 +43,7 @@ METADATA = CardMetadata(
     id="comet-stellar-pup",
     name="Comet, Stellar Pup",
     scryfall_id="a76fa8d4-923d-4afc-ba47-ba10fc0fe46e",
+    show_hero_art=True,
     rules_text=(
         "0: Roll a six-sided die. "
         "1 or 2 — [+2], then create two 1/1 green Squirrel creature tokens. They gain haste "
@@ -83,7 +84,16 @@ METADATA = CardMetadata(
         ),
     ],
     outputs=[
-        OutputSpec(name="loyalty", label="Loyalty", short_label="loyalty", primary=True),
+        OutputSpec(
+            name="loyalty",
+            label="Loyalty",
+            short_label="loyalty",
+            primary=True,
+            # Loyalty renders in a planeswalker shield beside the card art -- the same
+            # number the printed loyalty box shows, drawn next to the image rather than
+            # over it (Scryfall's terms forbid overlays; see cardImage.ts).
+            hero_shape="shield",
+        ),
         OutputSpec(
             name="activations_remaining",
             label="Activations remaining",

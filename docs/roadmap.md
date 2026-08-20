@@ -80,7 +80,9 @@ crop or cover the copyright and artist line, do not distort or recolor, no water
 the top, and nothing implying anyone other than Wizards created the card. Showing the
 **full** card image satisfies all of them at once. Those rules live in
 `packages/core/src/cardImage.ts`, next to the code that builds the URL, so they are found
-by anyone changing it.
+by anyone changing it -- including the one recorded exception: Comet's screen draws the
+live loyalty over the card's printed loyalty box (never the art or the artist line), a
+deliberate user decision noted there with its rationale and its one-component rollback.
 
 ## Decisions already made
 

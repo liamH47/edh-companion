@@ -85,6 +85,17 @@ renders the note instead.
 a vertical list of cards, most-recently-opened first (tracked in `src/core/storage.ts`, not the
 backend). Selecting a card pushes `CardScreen`.
 
+## The hero slot's two schema flags
+
+Rule 6's hero is not always a bare number. Two declarative flags extend it with zero
+per-card branching: `OutputSpec.hero_shape` swaps the primary output's rendering
+(`"shield"` = the planeswalker badge), and `CardMetadata.show_hero_art` puts card art on
+the play surface. Declared together (Comet), they render `CardArtHero`: the card large,
+with the live loyalty drawn over its printed loyalty box -- a recorded exception to the
+no-overlay reading of Scryfall's terms, scoped to the loyalty box only (decision note in
+cardImage.ts). Offline the hero falls back to the standalone shield, so the play surface
+never waits on the network.
+
 ## The 9 generic rules
 
 These are implemented once in `src/core/cardModel.ts` and must hold for every current and future
