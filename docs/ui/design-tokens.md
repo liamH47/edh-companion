@@ -102,10 +102,14 @@ either an inline numeric style or JS timing, not a Tailwind class:
 - `hitTarget.min = 48` (px). Every tap target (buttons, stepper controls, chips with `onClick`,
   toggle segments) is `min-h-12 min-w-12` or larger. Non-negotiable per
   `portability-rules.md`'s a11y note.
-- `motion.duration.{fast,base,sheet} = 160/200/280` (ms); `motion.easing.{standard,decelerate}`
+- `motion.duration.{fast,base,sheet} = 160/200/280` (ms); `motion.easing.{standard,decelerate,accelerate}`
   are cubic-bezier strings. `src/core/motion.ts` exports `transitionDuration(token)`, which
   returns `0` under `prefers-reduced-motion: reduce` instead of a shortened duration — reduced
   motion means *no* motion here, not less of it.
+  - `accelerate` speeds up *into* the end of a movement, which is only correct for something
+    falling — the die's descent between bounces. On a UI transition it makes the interface feel
+    like it is getting away from you; use `standard` or `decelerate` for anything a person
+    initiates.
 - **The one exception is an outcome-reveal animation** — the coin flip and the die roll —
   exported as `revealDuration()` (`REVEAL_DURATION_MS`/`REDUCED_REVEAL_DURATION_MS`). Here the
   animation *is* the result being shown, so at `0` the answer would just appear with no sense a

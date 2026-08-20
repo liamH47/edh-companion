@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { motion } from '@mtg/core/theme/tokens'
+import { prefersReducedMotion, rollKeyframes, type DieKeyframe } from '@mtg/core'
 
 /** Pip layout per face, on a 3x3 grid indexed 0..8 (0 = top-left, 4 = centre). */
 const PIPS_BY_FACE: Record<number, number[]> = {
@@ -17,16 +18,9 @@ const PIP_POSITIONS = [
   [28, 72], [50, 72], [72, 72],
 ] as const
 
-/** How often the shown face changes while tumbling. Slow enough to read as distinct
- * faces rather than a grey blur, fast enough to feel like a real roll. */
+/** How often the shown face changes while the die is in the air. Slow enough to read as
+ * distinct faces rather than a grey blur, fast enough to feel like a real roll. */
 const FACE_SWAP_INTERVAL_MS = 70
-const SPIN_TURNS = 2
-
-/** The landing "pop": a brief overshoot, then settle. State-driven (two phases) rather
- * than a CSS @keyframes bounce, so it maps onto Animated.sequence in a React Native port
- * -- @keyframes has no RN equivalent. */
-const POP_SCALE = 1.08
-const POP_MS = 120
 
 interface DieFaceProps {
   face: number
@@ -84,79 +78,115 @@ function DieFace({ face, faces }: DieFaceProps) {
   )
 }
 
+/** The die sitting still: no offset, no spin, full size. */
+const AT_REST: DieKeyframe = {
+  durationMs: 0,
+  translateX: 0,
+  translateY: 0,
+  rotateDeg: 0,
+  scale: 1,
+  easing: 'decelerate',
+  contact: false,
+}
+
+function transformFor(frame: DieKeyframe): string {
+  return `translate(${frame.translateX}px, ${frame.translateY}px) rotate(${frame.rotateDeg}deg) scale(${frame.scale})`
+}
+
 interface TumblingDieProps {
-  /** The face to reveal once the tumble ends. Ignored (a flicker plays) while `rolling`. */
+  /** The face to reveal once the die lands. A flicker plays while it is in the air. */
   face: number
   faces: number
   rolling: boolean
   durationMs: number
+  /** Varies the resting angle and tumble between rolls. The owner supplies it from the
+   * same RNG that picked the face, so a test can pin both. */
+  seed?: number
 }
 
 /**
- * The die, purely as a visual: it flickers through faces while `rolling`, then reveals
- * `face` with a small pop when `rolling` goes false. It decides nothing -- no RNG, no
- * result callback, no announcement. The owner (a card's `DieRoller`, or `DiceScreen`)
- * picks the outcome up front and drives `face`/`rolling`, which is what lets `DiceScreen`
- * land two dice off one shared timer and announce their sum exactly once.
+ * The die, purely as a visual: it is thrown, bounces along the contact schedule in
+ * `dieAnimation.ts`, and settles at a slight angle showing `face`. It decides nothing --
+ * no RNG, no result callback, no announcement. The owner (a card's `DieRoller`, or
+ * `DiceScreen`) picks the outcome up front and drives `face`/`rolling`, which is what
+ * lets `DiceScreen` land two dice off one shared timer and announce their sum once.
+ *
+ * Playback is a keyframe walk rather than one CSS transition: each frame sets a transform
+ * and a duration, and a timer advances to the next. That is what CSS `@keyframes` would
+ * do, but `@keyframes` has no React Native equivalent, whereas this maps directly onto
+ * `Animated.sequence` (portability-rules.md).
+ *
+ * The face stops flickering at the last contact, not when the whole animation ends -- a
+ * real die shows its number from the moment it stops moving, and the settle is the die
+ * rocking flat with its result already visible.
  */
-export function TumblingDie({ face, faces, rolling, durationMs }: TumblingDieProps) {
+export function TumblingDie({ face, faces, rolling, durationMs, seed = 1 }: TumblingDieProps) {
   const [shownFace, setShownFace] = useState(face)
-  const [spins, setSpins] = useState(0)
-  const [popped, setPopped] = useState(false)
+  const [frameIndex, setFrameIndex] = useState(-1)
   const intervalRef = useRef<number | undefined>(undefined)
-  const popTimeoutRef = useRef<number | undefined>(undefined)
-  const wasRolling = useRef(false)
+  const timeoutRef = useRef<number | undefined>(undefined)
+
+  const frames = useMemo(
+    () => rollKeyframes(durationMs, seed, prefersReducedMotion()),
+    [durationMs, seed],
+  )
+  // Everything from the final contact onward shows the real face: the die has landed and
+  // is only settling.
+  const landedAt = frames.reduce((last, frame, index) => (frame.contact ? index : last), 0)
 
   useEffect(() => {
     return () => {
       window.clearInterval(intervalRef.current)
-      window.clearTimeout(popTimeoutRef.current)
+      window.clearTimeout(timeoutRef.current)
     }
   }, [])
 
   useEffect(() => {
-    if (rolling) {
-      wasRolling.current = true
-      setSpins((current) => current + SPIN_TURNS)
-      intervalRef.current = window.setInterval(() => {
-        // Purely visual: cycles faces so the die reads as tumbling. The value that
-        // counts is `face`, revealed below when the roll ends.
-        setShownFace((current) => (current % faces) + 1)
-      }, FACE_SWAP_INTERVAL_MS)
-      return () => window.clearInterval(intervalRef.current)
+    if (!rolling) {
+      setFrameIndex(-1)
+      setShownFace(face)
+      return
     }
 
     setShownFace(face)
-    // Pop only when a roll just finished -- not on the initial mount, where `rolling`
-    // is already false and nothing was tumbling.
-    if (wasRolling.current) {
-      wasRolling.current = false
-      setPopped(true)
-      popTimeoutRef.current = window.setTimeout(() => setPopped(false), POP_MS)
+    setFrameIndex(0)
+
+    let index = 0
+    const advance = () => {
+      index += 1
+      if (index >= frames.length) return
+      setFrameIndex(index)
+      timeoutRef.current = window.setTimeout(advance, frames[index].durationMs)
     }
-  }, [rolling, face, faces])
+    timeoutRef.current = window.setTimeout(advance, frames[0].durationMs)
+
+    intervalRef.current = window.setInterval(() => {
+      // Purely decorative: cycles faces so the die reads as tumbling. The value that
+      // counts is `face`, shown from the last contact onward.
+      setShownFace((current) => (current % faces) + 1)
+    }, FACE_SWAP_INTERVAL_MS)
+
+    return () => {
+      window.clearInterval(intervalRef.current)
+      window.clearTimeout(timeoutRef.current)
+    }
+  }, [rolling, face, faces, frames])
+
+  const airborne = rolling && frameIndex > -1 && frameIndex < landedAt
+  const frame = frameIndex > -1 ? frames[frameIndex] : AT_REST
 
   return (
-    <div
-      className="h-24 w-24"
-      // Rotation and opacity only on the outer element -- the two properties React Native
-      // animates the same way (portability-rules.md).
-      style={{
-        transform: `rotate(${spins * 360}deg)`,
-        transition: `transform ${durationMs}ms ${motion.easing.decelerate}`,
-        opacity: rolling ? 0.85 : 1,
-      }}
-    >
+    <div className="h-24 w-24">
       <div
         className="h-full w-full"
-        // Scale kept on a nested element so its short pop timing doesn't fight the long
-        // spin transition above.
+        // Only transform, and only via tokens -- the two things a React Native port can
+        // animate identically (portability-rules.md).
         style={{
-          transform: `scale(${popped ? POP_SCALE : 1})`,
-          transition: `transform ${POP_MS}ms ${motion.easing.decelerate}`,
+          transform: transformFor(frame),
+          transition: `transform ${frame.durationMs}ms ${motion.easing[frame.easing]}`,
         }}
       >
-        <DieFace face={shownFace} faces={faces} />
+        <DieFace face={airborne ? shownFace : face} faces={faces} />
       </div>
     </div>
   )

@@ -59,6 +59,13 @@ jobs:
       - name: Check the parity corpus is current
         run: uv run python tools/generate_parity_corpus.py --check
 
+      # The roll sound is synthesized from the die animation's contact schedule
+      # (packages/core/src/dieAnimation.ts), so the thuds land on the frames where the
+      # die touches down. This fails if someone edits the schedule, the reveal duration,
+      # or the synth parameters without regenerating the committed WAV.
+      - name: Check the roll sound matches the animation
+        run: uv run python tools/generate_roll_sound.py --check
+
   frontend:
     name: Frontend (tsc, oxlint, vitest)
     runs-on: ubuntu-latest

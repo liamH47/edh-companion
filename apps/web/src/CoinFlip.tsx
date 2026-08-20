@@ -85,13 +85,38 @@ function KrarkFace() {
   )
 }
 
+/**
+ * A goblin thumbs-up. Three details do the work of making it read as a *hand* rather than
+ * a shape on a base: the thumb leaves the fist at an angle from one side instead of rising
+ * symmetrically from the middle, the curled fingers are drawn as ridges across the fist,
+ * and there is a nail at the tip and a sleeve cuff at the wrist. Drop any of those and it
+ * goes back to being an anonymous vertical form -- which is exactly what the first version
+ * was, and it did not read the way it was meant to.
+ */
 function KrarkThumb() {
   return (
     <CoinBase>
-      <rect x="34" y="52" width="32" height="26" rx="10" fill="#6fa348" />
-      <rect x="44" y="20" width="16" height="38" rx="8" fill="#6fa348" />
-      <line x1="38" y1="60" x2="62" y2="60" stroke="#4c7a2e" strokeWidth="2" opacity="0.6" />
-      <line x1="38" y1="68" x2="62" y2="68" stroke="#4c7a2e" strokeWidth="2" opacity="0.6" />
+      {/* Sleeve, drawn first so the fist overlaps it at the wrist. */}
+      <rect x="36" y="70" width="28" height="12" rx="5" fill="#4c7a2e" />
+      {/* Thumb: angled up and to the left, off the side of the fist. */}
+      <line
+        x1="41"
+        y1="50"
+        x2="28"
+        y2="29"
+        stroke="#6fa348"
+        strokeWidth="13"
+        strokeLinecap="round"
+      />
+      <ellipse cx="27" cy="28" rx="3.2" ry="4.2" fill="#cfe3b8" opacity="0.85" />
+      {/* Fist, over the thumb's root so the join reads as one hand. */}
+      <rect x="30" y="44" width="42" height="32" rx="12" fill="#6fa348" />
+      {/* Curled fingers, seen side-on. */}
+      <line x1="43" y1="52" x2="67" y2="52" stroke="#4c7a2e" strokeWidth="2.5" strokeLinecap="round" opacity="0.65" />
+      <line x1="43" y1="60" x2="67" y2="60" stroke="#4c7a2e" strokeWidth="2.5" strokeLinecap="round" opacity="0.65" />
+      <line x1="43" y1="68" x2="67" y2="68" stroke="#4c7a2e" strokeWidth="2.5" strokeLinecap="round" opacity="0.65" />
+      {/* Crease where the thumb meets the fist. */}
+      <line x1="36" y1="52" x2="43" y2="47" stroke="#4c7a2e" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
     </CoinBase>
   )
 }
