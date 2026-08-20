@@ -73,6 +73,18 @@ Hand-write icons as `<svg><path>/<circle>` only (see `src/ui/Icon.tsx`) — no i
 sprite sheet. The same JSX compiles under `react-native-svg` (`Svg`/`Path`/`Circle`) with a
 mechanical element-name swap.
 
+## Frame-driven animation
+
+The transitions rule above bans CSS animation on properties other than `opacity` and
+`transform` because React Native cannot animate the rest. A **JS-driven per-frame
+redraw** -- `requestAnimationFrame` or a timer updating SVG attributes such as polygon
+`points` -- is not a CSS transition and is not banned: it is the correct tool for
+properties CSS cannot animate at all, and it maps directly onto `Animated`/Reanimated
+driving an SVG or Skia redraw on the native side. `requestAnimationFrame` is a shared
+global on both platforms (RN polyfills it), so it needs no seam; call it directly from
+the leaf component, the way `setTimeout` already is. Keep the *math* that produces each
+frame in `packages/core` (see `dice3d/`) so the loop body stays a dumb sampler.
+
 ## Numbers
 
 Never hardcode a number that means "the minimum tap target" or "how long this animation runs" —

@@ -3,7 +3,7 @@ import { rollDie, tapHaptic } from '@mtg/core'
 import { FIRST_CONTACT_FRACTION, playRollSound, revealDuration } from '@mtg/core'
 import { Button } from '../ui/Button'
 import { Text } from '../ui/Text'
-import { TumblingDie } from './TumblingDie'
+import { Die3D } from './Die3D'
 
 interface DieRollerProps {
   faces: number
@@ -19,7 +19,7 @@ interface DieRollerProps {
 /**
  * Rolls the die for the player instead of asking them what they rolled. Owns the outcome
  * (RNG, the reveal timer, the announcement, the Comet-specific disabled copy) and hands
- * the visuals to `TumblingDie`.
+ * the visuals to `Die3D`.
  *
  * The result is decided up front and only *revealed* when the tumble ends: the faces
  * flickering during the roll are decoration, and deciding at the end would let a mid-roll
@@ -71,13 +71,7 @@ export function DieRoller({
 
   return (
     <div className="flex flex-col items-center gap-3">
-      <TumblingDie
-        face={face}
-        faces={faces}
-        rolling={rolling}
-        durationMs={durationMs}
-        seed={seed}
-      />
+      <Die3D face={face} faces={faces} rolling={rolling} durationMs={durationMs} seed={seed} />
 
       {/* The face is announced rather than shown as text, so a screen reader hears the
           result the sighted player reads off the die. Only once it has landed. */}

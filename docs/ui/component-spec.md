@@ -326,17 +326,25 @@ Bottom-pinned row in the thumb zone. Three field shapes feed it, all honouring t
 - a live `sequence` declaring `roll` → a `DieRoller` the app rolls itself (Comet); the per-option
   buttons are suppressed so nobody can report a roll the app didn't make.
 
-### TumblingDie / DieRoller / DiceScreen
+### Die3D / DieRoller / DiceScreen
 
-`TumblingDie` (`cards/TumblingDie.tsx`) is the die as pure visual: it flickers through faces
-while `rolling`, then reveals `face` with a state-driven scale "pop" (overshoot then settle —
-not a CSS `@keyframes` bounce, which has no RN equivalent). It decides nothing: no RNG, no
-result callback, no announcement. Owners drive `face`/`rolling`. Faces > 6, and any face a d6
-has no pip layout for, render as a numeral.
+`Die3D` (`cards/Die3D.tsx`) is the die as a real solid, purely visual: a cube for six or
+fewer faces, a true icosahedron for a d20, projected by `@mtg/core/dice3d` (quaternions,
+perspective, backface culling, Lambert shading) and drawn as SVG `<polygon>`s. While
+`rolling` it samples the seeded `tumblePath` on a requestAnimationFrame clock -- thrown,
+bouncing on the shared contact schedule the roll sound is synthesized from, settling with
+the rolled face solved exactly toward the camera plus a <=12° in-plane tilt. Decorations
+(pips, or an upright numeral for faces > 6) are hidden mid-tumble and fade in from the
+final contact. It decides nothing: no RNG, no result callback, no announcement; owners
+drive `face`/`rolling`/`seed`. Fills and strokes are theme CSS variables passed as literal
+SVG props, never Tailwind classes (the react-native-svg-portable pattern). Under reduced
+motion it runs no frame loop at all: final pose, opacity ease-in over `revealDuration()`.
+Design record: `docs/design/dice3d.md`.
 
 - `DieRoller` (`cards/DieRoller.tsx`) keeps the self-deciding shape for the Comet card path:
-  it owns the RNG (`rollDie`), the reveal timer, the `aria-live` announcement, and the
-  Comet-specific "No activations left this turn." copy, rendering `TumblingDie` for visuals.
+  it owns the RNG (`rollDie`), the tumble seed, the reveal timer, the roll-clip trigger at
+  `FIRST_CONTACT_FRACTION`, the `aria-live` announcement, and the Comet-specific "No
+  activations left this turn." copy, rendering `Die3D` for visuals.
 - `DiceScreen` (`DiceScreen.tsx`) is the standalone d6 / 2d6 / d20 roller behind the Dice tab.
   A `SegmentedControl` picks the mode (disabled while rolling). One "Roll" decides all dice up
   front via `rollDice` and reveals them off a single shared timer, so 2d6's sum is committed in
