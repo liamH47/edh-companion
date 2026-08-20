@@ -38,9 +38,21 @@ conversation, a commit, or a log.
   green PR
 - `/add-card` — adding a card is a five-step job across two languages
 
-## Two things that surprise people
+## Finish the job by opening the PR
+
+Committing to a `claude/*` branch is not delivery. Several remote sessions have stopped
+there, and the branches sat unnoticed for over two weeks — one of them carrying a security
+fix. Open the PR before the session ends; a commit nobody can see may as well not exist.
+
+## Three things that surprise people
 
 - A card needs **both** a Python module and a TypeScript mirror. The parity suite fails
   until both exist, by design — that is a forcing function, not an oversight.
-- The backend uses `uv`, which is not preinstalled on a cloud VM. Install it before
-  running backend checks: `curl -LsSf https://astral.sh/uv/install.sh | sh`.
+- The backend uses `uv`, which is not preinstalled on a cloud VM — but you do not have to
+  install it yourself. The `SessionStart` hook (`.claude/hooks/session-start.sh`) installs
+  `uv`, runs `uv sync` in `backend/`, and runs a root `npm install`, so checks work
+  immediately. It is guarded on `CLAUDE_CODE_REMOTE` and does nothing locally, so a local
+  checkout still needs `curl -LsSf https://astral.sh/uv/install.sh | sh` by hand.
+- Not every entry under Cards is a card. Commander Tax is a format mechanic with
+  `scryfall_id: None`, and `test_registry.py` allowlists such ids explicitly — so a real
+  card added without an id still fails the check.
