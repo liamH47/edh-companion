@@ -12,7 +12,15 @@ import type { CardMetadata } from './types'
  *   - Do not distort, skew or stretch. The view must letterbox rather than fill.
  *   - Do not recolor, blur or desaturate. No filters, and no dimming the image itself to
  *     match a dark theme -- dim the surround instead.
- *   - Do not add watermarks or logos over it.
+ *   - Do not add watermarks or logos over it. **Recorded exception, decided
+ *     2026-08-20:** Comet's screen draws the LIVE loyalty value in a badge over the
+ *     card's own printed loyalty box (CardArtHero) -- the user chose this over a
+ *     beside-the-card shield with the conflict explicitly on the table. The badge is
+ *     game state in the frame's own slot for it, not a watermark or logo; it covers
+ *     only the printed loyalty box, never the artwork proper and never the artist and
+ *     copyright line, and the image stays undistorted, uncropped and unfiltered. If
+ *     Wizards or Scryfall ever object, CardArtHero already contains the fallback
+ *     (standalone shield, untouched image) -- flip is one component swap.
  *   - Do not imply anyone other than Wizards created the card.
  *
  * The id resolves through api.scryfall.com, which 302s to their CDN. Going through the

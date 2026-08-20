@@ -35,6 +35,7 @@ function output(overrides: Partial<OutputSpec> & Pick<OutputSpec, 'name'>): Outp
     kind: 'number',
     short_label: null,
     primary: false,
+    hero_shape: 'number',
     ...overrides,
   }
 }
@@ -44,6 +45,7 @@ const aetherfluxLikeCard: CardMetadata = {
   name: 'Aetherflux Reservoir',
   rules_text: 'Whenever you cast a spell, you gain 1 life for each spell cast this turn.',
   scryfall_id: '96b6b2e1-c3e6-464c-8a13-b15deb34e862',
+  show_hero_art: false,
   fields: [
     field({
       name: 'starting_life',
@@ -94,6 +96,7 @@ const allSetupCard: CardMetadata = {
   name: 'All Setup Card',
   rules_text: '...',
   scryfall_id: null,
+  show_hero_art: false,
   fields: [field({ name: 'power', kind: 'number', label: 'Power', setup: true })],
   outputs: [output({ name: 'total', label: 'Total', primary: true })],
   alert: null,
@@ -104,6 +107,7 @@ const singleOutputCard: CardMetadata = {
   name: 'Single Output Card',
   rules_text: '...',
   scryfall_id: null,
+  show_hero_art: false,
   fields: [field({ name: 'creatures_died', kind: 'number', label: 'Creatures died' })],
   outputs: [output({ name: 'total_life_drained', label: 'Total life drained', primary: true })],
   alert: null,
@@ -226,6 +230,48 @@ describe('CardScreen', () => {
     expect(await screen.findByText('6')).toBeInTheDocument()
     // Only the hero's own render of "6" should exist -- no duplicate stat tile.
     expect(screen.getAllByText('6')).toHaveLength(1)
+  })
+
+  it('renders the card large with loyalty overlaid when the schema asks for both', async () => {
+    compute.mockReturnValue({ loyalty: 7 })
+    const cometLike: CardMetadata = {
+      ...singleOutputCard,
+      id: 'comet-like',
+      scryfall_id: '96b6b2e1-c3e6-464c-8a13-b15deb34e862',
+      show_hero_art: true,
+      outputs: [output({ name: 'loyalty', primary: true, hero_shape: 'shield' })],
+    }
+    render(<CardScreen card={cometLike} />)
+    // The card IS the hero: full-size art with the badge over its printed loyalty box.
+    expect(await screen.findByTestId('card-art-hero')).toBeInTheDocument()
+    expect(screen.getByTestId('loyalty-shield')).toBeInTheDocument()
+    expect(screen.getByAltText('Single Output Card, as printed')).toBeInTheDocument()
+  })
+
+  it('renders inline art beside the plain hero when only show_hero_art is set', async () => {
+    compute.mockReturnValue({ total_life_drained: 4 })
+    const artOnly: CardMetadata = {
+      ...singleOutputCard,
+      id: 'art-only',
+      scryfall_id: '96b6b2e1-c3e6-464c-8a13-b15deb34e862',
+      show_hero_art: true,
+    }
+    render(<CardScreen card={artOnly} />)
+    expect(await screen.findByText('4')).toBeInTheDocument()
+    expect(screen.queryByTestId('loyalty-shield')).not.toBeInTheDocument()
+    expect(screen.getByAltText('Single Output Card, as printed')).toBeInTheDocument()
+  })
+
+  it('renders the shield alone for a shield hero with no inline art', async () => {
+    compute.mockReturnValue({ loyalty: 3 })
+    const shieldNoArt: CardMetadata = {
+      ...singleOutputCard,
+      id: 'shield-no-art',
+      outputs: [output({ name: 'loyalty', primary: true, hero_shape: 'shield' })],
+    }
+    render(<CardScreen card={shieldNoArt} />)
+    expect(await screen.findByTestId('loyalty-shield')).toBeInTheDocument()
+    expect(screen.queryByAltText(/as printed/)).not.toBeInTheDocument()
   })
 
   it('resets values via New turn without reopening the setup sheet', async () => {

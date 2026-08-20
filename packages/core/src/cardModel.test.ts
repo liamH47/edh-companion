@@ -40,6 +40,7 @@ function output(overrides: Partial<OutputSpec> & Pick<OutputSpec, 'name'>): Outp
     kind: 'number',
     short_label: null,
     primary: false,
+    hero_shape: 'number',
     ...overrides,
   }
 }
@@ -50,6 +51,7 @@ function card(overrides: Partial<CardMetadata> = {}): CardMetadata {
     name: 'Test Card',
     rules_text: '...',
     scryfall_id: null,
+    show_hero_art: false,
     fields: [],
     outputs: [],
     alert: null,

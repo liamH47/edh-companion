@@ -1,7 +1,7 @@
 """Pydantic contract shared by every card: metadata a frontend can render generically."""
 
 from enum import StrEnum
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, model_validator
 
@@ -132,6 +132,12 @@ class OutputSpec(BaseModel):
     # Marks this as the card's headline result, e.g. "damage available" for Aetherflux --
     # rendered as the hero number instead of an equal-weight tile. At most one per card.
     primary: bool = False
+    # How the hero renders this output, when it is the primary. "number" is the plain
+    # HeroStat; "shield" draws a planeswalker loyalty shield around it (Comet). A visual
+    # shape, deliberately not part of OutputKind -- that enum is the value's data type,
+    # and coupling presentation to it would make every kind branch also carry
+    # presentation. Frontend-only, like `primary`; compute() knows nothing of it.
+    hero_shape: Literal["number", "shield"] = "number"
 
 
 class AlertSpec(BaseModel):
@@ -151,6 +157,12 @@ class CardMetadata(BaseModel):
     # Optional: a future entry could be a format mechanic (commander tax) with no card
     # behind it, and the button simply does not render for those.
     scryfall_id: str | None = None
+    # Show the card image inline on the calculator screen, beside the hero, instead of
+    # only behind the "View card" button. The screen must keep working without it --
+    # the image is the one thing in the app that needs a network -- so the frontend
+    # reuses CardImage's graceful fallback, and cardless entries are safe by
+    # construction (no scryfall_id, no image, flag ignored).
+    show_hero_art: bool = False
     fields: list[FieldSpec]
     outputs: list[OutputSpec]
     alert: AlertSpec | None = None
@@ -160,4 +172,16 @@ class CardMetadata(BaseModel):
         primary_names = [output.name for output in self.outputs if output.primary]
         if len(primary_names) > 1:
             raise ValueError(f"card {self.id!r} declares multiple primary outputs: {primary_names}")
+        return self
+
+    @model_validator(mode="after")
+    def _check_hero_shape_is_primary(self) -> "CardMetadata":
+        """A shaped hero only means something on the primary output -- a shield on an
+        equal-weight stat tile would silently never render, which is the kind of quiet
+        misconfiguration a card author should hear about at import time."""
+        shaped = [o.name for o in self.outputs if o.hero_shape != "number" and not o.primary]
+        if shaped:
+            raise ValueError(
+                f"card {self.id!r} declares hero_shape on non-primary outputs: {shaped}"
+            )
         return self

@@ -93,6 +93,13 @@ test.describe('Cards', () => {
     // recharged -- never in between.
     const remaining = await page.getByText(/acts left/).textContent()
     expect(remaining).toBeTruthy()
+
+    // The loyalty badge on the card art tracks the roll: 5 before, and every possible
+    // face moves it (1-2 -> 7, 3 -> 4, 4-5 -> 3, 6 -> 6), so it can never still read 5
+    // after one roll. The badge renders over the image when Scryfall is reachable and
+    // as the standalone shield when not -- both carry the same live region.
+    const shield = page.getByTestId('loyalty-shield')
+    await expect(shield.locator('[aria-live="polite"]')).not.toHaveText('5')
   })
 
   test('computes with the API unreachable', async ({ page }) => {

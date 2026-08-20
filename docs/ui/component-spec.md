@@ -356,6 +356,19 @@ Design record: `docs/design/dice3d.md`.
 A `secondary` "New turn" button sits last. Padded with `env(safe-area-inset-bottom)` so it
 clears a phone's gesture bar. (`screen-spec.md` covers the multi-counter ordering.)
 
+### CardArtHero / LoyaltyShield / LoyaltyBadge
+
+`CardArtHero` (`cards/CardArtHero.tsx`) makes the card itself the hero: the printed image,
+large, with `LoyaltyBadge` -- the live loyalty in a hand-drawn planeswalker badge -- over
+the card's own printed loyalty box. A recorded decision (see the note in cardImage.ts):
+the badge covers only the printed loyalty box, never the artwork proper or the artist and
+copyright line, and the image is otherwise untouched. Selected declaratively by
+`OutputSpec.hero_shape: "shield"` + `CardMetadata.show_hero_art` together -- the RollSpec
+pattern, never a card-id switch. Offline (or for a cardless entry) it falls back to
+`LoyaltyShield`, the standalone label-over-badge hero with HeroStat's data contract, so
+the game state never waits on the network. When the card's alert fires (Comet dead), the
+badge takes the danger tones -- the one use design-tokens.md reserves danger for.
+
 ### CardPickerScreen / CardDetailSheet / CardImage
 
 Specified in `screen-spec.md` alongside navigation, since they're screen-level, not reusable

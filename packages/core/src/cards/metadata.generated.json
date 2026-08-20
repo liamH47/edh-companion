@@ -101,6 +101,7 @@
     "name": "Aetherflux Reservoir",
     "outputs": [
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Life gained this spell",
         "name": "life_this_spell",
@@ -108,6 +109,7 @@
         "short_label": "this spell"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Total life gained",
         "name": "total_life",
@@ -115,6 +117,7 @@
         "short_label": "life gained"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Current life total",
         "name": "current_life",
@@ -122,6 +125,7 @@
         "short_label": "life"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Damage dealt",
         "name": "damage_dealt",
@@ -129,6 +133,7 @@
         "short_label": "damage dealt"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Activations available",
         "name": "possible_activations",
@@ -136,6 +141,7 @@
         "short_label": "activations"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Damage available",
         "name": "damage_available",
@@ -143,6 +149,7 @@
         "short_label": "damage"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Spells until next activation",
         "name": "spells_until_next_activation",
@@ -151,7 +158,8 @@
       }
     ],
     "rules_text": "Whenever you cast a spell, you gain 1 life for each spell you've cast this turn. Pay 50 life: Aetherflux Reservoir deals 50 damage to any target.",
-    "scryfall_id": "96b6b2e1-c3e6-464c-8a13-b15deb34e862"
+    "scryfall_id": "96b6b2e1-c3e6-464c-8a13-b15deb34e862",
+    "show_hero_art": false
   },
   {
     "alert": null,
@@ -195,6 +203,7 @@
     "name": "Blood Artist",
     "outputs": [
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Life drained (and gained)",
         "name": "total_life_drained",
@@ -203,7 +212,8 @@
       }
     ],
     "rules_text": "Whenever this creature or another creature dies, target player loses 1 life and you gain 1 life.",
-    "scryfall_id": "b5275d76-2947-4219-be21-614c7421614a"
+    "scryfall_id": "b5275d76-2947-4219-be21-614c7421614a",
+    "show_hero_art": false
   },
   {
     "alert": {
@@ -250,6 +260,7 @@
     "name": "Brain Freeze",
     "outputs": [
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Copies from storm",
         "name": "copies_from_storm",
@@ -257,6 +268,7 @@
         "short_label": "copies"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Total resolutions",
         "name": "total_copies",
@@ -264,6 +276,7 @@
         "short_label": "resolutions"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Cards milled",
         "name": "cards_milled",
@@ -271,6 +284,7 @@
         "short_label": "milled"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Cards left after",
         "name": "library_after",
@@ -279,7 +293,8 @@
       }
     ],
     "rules_text": "Target player mills three cards. Storm (When you cast this spell, copy it for each spell cast before it this turn. You may choose new targets for the copies.)",
-    "scryfall_id": "3a2d7cf9-dddb-4de3-b4f2-c52e3ec8fb4b"
+    "scryfall_id": "3a2d7cf9-dddb-4de3-b4f2-c52e3ec8fb4b",
+    "show_hero_art": false
   },
   {
     "alert": {
@@ -357,6 +372,7 @@
     "name": "Comet, Stellar Pup",
     "outputs": [
       {
+        "hero_shape": "shield",
         "kind": "number",
         "label": "Loyalty",
         "name": "loyalty",
@@ -364,6 +380,7 @@
         "short_label": "loyalty"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Activations remaining",
         "name": "activations_remaining",
@@ -371,6 +388,7 @@
         "short_label": "acts left"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Damage from the last roll",
         "name": "damage_this_activation",
@@ -378,6 +396,7 @@
         "short_label": "dmg now"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Total damage this turn",
         "name": "total_damage",
@@ -385,6 +404,7 @@
         "short_label": "total dmg"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Squirrels created",
         "name": "squirrels_created",
@@ -392,6 +412,7 @@
         "short_label": "squirrels"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Cards returned",
         "name": "cards_returned",
@@ -400,7 +421,8 @@
       }
     ],
     "rules_text": "0: Roll a six-sided die. 1 or 2 \u2014 [+2], then create two 1/1 green Squirrel creature tokens. They gain haste until end of turn. 3 \u2014 [\u22121], then return a card with mana value 2 or less from your graveyard to your hand. 4 or 5 \u2014 Comet deals damage equal to the number of loyalty counters on him to a creature or player, then [\u22122]. 6 \u2014 [+1], and you may activate Comet's loyalty ability two more times this turn.",
-    "scryfall_id": "a76fa8d4-923d-4afc-ba47-ba10fc0fe46e"
+    "scryfall_id": "a76fa8d4-923d-4afc-ba47-ba10fc0fe46e",
+    "show_hero_art": true
   },
   {
     "alert": null,
@@ -461,6 +483,7 @@
     "name": "Commander Tax",
     "outputs": [
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Commander tax",
         "name": "commander_tax",
@@ -468,6 +491,7 @@
         "short_label": "tax"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Next cast costs",
         "name": "current_cast_cost",
@@ -476,7 +500,8 @@
       }
     ],
     "rules_text": "Each time you cast your commander from the command zone, it costs {2} more for each previous time you've cast it from the command zone this game.",
-    "scryfall_id": null
+    "scryfall_id": null,
+    "show_hero_art": false
   },
   {
     "alert": null,
@@ -557,6 +582,7 @@
     "name": "Craterhoof Behemoth",
     "outputs": [
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Power bonus per creature (trigger 1)",
         "name": "power_bonus_trigger_1",
@@ -564,6 +590,7 @@
         "short_label": "bonus (1st)"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Total power after trigger 1",
         "name": "power_after_trigger_1",
@@ -571,6 +598,7 @@
         "short_label": "after 1st"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Power bonus per creature (trigger 2)",
         "name": "power_bonus_trigger_2",
@@ -578,6 +606,7 @@
         "short_label": "bonus (2nd)"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Total power after all triggers",
         "name": "total_power_after_triggers",
@@ -586,7 +615,8 @@
       }
     ],
     "rules_text": "Haste. When this creature enters, creatures you control gain trample and get +X/+X until end of turn, where X is the number of creatures you control.",
-    "scryfall_id": "276f5cee-a501-4658-bd4d-7a044bf1ccbc"
+    "scryfall_id": "276f5cee-a501-4658-bd4d-7a044bf1ccbc",
+    "show_hero_art": false
   },
   {
     "alert": null,
@@ -613,6 +643,7 @@
     "name": "Empty the Warrens",
     "outputs": [
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Copies from storm",
         "name": "copies_from_storm",
@@ -620,6 +651,7 @@
         "short_label": "copies"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Total resolutions",
         "name": "total_copies",
@@ -627,6 +659,7 @@
         "short_label": "resolutions"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Goblins created",
         "name": "goblins_created",
@@ -634,6 +667,7 @@
         "short_label": "goblins"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Damage if they all attack",
         "name": "damage_next_turn",
@@ -642,7 +676,8 @@
       }
     ],
     "rules_text": "Create two 1/1 red Goblin creature tokens. Storm (When you cast this spell, copy it for each spell cast before it this turn.)",
-    "scryfall_id": "939d765a-aefb-4393-8808-98b1bbd7e803"
+    "scryfall_id": "939d765a-aefb-4393-8808-98b1bbd7e803",
+    "show_hero_art": false
   },
   {
     "alert": null,
@@ -669,6 +704,7 @@
     "name": "Grapeshot",
     "outputs": [
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Copies from storm",
         "name": "copies_from_storm",
@@ -676,6 +712,7 @@
         "short_label": "copies"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Total resolutions",
         "name": "total_copies",
@@ -683,6 +720,7 @@
         "short_label": "resolutions"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Total damage",
         "name": "total_damage",
@@ -691,7 +729,8 @@
       }
     ],
     "rules_text": "Grapeshot deals 1 damage to any target. Storm (When you cast this spell, copy it for each spell cast before it this turn. You may choose new targets for the copies.)",
-    "scryfall_id": "e3e2d90a-3557-49d5-9986-cb50fd31f396"
+    "scryfall_id": "e3e2d90a-3557-49d5-9986-cb50fd31f396",
+    "show_hero_art": false
   },
   {
     "alert": null,
@@ -752,6 +791,7 @@
     "name": "Kalonian Hydra",
     "outputs": [
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Total +1/+1 counters after attacking",
         "name": "counters_after",
@@ -759,6 +799,7 @@
         "short_label": "counters"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Power added by doubling",
         "name": "power_gained",
@@ -766,6 +807,7 @@
         "short_label": "power gained"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Total power after attacking",
         "name": "total_power_after",
@@ -774,7 +816,8 @@
       }
     ],
     "rules_text": "Trample\nThis creature enters with four +1/+1 counters on it.\nWhenever this creature attacks, double the number of +1/+1 counters on each creature you control.",
-    "scryfall_id": "1d21ae20-2ef5-4dc0-aced-97497e6a8025"
+    "scryfall_id": "1d21ae20-2ef5-4dc0-aced-97497e6a8025",
+    "show_hero_art": false
   },
   {
     "alert": null,
@@ -801,6 +844,7 @@
     "name": "Nykthos, Shrine to Nyx",
     "outputs": [
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Mana produced",
         "name": "mana_produced",
@@ -808,6 +852,7 @@
         "short_label": "mana"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Net mana after paying {2} to activate",
         "name": "net_mana_after_activation_cost",
@@ -816,7 +861,8 @@
       }
     ],
     "rules_text": "{T}: Add {C}. {2}, {T}: Choose a color. Add an amount of mana of that color equal to your devotion to that color. (Devotion to a color is the number of mana symbols of that color in the mana costs of permanents you control.)",
-    "scryfall_id": "834b27a0-dfd7-4f96-8cde-cacac4b24acc"
+    "scryfall_id": "834b27a0-dfd7-4f96-8cde-cacac4b24acc",
+    "show_hero_art": false
   },
   {
     "alert": null,
@@ -877,6 +923,7 @@
     "name": "Ob Nixilis, the Fallen",
     "outputs": [
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Power and toughness",
         "name": "power",
@@ -884,6 +931,7 @@
         "short_label": "power"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Landfall triggers",
         "name": "landfall_triggers",
@@ -891,6 +939,7 @@
         "short_label": "triggers"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Counters added this turn",
         "name": "counters_added",
@@ -898,6 +947,7 @@
         "short_label": "added"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Total +1/+1 counters",
         "name": "total_counters",
@@ -905,6 +955,7 @@
         "short_label": "counters"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Life drained this turn",
         "name": "life_drained",
@@ -913,7 +964,8 @@
       }
     ],
     "rules_text": "Landfall \u2014 Whenever a land you control enters, you may have target player lose 3 life. If you do, put three +1/+1 counters on Ob Nixilis, the Fallen.",
-    "scryfall_id": "dc9d3ada-9d0d-489a-89b7-08f53f6601e1"
+    "scryfall_id": "dc9d3ada-9d0d-489a-89b7-08f53f6601e1",
+    "show_hero_art": false
   },
   {
     "alert": null,
@@ -991,6 +1043,7 @@
     "name": "Scute Swarm",
     "outputs": [
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Lands after this turn",
         "name": "final_land_count",
@@ -998,6 +1051,7 @@
         "short_label": "lands"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Scute Swarm copies after this turn",
         "name": "final_scute_swarm_count",
@@ -1005,6 +1059,7 @@
         "short_label": "swarm"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Insect tokens after this turn",
         "name": "final_insect_count",
@@ -1012,6 +1067,7 @@
         "short_label": "insects"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Total power on board",
         "name": "total_power",
@@ -1020,7 +1076,8 @@
       }
     ],
     "rules_text": "Landfall \u2014 Whenever a land you control enters, create a 1/1 green Insect creature token. If you control six or more lands, create a token that's a copy of this creature instead.",
-    "scryfall_id": "ea630ba1-22f9-4a10-bdc6-0d03128214f4"
+    "scryfall_id": "ea630ba1-22f9-4a10-bdc6-0d03128214f4",
+    "show_hero_art": false
   },
   {
     "alert": {
@@ -1067,6 +1124,7 @@
     "name": "Tendrils of Agony",
     "outputs": [
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Copies from storm",
         "name": "copies_from_storm",
@@ -1074,6 +1132,7 @@
         "short_label": "copies"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Total resolutions",
         "name": "total_copies",
@@ -1081,6 +1140,7 @@
         "short_label": "resolutions"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Life drained",
         "name": "life_drained",
@@ -1088,6 +1148,7 @@
         "short_label": "drained"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Life you gain",
         "name": "life_gained",
@@ -1095,6 +1156,7 @@
         "short_label": "you gain"
       },
       {
+        "hero_shape": "number",
         "kind": "number",
         "label": "Life they're left on",
         "name": "target_life_after",
@@ -1103,6 +1165,7 @@
       }
     ],
     "rules_text": "Target player loses 2 life and you gain 2 life. Storm (When you cast this spell, copy it for each spell cast before it this turn. You may choose new targets for the copies.)",
-    "scryfall_id": "6f26faca-f338-4ce5-a218-6a61d40fc50a"
+    "scryfall_id": "6f26faca-f338-4ce5-a218-6a61d40fc50a",
+    "show_hero_art": false
   }
 ]
