@@ -104,13 +104,13 @@ describe('DieRoller', () => {
     expect(onRolled).toHaveBeenCalledWith(6)
   })
 
-  it('cycles the shown face while tumbling, then settles on the result', () => {
+  it('hides the result while tumbling, then settles showing it', () => {
     setup()
     expect(pipCount()).toBe(1)
 
     pressRoll()
-    advance(140) // two flicker intervals
-    expect(pipCount()).toBeGreaterThan(1)
+    advance(140) // mid-flight: a spinning face carries no readable result
+    expect(pipCount()).toBe(0)
 
     advance()
     expect(pipCount()).toBe(4)

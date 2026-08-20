@@ -41,6 +41,16 @@ export const motion = {
   },
 } as const
 
+/**
+ * 3D die shading. Not emitted as CSS -- consumed by dice3d/shade.ts, which lays shadow
+ * ink (the theme's text color at low opacity) over the token face color in proportion
+ * to how far each face turns from the light. `max` is the fully-shadowed ceiling; the
+ * lit face gets 0. One knob, so light and dark themes dim by the same fraction.
+ */
+export const diceShade = {
+  max: 0.34,
+} as const
+
 export const typeScale = {
   label: { size: 11, weight: 600, letterSpacing: 0.06 },
   body: { size: 14, weight: 500, letterSpacing: 0 },

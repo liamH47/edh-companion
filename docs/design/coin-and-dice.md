@@ -220,3 +220,17 @@ Docs + tests:
 - `App.tsx` tab dispatch becomes an exhaustive `switch`.
 - Roll asset resolved to a stdlib-generated **`roll.wav`**.
 </content>
+
+## Erratum (2026-08-20)
+
+Two recorded decisions above are superseded by the real-3D dice work; they are left in
+place because this doc records iteration rather than rewriting it:
+
+- "d20 needs **no new art**" -- reversed. The d20 is now a true icosahedron and the d6 a
+  projected cube, drawn as SVG polygons from `packages/core/src/dice3d/`. The numeral
+  fallback survives for dice with no standard solid here (a d12 shows its number on a
+  cube face). See `docs/design/dice3d.md`.
+- "Landing pop is a state-driven two-phase scale" -- replaced twice over: first by a
+  keyframe throw/bounce/settle, then by the continuous seeded tumble in `dice3d/tumble.ts`,
+  sampled per frame. `TumblingDie` itself is gone; `Die3D` is the visual, with the same
+  owner contract (no RNG, no callback, no announcement).

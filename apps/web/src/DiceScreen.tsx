@@ -7,7 +7,7 @@ import {
   rollDice,
   tapHaptic,
 } from '@mtg/core'
-import { TumblingDie } from './cards/TumblingDie'
+import { Die3D } from './cards/Die3D'
 import { Button } from './ui/Button'
 import { SegmentedControl, type SegmentedOption } from './ui/SegmentedControl'
 import { Text } from './ui/Text'
@@ -47,7 +47,7 @@ function announce(results: number[]): string {
  * A general dice roller: d6, two d6, or a d20. One "Roll" button drives however many dice
  * the mode has; the outcome is decided up front and revealed together off a single timer,
  * so 2d6's sum is committed in one atomic update with one announcement -- there is no
- * second die landing on its own clock to race. `TumblingDie` supplies the visuals; this
+ * second die landing on its own clock to race. `Die3D` supplies the visuals; this
  * screen owns the orchestration (mode, sum, sound).
  */
 export function DiceScreen({ rng = Math.random }: { rng?: () => number }) {
@@ -135,7 +135,7 @@ export function DiceScreen({ rng = Math.random }: { rng?: () => number }) {
       {/* Keyed by mode so switching remounts the dice, clearing any prior visual state. */}
       <div key={mode} className="flex items-center justify-center gap-4">
         {dice.map((die, index) => (
-          <TumblingDie
+          <Die3D
             key={index}
             face={die.face}
             faces={faces}
