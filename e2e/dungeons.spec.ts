@@ -21,7 +21,11 @@ test.describe('dungeons', () => {
     await expect(map.getByRole('button', { name: 'Trapped Entry, venture here' })).toBeVisible()
 
     // An unreachable room does not respond -- the road not taken stays not taken.
-    await map.getByRole('button', { name: 'Cradle of the Death God, unreachable' }).click()
+    // force: Playwright's actionability check refuses aria-disabled elements, and
+    // proving the tap is inert requires delivering it anyway.
+    await map
+      .getByRole('button', { name: 'Cradle of the Death God, unreachable' })
+      .click({ force: true })
     await expect(page.getByText('Not in this dungeon yet', { exact: false })).toBeVisible()
 
     // Walk the hard path: one brutal room where the cheap path takes two.
