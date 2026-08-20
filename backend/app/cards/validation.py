@@ -112,4 +112,32 @@ def _validate_sequence(field: FieldSpec, value: Any) -> list[str]:
                 "entry_not_in_options",
                 f"{field.name!r} entries must each be one of {sorted(allowed)}, got {entry!r}",
             )
+    if field.map is not None:
+        _validate_walk(field, value)
     return list(value)
+
+
+def _validate_walk(field: FieldSpec, value: list[str]) -> None:
+    """A mapped sequence must be a legal walk: start at the entry, then follow an
+    edge for every step. Venture never moves backwards or teleports (CR 309), and the
+    UI only offers legal successors -- so this rejects only a hand-crafted request,
+    the same defensive posture the membership check above already takes."""
+    assert field.map is not None  # narrowed by the caller; mypy cannot see it
+    if not value:
+        return
+    if value[0] != field.map.entry:
+        raise InputError(
+            field.name,
+            "illegal_room",
+            f"{field.name!r} must start at {field.map.entry!r}, got {value[0]!r}",
+        )
+    successors: dict[str, set[str]] = {}
+    for edge in field.map.edges:
+        successors.setdefault(edge.source, set()).add(edge.target)
+    for previous, current in zip(value, value[1:], strict=False):
+        if current not in successors.get(previous, set()):
+            raise InputError(
+                field.name,
+                "illegal_room",
+                f"{field.name!r} cannot move from {previous!r} to {current!r}",
+            )

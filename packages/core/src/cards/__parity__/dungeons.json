@@ -1,0 +1,514 @@
+{
+  "cardId": "dungeons",
+  "cases": [
+    {
+      "inputs": {
+        "dungeons_completed": 0,
+        "mad_mage_path": [],
+        "phandelver_path": [],
+        "tomb_path": [],
+        "undercity_path": [],
+        "which_dungeon": "none"
+      },
+      "outputs": {
+        "at_bottom_room": 0,
+        "dungeon_complete": false,
+        "dungeons_completed": 0,
+        "rooms_entered": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "dungeons_completed"
+      },
+      "inputs": {
+        "dungeons_completed": -1,
+        "mad_mage_path": [],
+        "phandelver_path": [],
+        "tomb_path": [],
+        "undercity_path": [],
+        "which_dungeon": "none"
+      }
+    },
+    {
+      "inputs": {
+        "dungeons_completed": 99,
+        "mad_mage_path": [],
+        "phandelver_path": [],
+        "tomb_path": [],
+        "undercity_path": [],
+        "which_dungeon": "none"
+      },
+      "outputs": {
+        "at_bottom_room": 0,
+        "dungeon_complete": false,
+        "dungeons_completed": 99,
+        "rooms_entered": 0
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "dungeons_completed"
+      },
+      "inputs": {
+        "dungeons_completed": 100,
+        "mad_mage_path": [],
+        "phandelver_path": [],
+        "tomb_path": [],
+        "undercity_path": [],
+        "which_dungeon": "none"
+      }
+    },
+    {
+      "inputs": {
+        "dungeons_completed": 0,
+        "mad_mage_path": [],
+        "phandelver_path": [],
+        "tomb_path": [],
+        "undercity_path": [],
+        "which_dungeon": "phandelver"
+      },
+      "outputs": {
+        "at_bottom_room": 0,
+        "dungeon_complete": false,
+        "dungeons_completed": 0,
+        "rooms_entered": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "dungeons_completed"
+      },
+      "inputs": {
+        "dungeons_completed": -1,
+        "mad_mage_path": [],
+        "phandelver_path": [],
+        "tomb_path": [],
+        "undercity_path": [],
+        "which_dungeon": "phandelver"
+      }
+    },
+    {
+      "inputs": {
+        "dungeons_completed": 99,
+        "mad_mage_path": [],
+        "phandelver_path": [],
+        "tomb_path": [],
+        "undercity_path": [],
+        "which_dungeon": "phandelver"
+      },
+      "outputs": {
+        "at_bottom_room": 0,
+        "dungeon_complete": false,
+        "dungeons_completed": 99,
+        "rooms_entered": 0
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "dungeons_completed"
+      },
+      "inputs": {
+        "dungeons_completed": 100,
+        "mad_mage_path": [],
+        "phandelver_path": [],
+        "tomb_path": [],
+        "undercity_path": [],
+        "which_dungeon": "phandelver"
+      }
+    },
+    {
+      "inputs": {
+        "dungeons_completed": 0,
+        "mad_mage_path": [],
+        "phandelver_path": [],
+        "tomb_path": [],
+        "undercity_path": [],
+        "which_dungeon": "tomb"
+      },
+      "outputs": {
+        "at_bottom_room": 0,
+        "dungeon_complete": false,
+        "dungeons_completed": 0,
+        "rooms_entered": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "dungeons_completed"
+      },
+      "inputs": {
+        "dungeons_completed": -1,
+        "mad_mage_path": [],
+        "phandelver_path": [],
+        "tomb_path": [],
+        "undercity_path": [],
+        "which_dungeon": "tomb"
+      }
+    },
+    {
+      "inputs": {
+        "dungeons_completed": 99,
+        "mad_mage_path": [],
+        "phandelver_path": [],
+        "tomb_path": [],
+        "undercity_path": [],
+        "which_dungeon": "tomb"
+      },
+      "outputs": {
+        "at_bottom_room": 0,
+        "dungeon_complete": false,
+        "dungeons_completed": 99,
+        "rooms_entered": 0
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "dungeons_completed"
+      },
+      "inputs": {
+        "dungeons_completed": 100,
+        "mad_mage_path": [],
+        "phandelver_path": [],
+        "tomb_path": [],
+        "undercity_path": [],
+        "which_dungeon": "tomb"
+      }
+    },
+    {
+      "inputs": {
+        "dungeons_completed": 0,
+        "mad_mage_path": [],
+        "phandelver_path": [],
+        "tomb_path": [],
+        "undercity_path": [],
+        "which_dungeon": "mad-mage"
+      },
+      "outputs": {
+        "at_bottom_room": 0,
+        "dungeon_complete": false,
+        "dungeons_completed": 0,
+        "rooms_entered": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "dungeons_completed"
+      },
+      "inputs": {
+        "dungeons_completed": -1,
+        "mad_mage_path": [],
+        "phandelver_path": [],
+        "tomb_path": [],
+        "undercity_path": [],
+        "which_dungeon": "mad-mage"
+      }
+    },
+    {
+      "inputs": {
+        "dungeons_completed": 99,
+        "mad_mage_path": [],
+        "phandelver_path": [],
+        "tomb_path": [],
+        "undercity_path": [],
+        "which_dungeon": "mad-mage"
+      },
+      "outputs": {
+        "at_bottom_room": 0,
+        "dungeon_complete": false,
+        "dungeons_completed": 99,
+        "rooms_entered": 0
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "dungeons_completed"
+      },
+      "inputs": {
+        "dungeons_completed": 100,
+        "mad_mage_path": [],
+        "phandelver_path": [],
+        "tomb_path": [],
+        "undercity_path": [],
+        "which_dungeon": "mad-mage"
+      }
+    },
+    {
+      "inputs": {
+        "dungeons_completed": 0,
+        "mad_mage_path": [],
+        "phandelver_path": [],
+        "tomb_path": [],
+        "undercity_path": [],
+        "which_dungeon": "undercity"
+      },
+      "outputs": {
+        "at_bottom_room": 0,
+        "dungeon_complete": false,
+        "dungeons_completed": 0,
+        "rooms_entered": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "dungeons_completed"
+      },
+      "inputs": {
+        "dungeons_completed": -1,
+        "mad_mage_path": [],
+        "phandelver_path": [],
+        "tomb_path": [],
+        "undercity_path": [],
+        "which_dungeon": "undercity"
+      }
+    },
+    {
+      "inputs": {
+        "dungeons_completed": 99,
+        "mad_mage_path": [],
+        "phandelver_path": [],
+        "tomb_path": [],
+        "undercity_path": [],
+        "which_dungeon": "undercity"
+      },
+      "outputs": {
+        "at_bottom_room": 0,
+        "dungeon_complete": false,
+        "dungeons_completed": 99,
+        "rooms_entered": 0
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "dungeons_completed"
+      },
+      "inputs": {
+        "dungeons_completed": 100,
+        "mad_mage_path": [],
+        "phandelver_path": [],
+        "tomb_path": [],
+        "undercity_path": [],
+        "which_dungeon": "undercity"
+      }
+    },
+    {
+      "inputs": {
+        "dungeons_completed": 0,
+        "phandelver_path": [
+          "cave-entrance",
+          "goblin-lair",
+          "storeroom",
+          "temple-of-dumathoin"
+        ],
+        "which_dungeon": "phandelver"
+      },
+      "outputs": {
+        "at_bottom_room": 1,
+        "dungeon_complete": true,
+        "dungeons_completed": 0,
+        "rooms_entered": 4
+      }
+    },
+    {
+      "inputs": {
+        "dungeons_completed": 3,
+        "phandelver_path": [
+          "cave-entrance",
+          "mine-tunnels",
+          "fungi-cavern",
+          "temple-of-dumathoin"
+        ],
+        "which_dungeon": "phandelver"
+      },
+      "outputs": {
+        "at_bottom_room": 1,
+        "dungeon_complete": true,
+        "dungeons_completed": 3,
+        "rooms_entered": 4
+      }
+    },
+    {
+      "inputs": {
+        "dungeons_completed": 0,
+        "tomb_path": [
+          "trapped-entry",
+          "veils-of-fear",
+          "sandfall-cell",
+          "cradle-of-the-death-god"
+        ],
+        "which_dungeon": "tomb"
+      },
+      "outputs": {
+        "at_bottom_room": 1,
+        "dungeon_complete": true,
+        "dungeons_completed": 0,
+        "rooms_entered": 4
+      }
+    },
+    {
+      "inputs": {
+        "dungeons_completed": 1,
+        "tomb_path": [
+          "trapped-entry",
+          "oubliette",
+          "cradle-of-the-death-god"
+        ],
+        "which_dungeon": "tomb"
+      },
+      "outputs": {
+        "at_bottom_room": 1,
+        "dungeon_complete": true,
+        "dungeons_completed": 1,
+        "rooms_entered": 3
+      }
+    },
+    {
+      "inputs": {
+        "dungeons_completed": 99,
+        "mad_mage_path": [
+          "yawning-portal",
+          "dungeon-level",
+          "goblin-bazaar",
+          "lost-level",
+          "runestone-caverns",
+          "deep-mines",
+          "mad-wizards-lair"
+        ],
+        "which_dungeon": "mad-mage"
+      },
+      "outputs": {
+        "at_bottom_room": 1,
+        "dungeon_complete": true,
+        "dungeons_completed": 99,
+        "rooms_entered": 7
+      }
+    },
+    {
+      "inputs": {
+        "dungeons_completed": 2,
+        "undercity_path": [
+          "secret-entrance",
+          "forge",
+          "trap",
+          "archives",
+          "throne-of-the-dead-three"
+        ],
+        "which_dungeon": "undercity"
+      },
+      "outputs": {
+        "at_bottom_room": 1,
+        "dungeon_complete": true,
+        "dungeons_completed": 2,
+        "rooms_entered": 5
+      }
+    },
+    {
+      "inputs": {
+        "dungeons_completed": 0,
+        "mad_mage_path": [
+          "yawning-portal",
+          "dungeon-level"
+        ],
+        "which_dungeon": "mad-mage"
+      },
+      "outputs": {
+        "at_bottom_room": 0,
+        "dungeon_complete": false,
+        "dungeons_completed": 0,
+        "rooms_entered": 2
+      }
+    },
+    {
+      "inputs": {
+        "dungeons_completed": 0,
+        "phandelver_path": [
+          "cave-entrance",
+          "goblin-lair"
+        ],
+        "tomb_path": [
+          "trapped-entry"
+        ],
+        "which_dungeon": "tomb"
+      },
+      "outputs": {
+        "at_bottom_room": 0,
+        "dungeon_complete": false,
+        "dungeons_completed": 0,
+        "rooms_entered": 1
+      }
+    },
+    {
+      "error": {
+        "code": "illegal_room",
+        "field": "phandelver_path"
+      },
+      "inputs": {
+        "dungeons_completed": 0,
+        "phandelver_path": [
+          "goblin-lair"
+        ],
+        "which_dungeon": "phandelver"
+      }
+    },
+    {
+      "error": {
+        "code": "illegal_room",
+        "field": "phandelver_path"
+      },
+      "inputs": {
+        "dungeons_completed": 0,
+        "phandelver_path": [
+          "cave-entrance",
+          "goblin-lair",
+          "fungi-cavern"
+        ],
+        "which_dungeon": "phandelver"
+      }
+    },
+    {
+      "error": {
+        "code": "illegal_room",
+        "field": "undercity_path"
+      },
+      "inputs": {
+        "dungeons_completed": 0,
+        "undercity_path": [
+          "secret-entrance",
+          "forge",
+          "stash"
+        ],
+        "which_dungeon": "undercity"
+      }
+    },
+    {
+      "error": {
+        "code": "too_long",
+        "field": "tomb_path"
+      },
+      "inputs": {
+        "dungeons_completed": 0,
+        "tomb_path": [
+          "trapped-entry",
+          "veils-of-fear",
+          "trapped-entry",
+          "veils-of-fear",
+          "trapped-entry",
+          "veils-of-fear"
+        ],
+        "which_dungeon": "tomb"
+      }
+    }
+  ],
+  "generatedFrom": "backend/app/cards/dungeons.py",
+  "note": "Generated by backend/tools/generate_parity_corpus.py. Do not edit by hand."
+}

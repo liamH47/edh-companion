@@ -19,6 +19,9 @@ METADATA = CardMetadata(
     id="commander-tax",
     name="Commander Tax",
     # No scryfall_id: this is rule 903.8, not a card. rules_text describes the rule.
+    # The cast count is game-long -- "New turn" has no meaning here and would
+    # quietly erase it (the resetTurn bug the dungeons review surfaced).
+    resets_on_new_turn=False,
     rules_text=(
         "Each time you cast your commander from the command zone, it costs {2} more for "
         "each previous time you've cast it from the command zone this game."

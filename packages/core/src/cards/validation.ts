@@ -1,4 +1,4 @@
-import type { FieldSpec, FieldValues } from '../types'
+import type { FieldSpec, FieldValues, MapSpec } from '../types'
 
 /**
  * The TypeScript half of card input validation. Mirrors `backend/app/cards/validation.py`
@@ -20,6 +20,7 @@ export type InputErrorCode =
   | 'not_list'
   | 'too_long'
   | 'entry_not_in_options'
+  | 'illegal_room'
 
 export class InputError extends Error {
   // Declared explicitly rather than as constructor parameter properties, which are a
@@ -98,10 +99,46 @@ function validateSequence(field: FieldSpec, value: unknown): string[] {
       )
     }
   }
+  if (field.map != null) {
+    validateWalk(field, field.map, value as string[])
+  }
   // A copy, for the same reason Python returns one: a sequence field's default is a
   // shared array on the metadata singleton, so handing it back would let one session's
   // inputs alias every later default.
   return [...value]
+}
+
+/** A mapped sequence must be a legal walk: start at the entry, then follow an edge for
+ * every step. Venture never moves backwards or teleports (CR 309); the UI only offers
+ * legal successors, so this rejects only a hand-crafted input -- the same defensive
+ * posture the membership check above already takes. */
+function validateWalk(field: FieldSpec, map: MapSpec, value: string[]): void {
+  if (value.length === 0) return
+  if (value[0] !== map.entry) {
+    throw new InputError(
+      field.name,
+      'illegal_room',
+      `${field.name} must start at ${map.entry}`,
+    )
+  }
+  const successors = new Map<string, Set<string>>()
+  for (const edge of map.edges) {
+    let targets = successors.get(edge.source)
+    if (!targets) {
+      targets = new Set()
+      successors.set(edge.source, targets)
+    }
+    targets.add(edge.target)
+  }
+  for (let i = 1; i < value.length; i += 1) {
+    if (!successors.get(value[i - 1])?.has(value[i])) {
+      throw new InputError(
+        field.name,
+        'illegal_room',
+        `${field.name} cannot move from ${value[i - 1]} to ${value[i]}`,
+      )
+    }
+  }
 }
 
 /** Applies each field's default for omitted keys, then type/bounds-checks every value. */

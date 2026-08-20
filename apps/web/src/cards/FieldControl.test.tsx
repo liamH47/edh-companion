@@ -17,6 +17,7 @@ function field(overrides: Partial<FieldSpec> & Pick<FieldSpec, 'name' | 'kind'>)
     action_label: null,
     action_disabled_when: null,
     roll: null,
+    map: null,
     setup: false,
     short_label: null,
     ...overrides,
@@ -111,6 +112,47 @@ describe('FieldControl', () => {
       const f = field({ name: 'mode', kind: 'select', label: 'Mode', options: null })
       render(<FieldControl field={f} value={null} onChange={() => {}} />)
       expect(screen.queryAllByRole('radio')).toHaveLength(0)
+    })
+  })
+
+  describe('mapped sequence', () => {
+    const mapSpec = {
+      entry: 'cave',
+      nodes: [
+        { id: 'cave', column: 0, row: 0 },
+        { id: 'lair', column: 1, row: 0 },
+      ],
+      edges: [{ source: 'cave', target: 'lair' }],
+    }
+    const mapped = () =>
+      field({
+        name: 'path',
+        kind: 'sequence',
+        label: 'Your path',
+        options: [
+          { value: 'cave', label: 'Cave Entrance' },
+          { value: 'lair', label: 'Goblin Lair' },
+        ],
+        map: mapSpec,
+      })
+
+    it('renders the dungeon map instead of the chip log', () => {
+      render(<FieldControl field={mapped()} value={['cave']} onChange={() => {}} />)
+      expect(screen.getByTestId('dungeon-map-path')).toBeInTheDocument()
+      expect(screen.queryByText('Nothing yet.')).not.toBeInTheDocument()
+    })
+
+    it('pops the last room via the undo control', async () => {
+      const user = userEvent.setup()
+      const onChange = vi.fn()
+      render(<FieldControl field={mapped()} value={['cave', 'lair']} onChange={onChange} />)
+      await user.click(screen.getByRole('button', { name: 'Undo last Your path' }))
+      expect(onChange).toHaveBeenCalledWith('path', ['cave'])
+    })
+
+    it('hides the undo before the first venture', () => {
+      render(<FieldControl field={mapped()} value={[]} onChange={() => {}} />)
+      expect(screen.queryByRole('button', { name: 'Undo last Your path' })).not.toBeInTheDocument()
     })
   })
 

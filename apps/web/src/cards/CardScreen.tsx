@@ -147,6 +147,7 @@ export function CardScreen({ card, onBack }: CardScreenProps) {
         outputs={session.outputs}
         onFieldChange={session.setField}
         onNewTurn={session.resetTurn}
+        showNewTurn={card.resets_on_new_turn}
       />
 
       <SetupSheet

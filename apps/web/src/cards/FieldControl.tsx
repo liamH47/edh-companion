@@ -2,6 +2,7 @@ import { sequenceValue } from '@mtg/core'
 import type { FieldSpec } from '@mtg/core'
 import { Chip } from '../ui/Chip'
 import { UndoIcon } from '../ui/Icon'
+import { DungeonMap } from './DungeonMap'
 import { Pressable } from '../ui/Pressable'
 import { Stepper } from '../ui/Stepper'
 import { Text } from '../ui/Text'
@@ -101,6 +102,29 @@ export function FieldControl({ field, value, onChange }: FieldControlProps) {
       )
     }
     case 'sequence': {
+      // A mapped sequence renders as the dungeon map -- the map is the input control,
+      // the way a roll-flagged sequence renders as the die. The chip log below stays
+      // for plain sequences (Comet's rolls), where order is the content.
+      if (field.map) {
+        return (
+          <div className="flex flex-col gap-1">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <Text variant="body">{field.label}</Text>
+              {sequenceValue(value).length > 0 && (
+                <Pressable
+                  aria-label={`Undo last ${field.label}`}
+                  onClick={() => onChange(field.name, sequenceValue(value).slice(0, -1))}
+                  className="min-h-12 min-w-12 justify-center rounded-full text-text-muted hover:text-text"
+                >
+                  <UndoIcon />
+                </Pressable>
+              )}
+            </div>
+            <DungeonMap field={field} value={value} onChange={onChange} />
+            {helpText}
+          </div>
+        )
+      }
       const entries = sequenceValue(value)
       const labelForValue = new Map((field.options ?? []).map((o) => [o.value, o.label]))
       return (

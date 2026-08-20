@@ -13,6 +13,7 @@
         "help_text": null,
         "kind": "number",
         "label": "Life total at the start of the turn",
+        "map": null,
         "max": 99999,
         "min": 0,
         "name": "starting_life",
@@ -30,6 +31,7 @@
         "help_text": null,
         "kind": "boolean",
         "label": "In play at the start of the turn?",
+        "map": null,
         "max": null,
         "min": null,
         "name": "was_in_play_at_turn_start",
@@ -47,6 +49,7 @@
         "help_text": "Every spell cast this turn before Aetherflux was on the battlefield \u2014 including the cast of Aetherflux itself. It doesn't trigger its own ability, but it still counts toward the spell total that later triggers gain life for.",
         "kind": "number",
         "label": "Spells already cast before it entered",
+        "map": null,
         "max": 99,
         "min": 0,
         "name": "spells_already_cast",
@@ -67,6 +70,7 @@
         "help_text": null,
         "kind": "counter",
         "label": "Spells cast this turn",
+        "map": null,
         "max": 99,
         "min": 0,
         "name": "spells_cast_this_turn",
@@ -87,6 +91,7 @@
         "help_text": null,
         "kind": "counter",
         "label": "Activations used",
+        "map": null,
         "max": 99,
         "min": 0,
         "name": "activations_used",
@@ -157,6 +162,7 @@
         "short_label": "until next"
       }
     ],
+    "resets_on_new_turn": true,
     "rules_text": "Whenever you cast a spell, you gain 1 life for each spell you've cast this turn. Pay 50 life: Aetherflux Reservoir deals 50 damage to any target.",
     "scryfall_id": "96b6b2e1-c3e6-464c-8a13-b15deb34e862",
     "show_hero_art": false
@@ -172,6 +178,7 @@
         "help_text": "Count Blood Artist itself plus any other death-drain trigger you control (Zulaport Cutthroat, Cruel Celebrant, ...).",
         "kind": "number",
         "label": "Blood-Artist-style triggers you control",
+        "map": null,
         "max": 20,
         "min": 0,
         "name": "drain_effect_count",
@@ -189,6 +196,7 @@
         "help_text": "However many died at once -- a board wipe, a combat trade, a single removal spell.",
         "kind": "number",
         "label": "Creatures that died this event",
+        "map": null,
         "max": 99,
         "min": 0,
         "name": "creatures_died",
@@ -211,6 +219,7 @@
         "short_label": "drained"
       }
     ],
+    "resets_on_new_turn": true,
     "rules_text": "Whenever this creature or another creature dies, target player loses 1 life and you gain 1 life.",
     "scryfall_id": "b5275d76-2947-4219-be21-614c7421614a",
     "show_hero_art": false
@@ -229,6 +238,7 @@
         "help_text": "99 is a fresh Commander deck -- lower it to whatever they're actually down to.",
         "kind": "number",
         "label": "Cards left in the library you're targeting",
+        "map": null,
         "max": 999,
         "min": 0,
         "name": "target_library_size",
@@ -246,6 +256,7 @@
         "help_text": "Spells cast by every player this turn, not just you. Countered spells and spells cast from a graveyard or exile still count; the copies storm itself makes are not cast, so they never count.",
         "kind": "counter",
         "label": "Spells cast before this one this turn",
+        "map": null,
         "max": 99,
         "min": 0,
         "name": "storm_count",
@@ -292,6 +303,7 @@
         "short_label": "left"
       }
     ],
+    "resets_on_new_turn": true,
     "rules_text": "Target player mills three cards. Storm (When you cast this spell, copy it for each spell cast before it this turn. You may choose new targets for the copies.)",
     "scryfall_id": "3a2d7cf9-dddb-4de3-b4f2-c52e3ec8fb4b",
     "show_hero_art": false
@@ -310,6 +322,7 @@
         "help_text": "5 the turn he lands.",
         "kind": "number",
         "label": "Loyalty before this turn's first activation",
+        "map": null,
         "max": 999,
         "min": 0,
         "name": "starting_loyalty",
@@ -330,6 +343,7 @@
         "help_text": "1\u20132: +2 loyalty and two Squirrels. 3: \u22121 and return a card. 4\u20135: deals damage equal to his loyalty, then \u22122. 6: +1 and two more activations.",
         "kind": "sequence",
         "label": "Rolls this turn",
+        "map": null,
         "max": 40,
         "min": null,
         "name": "rolls",
@@ -420,6 +434,7 @@
         "short_label": "returned"
       }
     ],
+    "resets_on_new_turn": true,
     "rules_text": "0: Roll a six-sided die. 1 or 2 \u2014 [+2], then create two 1/1 green Squirrel creature tokens. They gain haste until end of turn. 3 \u2014 [\u22121], then return a card with mana value 2 or less from your graveyard to your hand. 4 or 5 \u2014 Comet deals damage equal to the number of loyalty counters on him to a creature or player, then [\u22122]. 6 \u2014 [+1], and you may activate Comet's loyalty ability two more times this turn.",
     "scryfall_id": "a76fa8d4-923d-4afc-ba47-ba10fc0fe46e",
     "show_hero_art": true
@@ -435,6 +450,7 @@
         "help_text": "Your commander's printed total mana value, before any tax or reduction.",
         "kind": "number",
         "label": "Commander's mana value",
+        "map": null,
         "max": 20,
         "min": 0,
         "name": "base_commander_cost",
@@ -452,6 +468,7 @@
         "help_text": "Total generic reduction from effects you control (Jodah, Emerald Medallion, ...). Applied to the whole cost, never below zero.",
         "kind": "number",
         "label": "Cost reduction you control",
+        "map": null,
         "max": 20,
         "min": 0,
         "name": "flat_cost_reduction",
@@ -469,6 +486,7 @@
         "help_text": "How many times you've already cast your commander from the command zone this game -- tap once each time you cast it. The next cast is taxed on this.",
         "kind": "counter",
         "label": "Times already cast from the command zone",
+        "map": null,
         "max": 30,
         "min": 0,
         "name": "times_cast_from_command_zone",
@@ -499,6 +517,7 @@
         "short_label": "next cost"
       }
     ],
+    "resets_on_new_turn": false,
     "rules_text": "Each time you cast your commander from the command zone, it costs {2} more for each previous time you've cast it from the command zone this game.",
     "scryfall_id": null,
     "show_hero_art": false
@@ -514,6 +533,7 @@
         "help_text": null,
         "kind": "number",
         "label": "Total power of your creatures before any trigger resolves",
+        "map": null,
         "max": 9999,
         "min": 0,
         "name": "total_power_before_triggers",
@@ -531,6 +551,7 @@
         "help_text": "Include Craterhoof itself -- it has haste and is already on the battlefield when its own trigger resolves.",
         "kind": "number",
         "label": "Creatures you control when the first trigger resolves",
+        "map": null,
         "max": 99,
         "min": 0,
         "name": "trigger_1_creature_count",
@@ -548,6 +569,7 @@
         "help_text": "Only if a second trigger resolves this turn (a second copy, a flicker, a similar effect) -- most turns won't have one.",
         "kind": "counter",
         "label": "Second Craterhoof-shaped trigger this turn?",
+        "map": null,
         "max": 1,
         "min": 0,
         "name": "additional_triggers",
@@ -565,6 +587,7 @@
         "help_text": "Re-confirm the count fresh -- it can differ from the first trigger.",
         "kind": "number",
         "label": "Creatures you control when the second trigger resolves",
+        "map": null,
         "max": 99,
         "min": 0,
         "name": "trigger_2_creature_count",
@@ -614,8 +637,635 @@
         "short_label": "total power"
       }
     ],
+    "resets_on_new_turn": true,
     "rules_text": "Haste. When this creature enters, creatures you control gain trample and get +X/+X until end of turn, where X is the number of creatures you control.",
     "scryfall_id": "276f5cee-a501-4658-bd4d-7a044bf1ccbc",
+    "show_hero_art": false
+  },
+  {
+    "alert": {
+      "message": "Dungeon complete -- mark the tally, then venture anew",
+      "output": "dungeon_complete"
+    },
+    "fields": [
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": "none",
+        "default_source": null,
+        "help_text": "Undercity is entered only by taking the initiative -- its own card face says you can't enter it any other way.",
+        "kind": "select",
+        "label": "Dungeon",
+        "map": null,
+        "max": null,
+        "min": null,
+        "name": "which_dungeon",
+        "options": [
+          {
+            "label": "No dungeon",
+            "value": "none"
+          },
+          {
+            "label": "Lost Mine of Phandelver",
+            "value": "phandelver"
+          },
+          {
+            "label": "Tomb of Annihilation",
+            "value": "tomb"
+          },
+          {
+            "label": "Dungeon of the Mad Mage",
+            "value": "mad-mage"
+          },
+          {
+            "label": "Undercity (via the initiative)",
+            "value": "undercity"
+          }
+        ],
+        "roll": null,
+        "setup": false,
+        "short_label": "dungeon",
+        "visible_if": null
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": [],
+        "default_source": null,
+        "help_text": "Tap the next room each time you venture. Forward only -- the rules never let a marker move back up the card.",
+        "kind": "sequence",
+        "label": "Your path through Lost Mine of Phandelver",
+        "map": {
+          "edges": [
+            {
+              "source": "cave-entrance",
+              "target": "goblin-lair"
+            },
+            {
+              "source": "cave-entrance",
+              "target": "mine-tunnels"
+            },
+            {
+              "source": "goblin-lair",
+              "target": "storeroom"
+            },
+            {
+              "source": "goblin-lair",
+              "target": "dark-pool"
+            },
+            {
+              "source": "mine-tunnels",
+              "target": "dark-pool"
+            },
+            {
+              "source": "mine-tunnels",
+              "target": "fungi-cavern"
+            },
+            {
+              "source": "storeroom",
+              "target": "temple-of-dumathoin"
+            },
+            {
+              "source": "dark-pool",
+              "target": "temple-of-dumathoin"
+            },
+            {
+              "source": "fungi-cavern",
+              "target": "temple-of-dumathoin"
+            }
+          ],
+          "entry": "cave-entrance",
+          "nodes": [
+            {
+              "column": 0,
+              "id": "cave-entrance",
+              "row": 0
+            },
+            {
+              "column": 1,
+              "id": "goblin-lair",
+              "row": 0
+            },
+            {
+              "column": 1,
+              "id": "mine-tunnels",
+              "row": 1
+            },
+            {
+              "column": 2,
+              "id": "storeroom",
+              "row": 0
+            },
+            {
+              "column": 2,
+              "id": "dark-pool",
+              "row": 1
+            },
+            {
+              "column": 2,
+              "id": "fungi-cavern",
+              "row": 2
+            },
+            {
+              "column": 3,
+              "id": "temple-of-dumathoin",
+              "row": 0
+            }
+          ]
+        },
+        "max": 4,
+        "min": null,
+        "name": "phandelver_path",
+        "options": [
+          {
+            "label": "Cave Entrance",
+            "value": "cave-entrance"
+          },
+          {
+            "label": "Goblin Lair",
+            "value": "goblin-lair"
+          },
+          {
+            "label": "Mine Tunnels",
+            "value": "mine-tunnels"
+          },
+          {
+            "label": "Storeroom",
+            "value": "storeroom"
+          },
+          {
+            "label": "Dark Pool",
+            "value": "dark-pool"
+          },
+          {
+            "label": "Fungi Cavern",
+            "value": "fungi-cavern"
+          },
+          {
+            "label": "Temple of Dumathoin",
+            "value": "temple-of-dumathoin"
+          }
+        ],
+        "roll": null,
+        "setup": false,
+        "short_label": "path",
+        "visible_if": {
+          "equals": "phandelver",
+          "field": "which_dungeon"
+        }
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": [],
+        "default_source": null,
+        "help_text": "Tap the next room each time you venture. Forward only -- the rules never let a marker move back up the card.",
+        "kind": "sequence",
+        "label": "Your path through Tomb of Annihilation",
+        "map": {
+          "edges": [
+            {
+              "source": "trapped-entry",
+              "target": "veils-of-fear"
+            },
+            {
+              "source": "trapped-entry",
+              "target": "oubliette"
+            },
+            {
+              "source": "veils-of-fear",
+              "target": "sandfall-cell"
+            },
+            {
+              "source": "oubliette",
+              "target": "cradle-of-the-death-god"
+            },
+            {
+              "source": "sandfall-cell",
+              "target": "cradle-of-the-death-god"
+            }
+          ],
+          "entry": "trapped-entry",
+          "nodes": [
+            {
+              "column": 0,
+              "id": "trapped-entry",
+              "row": 0
+            },
+            {
+              "column": 1,
+              "id": "veils-of-fear",
+              "row": 0
+            },
+            {
+              "column": 1,
+              "id": "oubliette",
+              "row": 1
+            },
+            {
+              "column": 2,
+              "id": "sandfall-cell",
+              "row": 0
+            },
+            {
+              "column": 3,
+              "id": "cradle-of-the-death-god",
+              "row": 0
+            }
+          ]
+        },
+        "max": 4,
+        "min": null,
+        "name": "tomb_path",
+        "options": [
+          {
+            "label": "Trapped Entry",
+            "value": "trapped-entry"
+          },
+          {
+            "label": "Veils of Fear",
+            "value": "veils-of-fear"
+          },
+          {
+            "label": "Oubliette",
+            "value": "oubliette"
+          },
+          {
+            "label": "Sandfall Cell",
+            "value": "sandfall-cell"
+          },
+          {
+            "label": "Cradle of the Death God",
+            "value": "cradle-of-the-death-god"
+          }
+        ],
+        "roll": null,
+        "setup": false,
+        "short_label": "path",
+        "visible_if": {
+          "equals": "tomb",
+          "field": "which_dungeon"
+        }
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": [],
+        "default_source": null,
+        "help_text": "Tap the next room each time you venture. Forward only -- the rules never let a marker move back up the card.",
+        "kind": "sequence",
+        "label": "Your path through Dungeon of the Mad Mage",
+        "map": {
+          "edges": [
+            {
+              "source": "yawning-portal",
+              "target": "dungeon-level"
+            },
+            {
+              "source": "dungeon-level",
+              "target": "goblin-bazaar"
+            },
+            {
+              "source": "dungeon-level",
+              "target": "twisted-caverns"
+            },
+            {
+              "source": "goblin-bazaar",
+              "target": "lost-level"
+            },
+            {
+              "source": "twisted-caverns",
+              "target": "lost-level"
+            },
+            {
+              "source": "lost-level",
+              "target": "runestone-caverns"
+            },
+            {
+              "source": "lost-level",
+              "target": "muirals-graveyard"
+            },
+            {
+              "source": "runestone-caverns",
+              "target": "deep-mines"
+            },
+            {
+              "source": "muirals-graveyard",
+              "target": "deep-mines"
+            },
+            {
+              "source": "deep-mines",
+              "target": "mad-wizards-lair"
+            }
+          ],
+          "entry": "yawning-portal",
+          "nodes": [
+            {
+              "column": 0,
+              "id": "yawning-portal",
+              "row": 0
+            },
+            {
+              "column": 1,
+              "id": "dungeon-level",
+              "row": 0
+            },
+            {
+              "column": 2,
+              "id": "goblin-bazaar",
+              "row": 0
+            },
+            {
+              "column": 2,
+              "id": "twisted-caverns",
+              "row": 1
+            },
+            {
+              "column": 3,
+              "id": "lost-level",
+              "row": 0
+            },
+            {
+              "column": 4,
+              "id": "runestone-caverns",
+              "row": 0
+            },
+            {
+              "column": 4,
+              "id": "muirals-graveyard",
+              "row": 1
+            },
+            {
+              "column": 5,
+              "id": "deep-mines",
+              "row": 0
+            },
+            {
+              "column": 6,
+              "id": "mad-wizards-lair",
+              "row": 0
+            }
+          ]
+        },
+        "max": 7,
+        "min": null,
+        "name": "mad_mage_path",
+        "options": [
+          {
+            "label": "Yawning Portal",
+            "value": "yawning-portal"
+          },
+          {
+            "label": "Dungeon Level",
+            "value": "dungeon-level"
+          },
+          {
+            "label": "Goblin Bazaar",
+            "value": "goblin-bazaar"
+          },
+          {
+            "label": "Twisted Caverns",
+            "value": "twisted-caverns"
+          },
+          {
+            "label": "Lost Level",
+            "value": "lost-level"
+          },
+          {
+            "label": "Runestone Caverns",
+            "value": "runestone-caverns"
+          },
+          {
+            "label": "Muiral's Graveyard",
+            "value": "muirals-graveyard"
+          },
+          {
+            "label": "Deep Mines",
+            "value": "deep-mines"
+          },
+          {
+            "label": "Mad Wizard's Lair",
+            "value": "mad-wizards-lair"
+          }
+        ],
+        "roll": null,
+        "setup": false,
+        "short_label": "path",
+        "visible_if": {
+          "equals": "mad-mage",
+          "field": "which_dungeon"
+        }
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": [],
+        "default_source": null,
+        "help_text": "Tap the next room each time you venture. Forward only -- the rules never let a marker move back up the card.",
+        "kind": "sequence",
+        "label": "Your path through Undercity",
+        "map": {
+          "edges": [
+            {
+              "source": "secret-entrance",
+              "target": "forge"
+            },
+            {
+              "source": "secret-entrance",
+              "target": "lost-well"
+            },
+            {
+              "source": "forge",
+              "target": "trap"
+            },
+            {
+              "source": "forge",
+              "target": "arena"
+            },
+            {
+              "source": "lost-well",
+              "target": "arena"
+            },
+            {
+              "source": "lost-well",
+              "target": "stash"
+            },
+            {
+              "source": "trap",
+              "target": "archives"
+            },
+            {
+              "source": "arena",
+              "target": "archives"
+            },
+            {
+              "source": "arena",
+              "target": "catacombs"
+            },
+            {
+              "source": "stash",
+              "target": "catacombs"
+            },
+            {
+              "source": "archives",
+              "target": "throne-of-the-dead-three"
+            },
+            {
+              "source": "catacombs",
+              "target": "throne-of-the-dead-three"
+            }
+          ],
+          "entry": "secret-entrance",
+          "nodes": [
+            {
+              "column": 0,
+              "id": "secret-entrance",
+              "row": 0
+            },
+            {
+              "column": 1,
+              "id": "forge",
+              "row": 0
+            },
+            {
+              "column": 1,
+              "id": "lost-well",
+              "row": 1
+            },
+            {
+              "column": 2,
+              "id": "trap",
+              "row": 0
+            },
+            {
+              "column": 2,
+              "id": "arena",
+              "row": 1
+            },
+            {
+              "column": 2,
+              "id": "stash",
+              "row": 2
+            },
+            {
+              "column": 3,
+              "id": "archives",
+              "row": 0
+            },
+            {
+              "column": 3,
+              "id": "catacombs",
+              "row": 1
+            },
+            {
+              "column": 4,
+              "id": "throne-of-the-dead-three",
+              "row": 0
+            }
+          ]
+        },
+        "max": 5,
+        "min": null,
+        "name": "undercity_path",
+        "options": [
+          {
+            "label": "Secret Entrance",
+            "value": "secret-entrance"
+          },
+          {
+            "label": "Forge",
+            "value": "forge"
+          },
+          {
+            "label": "Lost Well",
+            "value": "lost-well"
+          },
+          {
+            "label": "Trap!",
+            "value": "trap"
+          },
+          {
+            "label": "Arena",
+            "value": "arena"
+          },
+          {
+            "label": "Stash",
+            "value": "stash"
+          },
+          {
+            "label": "Archives",
+            "value": "archives"
+          },
+          {
+            "label": "Catacombs",
+            "value": "catacombs"
+          },
+          {
+            "label": "Throne of the Dead Three",
+            "value": "throne-of-the-dead-three"
+          }
+        ],
+        "roll": null,
+        "setup": false,
+        "short_label": "path",
+        "visible_if": {
+          "equals": "undercity",
+          "field": "which_dungeon"
+        }
+      },
+      {
+        "action_disabled_when": {
+          "less_than": 1,
+          "output": "at_bottom_room"
+        },
+        "action_label": "Mark dungeon complete",
+        "default": 0,
+        "default_source": null,
+        "help_text": "Tap when the bottom room's ability resolves, then pick your next dungeon. The tally is what completion payoffs read, and nothing at the table tracks it for you.",
+        "kind": "counter",
+        "label": "Dungeons completed this game",
+        "map": null,
+        "max": 99,
+        "min": 0,
+        "name": "dungeons_completed",
+        "options": null,
+        "roll": null,
+        "setup": false,
+        "short_label": "completed",
+        "visible_if": null
+      }
+    ],
+    "id": "dungeons",
+    "name": "Dungeons",
+    "outputs": [
+      {
+        "hero_shape": "number",
+        "kind": "number",
+        "label": "Dungeons completed",
+        "name": "dungeons_completed",
+        "primary": true,
+        "short_label": "completed"
+      },
+      {
+        "hero_shape": "number",
+        "kind": "number",
+        "label": "Rooms entered",
+        "name": "rooms_entered",
+        "primary": false,
+        "short_label": "rooms"
+      },
+      {
+        "hero_shape": "number",
+        "kind": "number",
+        "label": "At the bottom room",
+        "name": "at_bottom_room",
+        "primary": false,
+        "short_label": "at bottom"
+      }
+    ],
+    "resets_on_new_turn": false,
+    "rules_text": "Venture into the dungeon: if you're not in a dungeon, choose one, put it into the command zone, and enter its first room. Otherwise, advance to the next room, choosing which arrow to follow at a fork -- never backwards. A room's ability triggers when you enter it. When the ability of the bottommost room has resolved, the dungeon is completed and removed; the next venture starts a fresh dungeon. You can be in only one dungeon at a time. Undercity is the exception on entry: you can't enter it unless an effect has you \"venture into Undercity\" (the initiative).",
+    "scryfall_id": null,
     "show_hero_art": false
   },
   {
@@ -629,6 +1279,7 @@
         "help_text": "Spells cast by every player this turn, not just you. Countered spells and spells cast from a graveyard or exile still count; the copies storm itself makes are not cast, so they never count.",
         "kind": "counter",
         "label": "Spells cast before this one this turn",
+        "map": null,
         "max": 99,
         "min": 0,
         "name": "storm_count",
@@ -675,6 +1326,7 @@
         "short_label": "next turn"
       }
     ],
+    "resets_on_new_turn": true,
     "rules_text": "Create two 1/1 red Goblin creature tokens. Storm (When you cast this spell, copy it for each spell cast before it this turn.)",
     "scryfall_id": "939d765a-aefb-4393-8808-98b1bbd7e803",
     "show_hero_art": false
@@ -690,6 +1342,7 @@
         "help_text": "Spells cast by every player this turn, not just you. Countered spells and spells cast from a graveyard or exile still count; the copies storm itself makes are not cast, so they never count.",
         "kind": "counter",
         "label": "Spells cast before this one this turn",
+        "map": null,
         "max": 99,
         "min": 0,
         "name": "storm_count",
@@ -728,6 +1381,7 @@
         "short_label": "damage"
       }
     ],
+    "resets_on_new_turn": true,
     "rules_text": "Grapeshot deals 1 damage to any target. Storm (When you cast this spell, copy it for each spell cast before it this turn. You may choose new targets for the copies.)",
     "scryfall_id": "e3e2d90a-3557-49d5-9986-cb50fd31f396",
     "show_hero_art": false
@@ -743,6 +1397,7 @@
         "help_text": "Include the Hydra itself. It is a 0/0, so its four counters are what make it a 4/4.",
         "kind": "number",
         "label": "Total power of your creatures before attacking",
+        "map": null,
         "max": 9999,
         "min": 0,
         "name": "total_power_before",
@@ -760,6 +1415,7 @@
         "help_text": "Count +1/+1 counters only, across every creature you control. A creature with no counters gains nothing when the trigger resolves, however big it already is.",
         "kind": "number",
         "label": "Total +1/+1 counters on your creatures before attacking",
+        "map": null,
         "max": 999,
         "min": 0,
         "name": "counters_before",
@@ -777,6 +1433,7 @@
         "help_text": "One per attack trigger that resolves. More than one means extra combat phases -- each doubles a board that is already doubled.",
         "kind": "counter",
         "label": "Times the Hydra has attacked this turn",
+        "map": null,
         "max": 6,
         "min": 0,
         "name": "attacks_this_turn",
@@ -815,6 +1472,7 @@
         "short_label": "total power"
       }
     ],
+    "resets_on_new_turn": true,
     "rules_text": "Trample\nThis creature enters with four +1/+1 counters on it.\nWhenever this creature attacks, double the number of +1/+1 counters on each creature you control.",
     "scryfall_id": "1d21ae20-2ef5-4dc0-aced-97497e6a8025",
     "show_hero_art": false
@@ -830,6 +1488,7 @@
         "help_text": "Click once per colored mana symbol in the mana costs of permanents you control, for the color you're about to choose.",
         "kind": "counter",
         "label": "Devotion pips found",
+        "map": null,
         "max": 99,
         "min": 0,
         "name": "devotion_count",
@@ -860,6 +1519,7 @@
         "short_label": "net"
       }
     ],
+    "resets_on_new_turn": true,
     "rules_text": "{T}: Add {C}. {2}, {T}: Choose a color. Add an amount of mana of that color equal to your devotion to that color. (Devotion to a color is the number of mana symbols of that color in the mana costs of permanents you control.)",
     "scryfall_id": "834b27a0-dfd7-4f96-8cde-cacac4b24acc",
     "show_hero_art": false
@@ -875,6 +1535,7 @@
         "help_text": "From earlier turns. He's a 3/3 with none.",
         "kind": "number",
         "label": "+1/+1 counters already on him",
+        "map": null,
         "max": 999,
         "min": 0,
         "name": "existing_counters",
@@ -892,6 +1553,7 @@
         "help_text": "1 normally. 2 with Ancient Greenwarden or another landfall doubler.",
         "kind": "number",
         "label": "Landfall triggers per land",
+        "map": null,
         "max": 4,
         "min": 1,
         "name": "triggers_per_land",
@@ -909,6 +1571,7 @@
         "help_text": "Any land, not just Swamps, and not just your land drop for the turn. Assumes you take the drain every trigger -- declining one means no counters from it either.",
         "kind": "counter",
         "label": "Lands entered this turn",
+        "map": null,
         "max": 99,
         "min": 0,
         "name": "lands_this_turn",
@@ -963,6 +1626,7 @@
         "short_label": "drained"
       }
     ],
+    "resets_on_new_turn": true,
     "rules_text": "Landfall \u2014 Whenever a land you control enters, you may have target player lose 3 life. If you do, put three +1/+1 counters on Ob Nixilis, the Fallen.",
     "scryfall_id": "dc9d3ada-9d0d-489a-89b7-08f53f6601e1",
     "show_hero_art": false
@@ -978,6 +1642,7 @@
         "help_text": null,
         "kind": "number",
         "label": "Lands you control right now",
+        "map": null,
         "max": 99,
         "min": 0,
         "name": "current_land_count",
@@ -995,6 +1660,7 @@
         "help_text": "1 for Scute Swarm itself. Each copy has its own landfall trigger, which is why this doubles instead of staying flat once you hit six lands.",
         "kind": "number",
         "label": "Copies of Scute Swarm you control",
+        "map": null,
         "max": 99,
         "min": 0,
         "name": "scute_swarm_count",
@@ -1012,6 +1678,7 @@
         "help_text": null,
         "kind": "number",
         "label": "1/1 Insect tokens you already control",
+        "map": null,
         "max": 999,
         "min": 0,
         "name": "insect_token_count",
@@ -1029,6 +1696,7 @@
         "help_text": "Each land triggers landfall once per Scute Swarm copy you control at that moment -- that's the doubling.",
         "kind": "counter",
         "label": "Lands played this turn",
+        "map": null,
         "max": 12,
         "min": 0,
         "name": "lands_played",
@@ -1075,6 +1743,7 @@
         "short_label": "power"
       }
     ],
+    "resets_on_new_turn": true,
     "rules_text": "Landfall \u2014 Whenever a land you control enters, create a 1/1 green Insect creature token. If you control six or more lands, create a token that's a copy of this creature instead.",
     "scryfall_id": "ea630ba1-22f9-4a10-bdc6-0d03128214f4",
     "show_hero_art": false
@@ -1093,6 +1762,7 @@
         "help_text": "40 is a fresh Commander life total -- lower it to whatever they're actually on.",
         "kind": "number",
         "label": "Life total you're aiming at",
+        "map": null,
         "max": 999,
         "min": 0,
         "name": "target_life",
@@ -1110,6 +1780,7 @@
         "help_text": "Spells cast by every player this turn, not just you. Countered spells and spells cast from a graveyard or exile still count; the copies storm itself makes are not cast, so they never count.",
         "kind": "counter",
         "label": "Spells cast before this one this turn",
+        "map": null,
         "max": 99,
         "min": 0,
         "name": "storm_count",
@@ -1164,6 +1835,7 @@
         "short_label": "they end"
       }
     ],
+    "resets_on_new_turn": true,
     "rules_text": "Target player loses 2 life and you gain 2 life. Storm (When you cast this spell, copy it for each spell cast before it this turn. You may choose new targets for the copies.)",
     "scryfall_id": "6f26faca-f338-4ce5-a218-6a61d40fc50a",
     "show_hero_art": false

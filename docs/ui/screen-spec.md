@@ -96,6 +96,13 @@ no-overlay reading of Scryfall's terms, scoped to the loyalty box only (decision
 cardImage.ts). Offline the hero falls back to the standalone shield, so the play surface
 never waits on the network.
 
+## Game-long trackers
+
+`CardMetadata.resets_on_new_turn: false` (commander-tax, dungeons) removes the "New
+turn" button entirely: a game-long tally has no turn boundary, and the old behaviour --
+resetTurn wiping every field to defaults -- quietly erased state the player could not
+reconstruct.
+
 ## The 9 generic rules
 
 These are implemented once in `src/core/cardModel.ts` and must hold for every current and future

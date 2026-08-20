@@ -12,6 +12,10 @@ interface ActionBarProps {
   outputs: OutputValues | null
   onFieldChange: (name: string, value: unknown) => void
   onNewTurn: () => void
+  /** False for a game-long tracker (resets_on_new_turn on the metadata): there is no
+   * turn boundary to reset at, and the button would quietly erase state the player
+   * cannot reconstruct. */
+  showNewTurn?: boolean
   /** Forwarded to DieRoller so a test can pin the face rolled. */
   rng?: () => number
 }
@@ -32,12 +36,16 @@ export function ActionBar({
   outputs,
   onFieldChange,
   onNewTurn,
+  showNewTurn = true,
   rng,
 }: ActionBarProps) {
   const counterActionFields = liveFields.filter(
     (field) => field.kind === 'counter' && field.action_label,
   )
-  const sequenceFields = liveFields.filter((field) => field.kind === 'sequence')
+  // A mapped sequence's tap target IS the map (FieldControl renders it inline);
+  // offering a disconnected row of room buttons down here as well would be two
+  // competing ways to venture.
+  const sequenceFields = liveFields.filter((field) => field.kind === 'sequence' && !field.map)
 
   return (
     <div className="flex flex-col gap-2" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
@@ -121,9 +129,11 @@ export function ActionBar({
         )
       })}
 
-      <Button variant="secondary" fullWidth onClick={onNewTurn}>
-        New turn
-      </Button>
+      {showNewTurn && (
+        <Button variant="secondary" fullWidth onClick={onNewTurn}>
+          New turn
+        </Button>
+      )}
     </div>
   )
 }
