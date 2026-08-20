@@ -110,7 +110,7 @@ test.describe('Cards', () => {
     await expect(liveLoyalty).toHaveText(carried ?? '')
 
     // Damage between activations: the manual adjustment moves the shield directly.
-    await page.getByRole('button', { name: /Decrease Loyalty change/ }).click()
+    await page.getByRole('button', { name: /Decrease Other loyalty/ }).click()
     await expect(liveLoyalty).toHaveText(String(Number(carried) - 1))
   })
 

@@ -10,7 +10,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { resetComputeBackend, setComputeBackend } from './compute'
 import { setSoundBackend } from './sound'
 import { resetStorageBackend, setJSON } from './storage'
-import type { CardMetadata } from './types'
+import type { CardMetadata, FieldValues } from './types'
 import { useCardSession } from './useCardSession'
 
 /**
