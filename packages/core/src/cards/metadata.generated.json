@@ -2,7 +2,8 @@
   {
     "alert": {
       "message": "Oops, looks like you lose now",
-      "output": "game_lost"
+      "output": "game_lost",
+      "tone": "danger"
     },
     "fields": [
       {
@@ -234,7 +235,8 @@
   {
     "alert": {
       "message": "That mills them out",
-      "output": "mills_out"
+      "output": "mills_out",
+      "tone": "danger"
     },
     "fields": [
       {
@@ -320,7 +322,8 @@
   {
     "alert": {
       "message": "Comet hit 0 loyalty and died",
-      "output": "comet_died"
+      "output": "comet_died",
+      "tone": "danger"
     },
     "fields": [
       {
@@ -349,7 +352,7 @@
         "default_source": null,
         "help_text": "Damage he took, proliferate, +1/+1-style counter effects -- anything that moved his loyalty besides the die. Applied before this turn's rolls; cleared on New turn (the carry-over already includes it).",
         "kind": "number",
-        "label": "Loyalty change from outside his abilities",
+        "label": "Other loyalty changes",
         "map": null,
         "max": 999,
         "min": -999,
@@ -682,7 +685,8 @@
   {
     "alert": {
       "message": "Dungeon complete -- mark the tally, then venture anew",
-      "output": "dungeon_complete"
+      "output": "dungeon_complete",
+      "tone": "success"
     },
     "fields": [
       {
@@ -1991,7 +1995,8 @@
   {
     "alert": {
       "message": "That kills them",
-      "output": "is_lethal"
+      "output": "is_lethal",
+      "tone": "danger"
     },
     "fields": [
       {

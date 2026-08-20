@@ -138,6 +138,7 @@ describe('DungeonMap', () => {
         onChange={() => {}}
       />,
     )
+    // MAP names no card, so the drawn variant renders directly -- no image to load.
     // Labels degrade to ids.
     expect(screen.getByRole('button', { name: 'cave, current' })).toBeInTheDocument()
     expect(screen.getByText('You are here: cave')).toBeInTheDocument()
@@ -194,6 +195,9 @@ describe('DungeonMap with card art', () => {
   it('renders the printed card with a positioned tap target per room', () => {
     render(<DungeonMap field={mappedField({ map: ART_MAP })} value={[]} onChange={() => {}} />)
     expect(screen.getByAltText('The dungeon, as printed')).toBeInTheDocument()
+    // The tap targets wait for the pixels.
+    expect(screen.queryByRole('button', { name: 'Cave Entrance, venture here' })).not.toBeInTheDocument()
+    fireEvent.load(screen.getByAltText('The dungeon, as printed'))
     const entry = screen.getByRole('button', { name: 'Cave Entrance, venture here' })
     expect(entry.style.left).toBe('10%')
     expect(entry.style.top).toBe('15%')
@@ -207,6 +211,7 @@ describe('DungeonMap with card art', () => {
     const { rerender } = render(
       <DungeonMap field={mappedField({ map: ART_MAP })} value={[]} onChange={onChange} />,
     )
+    fireEvent.load(screen.getByAltText('The dungeon, as printed'))
     fireEvent.click(screen.getByRole('button', { name: 'Cave Entrance, venture here' }))
     expect(onChange).toHaveBeenCalledWith('path', ['cave'])
 
@@ -234,6 +239,7 @@ describe('DungeonMap with card art', () => {
         onChange={() => {}}
       />,
     )
+    fireEvent.load(screen.getByAltText('The dungeon, as printed'))
     expect(screen.getByRole('button', { name: 'Cave Entrance, visited' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Dark Pool, current' })).toBeInTheDocument()
   })
@@ -255,6 +261,7 @@ describe('DungeonMap with card art, defensive shapes', () => {
         onChange={() => {}}
       />,
     )
+    fireEvent.load(screen.getByAltText('The dungeon, as printed'))
     // Labels degrade to ids; the un-annotated room simply has no tap target.
     expect(screen.getByRole('button', { name: 'cave, current' })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: /pool/ })).not.toBeInTheDocument()

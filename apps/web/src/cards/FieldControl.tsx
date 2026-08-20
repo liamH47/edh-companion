@@ -1,7 +1,8 @@
+import { useState } from 'react'
 import { sequenceValue } from '@mtg/core'
 import type { FieldSpec } from '@mtg/core'
 import { Chip } from '../ui/Chip'
-import { UndoIcon } from '../ui/Icon'
+import { InfoIcon, UndoIcon } from '../ui/Icon'
 import { DungeonMap } from './DungeonMap'
 import { Pressable } from '../ui/Pressable'
 import { Stepper } from '../ui/Stepper'
@@ -36,17 +37,42 @@ const selectOptionClasses =
  * ActionBar where your thumb already is.
  */
 export function FieldControl({ field, value, onChange }: FieldControlProps) {
-  const helpText = field.help_text ? (
-    <Text as="p" variant="body" color="muted">
-      {field.help_text}
-    </Text>
+  // Help text is folded behind a small info toggle: the paragraphs were the single
+  // biggest space cost on a phone (Comet and Dungeons each carried several lines of
+  // always-on explanation between the card and its controls). The label row carries
+  // the toggle, so help stays one tap away without ever pushing controls down.
+  const [helpOpen, setHelpOpen] = useState(false)
+  const helpToggle = field.help_text ? (
+    <Pressable
+      aria-label={`About ${field.label}`}
+      aria-expanded={helpOpen}
+      onClick={() => setHelpOpen((open) => !open)}
+      className={`min-h-12 min-w-12 justify-center rounded-full ${
+        helpOpen ? 'text-accent' : 'text-text-muted'
+      } hover:text-text`}
+    >
+      <InfoIcon />
+    </Pressable>
   ) : null
+  const helpText =
+    field.help_text && helpOpen ? (
+      <Text as="p" variant="body" color="muted">
+        {field.help_text}
+      </Text>
+    ) : null
+
+  const labelRow = (
+    <div className="flex min-h-12 items-center gap-1">
+      <Text variant="body">{field.label}</Text>
+      {helpToggle}
+    </div>
+  )
 
   switch (field.kind) {
     case 'boolean':
       return (
         <div className="flex flex-col gap-1">
-          <Text variant="body">{field.label}</Text>
+          {labelRow}
           <Toggle
             value={value === true}
             onChange={(next) => onChange(field.name, next)}
@@ -60,7 +86,7 @@ export function FieldControl({ field, value, onChange }: FieldControlProps) {
       return (
         <div className="flex flex-col gap-1">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <Text variant="body">{field.label}</Text>
+            {labelRow}
             <Stepper
               value={typeof value === 'number' ? value : 0}
               onChange={(next) => onChange(field.name, next)}
@@ -74,10 +100,20 @@ export function FieldControl({ field, value, onChange }: FieldControlProps) {
       )
     case 'select': {
       const options = field.options ?? []
+      // Four-plus options wrap onto three phone rows as pills; a single scrollable
+      // row keeps the picker one line tall (a horizontal ScrollView on RN). Short
+      // lists keep the wrap -- nothing to scroll.
+      const scrolls = options.length > 3
       return (
         <div className="flex flex-col gap-1">
-          <Text variant="body">{field.label}</Text>
-          <div role="radiogroup" aria-label={field.label} className="flex flex-wrap gap-1">
+          {labelRow}
+          <div
+            role="radiogroup"
+            aria-label={field.label}
+            className={
+              scrolls ? 'flex gap-1 overflow-x-auto pb-1' : 'flex flex-wrap gap-1'
+            }
+          >
             {options.map((option) => {
               const selected = value === option.value
               return (
@@ -86,7 +122,7 @@ export function FieldControl({ field, value, onChange }: FieldControlProps) {
                   role="radio"
                   aria-checked={selected}
                   onClick={() => onChange(field.name, option.value)}
-                  className={`${selectOptionClasses} ${
+                  className={`${selectOptionClasses} ${scrolls ? 'shrink-0 whitespace-nowrap' : ''} ${
                     selected
                       ? 'border-accent bg-accent text-accent-text'
                       : 'border-border bg-surface text-text'
@@ -109,7 +145,7 @@ export function FieldControl({ field, value, onChange }: FieldControlProps) {
         return (
           <div className="flex flex-col gap-1">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <Text variant="body">{field.label}</Text>
+              {labelRow}
               {sequenceValue(value).length > 0 && (
                 <Pressable
                   aria-label={`Undo last ${field.label}`}
@@ -130,7 +166,7 @@ export function FieldControl({ field, value, onChange }: FieldControlProps) {
       return (
         <div className="flex flex-col gap-1">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <Text variant="body">{field.label}</Text>
+            {labelRow}
             {entries.length > 0 && (
               <Pressable
                 aria-label={`Undo last ${field.label}`}

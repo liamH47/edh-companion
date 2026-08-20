@@ -29,7 +29,12 @@ export function withDerivedValues(
   const derived = { ...nextValues }
 
   for (const field of card.fields) {
-    if (field.visible_if && !isFieldVisible(field, derived)) {
+    // A hidden mapped field keeps its walk: a player tracking several dungeons at
+    // once (or peeking at another dungeon's shape) must not lose their position in
+    // one by looking at another. Every other hidden field still resets -- Aetherflux
+    // relies on that -- and compute() only ever reads the selected dungeon's path,
+    // so a kept walk never leaks into the outputs.
+    if (field.visible_if && !isFieldVisible(field, derived) && field.map === null) {
       derived[field.name] = field.default
     }
   }
@@ -128,6 +133,17 @@ export function nonPrimaryOutputs(card: CardMetadata): OutputSpec[] {
 export function resolveAlertMessage(card: CardMetadata, outputs: OutputValues | null): string | null {
   if (!card.alert || !outputs) return null
   return outputs[card.alert.output] === true ? card.alert.message : null
+}
+
+/** The active alert's tone, or null while no alert is active -- the same resolution
+ * as the message, so banner styling and the one-shot sound agree on which moment
+ * this is (a dungeon completed must not sound or read like a loss). */
+export function resolveAlertTone(
+  card: CardMetadata,
+  outputs: OutputValues | null,
+): 'danger' | 'success' | null {
+  if (!card.alert || !outputs) return null
+  return outputs[card.alert.output] === true ? card.alert.tone : null
 }
 
 const numberFormatter = new Intl.NumberFormat('en-US')

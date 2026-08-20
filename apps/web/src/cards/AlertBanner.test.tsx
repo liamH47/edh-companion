@@ -13,3 +13,13 @@ describe('AlertBanner', () => {
     expect(screen.getByRole('alert')).toHaveTextContent('Oops, looks like you lose now')
   })
 })
+
+
+describe('success tone', () => {
+  it('renders the payoff styling instead of danger', () => {
+    render(<AlertBanner message="Dungeon complete" tone="success" />)
+    const banner = screen.getByRole('alert')
+    expect(banner.className).toContain('bg-accent-muted')
+    expect(screen.getByText('Dungeon complete')).toBeInTheDocument()
+  })
+})

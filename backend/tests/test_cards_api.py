@@ -150,7 +150,11 @@ def test_get_card_metadata_returns_full_schema(client: TestClient) -> None:
     outputs_by_name = {output["name"]: output for output in body["outputs"]}
     assert outputs_by_name["damage_available"]["primary"] is True
     assert outputs_by_name["current_life"]["primary"] is False
-    assert body["alert"] == {"output": "game_lost", "message": "Oops, looks like you lose now"}
+    assert body["alert"] == {
+        "output": "game_lost",
+        "message": "Oops, looks like you lose now",
+        "tone": "danger",
+    }
 
 
 def test_get_card_metadata_returns_404_for_unknown_card_id(client: TestClient) -> None:

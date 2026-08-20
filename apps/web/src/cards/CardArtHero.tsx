@@ -26,6 +26,9 @@ interface CardArtHeroProps {
 export function CardArtHero({ card, label, value, pending, dead }: CardArtHeroProps) {
   const url = cardImageUrl(card)
   const [failed, setFailed] = useState(false)
+  // The badge waits for the pixels: a loyalty shield floating over the image's blank
+  // placeholder box reads as broken during a slow load.
+  const [loaded, setLoaded] = useState(false)
 
   if (!url || failed) {
     return <LoyaltyShield label={label} value={value} pending={pending} dead={dead} />
@@ -36,18 +39,21 @@ export function CardArtHero({ card, label, value, pending, dead }: CardArtHeroPr
       <img
         src={url}
         alt={`${card.name}, as printed`}
+        onLoad={() => setLoaded(true)}
         onError={() => setFailed(true)}
         loading="lazy"
         className="w-full rounded-xl object-contain aspect-[488/680]"
       />
       {/* Over the printed loyalty box: bottom-right of the frame, above the artist
           line. Sized and placed as fractions of the card so it tracks every width. */}
-      <div
-        className={`absolute right-[4%] bottom-[4%] w-[21%] ${pending ? 'opacity-60' : ''}`}
-        data-testid="loyalty-shield"
-      >
-        <LoyaltyBadge value={value} dead={dead} />
-      </div>
+      {loaded && (
+        <div
+          className={`absolute right-[4%] bottom-[4%] w-[21%] ${pending ? 'opacity-60' : ''}`}
+          data-testid="loyalty-shield"
+        >
+          <LoyaltyBadge value={value} dead={dead} />
+        </div>
+      )}
     </div>
   )
 }

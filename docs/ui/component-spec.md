@@ -326,6 +326,14 @@ Bottom-pinned row in the thumb zone. Three field shapes feed it, all honouring t
 - a live `sequence` declaring `roll` → a `DieRoller` the app rolls itself (Comet); the per-option
   buttons are suppressed so nobody can report a roll the app didn't make.
 
+### Field help and dense pickers
+
+Every field's `help_text` folds behind a small info toggle on its label row
+(`aria-expanded`): the always-on paragraphs were the single biggest space cost on a
+phone, sitting between the card art and its controls. A `select` with more than three
+options renders as one horizontally-scrollable row (an RN horizontal ScrollView)
+instead of wrapping onto several; short lists keep the wrap.
+
 ### Compact stats (StatTile / StatStrip / HeroStat)
 
 `StatStrip` centres its wrapping row (`justify-center`) so the tiles share the hero's
@@ -395,6 +403,9 @@ animation, so nothing needs a reduced-motion gate beyond the primitives' own pre
 feedback.
 
 ### CardArtHero / LoyaltyShield / LoyaltyBadge
+
+Overlays (the loyalty badge, the dungeon room targets) wait for the image's `onLoad`:
+rings floating over the blank placeholder box read as broken during a slow load.
 
 `CardArtHero` (`cards/CardArtHero.tsx`) makes the card itself the hero: the printed image,
 large, with `LoyaltyBadge` -- the live loyalty in a hand-drawn planeswalker badge -- over

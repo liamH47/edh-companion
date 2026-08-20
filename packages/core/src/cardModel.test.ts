@@ -350,17 +350,17 @@ describe('resolveAlertMessage', () => {
   })
 
   it('returns null when outputs are not yet known', () => {
-    const c = card({ alert: { output: 'game_lost', message: 'You lose' } })
+    const c = card({ alert: { output: 'game_lost', message: 'You lose', tone: 'danger' } })
     expect(resolveAlertMessage(c, null)).toBeNull()
   })
 
   it('returns null when the alert output is false', () => {
-    const c = card({ alert: { output: 'game_lost', message: 'You lose' } })
+    const c = card({ alert: { output: 'game_lost', message: 'You lose', tone: 'danger' } })
     expect(resolveAlertMessage(c, { game_lost: false })).toBeNull()
   })
 
   it('returns the message when the alert output is true', () => {
-    const c = card({ alert: { output: 'game_lost', message: 'You lose' } })
+    const c = card({ alert: { output: 'game_lost', message: 'You lose', tone: 'danger' } })
     expect(resolveAlertMessage(c, { game_lost: true })).toBe('You lose')
   })
 })

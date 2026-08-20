@@ -300,6 +300,8 @@ METADATA = CardMetadata(
     alert=AlertSpec(
         output="dungeon_complete",
         message="Dungeon complete -- mark the tally, then venture anew",
+        # Completion is the payoff, not a loss: accent banner, win sound.
+        tone="success",
     ),
 )
 

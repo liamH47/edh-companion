@@ -246,10 +246,16 @@ class OutputSpec(BaseModel):
 class AlertSpec(BaseModel):
     """Names a boolean compute() output that should drive a banner instead of another
     stat tile -- e.g. Aetherflux's `game_lost`. Frontend-only concern; compute() just
-    returns the named boolean like any other output."""
+    returns the named boolean like any other output.
+
+    `tone` decides how the moment sounds and reads: "danger" (a loss -- Aetherflux's
+    game_lost, Comet dying) takes the danger banner and the lose sound; "success"
+    (a dungeon completed) takes the accent banner and the win sound. Completing a
+    dungeon sounding like losing a coin flip was the bug that forced the split."""
 
     output: str
     message: str
+    tone: Literal["danger", "success"] = "danger"
 
 
 class CardMetadata(BaseModel):
