@@ -4,7 +4,7 @@ Where this project is and what is left. Written into the repo deliberately: a Cl
 cloud session clones the repo and cannot see anything on a local machine, so a plan that
 lives only in `~/.claude/plans/` is invisible there.
 
-Last updated 2026-08-20.
+Last updated 2026-08-20 (evening: 3D dice, Comet card screen, Dungeons).
 
 ## Where it stands
 
@@ -14,16 +14,24 @@ needs a connection.
 
 Four tabs:
 
-- **Cards** — **13 calculators**, each a Python module plus a mirrored TypeScript
-  implementation. Twelve are real cards; **Commander Tax is a cardless format mechanic**
-  (rule 903.8), which is why the schema allows `scryfall_id: None` and no "View card"
-  image renders for it.
+- **Cards** — **14 calculators**, each a Python module plus a mirrored TypeScript
+  implementation. Twelve are real cards; **Commander Tax and Dungeons are cardless
+  format mechanics**, which is why the schema allows `scryfall_id: None`. Dungeons
+  tracks all four dungeon cards (Undercity included, its initiative gating recorded in
+  the option label) as a tappable room map — the `map` capability on a sequence field,
+  with walk legality parity-proven on both sides — and Comet's screen shows the card
+  itself with the live loyalty overlaid on the printed loyalty box (the one recorded
+  exception to the no-overlay rule; decision note in `cardImage.ts`).
 - **Pairings** — opens on a chooser, because most Commander meetups don't run Swiss.
   Casual **Commander pods** is the headline option (generate tables and reshuffle each
   round to minimise repeat tablemates — no scoring); full **Swiss** is one tap away, with
   1v1 and Commander pods, drops, re-pairing, and MTR tiebreakers.
 - **Coin Flip** — a plain flip, with Okaun/Zndrsplt tracking as an opt-in mode.
-- **Dice** — d6, 2d6 and d20.
+- **Dice** — d6, 2d6 and d20, as **real projected 3D solids** (a cube and a true
+  icosahedron, own quaternion math in `packages/core/src/dice3d/`, zero dependencies),
+  thrown, bouncing on the same contact schedule the roll sound is synthesized from
+  (`generate_roll_sound.py --check` guards the sync in CI). Design record:
+  `docs/design/dice3d.md`.
 
 Every deploy is gated on CI: backend lint/format/types/tests, a design-tokens freshness
 check, both frontend packages at 100% coverage, a parity corpus proving Python and
