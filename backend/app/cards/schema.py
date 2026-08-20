@@ -120,6 +120,13 @@ class FieldSpec(BaseModel):
     # See MapSpec: this sequence is a walk through a room graph, rendered as a map.
     # Only meaningful on a sequence field; mutually exclusive with roll.
     map: MapSpec | None = None
+    # On "New turn", this field takes the named output's final value instead of its
+    # default -- state that persists across turns rather than resetting (Comet's
+    # loyalty: the walker keeps the counters it ended the turn with). Frontend-only,
+    # like default_source; compute() never knows where the value came from. The carried
+    # value is clamped to the field's own min/max so a runaway output cannot poison the
+    # next turn's validation.
+    new_turn_carries_output: str | None = None
     # Marks a field as one-time board-state setup (answered once, rarely revisited) rather
     # than something clicked repeatedly during play. Setup fields render inside a collapsible
     # section the player can tuck away once answered, keeping the fields they actually
@@ -239,6 +246,20 @@ class CardMetadata(BaseModel):
         primary_names = [output.name for output in self.outputs if output.primary]
         if len(primary_names) > 1:
             raise ValueError(f"card {self.id!r} declares multiple primary outputs: {primary_names}")
+        return self
+
+    @model_validator(mode="after")
+    def _check_carried_outputs_exist(self) -> "CardMetadata":
+        """A carry-over naming a missing output would silently fall back to the
+        default -- exactly the quiet reset the flag exists to prevent."""
+        declared = {output.name for output in self.outputs}
+        bad = [
+            f.name
+            for f in self.fields
+            if f.new_turn_carries_output is not None and f.new_turn_carries_output not in declared
+        ]
+        if bad:
+            raise ValueError(f"card {self.id!r} carries undeclared outputs on fields: {bad}")
         return self
 
     @model_validator(mode="after")

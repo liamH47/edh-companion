@@ -42,6 +42,7 @@ function mappedField(overrides: Partial<FieldSpec> = {}): FieldSpec {
     action_disabled_when: null,
     roll: null,
     map: MAP,
+    new_turn_carries_output: null,
     setup: false,
     short_label: null,
     ...overrides,

@@ -10,7 +10,13 @@ const FACES_DAMAGE = new Set(['4', '5'])
 
 /** Mirrors backend/app/cards/comet_stellar_pup.py. */
 export function compute(inputs: FieldValues): OutputValues {
-  let loyalty = Number(inputs.starting_loyalty)
+  const adjustment = Number(inputs.loyalty_adjustment)
+  let loyalty = Number(inputs.starting_loyalty) + adjustment
+
+  // Enough damage between activations kills him before the die is ever picked up. A
+  // plain zero start (no adjustment) is not death -- that is just the field's floor.
+  let died = adjustment < 0 && loyalty <= 0
+  loyalty = Math.max(0, loyalty)
   // validateInputs guarantees this is an array of declared option values.
   const rolls = inputs.rolls as string[]
 
@@ -20,7 +26,6 @@ export function compute(inputs: FieldValues): OutputValues {
   let totalDamage = 0
   let squirrelsCreated = 0
   let cardsReturned = 0
-  let died = false
 
   for (const roll of rolls) {
     if (died) {

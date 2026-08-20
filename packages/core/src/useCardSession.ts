@@ -52,6 +52,10 @@ export function useCardSession(card: CardMetadata): CardSession {
 
   const [values, setValues] = useState<FieldValues>(() => defaultValues(card))
   const [outputs, setOutputs] = useState<OutputValues | null>(null)
+  // Mirrors `outputs` for callbacks that must read the latest result without keying
+  // themselves on it (resetTurn's carry-over) -- same pattern as cardRef.
+  const outputsRef = useRef<OutputValues | null>(null)
+  outputsRef.current = outputs
   const [error, setError] = useState<string | null>(null)
   const [setupConfirmed, setSetupConfirmed] = useState(() => isSetupConfirmed(card.id))
 
@@ -92,7 +96,22 @@ export function useCardSession(card: CardMetadata): CardSession {
   )
 
   const resetTurn = useCallback(() => {
-    const reset = defaultValues(cardRef.current)
+    const card = cardRef.current
+    const reset = defaultValues(card)
+    // Carry-over fields take the output they name instead of their default: a walker
+    // keeps the loyalty it ended the turn with. Clamped to the field's own bounds so a
+    // runaway output cannot poison the next turn's validation.
+    const outputs = outputsRef.current
+    for (const field of card.fields) {
+      const carried = field.new_turn_carries_output
+      if (carried === null || outputs === null) continue
+      const value = outputs[carried]
+      if (typeof value !== 'number') continue
+      let clamped = value
+      if (field.min != null) clamped = Math.max(field.min, clamped)
+      if (field.max != null) clamped = Math.min(field.max, clamped)
+      reset[field.name] = clamped
+    }
     setValues(reset)
     runCalculation(reset)
   }, [runCalculation])

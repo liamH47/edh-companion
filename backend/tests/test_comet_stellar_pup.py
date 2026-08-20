@@ -4,6 +4,7 @@ from app.cards.comet_stellar_pup import compute
 def _inputs(**overrides: object) -> dict[str, object]:
     base: dict[str, object] = {
         "starting_loyalty": 5,
+        "loyalty_adjustment": 0,
         "rolls": [],
     }
     base.update(overrides)
@@ -143,4 +144,34 @@ def test_compute_walks_every_face_in_one_reachable_turn() -> None:
     assert result["squirrels_created"] == 4
     assert result["cards_returned"] == 1
     assert result["activations_remaining"] == 0
+    assert result["comet_died"] is False
+
+
+def test_negative_adjustment_applies_before_the_rolls() -> None:
+    # Hit for 1 between turns, then a damage roll: it deals the reduced loyalty.
+    result = compute(_inputs(loyalty_adjustment=-1, rolls=["4"]))
+    assert result["damage_this_activation"] == 4
+    assert result["loyalty"] == 2
+
+
+def test_positive_adjustment_raises_the_damage_roll() -> None:
+    result = compute(_inputs(loyalty_adjustment=2, rolls=["4"]))
+    assert result["damage_this_activation"] == 7
+
+
+def test_enough_damage_between_activations_kills_him_outright() -> None:
+    result = compute(_inputs(loyalty_adjustment=-5))
+    assert result["comet_died"] is True
+    assert result["loyalty"] == 0
+    assert result["activations_remaining"] == 0
+
+
+def test_dead_from_adjustment_ignores_any_logged_rolls() -> None:
+    result = compute(_inputs(loyalty_adjustment=-9, rolls=["1", "1"]))
+    assert result["squirrels_created"] == 0
+
+
+def test_a_plain_zero_start_is_not_death() -> None:
+    # The field floor, not damage: no adjustment means no death at zero.
+    result = compute(_inputs(starting_loyalty=0))
     assert result["comet_died"] is False

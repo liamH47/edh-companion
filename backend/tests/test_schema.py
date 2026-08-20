@@ -263,3 +263,36 @@ def test_field_spec_rejects_roll_on_a_non_sequence_kind() -> None:
 def test_field_spec_roll_defaults_to_none() -> None:
     field = FieldSpec(name="count", label="Count", kind=FieldKind.NUMBER, default=0)
     assert field.roll is None
+
+
+def test_card_metadata_rejects_a_carry_over_naming_a_missing_output() -> None:
+    with pytest.raises(ValueError, match="carries undeclared outputs"):
+        CardMetadata(
+            id="test-card",
+            name="Test Card",
+            rules_text="...",
+            fields=[
+                FieldSpec(
+                    name="start",
+                    label="Start",
+                    kind=FieldKind.NUMBER,
+                    new_turn_carries_output="ghost",
+                )
+            ],
+            outputs=[OutputSpec(name="total", label="Total")],
+        )
+
+
+def test_card_metadata_accepts_a_carry_over_naming_a_declared_output() -> None:
+    card = CardMetadata(
+        id="test-card",
+        name="Test Card",
+        rules_text="...",
+        fields=[
+            FieldSpec(
+                name="start", label="Start", kind=FieldKind.NUMBER, new_turn_carries_output="total"
+            )
+        ],
+        outputs=[OutputSpec(name="total", label="Total")],
+    )
+    assert card.fields[0].new_turn_carries_output == "total"

@@ -39,6 +39,10 @@ export interface FieldSpec {
   roll: RollSpec | null
   /** See MapSpec. Only on a sequence field; mutually exclusive with roll. */
   map: MapSpec | null
+  /** On "New turn", this field takes the named output's final value (clamped to the
+   * field's own bounds) instead of its default -- state that persists across turns
+   * (Comet's loyalty). Frontend-only; compute() never knows where the value came from. */
+  new_turn_carries_output: string | null
   setup: boolean
   short_label: string | null
 }
