@@ -35,6 +35,9 @@ export function StandingsScreen({ tournament }: StandingsScreenProps) {
 
       <ul className="flex flex-col gap-2">
         {standings.map((standing) => {
+          // Safe to assert: computeStandings derives every row from tournament.entrants,
+          // so this id is always present (unlike a match's entrantIds, which the pairer
+          // sources the same way but the UI must still guard -- see RoundScreen).
           const entrant = nameById.get(standing.entrantId)!
           const dropped = entrant.droppedAfterRound !== null
           return (

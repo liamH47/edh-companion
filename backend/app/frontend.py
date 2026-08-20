@@ -20,9 +20,17 @@ def mount_frontend(app: FastAPI, dist_dir: Path) -> None:
     if assets_dir.is_dir():
         app.mount("/assets", StaticFiles(directory=assets_dir), name="frontend-assets")
 
+    root = dist_dir.resolve()
+
     @app.get("/{full_path:path}")
     def serve_frontend(full_path: str) -> FileResponse:
-        candidate = dist_dir / full_path
-        if full_path and candidate.is_file():
+        # `dist_dir / full_path` is NOT safe on its own: pathlib's `/` discards the left
+        # operand when the right side is absolute (`dist_dir / "/etc/passwd"` == "/etc/passwd"),
+        # and `..` segments climb out of the root -- so an unchecked catch-all is an
+        # arbitrary-file-read. Resolve the candidate and require it to stay inside the
+        # dist root before serving anything; everything else falls through to the SPA
+        # shell, exactly as a genuine client-side route already does.
+        candidate = (dist_dir / full_path).resolve()
+        if full_path and (candidate == root or root in candidate.parents) and candidate.is_file():
             return FileResponse(candidate)
-        return FileResponse(dist_dir / "index.html")
+        return FileResponse(root / "index.html")

@@ -3,11 +3,14 @@ import {
   makeEntrants,
   makeTournament,
   match,
+  playRound,
+  podResult,
   result,
   round,
   seededRng,
 } from './fixtures'
 import { computeStandings } from './scoring'
+import { isBye } from './types'
 import {
   assignSeatsRandomly,
   createTournament,
@@ -180,6 +183,20 @@ describe('startNextRound', () => {
     const tournament = makeTournament({ entrants: makeEntrants(4) })
     startNextRound(tournament, seededRng())
     expect(tournament.rounds).toEqual([])
+  })
+
+  it('refuses to start a round once every remaining entrant has dropped', () => {
+    // An empty round would read as vacuously complete (an `every` over no matches is
+    // true), silently marking the whole tournament finished. Guard by leaving it be.
+    const tournament = makeTournament({
+      entrants: makeEntrants(2).map((entrant) => ({ ...entrant, droppedAfterRound: 1 })),
+      rounds: [round(1, [match('entrant-1', 'entrant-2', result(2, 0))])],
+    })
+    const { tournament: next, hadToRepeatPairing } = startNextRound(tournament, seededRng())
+    expect(next).toBe(tournament)
+    expect(next.rounds).toHaveLength(1)
+    expect(hadToRepeatPairing).toBe(false)
+    expect(isTournamentComplete(next)).toBe(false)
   })
 })
 
@@ -515,5 +532,31 @@ describe('Commander events', () => {
   it('never produces a bye', () => {
     const { tournament } = startNextRound(createTournament(commanderInput), seededRng())
     expect(tournament.rounds[0].matches.every((m) => m.entrantIds.length >= 3)).toBe(true)
+  })
+
+  it('gives a lone survivor a bye rather than a stuck one-player pod', () => {
+    // A Commander field that drops down to a single active player has no table to seat.
+    // The pod pairer must record a bye (which carries a result and completes the round)
+    // rather than a one-entrant match whose null result the UI can never report --
+    // otherwise the round never completes and the tournament deadlocks.
+    const input = {
+      mode: 'solo' as const,
+      eventFormat: 'commander' as const,
+      format: 'bo3' as const,
+      totalRounds: 3,
+      entrantMembers: Array.from({ length: 4 }, (_u, i) => [`P${i + 1}`]),
+    }
+    let tournament = startNextRound(createTournament(input), seededRng()).tournament
+    tournament = playRound(tournament, 1, () => podResult(4, 0))
+    for (const id of ['entrant-2', 'entrant-3', 'entrant-4']) {
+      tournament = dropEntrant(tournament, id, 1)
+    }
+
+    const { tournament: next } = startNextRound(tournament, seededRng())
+    const round2 = next.rounds[1]
+    expect(round2.matches).toHaveLength(1)
+    expect(round2.matches[0].entrantIds).toEqual(['entrant-1'])
+    expect(isBye(round2.matches[0])).toBe(true)
+    expect(isRoundComplete(next, 2)).toBe(true)
   })
 })

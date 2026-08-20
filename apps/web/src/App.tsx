@@ -5,6 +5,7 @@ import { CardPickerScreen } from './cards/CardPickerScreen'
 import { CardScreen } from './cards/CardScreen'
 import { CoinFlip } from './CoinFlip'
 import { useNavigation } from './core/navigation/useNavigation'
+import { ErrorBoundary } from './ErrorBoundary'
 import { DiceScreen } from './DiceScreen'
 import { PairingsScreen } from './pairings/PairingsScreen'
 import { SoundToggle } from './SoundToggle'
@@ -77,18 +78,24 @@ function App() {
         </div>
       </header>
 
-      {(route.name === 'card-picker' || route.name === 'card') &&
-        (selectedCard ? (
-          <CardScreen key={selectedCard.id} card={selectedCard} onBack={goToCardPicker} />
-        ) : (
-          <CardPickerScreen cards={CARDS} onSelectCard={handleSelectCard} />
-        ))}
+      {/* One boundary per tab, not just the single top-level one in main.tsx: a render
+          error in (say) the Swiss screen should surface its own recover button without
+          dragging Cards, Coin Flip and Dice down to a blank screen with it. The key
+          resets the boundary on navigation, so leaving a broken route clears the error. */}
+      <ErrorBoundary key={route.name}>
+        {(route.name === 'card-picker' || route.name === 'card') &&
+          (selectedCard ? (
+            <CardScreen key={selectedCard.id} card={selectedCard} onBack={goToCardPicker} />
+          ) : (
+            <CardPickerScreen cards={CARDS} onSelectCard={handleSelectCard} />
+          ))}
 
-      {route.name === 'coin-flip' && <CoinFlip />}
+        {route.name === 'coin-flip' && <CoinFlip />}
 
-      {route.name === 'swiss' && <PairingsScreen />}
+        {route.name === 'swiss' && <PairingsScreen />}
 
-      {route.name === 'dice' && <DiceScreen />}
+        {route.name === 'dice' && <DiceScreen />}
+      </ErrorBoundary>
 
       {showTabBar && <TabBar active={tabForRoute(route.name)} onSelect={handleSelectTab} />}
     </main>

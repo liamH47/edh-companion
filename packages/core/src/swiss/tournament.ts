@@ -1,4 +1,5 @@
 import {
+  activeEntrantsForRound,
   makeBye,
   makeMatch,
   podPairings,
@@ -142,6 +143,14 @@ export function startNextRound(
       tournament: { ...tournament, rounds: [{ number: 1, matches }] },
       hadToRepeatPairing: false,
     }
+  }
+
+  // With everyone dropped there is no field to pair. Appending an empty round would be
+  // read as "complete" (an `every` over no matches is vacuously true), so the whole
+  // tournament would silently register as finished -- and the user could keep spawning
+  // more empty rounds. Refuse instead, leaving the tournament untouched.
+  if (activeEntrantsForRound(tournament, roundNumber).length === 0) {
+    return { tournament, hadToRepeatPairing: false }
   }
 
   const { matches, hadToRepeatPairing } = isPodded
