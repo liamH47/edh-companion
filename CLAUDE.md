@@ -13,6 +13,16 @@ because it is not itself a secret.
 `Co-Authored-By:` trailers are fine and should stay — that is ordinary attribution and
 points at nothing.
 
+## Don't re-ask a decision the user has answered
+
+When specialized agents reach quorum, proceed on the agreed items without re-confirming.
+For a genuine fork, ask **once** via `AskUserQuestion`; once the user answers, record the
+choice and move forward. Never re-surface the same decision.
+
+This matters most in a resumed or background session — for example one watching a PR. A
+re-wake is not a new question. If a design decision already has an answer earlier in the
+conversation, treat it as settled rather than asking again.
+
 ## Secrets
 
 Set them with `gh secret set NAME` and paste at the prompt, never
