@@ -82,7 +82,8 @@ describe('DieRoller', () => {
     const { onRolled } = setup({ rng })
 
     pressRoll()
-    expect(rng).toHaveBeenCalledTimes(1)
+    // One draw for the face, one for the tumble seed -- both up front.
+    expect(rng).toHaveBeenCalledTimes(2)
 
     advance()
     expect(onRolled).toHaveBeenCalledWith(1)

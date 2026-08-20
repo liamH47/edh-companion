@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-import { playLoseSound, playRollSound, revealDuration, rollDice, tapHaptic } from '@mtg/core'
+import {
+  FIRST_CONTACT_FRACTION,
+  playLoseSound,
+  playRollSound,
+  revealDuration,
+  rollDice,
+  tapHaptic,
+} from '@mtg/core'
 import { TumblingDie } from './cards/TumblingDie'
 import { Button } from './ui/Button'
 import { SegmentedControl, type SegmentedOption } from './ui/SegmentedControl'
@@ -45,27 +52,34 @@ function announce(results: number[]): string {
  */
 export function DiceScreen({ rng = Math.random }: { rng?: () => number }) {
   const [mode, setMode] = useState<DiceMode>('d6')
-  const [results, setResults] = useState<number[]>([1])
+  // Face and tumble seed live in one record per die: parallel arrays would invite an
+  // index mismatch the render would then have to paper over with a fallback.
+  const [dice, setDice] = useState<{ face: number; seed: number }[]>([{ face: 1, seed: 1 }])
   const [rolling, setRolling] = useState(false)
   const [announcement, setAnnouncement] = useState('')
   const timeoutRef = useRef<number | undefined>(undefined)
+  const soundTimeoutRef = useRef<number | undefined>(undefined)
   const inFlight = useRef(false)
   const durationMs = revealDuration()
 
   const { count, faces } = CONFIG[mode]
 
   useEffect(() => {
-    return () => window.clearTimeout(timeoutRef.current)
+    return () => {
+      window.clearTimeout(timeoutRef.current)
+      window.clearTimeout(soundTimeoutRef.current)
+    }
   }, [])
 
   const changeMode = (next: DiceMode) => {
     // The selector is disabled while rolling, so this only fires at rest; the resets are
     // defensive so no stale roll can survive a mode change.
     window.clearTimeout(timeoutRef.current)
+    window.clearTimeout(soundTimeoutRef.current)
     inFlight.current = false
     setRolling(false)
     setMode(next)
-    setResults(Array.from({ length: CONFIG[next].count }, () => 1))
+    setDice(Array.from({ length: CONFIG[next].count }, () => ({ face: 1, seed: 1 })))
     setAnnouncement('')
   }
 
@@ -77,20 +91,33 @@ export function DiceScreen({ rng = Math.random }: { rng?: () => number }) {
     tapHaptic()
 
     const landed = rollDice(count, faces, rng)
-    setResults(landed)
+    // One seed per die, drawn from the same rng as the faces, so two dice tumble
+    // independently and a test can pin the whole roll. Without this both 2d6 dice
+    // shared the default seed and moved in lockstep -- one object mirrored, not two.
+    setDice(landed.map((face) => ({ face, seed: Math.floor(rng() * 1_000_000) })))
     setRolling(true)
     setAnnouncement('')
+
+    // The roll clip's impacts are baked at the animation's contact fractions, so it
+    // starts when the dice first touch down, not when the button is pressed and not at
+    // the reveal (which put every bounce on screen before a single sound played).
+    // Contact timing is seed-independent, so one shared trigger covers both dice.
+    soundTimeoutRef.current = window.setTimeout(
+      playRollSound,
+      durationMs * FIRST_CONTACT_FRACTION,
+    )
 
     timeoutRef.current = window.setTimeout(() => {
       inFlight.current = false
       setRolling(false)
       setAnnouncement(announce(landed))
+      // The failure sting is about the outcome, so it waits for the reveal; the roll
+      // clip above is about the physics, so it does not.
       if (isFailure(mode, landed)) playLoseSound()
-      else playRollSound()
     }, durationMs)
   }
 
-  const sum = results.reduce((total, face) => total + face, 0)
+  const sum = dice.reduce((total, die) => total + die.face, 0)
 
   return (
     <section className="flex flex-col items-center gap-5 py-4">
@@ -107,8 +134,15 @@ export function DiceScreen({ rng = Math.random }: { rng?: () => number }) {
 
       {/* Keyed by mode so switching remounts the dice, clearing any prior visual state. */}
       <div key={mode} className="flex items-center justify-center gap-4">
-        {results.map((face, index) => (
-          <TumblingDie key={index} face={face} faces={faces} rolling={rolling} durationMs={durationMs} />
+        {dice.map((die, index) => (
+          <TumblingDie
+            key={index}
+            face={die.face}
+            faces={faces}
+            rolling={rolling}
+            durationMs={durationMs}
+            seed={die.seed}
+          />
         ))}
       </div>
 
@@ -120,7 +154,7 @@ export function DiceScreen({ rng = Math.random }: { rng?: () => number }) {
             {sum}
           </Text>
           <Text as="p" variant="body" color="muted">
-            {results[0]} + {results[1]}
+            {dice[0].face} + {dice[1].face}
           </Text>
         </div>
       )}

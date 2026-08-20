@@ -34,6 +34,10 @@ export const motion = {
   easing: {
     standard: 'cubic-bezier(0.22, 1, 0.36, 1)',
     decelerate: 'cubic-bezier(0, 0, 0.2, 1)',
+    // Speeds up into the end of the movement. Only correct for something falling: the
+    // die's descent between bounces. Using it on a UI transition makes the interface
+    // feel like it is getting away from you, which is why the other two exist.
+    accelerate: 'cubic-bezier(0.4, 0, 1, 1)',
   },
 } as const
 

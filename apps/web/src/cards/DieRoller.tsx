@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { rollDie, tapHaptic } from '@mtg/core'
-import { revealDuration } from '@mtg/core'
+import { FIRST_CONTACT_FRACTION, playRollSound, revealDuration } from '@mtg/core'
 import { Button } from '../ui/Button'
 import { Text } from '../ui/Text'
 import { TumblingDie } from './TumblingDie'
@@ -34,13 +34,18 @@ export function DieRoller({
   rng = Math.random,
 }: DieRollerProps) {
   const [face, setFace] = useState(1)
+  const [seed, setSeed] = useState(1)
   const [rolling, setRolling] = useState(false)
   const timeoutRef = useRef<number | undefined>(undefined)
+  const soundTimeoutRef = useRef<number | undefined>(undefined)
 
   const durationMs = revealDuration()
 
   useEffect(() => {
-    return () => window.clearTimeout(timeoutRef.current)
+    return () => {
+      window.clearTimeout(timeoutRef.current)
+      window.clearTimeout(soundTimeoutRef.current)
+    }
   }, [])
 
   const roll = () => {
@@ -48,7 +53,16 @@ export function DieRoller({
     const landedOn = rollDie(faces, rng)
 
     setFace(landedOn)
+    // Varies the tumble and the resting angle between rolls. Drawn from the same rng the
+    // face came from, so an injected rng pins the animation as well as the result.
+    setSeed(Math.floor(rng() * 1_000_000))
     setRolling(true)
+    // The clip starts at the die's first contact -- there is nothing to hear while it is
+    // still in the air, and playing on the button press puts the thud before the landing.
+    soundTimeoutRef.current = window.setTimeout(
+      playRollSound,
+      durationMs * FIRST_CONTACT_FRACTION,
+    )
     timeoutRef.current = window.setTimeout(() => {
       setRolling(false)
       onRolled(landedOn)
@@ -57,7 +71,13 @@ export function DieRoller({
 
   return (
     <div className="flex flex-col items-center gap-3">
-      <TumblingDie face={face} faces={faces} rolling={rolling} durationMs={durationMs} />
+      <TumblingDie
+        face={face}
+        faces={faces}
+        rolling={rolling}
+        durationMs={durationMs}
+        seed={seed}
+      />
 
       {/* The face is announced rather than shown as text, so a screen reader hears the
           result the sighted player reads off the die. Only once it has landed. */}

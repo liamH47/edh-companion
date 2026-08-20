@@ -21,7 +21,11 @@ describe('theme', () => {
   })
 
   it('falls back to the system preference when storage access throws', () => {
-    vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+    // Spy the instance, not Storage.prototype: Node >= 26 ships its own global Storage
+    // class, so in that environment `Storage.prototype` is Node's, not jsdom's, and a
+    // prototype spy silently misses window.localStorage. An own-property spy on the
+    // object under test intercepts on every Node version.
+    vi.spyOn(localStorage, 'getItem').mockImplementation(() => {
       throw new DOMException('denied')
     })
     vi.spyOn(window, 'matchMedia').mockReturnValue({ matches: false } as MediaQueryList)
@@ -35,7 +39,7 @@ describe('theme', () => {
   })
 
   it('still applies the theme when persisting throws', () => {
-    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+    vi.spyOn(localStorage, 'setItem').mockImplementation(() => {
       throw new DOMException('quota exceeded')
     })
     expect(() => applyTheme('dark')).not.toThrow()

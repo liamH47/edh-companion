@@ -89,8 +89,10 @@ describe('DiceScreen', () => {
     advance()
 
     expect(screen.getByText('Rolled 1 and 1 — sum 2')).toBeInTheDocument()
+    // The roll clip is the physics (the dice still audibly land); the sting is the
+    // outcome. Both play on a failure.
     expect(sound.playLose).toHaveBeenCalledTimes(1)
-    expect(sound.playRoll).not.toHaveBeenCalled()
+    expect(sound.playRoll).toHaveBeenCalledTimes(1)
   })
 
   it('rolls a d20 as a numeral and plays the loss sound on a natural 1', () => {
@@ -101,7 +103,7 @@ describe('DiceScreen', () => {
 
     expect(screen.getByText('Rolled 1')).toBeInTheDocument()
     expect(sound.playLose).toHaveBeenCalledTimes(1)
-    expect(sound.playRoll).not.toHaveBeenCalled()
+    expect(sound.playRoll).toHaveBeenCalledTimes(1)
   })
 
   it('plays the neutral roll sound on a d20 that is not a 1', () => {
@@ -144,8 +146,8 @@ describe('DiceScreen', () => {
       button.click()
       button.click()
     })
-    // One d6 = one draw; the second tap is guarded before it can start a second roll.
-    expect(rng).toHaveBeenCalledTimes(1)
+    // One d6 = one face draw plus one tumble seed; the second tap is guarded before it can start a second roll.
+    expect(rng).toHaveBeenCalledTimes(2)
   })
 
   it('lands quickly under reduced motion', () => {
