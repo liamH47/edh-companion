@@ -65,6 +65,21 @@ METADATA = CardMetadata(
             max=MAX_LOYALTY,
             help_text="5 the turn he lands.",
             setup=True,
+            # A walker keeps the counters it ended the turn with: "New turn" copies the
+            # final loyalty here instead of snapping back to 5.
+            new_turn_carries_output="loyalty",
+        ),
+        FieldSpec(
+            name="loyalty_adjustment",
+            label="Loyalty change from outside his abilities",
+            short_label="adjust",
+            kind=FieldKind.NUMBER,
+            default=0,
+            min=-MAX_LOYALTY,
+            max=MAX_LOYALTY,
+            help_text="Damage he took, proliferate, +1/+1-style counter effects -- "
+            "anything that moved his loyalty besides the die. Applied before this "
+            "turn's rolls; cleared on New turn (the carry-over already includes it).",
         ),
         FieldSpec(
             name="rolls",
@@ -113,7 +128,14 @@ METADATA = CardMetadata(
 
 
 def compute(inputs: dict[str, Any]) -> dict[str, Any]:
-    loyalty = int(inputs["starting_loyalty"])
+    adjustment = int(inputs["loyalty_adjustment"])
+    loyalty = int(inputs["starting_loyalty"]) + adjustment
+
+    # Enough damage between activations kills him before the die is ever picked up. A
+    # plain zero start (no adjustment) is not death -- that is just the field's floor,
+    # matching the pre-adjustment behaviour.
+    died = adjustment < 0 and loyalty <= 0
+    loyalty = max(0, loyalty)
     rolls = list(inputs["rolls"])
 
     # A planeswalker gets one loyalty activation a turn; every 6 rolled buys two more.
@@ -122,7 +144,6 @@ def compute(inputs: dict[str, Any]) -> dict[str, Any]:
     total_damage = 0
     squirrels_created = 0
     cards_returned = 0
-    died = False
 
     for roll in rolls:
         if died:

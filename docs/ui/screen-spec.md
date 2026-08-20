@@ -103,6 +103,13 @@ turn" button entirely: a game-long tally has no turn boundary, and the old behav
 resetTurn wiping every field to defaults -- quietly erased state the player could not
 reconstruct.
 
+For a card that DOES reset each turn but carries some state across the boundary,
+`FieldSpec.new_turn_carries_output` names an output whose final value the field takes on
+"New turn" instead of its default, clamped to the field's own bounds (Comet's
+`starting_loyalty` carries `loyalty` -- a walker keeps the counters it ended the turn
+with). Frontend-only, like `default_source`; compute() never knows where a value came
+from.
+
 ## The 9 generic rules
 
 These are implemented once in `src/core/cardModel.ts` and must hold for every current and future

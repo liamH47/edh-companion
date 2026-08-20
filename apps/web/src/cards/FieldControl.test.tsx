@@ -18,6 +18,7 @@ function field(overrides: Partial<FieldSpec> & Pick<FieldSpec, 'name' | 'kind'>)
     action_disabled_when: null,
     roll: null,
     map: null,
+    new_turn_carries_output: null,
     setup: false,
     short_label: null,
     ...overrides,

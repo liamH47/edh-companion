@@ -99,7 +99,19 @@ test.describe('Cards', () => {
     // after one roll. The badge renders over the image when Scryfall is reachable and
     // as the standalone shield when not -- both carry the same live region.
     const shield = page.getByTestId('loyalty-shield')
-    await expect(shield.locator('[aria-live="polite"]')).not.toHaveText('5')
+    const liveLoyalty = shield.locator('[aria-live="polite"]')
+    await expect(liveLoyalty).not.toHaveText('5')
+
+    // New turn clears the rolls but the walker keeps its counters: the loyalty
+    // carries over instead of snapping back to 5.
+    const carried = await liveLoyalty.textContent()
+    await page.getByRole('button', { name: 'New turn' }).click()
+    await expect(page.getByText('Nothing yet.')).toBeVisible()
+    await expect(liveLoyalty).toHaveText(carried ?? '')
+
+    // Damage between activations: the manual adjustment moves the shield directly.
+    await page.getByRole('button', { name: /Decrease Loyalty change/ }).click()
+    await expect(liveLoyalty).toHaveText(String(Number(carried) - 1))
   })
 
   test('computes with the API unreachable', async ({ page }) => {

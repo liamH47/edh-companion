@@ -46,6 +46,7 @@ function makeCard(overrides: Partial<CardMetadata> = {}): CardMetadata {
         action_disabled_when: null,
         roll: null,
     map: null,
+    new_turn_carries_output: null,
         setup: false,
         short_label: null,
       },
@@ -129,6 +130,57 @@ describe('resetTurn', () => {
 
     expect(result.current.values).toEqual({ count: 0 })
     expect(result.current.setupConfirmed).toBe(true)
+  })
+
+  it('carries a flagged field over from the output it names, clamped to its bounds', () => {
+    const card = makeCard()
+    card.fields[0].new_turn_carries_output = 'total'
+    compute.mockReturnValue({ total: 12 })
+    const { result } = renderHook(() => useCardSession(card))
+    act(() => result.current.setField('count', 7))
+
+    act(() => result.current.resetTurn())
+    // The walker keeps what it ended the turn with, not the default.
+    expect(result.current.values).toEqual({ count: 12 })
+
+    // A runaway output is clamped to the field's own max rather than poisoning the
+    // next turn's validation.
+    compute.mockReturnValue({ total: 500 })
+    act(() => result.current.setField('count', 1))
+    act(() => result.current.resetTurn())
+    expect(result.current.values).toEqual({ count: 99 })
+  })
+
+  it('carries without clamping when the field declares no bounds', () => {
+    const card = makeCard()
+    card.fields[0].new_turn_carries_output = 'total'
+    card.fields[0].min = null
+    card.fields[0].max = null
+    compute.mockReturnValue({ total: -3 })
+    const { result } = renderHook(() => useCardSession(card))
+    act(() => result.current.resetTurn())
+    expect(result.current.values).toEqual({ count: -3 })
+  })
+
+  it('skips the carry when no computation has ever succeeded', () => {
+    const card = makeCard()
+    card.fields[0].new_turn_carries_output = 'total'
+    compute.mockImplementation(() => {
+      throw new Error('boom')
+    })
+    const { result } = renderHook(() => useCardSession(card))
+    act(() => result.current.resetTurn())
+    expect(result.current.values).toEqual({ count: 0 })
+  })
+
+  it('falls back to the default when the carried output is not a number', () => {
+    const card = makeCard()
+    card.fields[0].new_turn_carries_output = 'total'
+    compute.mockReturnValue({ total: true })
+    const { result } = renderHook(() => useCardSession(card))
+    act(() => result.current.setField('count', 7))
+    act(() => result.current.resetTurn())
+    expect(result.current.values).toEqual({ count: 0 })
   })
 })
 
