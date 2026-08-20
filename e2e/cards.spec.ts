@@ -44,6 +44,25 @@ test.describe('Cards', () => {
     await expect(page.getByRole('button', { name: 'Blood Artist' })).toBeHidden()
   })
 
+  test('the list URL survives a reload; the bare root still restores the last card', async ({
+    page,
+  }) => {
+    await page.goto('/')
+    // Opening a card from the picker records it as the most-recently-used card.
+    await page.getByRole('button', { name: 'Blood Artist' }).click()
+    await expect(page).toHaveURL(/\/cards\/blood-artist/)
+
+    // Reloading the list URL stays on the list. This is the reported bug: the picker used
+    // to share the bare root, so a refresh here reopened the recorded card.
+    await page.goto('/cards')
+    await expect(page.getByRole('searchbox', { name: 'Search cards' })).toBeVisible()
+
+    // The bare root still opens the last-used card directly -- the cold-launch convenience
+    // is kept, just no longer conflated with an explicit trip back to the list.
+    await page.goto('/')
+    await expect(page.getByRole('searchbox', { name: 'Search cards' })).toBeHidden()
+  })
+
   test('rolls Comet for you and logs the face that came up', async ({ page }) => {
     await page.goto('/cards/comet-stellar-pup')
 
