@@ -65,6 +65,35 @@ class RollSpec(BaseModel):
     action_label: str = "Roll"
 
 
+class MapNode(BaseModel):
+    """One room on a dungeon map. `column` is depth into the dungeon (0 = the entry,
+    rendered top-to-bottom); `row` places siblings left-to-right within a column."""
+
+    id: str
+    column: int
+    row: int
+
+
+class MapEdge(BaseModel):
+    source: str
+    target: str
+
+
+class MapSpec(BaseModel):
+    """Marks a `sequence` field as a walk through a room graph, rendered as a tappable
+    map rather than a chip log. The value stays a plain ordered list of room ids --
+    compute() reads it exactly like Comet reads its rolls and never learns about the
+    map, the same doctrine that keeps RollSpec's die out of the pure function.
+
+    A room with no outgoing edges IS the bottom room; there is deliberately no
+    `terminal` flag, which would be a second source of truth the card module could
+    drift out of sync with itself."""
+
+    entry: str
+    nodes: list[MapNode]
+    edges: list[MapEdge]
+
+
 class FieldSpec(BaseModel):
     name: str
     label: str
@@ -88,6 +117,9 @@ class FieldSpec(BaseModel):
     action_disabled_when: ActionGuard | None = None
     # See RollSpec. Only meaningful on a sequence field.
     roll: RollSpec | None = None
+    # See MapSpec: this sequence is a walk through a room graph, rendered as a map.
+    # Only meaningful on a sequence field; mutually exclusive with roll.
+    map: MapSpec | None = None
     # Marks a field as one-time board-state setup (answered once, rarely revisited) rather
     # than something clicked repeatedly during play. Setup fields render inside a collapsible
     # section the player can tuck away once answered, keeping the fields they actually
@@ -119,6 +151,35 @@ class FieldSpec(BaseModel):
                 f"field {self.name!r} rolls a d{self.roll.faces} "
                 f"but declares no option for face(s) {', '.join(missing)}"
             )
+        return self
+
+    @model_validator(mode="after")
+    def _check_map_is_a_walkable_sequence(self) -> "FieldSpec":
+        """A map must be renderable and walkable from its own declaration: sequence
+        kind only, never combined with roll, and every id it mentions -- entry, node,
+        edge endpoint -- must be a declared option value, so the chip log, the
+        validator and the map can never disagree about what a room is called."""
+        if self.map is None:
+            return self
+        if self.kind is not FieldKind.SEQUENCE:
+            raise ValueError(f"field {self.name!r} declares map but is kind={self.kind}")
+        if self.roll is not None:
+            raise ValueError(f"field {self.name!r} declares both map and roll")
+        declared = {option.value for option in self.options or []}
+        node_ids = {node.id for node in self.map.nodes}
+        if node_ids != declared:
+            raise ValueError(
+                f"field {self.name!r} map nodes {sorted(node_ids)} "
+                f"must match its options {sorted(declared)}"
+            )
+        if self.map.entry not in node_ids:
+            raise ValueError(f"field {self.name!r} map entry {self.map.entry!r} is not a node")
+        for edge in self.map.edges:
+            if edge.source not in node_ids or edge.target not in node_ids:
+                raise ValueError(
+                    f"field {self.name!r} map edge {edge.source!r}->{edge.target!r} "
+                    "references an undeclared room"
+                )
         return self
 
 
@@ -163,6 +224,12 @@ class CardMetadata(BaseModel):
     # reuses CardImage's graceful fallback, and cardless entries are safe by
     # construction (no scryfall_id, no image, flag ignored).
     show_hero_art: bool = False
+    # Whether the "New turn" reset button makes sense for this card. Most cards track a
+    # single turn (Aetherflux's spells this turn) and reset between turns; a game-long
+    # tracker (commander tax's cast count, dungeons' completed tally) has no turn
+    # boundary to reset at, and offering the button quietly erases state the player
+    # cannot reconstruct. Frontend-only: ActionBar hides the button when False.
+    resets_on_new_turn: bool = True
     fields: list[FieldSpec]
     outputs: list[OutputSpec]
     alert: AlertSpec | None = None

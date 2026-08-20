@@ -5,6 +5,9 @@ from app.cards.schema import (
     CardMetadata,
     FieldKind,
     FieldSpec,
+    MapEdge,
+    MapNode,
+    MapSpec,
     OutputSpec,
     RollSpec,
     SelectOption,
@@ -59,6 +62,108 @@ def test_card_metadata_rejects_more_than_one_primary_output() -> None:
                 OutputSpec(name="a", label="A", primary=True),
                 OutputSpec(name="b", label="B", primary=True),
             ],
+        )
+
+
+def _mapped_field(**overrides: object) -> dict[str, object]:
+    """A minimal two-room mapped sequence, overridable per test."""
+    base: dict[str, object] = {
+        "name": "path",
+        "label": "Path",
+        "kind": FieldKind.SEQUENCE,
+        "default": [],
+        "options": [
+            SelectOption(value="entry", label="Entry"),
+            SelectOption(value="hall", label="Hall"),
+        ],
+        "map": MapSpec(
+            entry="entry",
+            nodes=[MapNode(id="entry", column=0, row=0), MapNode(id="hall", column=1, row=0)],
+            edges=[MapEdge(source="entry", target="hall")],
+        ),
+    }
+    base.update(overrides)
+    return base
+
+
+def test_field_spec_accepts_a_well_formed_map() -> None:
+    field = FieldSpec(**_mapped_field())
+    assert field.map is not None
+    assert field.map.entry == "entry"
+
+
+def test_map_requires_a_sequence_field() -> None:
+    with pytest.raises(ValueError, match="declares map but is kind"):
+        FieldSpec(**_mapped_field(kind=FieldKind.SELECT, default="entry"))
+
+
+def test_map_and_roll_are_mutually_exclusive() -> None:
+    with pytest.raises(ValueError, match="both map and roll"):
+        FieldSpec(
+            **_mapped_field(
+                options=[
+                    SelectOption(value="entry", label="Entry"),
+                    SelectOption(value="hall", label="Hall"),
+                    SelectOption(value="1", label="1"),
+                    SelectOption(value="2", label="2"),
+                ],
+                map=MapSpec(
+                    entry="entry",
+                    nodes=[
+                        MapNode(id="entry", column=0, row=0),
+                        MapNode(id="hall", column=1, row=0),
+                        MapNode(id="1", column=2, row=0),
+                        MapNode(id="2", column=3, row=0),
+                    ],
+                    edges=[],
+                ),
+                roll=RollSpec(faces=2),
+            )
+        )
+
+
+def test_map_nodes_must_match_the_declared_options() -> None:
+    with pytest.raises(ValueError, match="must match its options"):
+        FieldSpec(
+            **_mapped_field(
+                map=MapSpec(
+                    entry="entry",
+                    nodes=[MapNode(id="entry", column=0, row=0)],
+                    edges=[],
+                )
+            )
+        )
+
+
+def test_map_entry_must_be_a_node() -> None:
+    with pytest.raises(ValueError, match="is not a node"):
+        FieldSpec(
+            **_mapped_field(
+                map=MapSpec(
+                    entry="elsewhere",
+                    nodes=[
+                        MapNode(id="entry", column=0, row=0),
+                        MapNode(id="hall", column=1, row=0),
+                    ],
+                    edges=[],
+                )
+            )
+        )
+
+
+def test_map_edges_must_reference_declared_rooms() -> None:
+    with pytest.raises(ValueError, match="references an undeclared room"):
+        FieldSpec(
+            **_mapped_field(
+                map=MapSpec(
+                    entry="entry",
+                    nodes=[
+                        MapNode(id="entry", column=0, row=0),
+                        MapNode(id="hall", column=1, row=0),
+                    ],
+                    edges=[MapEdge(source="entry", target="basement")],
+                )
+            )
         )
 
 

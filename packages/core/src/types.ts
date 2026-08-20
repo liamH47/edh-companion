@@ -37,8 +37,33 @@ export interface FieldSpec {
   action_label: string | null
   action_disabled_when: ActionGuard | null
   roll: RollSpec | null
+  /** See MapSpec. Only on a sequence field; mutually exclusive with roll. */
+  map: MapSpec | null
   setup: boolean
   short_label: string | null
+}
+
+export interface MapNode {
+  id: string
+  /** Depth into the dungeon: 0 = the entry, rendered top-to-bottom. */
+  column: number
+  /** Left-to-right position among siblings within a column. */
+  row: number
+}
+
+export interface MapEdge {
+  source: string
+  target: string
+}
+
+/** Marks a sequence field as a walk through a room graph, rendered as a tappable map.
+ * The value stays a plain ordered list of room ids -- compute() never sees the map,
+ * the same doctrine that keeps RollSpec's die out of the pure function. A room with no
+ * outgoing edges IS the bottom room; there is deliberately no terminal flag. */
+export interface MapSpec {
+  entry: string
+  nodes: MapNode[]
+  edges: MapEdge[]
 }
 
 export interface OutputSpec {
@@ -67,6 +92,9 @@ export interface CardMetadata {
   /** Show the card image inline beside the hero, not only behind "View card". The
    * screen must keep working without the image (CardImage's fallback). */
   show_hero_art: boolean
+  /** Whether the "New turn" reset button makes sense for this card. False for a
+   * game-long tracker (commander tax, dungeons); ActionBar hides the button. */
+  resets_on_new_turn: boolean
   fields: FieldSpec[]
   outputs: OutputSpec[]
   alert: AlertSpec | null

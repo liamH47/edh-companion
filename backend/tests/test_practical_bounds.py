@@ -13,7 +13,7 @@ number still beyond any real game, not the largest that fits in an int.
 from typing import Any
 
 from app.cards.registry import get_card, list_cards
-from app.cards.schema import CardMetadata, FieldKind
+from app.cards.schema import CardMetadata, FieldKind, MapSpec
 from app.cards.validation import validate_inputs
 
 PRACTICAL_OUTPUT_CEILING = 1_000_000
@@ -21,6 +21,20 @@ PRACTICAL_OUTPUT_CEILING = 1_000_000
 # The hero number is one line on a phone. Grouped digits make "406,503" seven
 # characters, and the smallest hero font stops being readable well before twenty.
 MAX_RENDERED_WIDTH = 15
+
+
+def _longest_walk(spec: MapSpec) -> list[str]:
+    successors: dict[str, list[str]] = {}
+    for edge in spec.edges:
+        successors.setdefault(edge.source, []).append(edge.target)
+
+    def walk(room: str) -> list[str]:
+        nexts = successors.get(room, [])
+        if not nexts:
+            return [room]
+        return [room, *max((walk(target) for target in nexts), key=len)]
+
+    return walk(spec.entry)
 
 
 def _maximal_inputs(card: CardMetadata) -> dict[str, Any]:
@@ -34,8 +48,13 @@ def _maximal_inputs(card: CardMetadata) -> dict[str, Any]:
             # "was it already out", which zeroes the baseline when true).
             inputs[field.name] = False
         elif field.kind is FieldKind.SEQUENCE:
-            options = field.options or []
-            inputs[field.name] = [options[-1].value] * int(field.max or 0)
+            if field.map is not None:
+                # A mapped sequence must be a legal walk, so its maximum is the longest
+                # path through the graph, not max-many copies of one option.
+                inputs[field.name] = _longest_walk(field.map)
+            else:
+                options = field.options or []
+                inputs[field.name] = [options[-1].value] * int(field.max or 0)
         else:
             inputs[field.name] = (field.options or [])[0].value
     return inputs

@@ -31,6 +31,8 @@ similar shape:
 | Tendrils of Agony | `tendrils_of_agony.py` | Third storm card — a drain, with a lethal alert |
 | Empty the Warrens | `empty_the_warrens.py` | Fourth storm card — tokens |
 | Kalonian Hydra | `kalonian_hydra.py` | Geometric compounding: a repeatable trigger that doubles a board-wide aggregate, where only part of the total participates |
+| Commander Tax | `commander_tax.py` | First cardless format mechanic: `scryfall_id=None`, allowlisted in `test_registry.py` |
+| Dungeons | `dungeons.py` | The `map` capability on a sequence: a walk through a room graph, rendered as a tappable dungeon map, legality validated on both sides; also the first `resets_on_new_turn=False` game-long tracker |
 
 **`storm.py`** is a shared non-card helper (the same supporting role `validation.py`
 plays), and it paid off exactly as predicted: Tendrils of Agony and Empty the Warrens
@@ -53,22 +55,12 @@ equal to loyalty *at that moment*, so an earlier +2 roll makes a later damage ro
 — per-outcome counters would lose exactly the information that matters. Reach for it
 whenever "what order did these happen in?" changes the result.
 
-## 1. Commander tax (format mechanic, not a single card)
+## 1. Commander tax — shipped
 
-Each time your commander has been cast from the command zone, it costs {2} more the next
-time, cumulatively. Constantly recalculated at the table, especially once cost-reduction
-effects stack on top.
-
-**Proposed fields**: `base_commander_cost` (number — commander's mana value),
-`times_cast_from_command_zone` (counter — "cast commander" button), `flat_cost_reduction`
-(number, default 0).
-**Proposed outputs**: `current_cast_cost` = max(0, base_commander_cost + 2 ×
-times_cast_from_command_zone − flat_cost_reduction).
-
-This one's a judgment call on scope: it isn't a "card", so it stretches the plugin
-system's "one card = one module" framing slightly — `CardMetadata.rules_text`/`name`
-would describe a rule instead of a card. Worth deciding deliberately if/when it gets
-built, rather than by accident.
+Moved to the shipped table above (`commander_tax.py`, PR #22). The scope judgment its
+proposal flagged got decided: cardless format mechanics are a supported shape, recorded
+in `docs/roadmap.md` and enforced by `test_registry.py`'s allowlist. Dungeons (also
+shipped) is the second entry in that family.
 
 ## Choosing bounds
 

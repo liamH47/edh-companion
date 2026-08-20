@@ -12,6 +12,7 @@ function makeCard(overrides: Partial<CardMetadata> = {}): CardMetadata {
     rules_text: 'Trample',
     scryfall_id: SCRYFALL_ID,
     show_hero_art: false,
+    resets_on_new_turn: true,
     fields: [],
     outputs: [],
     alert: null,

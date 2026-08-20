@@ -10,6 +10,7 @@ import brainFreeze from './__parity__/brain-freeze.json'
 import cometStellarPup from './__parity__/comet-stellar-pup.json'
 import commanderTax from './__parity__/commander-tax.json'
 import craterhoofBehemoth from './__parity__/craterhoof-behemoth.json'
+import dungeons from './__parity__/dungeons.json'
 import emptyTheWarrens from './__parity__/empty-the-warrens.json'
 import grapeshot from './__parity__/grapeshot.json'
 import kalonianHydra from './__parity__/kalonian-hydra.json'
@@ -52,6 +53,7 @@ const CORPORA: Corpus[] = [
   cometStellarPup,
   commanderTax,
   craterhoofBehemoth,
+  dungeons,
   emptyTheWarrens,
   grapeshot,
   kalonianHydra,

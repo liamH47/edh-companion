@@ -29,6 +29,7 @@ function makeCard(overrides: Partial<CardMetadata> = {}): CardMetadata {
     rules_text: '...',
     scryfall_id: null,
     show_hero_art: false,
+    resets_on_new_turn: true,
     fields: [
       {
         name: 'count',
@@ -44,6 +45,7 @@ function makeCard(overrides: Partial<CardMetadata> = {}): CardMetadata {
         action_label: null,
         action_disabled_when: null,
         roll: null,
+    map: null,
         setup: false,
         short_label: null,
       },

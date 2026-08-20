@@ -23,6 +23,7 @@ function field(overrides: Partial<FieldSpec> & Pick<FieldSpec, 'name' | 'kind'>)
     action_label: null,
     action_disabled_when: null,
     roll: null,
+    map: null,
     setup: false,
     short_label: null,
     ...overrides,
@@ -46,6 +47,7 @@ const aetherfluxLikeCard: CardMetadata = {
   rules_text: 'Whenever you cast a spell, you gain 1 life for each spell cast this turn.',
   scryfall_id: '96b6b2e1-c3e6-464c-8a13-b15deb34e862',
   show_hero_art: false,
+    resets_on_new_turn: true,
   fields: [
     field({
       name: 'starting_life',
@@ -97,6 +99,7 @@ const allSetupCard: CardMetadata = {
   rules_text: '...',
   scryfall_id: null,
   show_hero_art: false,
+    resets_on_new_turn: true,
   fields: [field({ name: 'power', kind: 'number', label: 'Power', setup: true })],
   outputs: [output({ name: 'total', label: 'Total', primary: true })],
   alert: null,
@@ -108,6 +111,7 @@ const singleOutputCard: CardMetadata = {
   rules_text: '...',
   scryfall_id: null,
   show_hero_art: false,
+    resets_on_new_turn: true,
   fields: [field({ name: 'creatures_died', kind: 'number', label: 'Creatures died' })],
   outputs: [output({ name: 'total_life_drained', label: 'Total life drained', primary: true })],
   alert: null,

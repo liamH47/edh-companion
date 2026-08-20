@@ -12,6 +12,7 @@ function makeCard(id: string, name: string): CardMetadata {
     rules_text: '...',
     scryfall_id: null,
     show_hero_art: false,
+    resets_on_new_turn: true,
     fields: [],
     outputs: [],
     alert: null,

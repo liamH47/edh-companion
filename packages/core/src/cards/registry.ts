@@ -4,6 +4,7 @@ import { compute as brainFreeze } from './compute/brain-freeze'
 import { compute as cometStellarPup } from './compute/comet-stellar-pup'
 import { compute as commanderTax } from './compute/commander-tax'
 import { compute as craterhoofBehemoth } from './compute/craterhoof-behemoth'
+import { compute as dungeons } from './compute/dungeons'
 import { compute as emptyTheWarrens } from './compute/empty-the-warrens'
 import { compute as grapeshot } from './compute/grapeshot'
 import { compute as kalonianHydra } from './compute/kalonian-hydra'
@@ -33,6 +34,7 @@ export const COMPUTE_BY_CARD_ID: Record<string, ComputeFn> = {
   'comet-stellar-pup': cometStellarPup,
   'commander-tax': commanderTax,
   'craterhoof-behemoth': craterhoofBehemoth,
+  dungeons: dungeons,
   'empty-the-warrens': emptyTheWarrens,
   grapeshot,
   'kalonian-hydra': kalonianHydra,

@@ -61,6 +61,103 @@ EXTRA_SEQUENCES: dict[str, list[list[str]]] = {
 
 # Board states worth pinning that a mechanical sweep would not reach.
 EXTRA_CASES: dict[str, list[dict[str, Any]]] = {
+    # Dungeons has FOUR sequence fields, so EXTRA_SEQUENCES (a product across them)
+    # would both explode combinatorially and cross-wire one dungeon's rooms into
+    # another's field. Whole hand-picked cases instead: full clears, the asymmetric
+    # Tomb fork, mid-walk states, and the walks validation must refuse.
+    "dungeons": [
+        # Full clear of each dungeon, one fork branch each.
+        {
+            "which_dungeon": "phandelver",
+            "phandelver_path": ["cave-entrance", "goblin-lair", "storeroom", "temple-of-dumathoin"],
+            "dungeons_completed": 0,
+        },
+        {
+            "which_dungeon": "phandelver",
+            "phandelver_path": [
+                "cave-entrance",
+                "mine-tunnels",
+                "fungi-cavern",
+                "temple-of-dumathoin",
+            ],
+            "dungeons_completed": 3,
+        },
+        # Tomb both ways: the cheap two-room path and the brutal one-room Oubliette.
+        {
+            "which_dungeon": "tomb",
+            "tomb_path": [
+                "trapped-entry",
+                "veils-of-fear",
+                "sandfall-cell",
+                "cradle-of-the-death-god",
+            ],
+            "dungeons_completed": 0,
+        },
+        {
+            "which_dungeon": "tomb",
+            "tomb_path": ["trapped-entry", "oubliette", "cradle-of-the-death-god"],
+            "dungeons_completed": 1,
+        },
+        {
+            "which_dungeon": "mad-mage",
+            "mad_mage_path": [
+                "yawning-portal",
+                "dungeon-level",
+                "goblin-bazaar",
+                "lost-level",
+                "runestone-caverns",
+                "deep-mines",
+                "mad-wizards-lair",
+            ],
+            "dungeons_completed": 99,
+        },
+        {
+            "which_dungeon": "undercity",
+            "undercity_path": [
+                "secret-entrance",
+                "forge",
+                "trap",
+                "archives",
+                "throne-of-the-dead-three",
+            ],
+            "dungeons_completed": 2,
+        },
+        # Mid-walk: entered but nowhere near the bottom.
+        {
+            "which_dungeon": "mad-mage",
+            "mad_mage_path": ["yawning-portal", "dungeon-level"],
+            "dungeons_completed": 0,
+        },
+        # A stale path on a hidden field must not leak into the selected dungeon.
+        {
+            "which_dungeon": "tomb",
+            "tomb_path": ["trapped-entry"],
+            "phandelver_path": ["cave-entrance", "goblin-lair"],
+            "dungeons_completed": 0,
+        },
+        # Walks validation must refuse, on both sides, with the same code.
+        {
+            "which_dungeon": "phandelver",
+            "phandelver_path": ["goblin-lair"],
+            "dungeons_completed": 0,
+        },
+        {
+            "which_dungeon": "phandelver",
+            "phandelver_path": ["cave-entrance", "goblin-lair", "fungi-cavern"],
+            "dungeons_completed": 0,
+        },
+        {
+            "which_dungeon": "undercity",
+            "undercity_path": ["secret-entrance", "forge", "stash"],
+            "dungeons_completed": 0,
+        },
+        # Over the field cap (longest legal walk) -- rejected before the walk check.
+        {
+            "which_dungeon": "tomb",
+            "tomb_path": ["trapped-entry", "veils-of-fear"] * 3,
+            "dungeons_completed": 0,
+        },
+    ],
     "aetherflux-reservoir": [
         # Exactly at the 50-life threshold the action guard keys on.
         {"starting_life": 50, "spells_already_cast": 0, "spells_cast_this_turn": 0},

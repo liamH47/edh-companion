@@ -356,6 +356,23 @@ Design record: `docs/design/dice3d.md`.
 A `secondary` "New turn" button sits last. Padded with `env(safe-area-inset-bottom)` so it
 clears a phone's gesture bar. (`screen-spec.md` covers the multi-counter ordering.)
 
+### DungeonMap
+
+`DungeonMap` (`cards/DungeonMap.tsx`) renders a `map`-flagged sequence as the dungeon
+itself: rooms as boxes laid out by the MapSpec's column/row (top-to-bottom -- venturing
+reads as descending), edges beneath them, the walked trail lit in accent so Dark Pool
+via Goblin Lair reads differently from via Mine Tunnels. The map IS the input control,
+dispatched from `FieldControl`'s sequence case the way `roll` dispatches to `DieRoller`;
+`ActionBar` excludes mapped sequences from its per-option buttons for the same reason.
+Only legal next rooms respond (dashed accent outline); unreachable rooms stay visible
+but inert and `aria-disabled` -- the shape of the road not taken is what a map shows
+that a picker cannot. State is never color alone: current = filled + caption ("You are
+here"), visited = check glyph, next = dashed. Long room names wrap at the space nearest
+the middle. The undo control above it pops the last room -- fix-a-fat-finger, not a
+rules-legal backward move, which the tap targets already forbid. No decorative
+animation, so nothing needs a reduced-motion gate beyond the primitives' own press
+feedback.
+
 ### CardArtHero / LoyaltyShield / LoyaltyBadge
 
 `CardArtHero` (`cards/CardArtHero.tsx`) makes the card itself the hero: the printed image,
