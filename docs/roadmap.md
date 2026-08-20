@@ -4,7 +4,7 @@ Where this project is and what is left. Written into the repo deliberately: a Cl
 cloud session clones the repo and cannot see anything on a local machine, so a plan that
 lives only in `~/.claude/plans/` is invisible there.
 
-Last updated 2026-08-03.
+Last updated 2026-08-20.
 
 ## Where it stands
 
@@ -12,14 +12,23 @@ The web app is **complete and deployed** at <https://mtg-calc.onrender.com>, and
 entirely offline — card metadata is bundled and compute runs in the browser, so no tab
 needs a connection.
 
-- **11 cards**, each a Python module plus a mirrored TypeScript implementation
-- **Pairings** tab with two flows: **casual Commander pods** (generate tables and reshuffle
-  each round to minimise repeat tablemates — no scoring) and full **Swiss** with 1v1 and
-  Commander pods, drops, re-pairing, and MTR tiebreakers
-- **Coin flip** with Okaun/Zndrsplt tracking
-- Every deploy gated on CI: backend lint/types/tests, both frontend packages at 100%
-  coverage, a parity corpus proving Python and TypeScript agree, and Playwright end-to-end
-  against the real Docker image
+Four tabs:
+
+- **Cards** — **13 calculators**, each a Python module plus a mirrored TypeScript
+  implementation. Twelve are real cards; **Commander Tax is a cardless format mechanic**
+  (rule 903.8), which is why the schema allows `scryfall_id: None` and no "View card"
+  image renders for it.
+- **Pairings** — opens on a chooser, because most Commander meetups don't run Swiss.
+  Casual **Commander pods** is the headline option (generate tables and reshuffle each
+  round to minimise repeat tablemates — no scoring); full **Swiss** is one tap away, with
+  1v1 and Commander pods, drops, re-pairing, and MTR tiebreakers.
+- **Coin Flip** — a plain flip, with Okaun/Zndrsplt tracking as an opt-in mode.
+- **Dice** — d6, 2d6 and d20.
+
+Every deploy is gated on CI: backend lint/format/types/tests, a design-tokens freshness
+check, both frontend packages at 100% coverage, a parity corpus proving Python and
+TypeScript agree, and Playwright end-to-end against the real Docker image (26 specs run on
+both a desktop and a Pixel 7 viewport).
 
 Nothing is half-finished. There is no broken state to return to.
 
@@ -30,7 +39,9 @@ apps/web/            the React web app (Vite, Tailwind v4)
 packages/core/       platform-free logic + design tokens -- no DOM, enforced by tsconfig
 backend/             FastAPI: serves the SPA, publishes /api/cards, owns card behaviour
 e2e/                 Playwright, run against the built Docker image
-.claude/             four agents and two skills, shared via the repo
+docs/                this roadmap, the UI specs, the deployment runbook, card ideas
+.claude/             five agents, two skills and a SessionStart hook, shared via the repo
+CLAUDE.md            the rules a session in this repo has to follow
 ```
 
 ## What is left
@@ -39,16 +50,30 @@ All of it is the mobile port. See `docs/ui/portability-rules.md` for why the spl
 makes this cheap.
 
 **Phase 7 — Expo scaffold and platform seams.** `packages/core` already exposes settable
-backends for storage, reduced-motion, haptics, sound and compute; `apps/web/src/platform.ts`
+backends for storage, compute, reduced-motion, haptics and sound; `apps/web/src/platform.ts`
 is the web half. A native app needs the same file with MMKV, `AccessibilityInfo`,
-`expo-haptics` and `expo-audio`. **Storage must stay synchronous** — three call sites read
-during render — which is why MMKV rather than AsyncStorage.
+`expo-haptics` and `expo-audio`. **Storage must stay synchronous** — which is why MMKV
+rather than AsyncStorage. Five components now read storage during render, up from three
+when this was first written: `ThemeToggle` (`getInitialTheme`), `SoundToggle`, `CoinFlip`
+(commander mode), `useCardSession` (setup confirmed), and `PairingsScreen` (`initialMode`,
+which checks for both a saved pod session and a saved tournament). An async store would
+mean a flash of the wrong state on every one of them.
 
-**Phase 8 — React Native primitives and screens.** Rewrite the 11 `apps/web/src/ui/`
+> **Decide the name before this phase, not before phase 10.** The Expo scaffold is where
+> `ios.bundleIdentifier` and `android.package` get written, and those are permanent after
+> publish. See "The actual blocker" below.
+
+**Phase 8 — React Native primitives and screens.** Rewrite the **12** `apps/web/src/ui/`
 primitives in `StyleSheet` + a `useColors()` theme context (React Native has no cascading
 CSS variables, so dark mode is the one real architecture change). Domain screens in
-`cards/` and `swiss/` port as copy-paste starting points — their JSX survives, their
-Tailwind strings do not. `Sheet` and `CoinFlip` are the only non-mechanical rewrites.
+`cards/`, `pods/`, `pairings/` and `swiss/` port as copy-paste starting points — their JSX
+survives, their Tailwind strings do not. `Sheet`, `CoinFlip` and `DieRoller` are the only
+non-mechanical rewrites.
+
+Routing is already shaped for this: `packages/core/src/navigation/navigation.ts` maps each
+screen 1:1 onto a future Expo Router path, and the picker owns `/cards` distinctly from the
+bare root `/` (the root is the cold-launch redirect to the last-used card; `/cards` is
+where Back and the Cards tab land, and it survives a refresh).
 
 **Phase 9 — Maestro flows and EAS.** Keep mobile end-to-end on `workflow_dispatch`, not
 on pushes: `render.yaml` uses `autoDeployTrigger: checksPass`, which waits on *every*
@@ -60,13 +85,14 @@ check, so a flaky emulator would block web deploys.
 
 **Google Play requires 12 testers opted in continuously for 14 days** before a personal
 developer account gets production access. That is calendar time; nothing in phases 7–9
-shortens it. Apple enrolment ($99/yr) is usually 24–48h. Both should start well before the
-app is ready or they gate the finish.
+shortens it. Apple enrolment ($99/yr) is usually 24–48h. **Start both now**, in parallel
+with phase 7 — starting them at phase 10 instead adds two weeks to the finish, and
+recruiting twelve real testers is usually the slow half.
 
 **The name is unresolved and becomes permanent on publish.** The repo is `mtg-calc`, the
 git remote is `edh-companion`, the Render service is `mtg-calc`, and the app header says
 "Commander's Companion". Bundle identifiers cannot be changed afterwards without a new
-listing.
+listing — and phase 7 is where they get chosen, so this is not a phase-10 problem.
 
 **Wizards' Fan Content Policy** permits the verbatim Oracle text every card module carries,
 but only for non-commercial fan content: ship free, no ads, no IAP, with the standard
@@ -97,24 +123,43 @@ Recorded so they are not re-litigated:
   3/1/0. Event format affects only round-1 seeding and whether the field is podded.
 - **Practical bounds**: past a million of anything the exact figure has stopped mattering.
   `backend/tests/test_practical_bounds.py` enforces it.
+- **The Pairings tab opens on a chooser**, not on Swiss setup — casual pods are the common
+  case and Swiss is the specialist one.
+- **Cardless entries are a supported shape**, not a workaround. `scryfall_id` is nullable,
+  and `test_registry.py` allowlists format-mechanic ids explicitly via
+  `_FORMAT_MECHANIC_IDS`, so a *real* card added without an id still fails the check
+  instead of hiding among them.
+- **Reduced motion shortens reveals rather than collapsing them.** The coin flip and die
+  roll are the documented exception to the collapse-to-zero rule, via
+  `motion.revealDuration()`. Written up in `docs/ui/design-tokens.md`.
 
 ## Tooling in this repo
 
-Four agents and two skills live in `.claude/` and load automatically, including in cloud
-sessions. Run `/context` to confirm they loaded.
+Five agents, two skills and a hook live in `.claude/` and load automatically, including in
+cloud sessions. Run `/context` to confirm they loaded.
 
 - `rules-checker` — verifies Oracle text and rules interactions before a card is written
 - `card-evaluator` — judges whether a candidate card is worth building at all
+- `card-interaction-designer` — how a card's play pattern should be represented on screen
 - `ui-reviewer` — consistency against the spec docs, and proposals for changing them
 - `edge-case-hunter` — inputs where a correct answer is still a broken experience
 - `/add-card` — the five-step, two-language card workflow
 - `/verify` — the full local gate
+- `.claude/hooks/session-start.sh` — see below
 
 ## Notes for a cloud session
 
-- The backend uses `uv`. If it is not on the machine, install it before running backend
-  checks (`curl -LsSf https://astral.sh/uv/install.sh | sh`).
+- **Setup is automatic.** The `SessionStart` hook installs `uv` if missing, runs
+  `uv sync` in `backend/`, and runs a root `npm install`, so backend and frontend checks
+  work the moment the session starts. It is guarded on `CLAUDE_CODE_REMOTE`, so it does
+  nothing on a local machine — a local checkout still installs `uv` by hand
+  (`curl -LsSf https://astral.sh/uv/install.sh | sh`).
 - `/verify` covers the whole gate. CI runs the same commands, so a green local run means
   a green PR.
 - Adding a card requires **both** implementations; the parity suite fails until both
   exist, by design.
+- **Finish the job by opening the PR.** Several remote sessions have committed real work
+  to a `claude/*` branch and stopped there; the branches sat unnoticed for over two weeks,
+  including one carrying a security fix. A commit that never becomes a PR is invisible.
+- **Do not put `claude.ai/code/session_...` links in commits or PR bodies.** See
+  `CLAUDE.md`; some tooling adds them by default and they must be stripped.
