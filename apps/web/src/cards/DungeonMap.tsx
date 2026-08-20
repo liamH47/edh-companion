@@ -1,4 +1,5 @@
-import { sequenceValue } from '@mtg/core'
+import { useState } from 'react'
+import { cardImageUrl, sequenceValue } from '@mtg/core'
 import type { FieldSpec, MapSpec } from '@mtg/core'
 
 /** Node box size and spacing, in viewBox units. Wide boxes, because room names are the
@@ -82,8 +83,155 @@ interface DungeonMapProps {
  */
 export function DungeonMap({ field, value, onChange }: DungeonMapProps) {
   const spec = field.map
+  const [artFailed, setArtFailed] = useState(false)
   if (!spec) return null
 
+  // The real card when it can load, the drawn map when it cannot: same states, same
+  // aria labels, same caption -- only the surface differs, so tests and screen
+  // readers see one component.
+  const artUrl = spec.scryfall_id ? cardImageUrl({ scryfall_id: spec.scryfall_id }) : null
+  if (artUrl && !artFailed) {
+    return (
+      <CardArtMap
+        field={field}
+        spec={spec}
+        value={value}
+        onChange={onChange}
+        url={artUrl}
+        onImageError={() => setArtFailed(true)}
+      />
+    )
+  }
+  return <DrawnMap field={field} spec={spec} value={value} onChange={onChange} />
+}
+
+interface MapVariantProps {
+  field: FieldSpec
+  spec: MapSpec
+  value: unknown
+  onChange: (name: string, value: unknown) => void
+}
+
+/** Shared per-render state derivation: what each room is, right now. */
+function useRoomStates(field: FieldSpec, spec: MapSpec, value: unknown) {
+  const entries = sequenceValue(value)
+  const current = entries.length > 0 ? entries[entries.length - 1] : null
+  const visited = new Set(entries)
+  const labelForValue = new Map((field.options ?? []).map((option) => [option.value, option.label]))
+  const successors = new Map<string, string[]>()
+  for (const edge of spec.edges) {
+    successors.set(edge.source, [...(successors.get(edge.source) ?? []), edge.target])
+  }
+  const legalNext = new Set(current === null ? [spec.entry] : (successors.get(current) ?? []))
+  const atMax = field.max != null && entries.length >= field.max
+  const stateOf = (id: string): NodeState => {
+    if (id === current) return 'current'
+    if (visited.has(id)) return 'visited'
+    if (!atMax && legalNext.has(id)) return 'next'
+    return 'unreachable'
+  }
+  return { entries, current, labelForValue, stateOf }
+}
+
+/**
+ * The printed card itself, with the venture marker overlaid on its own room boxes --
+ * the Comet treatment (see the recorded overlay decision in cardImage.ts: game state
+ * in the frame's own slots, never covering the artist/copyright line, image otherwise
+ * untouched). Each room's printed box becomes the tap target; the thin scry strips on
+ * Mad Mage run under the 48px hit minimum but span the card's full width, which is the
+ * best available without overlapping the neighbouring room -- noted deviation.
+ */
+function CardArtMap({
+  field,
+  spec,
+  value,
+  onChange,
+  url,
+  onImageError,
+}: MapVariantProps & { url: string; onImageError: () => void }) {
+  const { entries, current, labelForValue, stateOf } = useRoomStates(field, spec, value)
+
+  return (
+    <div data-testid={`dungeon-map-${field.name}`}>
+      <div className="relative mx-auto w-full max-w-80">
+        <img
+          src={url}
+          alt="The dungeon, as printed"
+          onError={onImageError}
+          loading="lazy"
+          className="w-full rounded-xl object-contain aspect-[488/680]"
+        />
+        {spec.nodes.map((node) => {
+          if (!node.art) return null
+          const state = stateOf(node.id)
+          const label = labelForValue.get(node.id) ?? node.id
+          const tappable = state === 'next'
+          const outline =
+            state === 'current'
+              ? 'border-[3px] border-accent shadow-[inset_0_0_0_2px_rgba(255,255,255,0.5)]'
+              : state === 'next'
+                ? 'border-2 border-dashed border-accent'
+                : 'border-2 border-transparent'
+          return (
+            <button
+              key={node.id}
+              type="button"
+              aria-label={`${label}, ${state === 'next' ? 'venture here' : state}`}
+              aria-disabled={tappable ? undefined : true}
+              disabled={!tappable}
+              onClick={
+                tappable ? () => onChange(field.name, [...entries, node.id]) : undefined
+              }
+              className={`absolute rounded-md ${outline} ${tappable ? 'cursor-pointer' : 'cursor-default'}`}
+              style={{
+                left: `${node.art.x * 100}%`,
+                top: `${node.art.y * 100}%`,
+                width: `${node.art.w * 100}%`,
+                height: `${node.art.h * 100}%`,
+              }}
+            >
+              {state === 'current' && (
+                <span
+                  aria-hidden="true"
+                  className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-accent text-xs font-bold text-accent-text"
+                >
+                  ●
+                </span>
+              )}
+              {state === 'visited' && (
+                <span
+                  aria-hidden="true"
+                  className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-accent-text"
+                >
+                  ✓
+                </span>
+              )}
+            </button>
+          )
+        })}
+      </div>
+      <MapCaption current={current} labelForValue={labelForValue} />
+    </div>
+  )
+}
+
+function MapCaption({
+  current,
+  labelForValue,
+}: {
+  current: string | null
+  labelForValue: Map<string, string>
+}) {
+  return (
+    <p aria-live="polite" className="text-center text-sm text-text-muted">
+      {current === null
+        ? 'Not in this dungeon yet -- tap the first room to venture.'
+        : `You are here: ${labelForValue.get(current) ?? current}`}
+    </p>
+  )
+}
+
+function DrawnMap({ field, spec, value, onChange }: MapVariantProps) {
   const entries = sequenceValue(value)
   const current = entries.length > 0 ? entries[entries.length - 1] : null
   const visited = new Set(entries)
@@ -224,11 +372,7 @@ export function DungeonMap({ field, value, onChange }: DungeonMapProps) {
         })}
       </svg>
       {/* The caption doubles as the screen-reader anchor for where the marker sits. */}
-      <p aria-live="polite" className="text-center text-sm text-text-muted">
-        {current === null
-          ? 'Not in this dungeon yet -- tap the first room to venture.'
-          : `You are here: ${labelForValue.get(current) ?? current}`}
-      </p>
+      <MapCaption current={current} labelForValue={labelForValue} />
     </div>
   )
 }

@@ -20,7 +20,10 @@ import type { CardMetadata } from './types'
  *     only the printed loyalty box, never the artwork proper and never the artist and
  *     copyright line, and the image stays undistorted, uncropped and unfiltered. If
  *     Wizards or Scryfall ever object, CardArtHero already contains the fallback
- *     (standalone shield, untouched image) -- flip is one component swap.
+ *     (standalone shield, untouched image) -- flip is one component swap. The same
+ *     recorded exception covers the dungeon tracker (CardArtMap): the venture marker
+ *     and room outlines sit on the printed cards' own room boxes, which exist to hold
+ *     exactly that marker on the physical card.
  *   - Do not imply anyone other than Wizards created the card.
  *
  * The id resolves through api.scryfall.com, which 302s to their CDN. Going through the

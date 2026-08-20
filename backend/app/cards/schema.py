@@ -65,13 +65,33 @@ class RollSpec(BaseModel):
     action_label: str = "Roll"
 
 
+class ArtBox(BaseModel):
+    """Where a room sits on the printed card image, as fractions of its width/height.
+    Lets the frontend draw the venture marker over the card's own room box."""
+
+    x: float
+    y: float
+    w: float
+    h: float
+
+    @model_validator(mode="after")
+    def _check_inside_the_card(self) -> "ArtBox":
+        if not (0 <= self.x <= 1 and 0 <= self.y <= 1 and 0 < self.w <= 1 and 0 < self.h <= 1):
+            raise ValueError(f"art box out of range: {self}")
+        if self.x + self.w > 1.0001 or self.y + self.h > 1.0001:
+            raise ValueError(f"art box exceeds the card: {self}")
+        return self
+
+
 class MapNode(BaseModel):
     """One room on a dungeon map. `column` is depth into the dungeon (0 = the entry,
-    rendered top-to-bottom); `row` places siblings left-to-right within a column."""
+    rendered top-to-bottom); `row` places siblings left-to-right within a column.
+    `art` is the room's box on the printed card, when the map has one to show."""
 
     id: str
     column: int
     row: int
+    art: ArtBox | None = None
 
 
 class MapEdge(BaseModel):
@@ -92,6 +112,21 @@ class MapSpec(BaseModel):
     entry: str
     nodes: list[MapNode]
     edges: list[MapEdge]
+    # The printed dungeon card this map depicts. When set, every node must carry an
+    # `art` box (all or nothing -- a half-annotated card would strand the marker), and
+    # the frontend renders the real card with the position overlaid, falling back to
+    # the drawn map offline.
+    scryfall_id: str | None = None
+
+    @model_validator(mode="after")
+    def _check_art_is_all_or_nothing(self) -> "MapSpec":
+        annotated = [node.id for node in self.nodes if node.art is not None]
+        if self.scryfall_id is not None and len(annotated) != len(self.nodes):
+            missing = [node.id for node in self.nodes if node.art is None]
+            raise ValueError(f"map with card art is missing art boxes for rooms: {missing}")
+        if self.scryfall_id is None and annotated:
+            raise ValueError(f"map declares art boxes but no card: {annotated}")
+        return self
 
 
 class FieldSpec(BaseModel):

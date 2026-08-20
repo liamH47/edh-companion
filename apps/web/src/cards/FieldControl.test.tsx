@@ -119,9 +119,10 @@ describe('FieldControl', () => {
   describe('mapped sequence', () => {
     const mapSpec = {
       entry: 'cave',
+      scryfall_id: null,
       nodes: [
-        { id: 'cave', column: 0, row: 0 },
-        { id: 'lair', column: 1, row: 0 },
+        { id: 'cave', column: 0, row: 0, art: null },
+        { id: 'lair', column: 1, row: 0, art: null },
       ],
       edges: [{ source: 'cave', target: 'lair' }],
     }

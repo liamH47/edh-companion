@@ -7,11 +7,12 @@ import { DungeonMap } from './DungeonMap'
  * enough graph to exercise every node state, including the road not taken. */
 const MAP: MapSpec = {
   entry: 'cave',
+  scryfall_id: null,
   nodes: [
-    { id: 'cave', column: 0, row: 0 },
-    { id: 'lair', column: 1, row: 0 },
-    { id: 'tunnels', column: 1, row: 1 },
-    { id: 'pool', column: 2, row: 0 },
+    { id: 'cave', column: 0, row: 0, art: null },
+    { id: 'lair', column: 1, row: 0, art: null },
+    { id: 'tunnels', column: 1, row: 1, art: null },
+    { id: 'pool', column: 2, row: 0, art: null },
   ],
   edges: [
     { source: 'cave', target: 'lair' },
@@ -173,5 +174,90 @@ describe('DungeonMap', () => {
       <DungeonMap field={mappedField({ map: null })} value={[]} onChange={() => {}} />,
     )
     expect(container).toBeEmptyDOMElement()
+  })
+})
+
+
+/** The same fork, annotated with printed-card boxes. */
+const ART_MAP: MapSpec = {
+  ...MAP,
+  scryfall_id: '59b11ff8-f118-4978-87dd-509dc0c8c932',
+  nodes: [
+    { id: 'cave', column: 0, row: 0, art: { x: 0.1, y: 0.15, w: 0.8, h: 0.1 } },
+    { id: 'lair', column: 1, row: 0, art: { x: 0.1, y: 0.3, w: 0.35, h: 0.15 } },
+    { id: 'tunnels', column: 1, row: 1, art: { x: 0.55, y: 0.3, w: 0.35, h: 0.15 } },
+    { id: 'pool', column: 2, row: 0, art: { x: 0.1, y: 0.5, w: 0.8, h: 0.12 } },
+  ],
+}
+
+describe('DungeonMap with card art', () => {
+  it('renders the printed card with a positioned tap target per room', () => {
+    render(<DungeonMap field={mappedField({ map: ART_MAP })} value={[]} onChange={() => {}} />)
+    expect(screen.getByAltText('The dungeon, as printed')).toBeInTheDocument()
+    const entry = screen.getByRole('button', { name: 'Cave Entrance, venture here' })
+    expect(entry.style.left).toBe('10%')
+    expect(entry.style.top).toBe('15%')
+    expect(entry.style.width).toBe('80%')
+    // No drawn map: the card is the surface.
+    expect(document.querySelectorAll('svg')).toHaveLength(0)
+  })
+
+  it('ventures by tapping the printed room and marks the current one', () => {
+    const onChange = vi.fn()
+    const { rerender } = render(
+      <DungeonMap field={mappedField({ map: ART_MAP })} value={[]} onChange={onChange} />,
+    )
+    fireEvent.click(screen.getByRole('button', { name: 'Cave Entrance, venture here' }))
+    expect(onChange).toHaveBeenCalledWith('path', ['cave'])
+
+    rerender(<DungeonMap field={mappedField({ map: ART_MAP })} value={['cave']} onChange={onChange} />)
+    expect(screen.getByRole('button', { name: 'Cave Entrance, current' })).toBeInTheDocument()
+    expect(screen.getByText('You are here: Cave Entrance')).toBeInTheDocument()
+    // Unreachable printed rooms are real disabled buttons -- inert by construction.
+    expect(screen.getByRole('button', { name: 'Dark Pool, unreachable' })).toBeDisabled()
+  })
+
+  it('falls back to the drawn map when the card image cannot load', () => {
+    render(<DungeonMap field={mappedField({ map: ART_MAP })} value={[]} onChange={() => {}} />)
+    fireEvent.error(screen.getByAltText('The dungeon, as printed'))
+    // The drawn SVG map takes over; the img is gone.
+    expect(screen.queryByAltText('The dungeon, as printed')).not.toBeInTheDocument()
+    expect(document.querySelectorAll('svg')).toHaveLength(1)
+    expect(screen.getByRole('button', { name: 'Cave Entrance, venture here' })).toBeInTheDocument()
+  })
+
+  it('marks visited rooms on the card with a check badge', () => {
+    render(
+      <DungeonMap
+        field={mappedField({ map: ART_MAP })}
+        value={['cave', 'lair', 'pool']}
+        onChange={() => {}}
+      />,
+    )
+    expect(screen.getByRole('button', { name: 'Cave Entrance, visited' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Dark Pool, current' })).toBeInTheDocument()
+  })
+})
+
+
+describe('DungeonMap with card art, defensive shapes', () => {
+  it('skips an un-annotated room and degrades labels to ids', () => {
+    // The schema forbids both (art is all-or-nothing, options mirror nodes), but the
+    // component is generic and must not crash on data it did not validate itself.
+    const patchy: MapSpec = {
+      ...ART_MAP,
+      nodes: ART_MAP.nodes.map((node) => (node.id === 'pool' ? { ...node, art: null } : node)),
+    }
+    render(
+      <DungeonMap
+        field={mappedField({ map: patchy, options: null })}
+        value={['cave']}
+        onChange={() => {}}
+      />,
+    )
+    // Labels degrade to ids; the un-annotated room simply has no tap target.
+    expect(screen.getByRole('button', { name: 'cave, current' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /pool/ })).not.toBeInTheDocument()
+    expect(screen.getByText('You are here: cave')).toBeInTheDocument()
   })
 })

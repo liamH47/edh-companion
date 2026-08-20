@@ -2,6 +2,7 @@ import pytest
 
 from app.cards.schema import (
     AlertSpec,
+    ArtBox,
     CardMetadata,
     FieldKind,
     FieldSpec,
@@ -296,3 +297,56 @@ def test_card_metadata_accepts_a_carry_over_naming_a_declared_output() -> None:
         outputs=[OutputSpec(name="total", label="Total")],
     )
     assert card.fields[0].new_turn_carries_output == "total"
+
+
+def test_art_box_accepts_a_box_inside_the_card() -> None:
+    box = ArtBox(x=0.1, y=0.2, w=0.5, h=0.3)
+    assert box.w == 0.5
+
+
+def test_art_box_rejects_out_of_range_values() -> None:
+    with pytest.raises(ValueError, match="out of range"):
+        ArtBox(x=-0.1, y=0.2, w=0.5, h=0.3)
+    with pytest.raises(ValueError, match="out of range"):
+        ArtBox(x=0.1, y=0.2, w=0.0, h=0.3)
+
+
+def test_art_box_rejects_a_box_hanging_off_the_card() -> None:
+    with pytest.raises(ValueError, match="exceeds the card"):
+        ArtBox(x=0.8, y=0.2, w=0.5, h=0.3)
+
+
+def test_map_spec_with_a_card_requires_art_on_every_room() -> None:
+    with pytest.raises(ValueError, match="missing art boxes"):
+        MapSpec(
+            entry="a",
+            scryfall_id="59b11ff8-f118-4978-87dd-509dc0c8c932",
+            nodes=[
+                MapNode(id="a", column=0, row=0, art=ArtBox(x=0.1, y=0.1, w=0.5, h=0.2)),
+                MapNode(id="b", column=1, row=0),
+            ],
+            edges=[MapEdge(source="a", target="b")],
+        )
+
+
+def test_map_spec_without_a_card_rejects_stray_art() -> None:
+    # An art box with no card to draw it on is a stranded annotation.
+    with pytest.raises(ValueError, match="art boxes but no card"):
+        MapSpec(
+            entry="a",
+            nodes=[MapNode(id="a", column=0, row=0, art=ArtBox(x=0.1, y=0.1, w=0.5, h=0.2))],
+            edges=[],
+        )
+
+
+def test_map_spec_with_full_art_is_accepted() -> None:
+    spec = MapSpec(
+        entry="a",
+        scryfall_id="59b11ff8-f118-4978-87dd-509dc0c8c932",
+        nodes=[
+            MapNode(id="a", column=0, row=0, art=ArtBox(x=0.1, y=0.1, w=0.5, h=0.2)),
+            MapNode(id="b", column=1, row=0, art=ArtBox(x=0.1, y=0.4, w=0.5, h=0.2)),
+        ],
+        edges=[MapEdge(source="a", target="b")],
+    )
+    assert spec.scryfall_id is not None

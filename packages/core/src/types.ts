@@ -47,12 +47,22 @@ export interface FieldSpec {
   short_label: string | null
 }
 
+/** Where a room sits on the printed card image, as fractions of its width/height. */
+export interface ArtBox {
+  x: number
+  y: number
+  w: number
+  h: number
+}
+
 export interface MapNode {
   id: string
   /** Depth into the dungeon: 0 = the entry, rendered top-to-bottom. */
   column: number
   /** Left-to-right position among siblings within a column. */
   row: number
+  /** The room's box on the printed card, when the map has one to show. */
+  art: ArtBox | null
 }
 
 export interface MapEdge {
@@ -68,6 +78,10 @@ export interface MapSpec {
   entry: string
   nodes: MapNode[]
   edges: MapEdge[]
+  /** The printed dungeon card this map depicts. When set, every node carries an `art`
+   * box and the frontend renders the real card with the position overlaid, falling
+   * back to the drawn map offline. */
+  scryfall_id: string | null
 }
 
 export interface OutputSpec {

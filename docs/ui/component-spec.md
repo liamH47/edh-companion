@@ -358,6 +358,16 @@ clears a phone's gesture bar. (`screen-spec.md` covers the multi-counter orderin
 
 ### DungeonMap
 
+When the `MapSpec` names its printed card (`scryfall_id` + an `art` box per room), the
+map renders as **the card itself** with the venture marker overlaid on the printed room
+boxes -- the Comet treatment, same recorded exception in cardImage.ts. Each printed room
+becomes an absolutely-positioned tap target (fractions of the card frame); current gets
+a solid accent ring and marker dot, visited a check badge, legal-next a dashed outline,
+unreachable a real disabled button. Offline, or when the image fails, the hand-drawn SVG
+map below takes over with identical states, labels and caption -- one component to a
+screen reader. Mad Mage's thin scry strips run under the 48px hit minimum but span the
+card's full width; noted deviation, the best available without overlapping neighbours.
+
 `DungeonMap` (`cards/DungeonMap.tsx`) renders a `map`-flagged sequence as the dungeon
 itself: rooms as boxes laid out by the MapSpec's column/row (top-to-bottom -- venturing
 reads as descending), edges beneath them, the walked trail lit in accent so Dark Pool
