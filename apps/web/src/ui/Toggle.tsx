@@ -9,7 +9,7 @@ interface ToggleProps {
 }
 
 const segmentBase =
-  'min-h-12 flex-1 justify-center rounded-pill px-4 text-body font-semibold transition-colors'
+  'min-h-12 flex-1 justify-center rounded-pill px-4 text-body font-semibold'
 const selectedClasses = 'bg-accent text-accent-text'
 const unselectedClasses = 'bg-transparent text-text-muted'
 

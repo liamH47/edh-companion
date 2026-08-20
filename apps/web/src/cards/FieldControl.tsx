@@ -19,7 +19,7 @@ function assertNever(value: never): never {
 }
 
 const selectOptionClasses =
-  'min-h-12 rounded-pill border px-4 text-body font-semibold transition-colors'
+  'min-h-12 rounded-pill border px-4 text-body font-semibold'
 
 /**
  * The FieldSpec.kind dispatch -- replaces Field.tsx, built from primitives instead

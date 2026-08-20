@@ -51,3 +51,19 @@ describe('StatStrip', () => {
     expect(screen.getByText('1').closest('div.px-3')).toHaveClass('opacity-60')
   })
 })
+
+
+describe('compact StatStrip', () => {
+  it('threads compact through to every tile', () => {
+    render(
+      <StatStrip
+        outputs={[output({ name: 'rooms' }), output({ name: 'at_bottom' })]}
+        values={{ rooms: 2, at_bottom: 0 }}
+        pending={false}
+        compact
+      />,
+    )
+    expect(screen.getByText('rooms')).toBeInTheDocument()
+    expect(screen.getByText('at_bottom')).toBeInTheDocument()
+  })
+})

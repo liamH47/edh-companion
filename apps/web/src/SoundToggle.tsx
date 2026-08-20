@@ -21,7 +21,7 @@ export function SoundToggle() {
       type="button"
       onClick={toggle}
       aria-label={enabled ? 'Mute sound' : 'Unmute sound'}
-      className="min-h-12 min-w-12 rounded-full border border-border text-text-muted transition-colors hover:bg-surface-raised hover:text-text"
+      className="min-h-12 min-w-12 rounded-full border border-border text-text-muted hover:bg-surface-raised hover:text-text"
     >
       {enabled ? (
         <SpeakerIcon className="mx-auto h-5 w-5" />

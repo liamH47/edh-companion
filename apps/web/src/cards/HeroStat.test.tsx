@@ -33,3 +33,19 @@ describe('HeroStat', () => {
     expect(screen.getByText(value.toLocaleString('en-US'))).toHaveClass(expectedClass)
   })
 })
+
+
+describe('compact HeroStat', () => {
+  it('renders the tile-sized variant with the value still announced', () => {
+    render(<HeroStat label="completed" value={3} pending={false} compact />)
+    const tile = screen.getByTestId('hero-compact')
+    expect(tile).toBeInTheDocument()
+    expect(screen.getByText('3')).toHaveAttribute('aria-live', 'polite')
+    expect(screen.getByText('completed')).toBeInTheDocument()
+  })
+
+  it('dims while pending, like the full-size hero', () => {
+    render(<HeroStat label="completed" value={3} pending compact />)
+    expect(screen.getByTestId('hero-compact').className).toContain('opacity-60')
+  })
+})

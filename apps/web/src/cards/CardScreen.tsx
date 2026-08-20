@@ -33,6 +33,9 @@ interface CardScreenProps {
 export function CardScreen({ card, onBack }: CardScreenProps) {
   const session = useCardSession(card)
   const { setupFields, liveFields, renderSetupInline } = splitFields(card, session.values)
+  // A mapped live field (a dungeon) is the screen's main event: hero and strip
+  // compress into one row above it.
+  const hasMappedField = liveFields.some((field) => field.map !== null)
 
   // Rule 3: an all-setup card renders its fields inline instead of behind a sheet
   // with nothing live underneath it, and suppresses the summary bar entirely.
@@ -91,45 +94,79 @@ export function CardScreen({ card, onBack }: CardScreenProps) {
 
       <AlertBanner message={session.alertMessage} />
 
-      {/* The hero slot, driven by two schema flags with zero per-card branching. A
-          shield hero with inline art becomes CardArtHero: the printed card, large,
-          with the live loyalty drawn over its printed loyalty box (a recorded
-          decision -- see cardImage.ts) and a standalone-shield fallback offline. Art
-          without a shield keeps a small image beside the plain hero. */}
-      {card.show_hero_art && hero.hero_shape === 'shield' ? (
-        <CardArtHero
-          card={card}
-          label={hero.short_label ?? hero.label}
-          value={heroValue}
-          pending={session.pending}
-          dead={session.alertMessage !== null}
-        />
-      ) : card.show_hero_art ? (
-        <div className="flex items-center justify-center gap-4">
-          <div className="w-28 flex-none">
-            <CardImage card={card} />
-          </div>
+      {/* The hero slot, driven by schema capabilities with zero per-card branching.
+          A screen whose main event is a mapped field (a dungeon) folds hero and strip
+          into one compact centred row so the map -- the thing the player acts on --
+          sits near the top instead of below ~500px of read-only state. A shield hero
+          with inline art becomes CardArtHero: the printed card, large, with the live
+          loyalty drawn over its printed loyalty box (a recorded decision -- see
+          cardImage.ts) and a standalone-shield fallback offline. Art without a shield
+          keeps a small image beside the plain hero. */}
+      {hasMappedField ? (
+        <div className="flex flex-wrap items-center justify-center gap-2">
           <HeroStat
             label={hero.short_label ?? hero.label}
             value={heroValue}
             pending={session.pending}
+            compact
+          />
+          <StatStrip
+            outputs={nonPrimaryOutputs(card)}
+            values={session.outputs}
+            pending={session.pending}
+            compact
           />
         </div>
-      ) : hero.hero_shape === 'shield' ? (
-        <LoyaltyShield
-          label={hero.short_label ?? hero.label}
-          value={heroValue}
-          pending={session.pending}
-          dead={session.alertMessage !== null}
-        />
       ) : (
-        <HeroStat label={hero.short_label ?? hero.label} value={heroValue} pending={session.pending} />
+        <>
+          {card.show_hero_art && hero.hero_shape === 'shield' ? (
+            <CardArtHero
+              card={card}
+              label={hero.short_label ?? hero.label}
+              value={heroValue}
+              pending={session.pending}
+              dead={session.alertMessage !== null}
+            />
+          ) : card.show_hero_art ? (
+            <div className="flex items-center justify-center gap-4">
+              <div className="w-28 flex-none">
+                <CardImage card={card} />
+              </div>
+              <HeroStat
+                label={hero.short_label ?? hero.label}
+                value={heroValue}
+                pending={session.pending}
+              />
+            </div>
+          ) : hero.hero_shape === 'shield' ? (
+            <LoyaltyShield
+              label={hero.short_label ?? hero.label}
+              value={heroValue}
+              pending={session.pending}
+              dead={session.alertMessage !== null}
+            />
+          ) : (
+            <HeroStat
+              label={hero.short_label ?? hero.label}
+              value={heroValue}
+              pending={session.pending}
+            />
+          )}
+
+          {/* Under card art the strip is annotation, not a peer panel to the card. */}
+          <StatStrip
+            outputs={nonPrimaryOutputs(card)}
+            values={session.outputs}
+            pending={session.pending}
+            compact={card.show_hero_art}
+          />
+        </>
       )}
 
-      <StatStrip outputs={nonPrimaryOutputs(card)} values={session.outputs} pending={session.pending} />
-
+      {/* The read/act divider: state above the line, controls below it -- so the card
+          art or hero never blends into the field stack at equal visual weight. */}
       {inlineFields.length > 0 && (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 border-t border-border pt-4">
           {inlineFields.map((field) => (
             <FieldControl
               key={field.name}

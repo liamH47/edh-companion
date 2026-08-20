@@ -24,3 +24,13 @@ describe('StatTile', () => {
     expect(screen.getByText('50').closest('div.px-3')).toHaveClass('opacity-60')
   })
 })
+
+
+describe('compact StatTile', () => {
+  it('shrinks type and padding so the tile reads as annotation', () => {
+    render(<StatTile label="rooms" value={2} compact />)
+    // Compact keeps the content, drops the statTile-size numerals.
+    expect(screen.getByText('2')).toBeInTheDocument()
+    expect(screen.getByText('rooms')).toBeInTheDocument()
+  })
+})
