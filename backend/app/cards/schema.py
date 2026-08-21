@@ -26,11 +26,20 @@ _OPTION_KINDS = frozenset({FieldKind.SELECT, FieldKind.SEQUENCE})
 class OutputKind(StrEnum):
     NUMBER = "number"
     TEXT = "text"
+    # A list of {source, effect, note} rows rather than a single value -- what a card
+    # returns when the answer is "here is everything that happens", not a number.
+    # Landfall's simultaneous triggers are the motivating case. Renders only as the
+    # hero (hero_shape="list"); no stat tile can hold a list.
+    LINES = "lines"
 
 
 class SelectOption(BaseModel):
     value: str
     label: str
+    # The printed card this option stands for, when it stands for one. Lets a picker
+    # show the card rather than only its name -- the same card-first read the calculator
+    # screens use. Purely presentational; compute() only ever sees `value`.
+    scryfall_id: str | None = None
 
 
 class VisibleIf(BaseModel):
@@ -63,6 +72,25 @@ class RollSpec(BaseModel):
 
     faces: int
     action_label: str = "Roll"
+
+
+class PickerSpec(BaseModel):
+    """Marks a `sequence` field as a roster assembled from a long option list -- rendered
+    as a searchable list of cards to add and remove, instead of one button per option.
+
+    Same doctrine as RollSpec and MapSpec: the value stays a plain ordered list of option
+    values and compute() never learns how it was gathered. Order carries no meaning here
+    (unlike Comet's rolls, where it changes the answer), but the list shape is what lets a
+    player declare two Lotus Cobras by adding the same option twice.
+
+    Exists because a `select` row of pills stops working somewhere around six options, and
+    a landfall roster is drawn from dozens: search is the only affordance that survives
+    the list getting longer, and it is the one the option-per-button layouts cannot grow
+    into."""
+
+    search_placeholder: str = "Search"
+    # Shown in place of the roster before anything is added.
+    empty_label: str = "Nothing added yet."
 
 
 class ArtBox(BaseModel):
@@ -155,6 +183,9 @@ class FieldSpec(BaseModel):
     # See MapSpec: this sequence is a walk through a room graph, rendered as a map.
     # Only meaningful on a sequence field; mutually exclusive with roll.
     map: MapSpec | None = None
+    # See PickerSpec: this sequence is a roster searched out of a long option list.
+    # Only meaningful on a sequence field; mutually exclusive with roll and map.
+    picker: PickerSpec | None = None
     # On "New turn", this field takes the named output's final value instead of its
     # default -- state that persists across turns rather than resetting (Comet's
     # loyalty: the walker keeps the counters it ended the turn with). Frontend-only,
@@ -162,6 +193,13 @@ class FieldSpec(BaseModel):
     # value is clamped to the field's own min/max so a runaway output cannot poison the
     # next turn's validation.
     new_turn_carries_output: str | None = None
+    # "New turn" leaves this field's value alone instead of resetting it to the default.
+    # For board state that a turn boundary does not change: the landfall permanents you
+    # control are still there next turn, and a "New turn" that emptied the roster would
+    # make the button unusable on the one screen whose whole premise is that roster.
+    # Distinct from new_turn_carries_output, which takes a *computed* value; this one
+    # simply keeps what is already there, so the two are mutually exclusive.
+    persists_across_turns: bool = False
     # Marks a field as one-time board-state setup (answered once, rarely revisited) rather
     # than something clicked repeatedly during play. Setup fields render inside a collapsible
     # section the player can tuck away once answered, keeping the fields they actually
@@ -224,6 +262,31 @@ class FieldSpec(BaseModel):
                 )
         return self
 
+    @model_validator(mode="after")
+    def _check_picker_is_a_pickable_sequence(self) -> "FieldSpec":
+        """A picker is one of three mutually exclusive ways to render a sequence -- die,
+        map, searchable roster. Two at once has no meaning, and silently letting one win
+        would make the screen depend on component dispatch order."""
+        if self.picker is None:
+            return self
+        if self.kind is not FieldKind.SEQUENCE:
+            raise ValueError(f"field {self.name!r} declares picker but is kind={self.kind}")
+        conflicting = [name for name in ("roll", "map") if getattr(self, name) is not None]
+        if conflicting:
+            raise ValueError(f"field {self.name!r} declares both picker and {conflicting[0]}")
+        return self
+
+    @model_validator(mode="after")
+    def _check_turn_persistence_is_unambiguous(self) -> "FieldSpec":
+        """Keeping the current value and adopting a computed one are two answers to the
+        same question -- what this field holds after "New turn"."""
+        if self.persists_across_turns and self.new_turn_carries_output is not None:
+            raise ValueError(
+                f"field {self.name!r} both persists across turns and carries "
+                f"{self.new_turn_carries_output!r}"
+            )
+        return self
+
 
 class OutputSpec(BaseModel):
     name: str
@@ -240,7 +303,7 @@ class OutputSpec(BaseModel):
     # shape, deliberately not part of OutputKind -- that enum is the value's data type,
     # and coupling presentation to it would make every kind branch also carry
     # presentation. Frontend-only, like `primary`; compute() knows nothing of it.
-    hero_shape: Literal["number", "shield"] = "number"
+    hero_shape: Literal["number", "shield", "list"] = "number"
     # Computed but never rendered as a stat tile. For outputs that exist to feed
     # machinery -- an ActionGuard threshold, an AlertSpec boolean -- whose value the
     # player already sees expressed elsewhere (the guard enabling, the banner firing).
@@ -319,6 +382,19 @@ class CardMetadata(BaseModel):
             hero = self.outputs[0]
         if hero is not None and hero.hidden:
             raise ValueError(f"card {self.id!r} hides its hero output: {hero.name!r}")
+        return self
+
+    @model_validator(mode="after")
+    def _check_line_outputs_are_the_list_hero(self) -> "CardMetadata":
+        """A LINES value is a list, and the only thing that renders a list is the hero
+        in its "list" shape. Requiring the two to agree in both directions means a card
+        can't declare rows nothing will draw, or a list hero with no rows to fill it."""
+        for output in self.outputs:
+            if (output.kind is OutputKind.LINES) != (output.hero_shape == "list"):
+                raise ValueError(
+                    f"card {self.id!r} output {output.name!r} must declare kind=lines and "
+                    "hero_shape=list together, or neither"
+                )
         return self
 
     @model_validator(mode="after")

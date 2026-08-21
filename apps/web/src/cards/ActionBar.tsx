@@ -42,10 +42,12 @@ export function ActionBar({
   const counterActionFields = liveFields.filter(
     (field) => field.kind === 'counter' && field.action_label,
   )
-  // A mapped sequence's tap target IS the map (FieldControl renders it inline);
-  // offering a disconnected row of room buttons down here as well would be two
-  // competing ways to venture.
-  const sequenceFields = liveFields.filter((field) => field.kind === 'sequence' && !field.map)
+  // A mapped sequence's tap target IS the map, and a picker's is its own search-and-add
+  // roster (FieldControl renders both inline); offering a disconnected row of buttons
+  // down here as well would be two competing ways to do the same thing.
+  const sequenceFields = liveFields.filter(
+    (field) => field.kind === 'sequence' && !field.map && !field.picker,
+  )
 
   return (
     <div className="flex flex-col gap-2" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>

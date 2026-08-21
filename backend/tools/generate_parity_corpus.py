@@ -57,6 +57,27 @@ EXTRA_SEQUENCES: dict[str, list[list[str]]] = {
         # Over the declared cap.
         ["1"] * 41,
     ],
+    # Landfall has exactly one sequence, so the product with the scalar axes is the
+    # right shape here: every roster below is crossed with the trigger-doubler and
+    # lands-this-turn bounds, which is where the rider arithmetic actually lives.
+    "landfall": [
+        [],
+        ["lotus-cobra"],
+        # The board the whole feature was asked for: mana, draw-and-life, and damage.
+        ["lotus-cobra", "tatyova-benthic-druid", "tannuk-memorial-ensign"],
+        # Two copies of one card: two abilities, one collapsed line, doubled totals.
+        ["lotus-cobra", "lotus-cobra"],
+        # Every second-resolution rider at once -- one of which also adds a card.
+        ["tannuk-memorial-ensign", "nissa-resurgent-animist", "scythecat-cub"],
+        # Sources with no countable output, which must still produce a line.
+        ["evolution-sage", "moraug-fury-of-akoum", "bloodghast"],
+        # The categories that never roll up into an output tile.
+        ["ob-nixilis-the-fallen", "ruin-crab", "hedron-crab", "icetill-explorer"],
+        # A permanent nobody registered -- validation refuses it before compute().
+        ["not-a-landfall-card"],
+        # Over the declared roster cap.
+        ["lotus-cobra"] * 13,
+    ],
 }
 
 # Board states worth pinning that a mechanical sweep would not reach.

@@ -130,23 +130,34 @@ export function useCardSession(card: CardMetadata): CardSession {
 
   const resetTurn = useCallback(() => {
     const card = cardRef.current
-    const reset = defaultValues(card)
-    // Carry-over fields take the output they name instead of their default: a walker
-    // keeps the loyalty it ended the turn with. Clamped to the field's own bounds so a
-    // runaway output cannot poison the next turn's validation.
     const outputs = outputsRef.current
-    for (const field of card.fields) {
-      const carried = field.new_turn_carries_output
-      if (carried === null || outputs === null) continue
-      const value = outputs[carried]
-      if (typeof value !== 'number') continue
-      let clamped = value
-      if (field.min != null) clamped = Math.max(field.min, clamped)
-      if (field.max != null) clamped = Math.min(field.max, clamped)
-      reset[field.name] = clamped
-    }
-    setValues(reset)
-    runCalculation(reset)
+    // Through the updater rather than over the `values` binding, so a field that keeps
+    // its value reads the current one -- the same reason setField goes this way round.
+    setValues((current) => {
+      const reset = defaultValues(card)
+      for (const field of card.fields) {
+        // Board state a turn boundary doesn't touch keeps whatever it already held: the
+        // landfall permanents you control are still there next turn, and a "New turn"
+        // that emptied that roster would make the button unusable on its own screen.
+        if (field.persists_across_turns) {
+          reset[field.name] = current[field.name]
+          continue
+        }
+        // Carry-over fields take the output they name instead of their default: a walker
+        // keeps the loyalty it ended the turn with. Clamped to the field's own bounds so
+        // a runaway output cannot poison the next turn's validation.
+        const carried = field.new_turn_carries_output
+        if (carried === null || outputs === null) continue
+        const value = outputs[carried]
+        if (typeof value !== 'number') continue
+        let clamped = value
+        if (field.min != null) clamped = Math.max(field.min, clamped)
+        if (field.max != null) clamped = Math.min(field.max, clamped)
+        reset[field.name] = clamped
+      }
+      runCalculation(reset)
+      return reset
+    })
   }, [runCalculation])
 
   const confirmSetup = useCallback(() => {

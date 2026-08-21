@@ -31,10 +31,10 @@ function mappedField(overrides: Partial<FieldSpec> = {}): FieldSpec {
     min: null,
     max: 3,
     options: [
-      { value: 'cave', label: 'Cave Entrance' },
-      { value: 'lair', label: 'Goblin Lair' },
-      { value: 'tunnels', label: 'Mine Tunnels' },
-      { value: 'pool', label: 'Dark Pool' },
+      { value: 'cave', label: 'Cave Entrance', scryfall_id: null },
+      { value: 'lair', label: 'Goblin Lair', scryfall_id: null },
+      { value: 'tunnels', label: 'Mine Tunnels', scryfall_id: null },
+      { value: 'pool', label: 'Dark Pool', scryfall_id: null },
     ],
     visible_if: null,
     help_text: null,
@@ -43,6 +43,8 @@ function mappedField(overrides: Partial<FieldSpec> = {}): FieldSpec {
     action_disabled_when: null,
     roll: null,
     map: MAP,
+    picker: null,
+    persists_across_turns: false,
     new_turn_carries_output: null,
     setup: false,
     short_label: null,
@@ -151,10 +153,10 @@ describe('DungeonMap', () => {
       <DungeonMap
         field={mappedField({
           options: [
-            { value: 'cave', label: 'Cradle of the Death God' },
-            { value: 'lair', label: 'Goblin Lair' },
-            { value: 'tunnels', label: 'Unbreakable-Hyphenated-Name' },
-            { value: 'pool', label: 'Dark Pool' },
+            { value: 'cave', label: 'Cradle of the Death God', scryfall_id: null },
+            { value: 'lair', label: 'Goblin Lair', scryfall_id: null },
+            { value: 'tunnels', label: 'Unbreakable-Hyphenated-Name', scryfall_id: null },
+            { value: 'pool', label: 'Dark Pool', scryfall_id: null },
           ],
         })}
         value={[]}

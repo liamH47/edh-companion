@@ -5,6 +5,7 @@ import { Chip } from '../ui/Chip'
 import { InfoIcon, UndoIcon } from '../ui/Icon'
 import { DungeonMap } from './DungeonMap'
 import { Pressable } from '../ui/Pressable'
+import { SourcePicker } from './SourcePicker'
 import { Stepper } from '../ui/Stepper'
 import { Text } from '../ui/Text'
 import { Toggle } from '../ui/Toggle'
@@ -138,6 +139,17 @@ export function FieldControl({ field, value, onChange }: FieldControlProps) {
       )
     }
     case 'sequence': {
+      // A picker sequence renders as a searchable roster -- it owns its own add and
+      // remove controls per row, so no shared undo affordance above it.
+      if (field.picker) {
+        return (
+          <div className="flex flex-col gap-1">
+            {labelRow}
+            <SourcePicker field={field} value={value} onChange={onChange} />
+            {helpText}
+          </div>
+        )
+      }
       // A mapped sequence renders as the dungeon map -- the map is the input control,
       // the way a roll-flagged sequence renders as the die. The chip log below stays
       // for plain sequences (Comet's rolls), where order is the content.

@@ -18,6 +18,8 @@ function field(overrides: Partial<FieldSpec> & Pick<FieldSpec, 'name' | 'kind'>)
     action_disabled_when: null,
     roll: null,
     map: null,
+    picker: null,
+    persists_across_turns: false,
     new_turn_carries_output: null,
     setup: false,
     short_label: null,
@@ -101,8 +103,8 @@ describe('FieldControl', () => {
 
   describe('select', () => {
     const options = [
-      { value: 'a', label: 'Mode A' },
-      { value: 'b', label: 'Mode B' },
+      { value: 'a', label: 'Mode A', scryfall_id: null },
+      { value: 'b', label: 'Mode B', scryfall_id: null },
     ]
 
     it('renders a radiogroup of options and reports the selected value', async () => {
@@ -132,10 +134,10 @@ describe('FieldControl', () => {
         kind: 'select',
         label: 'Which',
         options: [
-          { value: 'a', label: 'A' },
-          { value: 'b', label: 'B' },
-          { value: 'c', label: 'C' },
-          { value: 'd', label: 'D' },
+          { value: 'a', label: 'A', scryfall_id: null },
+          { value: 'b', label: 'B', scryfall_id: null },
+          { value: 'c', label: 'C', scryfall_id: null },
+          { value: 'd', label: 'D', scryfall_id: null },
         ],
       })
       render(<FieldControl field={f} value="a" onChange={() => {}} />)
@@ -150,8 +152,8 @@ describe('FieldControl', () => {
         kind: 'select',
         label: 'Which',
         options: [
-          { value: 'a', label: 'A' },
-          { value: 'b', label: 'B' },
+          { value: 'a', label: 'A', scryfall_id: null },
+          { value: 'b', label: 'B', scryfall_id: null },
         ],
       })
       render(<FieldControl field={f} value="a" onChange={() => {}} />)
@@ -175,8 +177,8 @@ describe('FieldControl', () => {
         kind: 'sequence',
         label: 'Your path',
         options: [
-          { value: 'cave', label: 'Cave Entrance' },
-          { value: 'lair', label: 'Goblin Lair' },
+          { value: 'cave', label: 'Cave Entrance', scryfall_id: null },
+          { value: 'lair', label: 'Goblin Lair', scryfall_id: null },
         ],
         map: mapSpec,
       })
@@ -203,8 +205,8 @@ describe('FieldControl', () => {
 
   describe('sequence', () => {
     const rollOptions = [
-      { value: '1-2', label: '1–2' },
-      { value: '4-5', label: '4–5' },
+      { value: '1-2', label: '1–2', scryfall_id: null },
+      { value: '4-5', label: '4–5', scryfall_id: null },
     ]
 
     function rollsField() {
@@ -250,6 +252,32 @@ describe('FieldControl', () => {
       const f = field({ name: 'rolls', kind: 'sequence', label: 'Rolls', options: null })
       render(<FieldControl field={f} value={['x']} onChange={() => {}} />)
       expect(screen.getByText('x')).toBeInTheDocument()
+    })
+  })
+
+  describe('picker sequence', () => {
+    const rosterField = () =>
+      field({
+        name: 'sources',
+        kind: 'sequence',
+        label: 'Permanents you control',
+        default: [],
+        options: [{ value: 'lotus-cobra', label: 'Lotus Cobra', scryfall_id: null }],
+        picker: { search_placeholder: 'Search landfall cards', empty_label: 'Nothing added yet.' },
+      })
+
+    it('renders the searchable roster instead of a chip log', () => {
+      render(<FieldControl field={rosterField()} value={[]} onChange={() => {}} />)
+      expect(screen.getByLabelText('Search landfall cards')).toBeInTheDocument()
+      expect(screen.getByText('Nothing added yet.')).toBeInTheDocument()
+    })
+
+    it('offers no shared undo -- each row owns its own add and remove', () => {
+      render(<FieldControl field={rosterField()} value={['lotus-cobra']} onChange={() => {}} />)
+      expect(
+        screen.queryByRole('button', { name: /Undo last/ }),
+      ).not.toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'Remove Lotus Cobra' })).toBeInTheDocument()
     })
   })
 

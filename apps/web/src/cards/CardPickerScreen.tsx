@@ -1,45 +1,10 @@
 import { useMemo, useState } from 'react'
-import { cardImageUrl, sortByRecency } from '@mtg/core'
+import { sortByRecency } from '@mtg/core'
 import type { CardMetadata } from '@mtg/core'
-import { CardsIcon, SearchIcon } from '../ui/Icon'
+import { SearchIcon } from '../ui/Icon'
 import { Pressable } from '../ui/Pressable'
 import { Text } from '../ui/Text'
-
-/**
- * Small full-card thumbnail for a picker row. Scryfall's `small` version (146x204) is
- * the **full** printed card, so the artist and copyright line stay in frame -- the same
- * by-construction compliance CardImage relies on (see cardImageUrl). Decorative: the
- * card's name sits right beside it, so the image is hidden from the accessibility tree.
- * Cardless entries (commander tax, dungeons) and a failed load fall back to the same
- * quiet card-back tile, so offline the list just loses its pictures, not its shape.
- */
-function CardThumb({ card }: { card: CardMetadata }) {
-  const url = cardImageUrl(card, 'small')
-  const [failed, setFailed] = useState(false)
-
-  if (!url || failed) {
-    return (
-      <div
-        aria-hidden="true"
-        data-testid="card-thumb-fallback"
-        className="flex aspect-[488/680] w-10 shrink-0 items-center justify-center rounded-sm border border-border bg-surface-raised text-text-muted"
-      >
-        <CardsIcon size={16} />
-      </div>
-    )
-  }
-
-  return (
-    <img
-      src={url}
-      alt=""
-      aria-hidden="true"
-      loading="lazy"
-      onError={() => setFailed(true)}
-      className="aspect-[488/680] w-10 shrink-0 rounded-sm object-contain"
-    />
-  )
-}
+import { CardThumb } from './CardThumb'
 
 interface CardPickerScreenProps {
   cards: CardMetadata[]
@@ -84,7 +49,7 @@ export function CardPickerScreen({ cards, onSelectCard }: CardPickerScreenProps)
                 onClick={() => onSelectCard(card.id)}
                 className="min-h-12 w-full gap-3 rounded-lg border border-border bg-surface px-3 py-2"
               >
-                <CardThumb card={card} />
+                <CardThumb scryfallId={card.scryfall_id} />
                 <Text variant="bodyStrong" className="flex-1 text-left">
                   {card.name}
                 </Text>
