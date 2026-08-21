@@ -3,6 +3,9 @@ export type FieldKind = 'number' | 'boolean' | 'select' | 'counter' | 'sequence'
 export interface SelectOption {
   value: string
   label: string
+  /** The printed card this option stands for, when it stands for one -- lets a picker
+   * show the card rather than only its name. Presentational; compute() sees only `value`. */
+  scryfall_id: string | null
 }
 
 export interface VisibleIf {
@@ -23,6 +26,15 @@ export interface RollSpec {
   action_label: string
 }
 
+/** Marks a sequence field as a roster searched out of a long option list, rendered as a
+ * searchable add/remove list instead of one button per option. The value stays a plain
+ * ordered list of option values; adding the same option twice is how you say you control
+ * two of that card. See PickerSpec in the backend's schema.py. */
+export interface PickerSpec {
+  search_placeholder: string
+  empty_label: string
+}
+
 export interface FieldSpec {
   name: string
   label: string
@@ -39,10 +51,16 @@ export interface FieldSpec {
   roll: RollSpec | null
   /** See MapSpec. Only on a sequence field; mutually exclusive with roll. */
   map: MapSpec | null
+  /** See PickerSpec. Only on a sequence field; mutually exclusive with roll and map. */
+  picker: PickerSpec | null
   /** On "New turn", this field takes the named output's final value (clamped to the
    * field's own bounds) instead of its default -- state that persists across turns
    * (Comet's loyalty). Frontend-only; compute() never knows where the value came from. */
   new_turn_carries_output: string | null
+  /** "New turn" leaves this field's value alone instead of resetting it to the default --
+   * board state a turn boundary does not change (the landfall permanents you control).
+   * Mutually exclusive with new_turn_carries_output, which adopts a computed value. */
+  persists_across_turns: boolean
   setup: boolean
   short_label: string | null
 }
@@ -87,13 +105,17 @@ export interface MapSpec {
 export interface OutputSpec {
   name: string
   label: string
-  kind: 'number' | 'text'
+  /** `lines` is a list of EffectLine rows rather than a single value -- what a card
+   * returns when the answer is everything that happens at once (landfall's simultaneous
+   * triggers). Only ever the hero; no stat tile can hold a list. */
+  kind: 'number' | 'text' | 'lines'
   short_label: string | null
   primary: boolean
-  /** How the hero renders this output when it is the primary: the plain HeroStat, or a
-   * planeswalker loyalty shield (Comet). Presentation only -- deliberately not part of
-   * `kind`, which is the value's data type. */
-  hero_shape: 'number' | 'shield'
+  /** How the hero renders this output when it is the primary: the plain HeroStat, a
+   * planeswalker loyalty shield (Comet), or a list of effect rows (landfall).
+   * Presentation only -- deliberately not part of `kind`, which is the value's data
+   * type. `lines` and `list` are declared together or not at all. */
+  hero_shape: 'number' | 'shield' | 'list'
   /** Computed but never rendered as a stat tile -- for guard/alert feeds the player
    * already sees expressed elsewhere (dungeons' `at_bottom_room`). Presentation only. */
   hidden: boolean
@@ -126,3 +148,12 @@ export interface CardMetadata {
 
 export type FieldValues = Record<string, unknown>
 export type OutputValues = Record<string, unknown>
+
+/** One row of a `lines` output: which permanent, what it does per resolution, and what
+ * that has come to this turn. Produced by compute() on both sides, so the corpus locks
+ * the wording; `effectLines` in cardModel.ts is the safe way to read one back. */
+export interface EffectLine {
+  source: string
+  effect: string
+  note: string
+}

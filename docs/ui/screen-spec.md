@@ -104,12 +104,32 @@ no-overlay reading of Scryfall's terms, scoped to the loyalty box only (decision
 cardImage.ts). Offline the hero falls back to the standalone shield, so the play surface
 never waits on the network.
 
+## The list hero
+
+`hero_shape: "list"` (with `kind: "lines"`, which the schema requires be declared together)
+replaces the headline number with `EffectList` — one row per thing that happens. For cards
+whose honest answer is a set, not a total: landfall's simultaneous triggers.
+
+The layout mirrors the mapped-field case, for the same reason. The list is itself the tall
+content, so the supporting numbers compress into one `compact` `StatStrip` row **above** it,
+putting the thing the player reads on a land drop near the top rather than below a column
+of tiles. An empty list borrows the card's `PickerSpec.empty_label` rather than inventing a
+second phrasing — read off the schema, so no per-card branching.
+
 ## Game-long trackers
 
 `CardMetadata.resets_on_new_turn: false` (commander-tax, dungeons) removes the "New
 turn" button entirely: a game-long tally has no turn boundary, and the old behaviour --
 resetTurn wiping every field to defaults -- quietly erased state the player could not
 reconstruct.
+
+`FieldSpec.persists_across_turns` is the field-level counterpart: "New turn" leaves that
+one field alone while resetting everything around it. For board state a turn boundary does
+not change — the landfall permanents you control are still there next turn, and a "New turn"
+that emptied that roster would make the button unusable on its own screen. Mutually
+exclusive with `new_turn_carries_output`, which answers the same question by adopting a
+*computed* value; this one just keeps what is already there, which is the only thing that
+works for a list.
 
 For a card that DOES reset each turn but carries some state across the boundary,
 `FieldSpec.new_turn_carries_output` names an output whose final value the field takes on

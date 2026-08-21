@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { CardMetadata, FieldSpec, OutputSpec } from '@mtg/core'
@@ -24,6 +24,8 @@ function field(overrides: Partial<FieldSpec> & Pick<FieldSpec, 'name' | 'kind'>)
     action_disabled_when: null,
     roll: null,
     map: null,
+    picker: null,
+    persists_across_turns: false,
     new_turn_carries_output: null,
     setup: false,
     short_label: null,
@@ -292,8 +294,8 @@ describe('CardScreen', () => {
           kind: 'sequence',
           label: 'Path',
           options: [
-            { value: 'a', label: 'A' },
-            { value: 'b', label: 'B' },
+            { value: 'a', label: 'A', scryfall_id: null },
+            { value: 'b', label: 'B', scryfall_id: null },
           ],
           map: {
             entry: 'a',
@@ -317,6 +319,87 @@ describe('CardScreen', () => {
     // ...with the strip beside it, and the map still below as the main event.
     expect(screen.getByText('rooms')).toBeInTheDocument()
     expect(screen.getByTestId('dungeon-map-path')).toBeInTheDocument()
+  })
+
+  it('renders a list hero as effect rows above the fields, stats compressed', async () => {
+    // Landfall's shape: the answer is everything that happens at once, so the hero is
+    // a list and the supporting numbers compress into one row above it.
+    compute.mockReturnValue({
+      effects: [
+        { source: 'Lotus Cobra', effect: 'Add one mana of any color', note: '2 mana' },
+        { source: 'Tatyova, Benthic Druid', effect: 'Gain 1 life and draw a card', note: '2 cards · 2 life' },
+      ],
+      triggers: 4,
+    })
+    const landfallLike: CardMetadata = {
+      ...singleOutputCard,
+      id: 'landfall-like',
+      scryfall_id: null,
+      fields: [
+        field({
+          name: 'sources',
+          kind: 'sequence',
+          label: 'Permanents you control',
+          default: [],
+          options: [{ value: 'lotus-cobra', label: 'Lotus Cobra', scryfall_id: null }],
+          picker: { search_placeholder: 'Search cards', empty_label: 'Add what you control.' },
+          setup: true,
+          persists_across_turns: true,
+        }),
+        field({ name: 'lands_this_turn', kind: 'counter', label: 'Lands', default: 0 }),
+      ],
+      outputs: [
+        output({ name: 'effects', label: 'What each land drop does', kind: 'lines', primary: true, hero_shape: 'list' }),
+        output({ name: 'triggers', label: 'Triggers', short_label: 'triggers' }),
+      ],
+    }
+    render(<CardScreen card={landfallLike} />)
+
+    expect(await screen.findByText('Add one mana of any color')).toBeInTheDocument()
+    expect(screen.getByText('2 cards · 2 life')).toBeInTheDocument()
+    // No number hero: the list is the headline.
+    expect(screen.queryByTestId('hero-compact')).not.toBeInTheDocument()
+    // The supporting stat still renders beside it.
+    expect(screen.getByText('triggers')).toBeInTheDocument()
+  })
+
+  it('an empty list hero borrows the picker its own empty text', async () => {
+    compute.mockReturnValue({ effects: [], triggers: 0 })
+    const landfallLike: CardMetadata = {
+      ...singleOutputCard,
+      id: 'landfall-empty',
+      fields: [
+        field({
+          name: 'sources',
+          kind: 'sequence',
+          default: [],
+          options: [{ value: 'lotus-cobra', label: 'Lotus Cobra', scryfall_id: null }],
+          picker: { search_placeholder: 'Search cards', empty_label: 'Add what you control.' },
+        }),
+      ],
+      outputs: [
+        output({ name: 'effects', label: 'Effects', kind: 'lines', primary: true, hero_shape: 'list' }),
+      ],
+    }
+    render(<CardScreen card={landfallLike} />)
+    // Scoped to the hero: the picker below says the same thing, which is the point --
+    // the hero borrows its text rather than inventing a second phrasing.
+    const heroRegion = (await screen.findByText('Effects')).parentElement!
+    expect(within(heroRegion).getByText('Add what you control.')).toBeInTheDocument()
+  })
+
+  it('falls back to generic empty text for a list hero with no picker behind it', async () => {
+    compute.mockReturnValue({ effects: [] })
+    const listNoPicker: CardMetadata = {
+      ...singleOutputCard,
+      id: 'list-no-picker',
+      fields: [],
+      outputs: [
+        output({ name: 'effects', label: 'Effects', kind: 'lines', primary: true, hero_shape: 'list' }),
+      ],
+    }
+    render(<CardScreen card={listNoPicker} />)
+    expect(await screen.findByText('Nothing to show yet.')).toBeInTheDocument()
   })
 
   it('resets values via New turn without reopening the setup sheet', async () => {

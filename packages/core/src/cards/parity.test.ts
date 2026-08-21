@@ -14,6 +14,7 @@ import dungeons from './__parity__/dungeons.json'
 import emptyTheWarrens from './__parity__/empty-the-warrens.json'
 import grapeshot from './__parity__/grapeshot.json'
 import kalonianHydra from './__parity__/kalonian-hydra.json'
+import landfall from './__parity__/landfall.json'
 import nykthosShrineToNyx from './__parity__/nykthos-shrine-to-nyx.json'
 import obNixilisTheFallen from './__parity__/ob-nixilis-the-fallen.json'
 import scuteSwarm from './__parity__/scute-swarm.json'
@@ -57,6 +58,7 @@ const CORPORA: Corpus[] = [
   emptyTheWarrens,
   grapeshot,
   kalonianHydra,
+  landfall,
   nykthosShrineToNyx,
   obNixilisTheFallen,
   scuteSwarm,
@@ -65,10 +67,27 @@ const CORPORA: Corpus[] = [
 
 /** Key order differs between a Python dict and a TypeScript object literal, and that
  * difference is not a behaviour difference. Sort before comparing so a failure means
- * the numbers disagree. */
+ * the numbers disagree.
+ *
+ * Recursive, because a `lines` output (landfall's effect rows) nests objects inside an
+ * array: sorting only the top level would compare `{source, effect, note}` against
+ * Python's alphabetized `{effect, note, source}` and report every identical row as a
+ * mismatch. Array *order* is left alone -- that one is real content. */
+function sortDeep(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(sortDeep)
+  if (typeof value === 'object' && value !== null) {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([key, nested]) => [key, sortDeep(nested)]),
+    )
+  }
+  return value
+}
+
 function canonical(values: OutputValues | undefined): string {
   if (values === undefined) return 'undefined'
-  return JSON.stringify(Object.fromEntries(Object.entries(values).sort(([a], [b]) => a.localeCompare(b))))
+  return JSON.stringify(sortDeep(values))
 }
 
 const CARDS = metadata as CardMetadata[]

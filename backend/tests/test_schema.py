@@ -9,7 +9,9 @@ from app.cards.schema import (
     MapEdge,
     MapNode,
     MapSpec,
+    OutputKind,
     OutputSpec,
+    PickerSpec,
     RollSpec,
     SelectOption,
 )
@@ -193,6 +195,87 @@ def test_card_metadata_rejects_hero_shape_on_a_non_primary_output() -> None:
                 OutputSpec(name="b", label="B", hero_shape="shield"),
             ],
         )
+
+
+def test_picker_must_be_a_sequence() -> None:
+    with pytest.raises(ValueError, match="declares picker but is kind"):
+        FieldSpec(
+            name="sources",
+            label="Sources",
+            kind=FieldKind.SELECT,
+            options=[SelectOption(value="a", label="A")],
+            picker=PickerSpec(),
+        )
+
+
+def test_picker_cannot_be_combined_with_roll_or_map() -> None:
+    # Die, map and searchable roster are three renderings of one field; two at once
+    # would make the screen depend on component dispatch order.
+    with pytest.raises(ValueError, match="declares both picker and roll"):
+        FieldSpec(
+            name="rolls",
+            label="Rolls",
+            kind=FieldKind.SEQUENCE,
+            options=[SelectOption(value=str(face), label=str(face)) for face in range(1, 7)],
+            roll=RollSpec(faces=6),
+            picker=PickerSpec(),
+        )
+
+
+def test_a_field_cannot_both_persist_and_carry() -> None:
+    with pytest.raises(ValueError, match="both persists across turns and carries"):
+        FieldSpec(
+            name="loyalty",
+            label="Loyalty",
+            kind=FieldKind.NUMBER,
+            persists_across_turns=True,
+            new_turn_carries_output="loyalty",
+        )
+
+
+def test_line_outputs_must_declare_the_list_hero_shape() -> None:
+    # Rows nothing will draw: kind=lines without hero_shape=list.
+    with pytest.raises(ValueError, match="kind=lines and hero_shape=list together"):
+        CardMetadata(
+            id="test-card",
+            name="Test Card",
+            rules_text="...",
+            fields=[],
+            outputs=[
+                OutputSpec(name="effects", label="Effects", kind=OutputKind.LINES, primary=True)
+            ],
+        )
+
+
+def test_a_list_hero_must_declare_line_output_kind() -> None:
+    # The mirror image: a list hero with no rows to fill it.
+    with pytest.raises(ValueError, match="kind=lines and hero_shape=list together"):
+        CardMetadata(
+            id="test-card",
+            name="Test Card",
+            rules_text="...",
+            fields=[],
+            outputs=[OutputSpec(name="effects", label="Effects", primary=True, hero_shape="list")],
+        )
+
+
+def test_card_metadata_allows_a_lines_hero() -> None:
+    card = CardMetadata(
+        id="test-card",
+        name="Test Card",
+        rules_text="...",
+        fields=[],
+        outputs=[
+            OutputSpec(
+                name="effects",
+                label="Effects",
+                kind=OutputKind.LINES,
+                primary=True,
+                hero_shape="list",
+            )
+        ],
+    )
+    assert card.outputs[0].kind is OutputKind.LINES
 
 
 def test_card_metadata_allows_a_hidden_guard_feed_output() -> None:

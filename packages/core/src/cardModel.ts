@@ -1,4 +1,11 @@
-import type { CardMetadata, FieldSpec, FieldValues, OutputSpec, OutputValues } from './types'
+import type {
+  CardMetadata,
+  EffectLine,
+  FieldSpec,
+  FieldValues,
+  OutputSpec,
+  OutputValues,
+} from './types'
 
 export function defaultValues(card: CardMetadata): FieldValues {
   const values: FieldValues = {}
@@ -127,6 +134,24 @@ export function heroOutput(card: CardMetadata): OutputSpec {
 export function nonPrimaryOutputs(card: CardMetadata): OutputSpec[] {
   const hero = heroOutput(card)
   return card.outputs.filter((output) => output.name !== hero.name && !output.hidden)
+}
+
+/** Reads a `lines` output back as rows, dropping anything that isn't one.
+ *
+ * Defensive because the value crosses the persistence seam: a roster saved by an older
+ * build, or a hand-edited localStorage, would otherwise reach the renderer as arbitrary
+ * shapes. The card screen's other outputs are numbers, which coerce harmlessly; a list
+ * of objects does not. */
+export function effectLines(value: unknown): EffectLine[] {
+  if (!Array.isArray(value)) return []
+  return value.filter(
+    (row): row is EffectLine =>
+      typeof row === 'object' &&
+      row !== null &&
+      typeof (row as EffectLine).source === 'string' &&
+      typeof (row as EffectLine).effect === 'string' &&
+      typeof (row as EffectLine).note === 'string',
+  )
 }
 
 /** When a card's alert output is true, its message; otherwise null. Centralizes the

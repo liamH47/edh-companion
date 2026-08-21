@@ -421,6 +421,61 @@ pattern, never a card-id switch. Offline (or for a cardless entry) it falls back
 the game state never waits on the network. When the card's alert fires (Comet dead), the
 badge takes the danger tones -- the one use design-tokens.md reserves danger for.
 
+### CardThumb
+
+A small full-card thumbnail, and the card-back tile it degrades to. Takes a `scryfallId`
+(nullable) and an optional Tailwind width; the 488×680 aspect is never a caller's choice,
+since Scryfall's terms forbid distorting a card image. Scryfall's `small` version is the
+**full** card, not an art crop, so the artist and copyright line stay in frame by
+construction — the same argument `CardImage` rests on.
+
+Always decorative (`alt=""`, `aria-hidden`): every caller renders the card's name beside
+it. Cardless entries and failed loads both land on the tile, so a list keeps its shape
+offline instead of collapsing to bare text. Used by `CardPickerScreen` rows and by
+`SourcePicker` on both the roster and the search results.
+
+### SourcePicker
+
+The third rendering of a `sequence` field, beside the die (`RollSpec`) and the dungeon map
+(`MapSpec`): a searchable roster, selected by `FieldSpec.picker` (`PickerSpec`).
+
+Exists because a row of option pills stops working somewhere around six options, and a
+landfall roster is drawn from dozens. Search is the only affordance that survives the list
+growing. Results appear **only once something is typed** — a permanently-open list of every
+option would push the roster itself off a phone screen, and the roster is what gets read
+during a turn.
+
+Each roster row is one option with its count (`x2`), a `+` to add another copy, and a `×`
+to remove one copy — not the whole row, since two Lotus Cobras are two abilities and
+dropping one is a real board change. At `field.max` the search box and every `+` disappear
+and a cap message takes their place; removal stays available, so a full roster is never a
+dead end. Adding twice is how the schema expresses "I control two of these".
+
+`ActionBar` filters picker sequences out of its button row for the same reason it filters
+mapped ones: the field owns its own controls inline.
+
+### EffectList
+
+The `list` hero shape (`OutputSpec.hero_shape: "list"` + `kind: "lines"`). One row per
+source: what it does once (`effect`), what that has come to this turn (`note`, accent), and
+which permanent it came from (`source`, muted).
+
+It exists because some cards have no single headline number — with three landfall permanents
+out, "what happens when this land enters" has three answers and no meaningful total. The
+per-source running total lives **in the row** rather than in another tile, which is what
+keeps a roster of three to three lines instead of three lines plus a dozen mostly-zero
+tiles.
+
+`aria-live="polite"` sits on the list, matching `HeroStat`'s contract: one land drop changes
+every row at once.
+
+| Prop | Type |
+|---|---|
+| `label` | `string` (the hero output's label) |
+| `lines` | `EffectLine[]` (read via `effectLines` in `cardModel.ts`) |
+| `pending` | `boolean` |
+| `emptyLabel` | `string` (borrowed from the card's `PickerSpec.empty_label`) |
+
 ### CardPickerScreen / CardDetailSheet / CardImage
 
 Specified in `screen-spec.md` alongside navigation, since they're screen-level, not reusable

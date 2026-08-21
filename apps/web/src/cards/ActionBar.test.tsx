@@ -18,6 +18,8 @@ function field(overrides: Partial<FieldSpec> & Pick<FieldSpec, 'name' | 'kind'>)
     action_disabled_when: null,
     roll: null,
     map: null,
+    picker: null,
+    persists_across_turns: false,
     new_turn_carries_output: null,
     setup: false,
     short_label: null,
@@ -193,8 +195,8 @@ describe('ActionBar', () => {
 
   describe('sequence fields', () => {
     const rollOptions = [
-      { value: '1-2', label: '1–2' },
-      { value: '6', label: '6' },
+      { value: '1-2', label: '1–2', scryfall_id: null },
+      { value: '6', label: '6', scryfall_id: null },
     ]
 
     function rollsField(overrides: Partial<FieldSpec> = {}): FieldSpec {
@@ -348,7 +350,7 @@ describe('ActionBar with a rolled sequence', () => {
     name: 'rolls',
     kind: 'sequence',
     label: 'Rolls this turn',
-    options: [1, 2, 3, 4, 5, 6].map((face) => ({ value: String(face), label: String(face) })),
+    options: [1, 2, 3, 4, 5, 6].map((face) => ({ value: String(face), label: String(face), scryfall_id: null })),
     roll: { faces: 6, action_label: 'Roll the die' },
     action_disabled_when: { output: 'activations_remaining', less_than: 1 },
   })
