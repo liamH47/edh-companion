@@ -20,6 +20,8 @@
         "name": "starting_life",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": true,
         "short_label": "start life",
@@ -39,6 +41,8 @@
         "name": "was_in_play_at_turn_start",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": true,
         "short_label": "in play",
@@ -58,6 +62,8 @@
         "name": "spells_already_cast",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": true,
         "short_label": "spells before",
@@ -80,6 +86,8 @@
         "name": "spells_cast_this_turn",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": false,
         "short_label": "spells cast",
@@ -102,6 +110,8 @@
         "name": "activations_used",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": false,
         "short_label": "activations",
@@ -197,6 +207,8 @@
         "name": "drain_effect_count",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": true,
         "short_label": "triggers",
@@ -216,6 +228,8 @@
         "name": "creatures_died",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": false,
         "short_label": "died",
@@ -261,6 +275,8 @@
         "name": "target_library_size",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": true,
         "short_label": "library",
@@ -280,6 +296,8 @@
         "name": "storm_count",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": false,
         "short_label": "storm",
@@ -352,6 +370,8 @@
         "name": "starting_loyalty",
         "new_turn_carries_output": "loyalty",
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": true,
         "short_label": "start loyalty",
@@ -371,6 +391,8 @@
         "name": "loyalty_adjustment",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": false,
         "short_label": "adjust",
@@ -395,29 +417,37 @@
         "options": [
           {
             "label": "1 \u00b7 squirrels",
+            "scryfall_id": null,
             "value": "1"
           },
           {
             "label": "2 \u00b7 squirrels",
+            "scryfall_id": null,
             "value": "2"
           },
           {
             "label": "3 \u00b7 return",
+            "scryfall_id": null,
             "value": "3"
           },
           {
             "label": "4 \u00b7 damage",
+            "scryfall_id": null,
             "value": "4"
           },
           {
             "label": "5 \u00b7 damage",
+            "scryfall_id": null,
             "value": "5"
           },
           {
             "label": "6 \u00b7 bonus",
+            "scryfall_id": null,
             "value": "6"
           }
         ],
+        "persists_across_turns": false,
+        "picker": null,
         "roll": {
           "action_label": "Roll the die",
           "faces": 6
@@ -507,6 +537,8 @@
         "name": "base_commander_cost",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": true,
         "short_label": "base cost",
@@ -526,6 +558,8 @@
         "name": "flat_cost_reduction",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": false,
         "short_label": "reduction",
@@ -545,6 +579,8 @@
         "name": "times_cast_from_command_zone",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": false,
         "short_label": "prior casts",
@@ -595,6 +631,8 @@
         "name": "total_power_before_triggers",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": true,
         "short_label": "power before",
@@ -614,6 +652,8 @@
         "name": "trigger_1_creature_count",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": true,
         "short_label": "creatures (1st)",
@@ -633,6 +673,8 @@
         "name": "additional_triggers",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": false,
         "short_label": "2nd trigger",
@@ -652,6 +694,8 @@
         "name": "trigger_2_creature_count",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": false,
         "short_label": "creatures (2nd)",
@@ -729,25 +773,32 @@
         "options": [
           {
             "label": "No dungeon",
+            "scryfall_id": null,
             "value": "none"
           },
           {
             "label": "Lost Mine of Phandelver",
+            "scryfall_id": null,
             "value": "phandelver"
           },
           {
             "label": "Tomb of Annihilation",
+            "scryfall_id": null,
             "value": "tomb"
           },
           {
             "label": "Dungeon of the Mad Mage",
+            "scryfall_id": null,
             "value": "mad-mage"
           },
           {
             "label": "Undercity (via the initiative)",
+            "scryfall_id": null,
             "value": "undercity"
           }
         ],
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": false,
         "short_label": "dungeon",
@@ -889,33 +940,42 @@
         "options": [
           {
             "label": "Cave Entrance",
+            "scryfall_id": null,
             "value": "cave-entrance"
           },
           {
             "label": "Goblin Lair",
+            "scryfall_id": null,
             "value": "goblin-lair"
           },
           {
             "label": "Mine Tunnels",
+            "scryfall_id": null,
             "value": "mine-tunnels"
           },
           {
             "label": "Storeroom",
+            "scryfall_id": null,
             "value": "storeroom"
           },
           {
             "label": "Dark Pool",
+            "scryfall_id": null,
             "value": "dark-pool"
           },
           {
             "label": "Fungi Cavern",
+            "scryfall_id": null,
             "value": "fungi-cavern"
           },
           {
             "label": "Temple of Dumathoin",
+            "scryfall_id": null,
             "value": "temple-of-dumathoin"
           }
         ],
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": false,
         "short_label": "path",
@@ -1022,25 +1082,32 @@
         "options": [
           {
             "label": "Trapped Entry",
+            "scryfall_id": null,
             "value": "trapped-entry"
           },
           {
             "label": "Veils of Fear",
+            "scryfall_id": null,
             "value": "veils-of-fear"
           },
           {
             "label": "Oubliette",
+            "scryfall_id": null,
             "value": "oubliette"
           },
           {
             "label": "Sandfall Cell",
+            "scryfall_id": null,
             "value": "sandfall-cell"
           },
           {
             "label": "Cradle of the Death God",
+            "scryfall_id": null,
             "value": "cradle-of-the-death-god"
           }
         ],
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": false,
         "short_label": "path",
@@ -1211,41 +1278,52 @@
         "options": [
           {
             "label": "Yawning Portal",
+            "scryfall_id": null,
             "value": "yawning-portal"
           },
           {
             "label": "Dungeon Level",
+            "scryfall_id": null,
             "value": "dungeon-level"
           },
           {
             "label": "Goblin Bazaar",
+            "scryfall_id": null,
             "value": "goblin-bazaar"
           },
           {
             "label": "Twisted Caverns",
+            "scryfall_id": null,
             "value": "twisted-caverns"
           },
           {
             "label": "Lost Level",
+            "scryfall_id": null,
             "value": "lost-level"
           },
           {
             "label": "Runestone Caverns",
+            "scryfall_id": null,
             "value": "runestone-caverns"
           },
           {
             "label": "Muiral's Graveyard",
+            "scryfall_id": null,
             "value": "muirals-graveyard"
           },
           {
             "label": "Deep Mines",
+            "scryfall_id": null,
             "value": "deep-mines"
           },
           {
             "label": "Mad Wizard's Lair",
+            "scryfall_id": null,
             "value": "mad-wizards-lair"
           }
         ],
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": false,
         "short_label": "path",
@@ -1424,41 +1502,52 @@
         "options": [
           {
             "label": "Secret Entrance",
+            "scryfall_id": null,
             "value": "secret-entrance"
           },
           {
             "label": "Forge",
+            "scryfall_id": null,
             "value": "forge"
           },
           {
             "label": "Lost Well",
+            "scryfall_id": null,
             "value": "lost-well"
           },
           {
             "label": "Trap!",
+            "scryfall_id": null,
             "value": "trap"
           },
           {
             "label": "Arena",
+            "scryfall_id": null,
             "value": "arena"
           },
           {
             "label": "Stash",
+            "scryfall_id": null,
             "value": "stash"
           },
           {
             "label": "Archives",
+            "scryfall_id": null,
             "value": "archives"
           },
           {
             "label": "Catacombs",
+            "scryfall_id": null,
             "value": "catacombs"
           },
           {
             "label": "Throne of the Dead Three",
+            "scryfall_id": null,
             "value": "throne-of-the-dead-three"
           }
         ],
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": false,
         "short_label": "path",
@@ -1484,6 +1573,8 @@
         "name": "dungeons_completed",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": false,
         "short_label": "completed",
@@ -1543,6 +1634,8 @@
         "name": "storm_count",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": false,
         "short_label": "storm",
@@ -1611,6 +1704,8 @@
         "name": "storm_count",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": false,
         "short_label": "storm",
@@ -1670,6 +1765,8 @@
         "name": "total_power_before",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": true,
         "short_label": "power before",
@@ -1689,6 +1786,8 @@
         "name": "counters_before",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": true,
         "short_label": "counters before",
@@ -1708,6 +1807,8 @@
         "name": "attacks_this_turn",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": false,
         "short_label": "attacks",
@@ -1755,6 +1856,285 @@
     "fields": [
       {
         "action_disabled_when": null,
+        "action_label": null,
+        "default": [],
+        "default_source": null,
+        "help_text": "Add a card twice if you control two of it -- each copy triggers on its own. Modal cards (Felidar Retreat, the Retreat cycle) are left out on purpose: the choice is yours every resolution, so no total would be right.",
+        "kind": "sequence",
+        "label": "Landfall permanents you control",
+        "map": null,
+        "max": 12,
+        "min": null,
+        "name": "sources",
+        "new_turn_carries_output": null,
+        "options": [
+          {
+            "label": "Lotus Cobra",
+            "scryfall_id": "a4b759f0-901f-4be3-93fa-224609b08d48",
+            "value": "lotus-cobra"
+          },
+          {
+            "label": "Nissa, Resurgent Animist",
+            "scryfall_id": "248c76d3-b5cb-4582-be17-7cd1d0cb0f58",
+            "value": "nissa-resurgent-animist"
+          },
+          {
+            "label": "Tatyova, Benthic Druid",
+            "scryfall_id": "eabc978a-0666-472d-bdc6-d4b29d29eca4",
+            "value": "tatyova-benthic-druid"
+          },
+          {
+            "label": "Aesi, Tyrant of Gyre Strait",
+            "scryfall_id": "673c21f8-02b6-4ac4-b2fc-df065b4ac662",
+            "value": "aesi-tyrant-of-gyre-strait"
+          },
+          {
+            "label": "Courser of Kruphix",
+            "scryfall_id": "dc63d2ea-a980-466e-9ebb-f28008f84c3d",
+            "value": "courser-of-kruphix"
+          },
+          {
+            "label": "Druid Class",
+            "scryfall_id": "09278e95-eaae-4cd4-a0d8-a2d15b0abb58",
+            "value": "druid-class"
+          },
+          {
+            "label": "Primeval Bounty",
+            "scryfall_id": "332c9742-dc3b-48e5-8736-7724fae1b4c4",
+            "value": "primeval-bounty"
+          },
+          {
+            "label": "Tannuk, Memorial Ensign",
+            "scryfall_id": "52498b7b-0389-4e7b-b29f-7ac86aab9229",
+            "value": "tannuk-memorial-ensign"
+          },
+          {
+            "label": "Tunneling Geopede",
+            "scryfall_id": "d4071152-5e64-4133-88a2-8fa5cb0eeb6c",
+            "value": "tunneling-geopede"
+          },
+          {
+            "label": "Sabotender",
+            "scryfall_id": "12df1295-8b08-4c8e-bac9-55b4f514c0be",
+            "value": "sabotender"
+          },
+          {
+            "label": "Iridescent Vinelasher",
+            "scryfall_id": "b2bc854c-4e72-48e0-a098-e3451d6e511d",
+            "value": "iridescent-vinelasher"
+          },
+          {
+            "label": "Ob Nixilis, the Fallen",
+            "scryfall_id": "dc9d3ada-9d0d-489a-89b7-08f53f6601e1",
+            "value": "ob-nixilis-the-fallen"
+          },
+          {
+            "label": "Rampaging Baloths",
+            "scryfall_id": "84aa18de-6acc-46cc-8e28-3046790a6751",
+            "value": "rampaging-baloths"
+          },
+          {
+            "label": "Zendikar's Roil",
+            "scryfall_id": "60297593-2438-48d7-9414-48af114a93d2",
+            "value": "zendikars-roil"
+          },
+          {
+            "label": "Omnath, Locus of Rage",
+            "scryfall_id": "637c5910-f835-496e-b1b9-445bfb71da97",
+            "value": "omnath-locus-of-rage"
+          },
+          {
+            "label": "Greensleeves, Maro-Sorcerer",
+            "scryfall_id": "0969d7f3-cec5-4118-adb1-ff957eedf6ab",
+            "value": "greensleeves-maro-sorcerer"
+          },
+          {
+            "label": "Emeria Angel",
+            "scryfall_id": "2406ab7c-c6be-421a-a92c-048441a01acd",
+            "value": "emeria-angel"
+          },
+          {
+            "label": "Tireless Provisioner",
+            "scryfall_id": "a1e048e0-19d2-4076-892d-f8b3104dee37",
+            "value": "tireless-provisioner"
+          },
+          {
+            "label": "Tireless Tracker",
+            "scryfall_id": "66444549-ad9b-49c6-a7c6-34e977c1085d",
+            "value": "tireless-tracker"
+          },
+          {
+            "label": "Scute Swarm",
+            "scryfall_id": "ea630ba1-22f9-4a10-bdc6-0d03128214f4",
+            "value": "scute-swarm"
+          },
+          {
+            "label": "Bristly Bill, Spine Sower",
+            "scryfall_id": "52eef0d6-24b7-40b7-8403-e8e863d0cd55",
+            "value": "bristly-bill-spine-sower"
+          },
+          {
+            "label": "Scythecat Cub",
+            "scryfall_id": "b3dd3c7d-4685-4579-b483-14ddaaaddf5b",
+            "value": "scythecat-cub"
+          },
+          {
+            "label": "Hedron Crab",
+            "scryfall_id": "d109b70e-862f-4d8a-8b40-ef6dc904868f",
+            "value": "hedron-crab"
+          },
+          {
+            "label": "Ruin Crab",
+            "scryfall_id": "738ce273-c938-42d2-83b2-c4f5f4000b0b",
+            "value": "ruin-crab"
+          },
+          {
+            "label": "Icetill Explorer",
+            "scryfall_id": "d9482aab-6ddf-48e1-84fa-b13d5ff81e69",
+            "value": "icetill-explorer"
+          },
+          {
+            "label": "Evolution Sage",
+            "scryfall_id": "1d58d08d-cd62-416d-8d8e-7d9c56d5c4da",
+            "value": "evolution-sage"
+          },
+          {
+            "label": "Moraug, Fury of Akoum",
+            "scryfall_id": "4481eab8-9e7d-4db8-b1f2-fdf5ee1919a2",
+            "value": "moraug-fury-of-akoum"
+          },
+          {
+            "label": "Bloodghast",
+            "scryfall_id": "cee85485-598f-4dfc-aa0b-7b1de86c7788",
+            "value": "bloodghast"
+          },
+          {
+            "label": "Valakut Exploration",
+            "scryfall_id": "18cb7bf6-9c7c-4e62-a678-7b75862e2f64",
+            "value": "valakut-exploration"
+          }
+        ],
+        "persists_across_turns": true,
+        "picker": {
+          "empty_label": "No landfall permanents yet -- search and add what you control.",
+          "search_placeholder": "Search landfall cards"
+        },
+        "roll": null,
+        "setup": true,
+        "short_label": "permanents",
+        "visible_if": null
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": 1,
+        "default_source": null,
+        "help_text": "1 normally. 2 with Ancient Greenwarden or another landfall doubler.",
+        "kind": "number",
+        "label": "Landfall triggers per land",
+        "map": null,
+        "max": 4,
+        "min": 1,
+        "name": "triggers_per_land",
+        "new_turn_carries_output": null,
+        "options": null,
+        "persists_across_turns": true,
+        "picker": null,
+        "roll": null,
+        "setup": true,
+        "short_label": "per land",
+        "visible_if": null
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": "Land enters",
+        "default": 0,
+        "default_source": null,
+        "help_text": "Any land entering under your control, not just your land drop -- a fetchland counts twice, once for itself and once for what it finds.",
+        "kind": "counter",
+        "label": "Lands entered this turn",
+        "map": null,
+        "max": 99,
+        "min": 0,
+        "name": "lands_this_turn",
+        "new_turn_carries_output": null,
+        "options": null,
+        "persists_across_turns": false,
+        "picker": null,
+        "roll": null,
+        "setup": false,
+        "short_label": "lands",
+        "visible_if": null
+      }
+    ],
+    "id": "landfall",
+    "name": "Landfall",
+    "outputs": [
+      {
+        "hero_shape": "list",
+        "hidden": false,
+        "kind": "lines",
+        "label": "What each land drop does",
+        "name": "effects",
+        "primary": true,
+        "short_label": "effects"
+      },
+      {
+        "hero_shape": "number",
+        "hidden": false,
+        "kind": "number",
+        "label": "Triggers this turn",
+        "name": "triggers",
+        "primary": false,
+        "short_label": "triggers"
+      },
+      {
+        "hero_shape": "number",
+        "hidden": false,
+        "kind": "number",
+        "label": "Cards drawn",
+        "name": "cards_drawn",
+        "primary": false,
+        "short_label": "cards"
+      },
+      {
+        "hero_shape": "number",
+        "hidden": false,
+        "kind": "number",
+        "label": "Life gained",
+        "name": "life_gained",
+        "primary": false,
+        "short_label": "life"
+      },
+      {
+        "hero_shape": "number",
+        "hidden": false,
+        "kind": "number",
+        "label": "Damage to each opponent",
+        "name": "damage_each_opponent",
+        "primary": false,
+        "short_label": "each opp"
+      },
+      {
+        "hero_shape": "number",
+        "hidden": false,
+        "kind": "number",
+        "label": "Tokens created",
+        "name": "tokens_created",
+        "primary": false,
+        "short_label": "tokens"
+      }
+    ],
+    "resets_on_new_turn": true,
+    "rules_text": "Landfall \u2014 Whenever a land you control enters, each landfall permanent you control triggers separately. They go on the stack together and you choose the order they resolve in. A few cards do something extra the second time their ability resolves in a turn, which is your second land drop, not your second permanent. Optional triggers are counted here as though you take them every time; modal landfall and effects that depend on board state the app cannot see are listed nowhere in this roster.",
+    "scryfall_id": null,
+    "show_hero_art": false
+  },
+  {
+    "alert": null,
+    "fields": [
+      {
+        "action_disabled_when": null,
         "action_label": "Found a pip",
         "default": 0,
         "default_source": null,
@@ -1767,6 +2147,8 @@
         "name": "devotion_count",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": false,
         "short_label": "devotion",
@@ -1817,6 +2199,8 @@
         "name": "existing_counters",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": true,
         "short_label": "counters",
@@ -1836,6 +2220,8 @@
         "name": "triggers_per_land",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": true,
         "short_label": "per land",
@@ -1855,6 +2241,8 @@
         "name": "lands_this_turn",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": false,
         "short_label": "lands",
@@ -1932,6 +2320,8 @@
         "name": "current_land_count",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": true,
         "short_label": "lands",
@@ -1951,6 +2341,8 @@
         "name": "scute_swarm_count",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": true,
         "short_label": "swarm",
@@ -1970,6 +2362,8 @@
         "name": "insect_token_count",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": true,
         "short_label": "insects",
@@ -1989,6 +2383,8 @@
         "name": "lands_played",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": false,
         "short_label": "played",
@@ -2061,6 +2457,8 @@
         "name": "target_life",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": true,
         "short_label": "their life",
@@ -2080,6 +2478,8 @@
         "name": "storm_count",
         "new_turn_carries_output": null,
         "options": null,
+        "persists_across_turns": false,
+        "picker": null,
         "roll": null,
         "setup": false,
         "short_label": "storm",

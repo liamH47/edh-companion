@@ -33,6 +33,25 @@ similar shape:
 | Kalonian Hydra | `kalonian_hydra.py` | Geometric compounding: a repeatable trigger that doubles a board-wide aggregate, where only part of the total participates |
 | Commander Tax | `commander_tax.py` | First cardless format mechanic: `scryfall_id=None`, allowlisted in `test_registry.py` |
 | Dungeons | `dungeons.py` | The `map` capability on a sequence: a walk through a room graph, rendered as a tappable dungeon map, legality validated on both sides; also the first `resets_on_new_turn=False` game-long tracker |
+| Landfall | `landfall.py` | First entry whose subject is an *interaction between* cards rather than one card: a roster of permanents (the `picker` capability on a sequence) and a `lines` output rendered as the `list` hero. The pattern to reuse for any "several things trigger at once" mechanic |
+
+**Landfall's roster is data, not code.** Each entry is a `_Source` row — label, Scryfall
+id, effect phrasing, per-resolution totals, and an optional second-resolution rider — so
+adding a card is one dict entry on each side and no new branches. Three deliberate
+exclusions, each because including them would mean guessing:
+
+- **Modal landfall** (Felidar Retreat, the Retreat cycle): "choose one" is a decision per
+  resolution, so any total would be wrong half the time. Modelling it would need a
+  per-resolution mode choice — a real feature, not a roster row.
+- **Board-state-conditional** (Field of the Dead's seven differently-named lands, Avenger
+  of Zendikar's Plant count): needs a board the app cannot see.
+- **Scute Swarm past six lands**, whose copies compound exponentially. Its own screen does
+  that arithmetic; the roster row states the flat case and points there.
+
+A Scryfall survey run 2026-08-21 found **214** cards that trigger on a land entering (189
+carrying the keyword, 25 wording it without). Roughly half have effects with no number
+attached at all — proliferate, mill, goad, extra combats — which is why an effect line with
+an empty `totals` is a first-class case rather than an oversight.
 
 **`storm.py`** is a shared non-card helper (the same supporting role `validation.py`
 plays), and it paid off exactly as predicted: Tendrils of Agony and Empty the Warrens

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import type { CardMetadata, FieldSpec, OutputSpec } from './types'
 import {
   defaultValues,
+  effectLines,
   formatNumber,
   heroFontSize,
   heroOutput,
@@ -29,6 +30,8 @@ function field(overrides: Partial<FieldSpec> & Pick<FieldSpec, 'name' | 'kind'>)
     action_disabled_when: null,
     roll: null,
     map: null,
+    picker: null,
+    persists_across_turns: false,
     new_turn_carries_output: null,
     setup: false,
     short_label: null,
@@ -272,15 +275,15 @@ describe('summarizeSetup', () => {
       name: 'mode',
       kind: 'select',
       options: [
-        { value: 'a', label: 'Mode A' },
-        { value: 'b', label: 'Mode B' },
+        { value: 'a', label: 'Mode A', scryfall_id: null },
+        { value: 'b', label: 'Mode B', scryfall_id: null },
       ],
     })
     expect(summarizeSetup([f], { mode: 'b' })).toEqual([{ name: 'mode', text: 'Mode B' }])
   })
 
   it('falls back to the field label for a select value with no matching option', () => {
-    const f = field({ name: 'mode', kind: 'select', label: 'Mode', options: [{ value: 'a', label: 'A' }] })
+    const f = field({ name: 'mode', kind: 'select', label: 'Mode', options: [{ value: 'a', label: 'A', scryfall_id: null }] })
     expect(summarizeSetup([f], { mode: 'missing' })).toEqual([{ name: 'mode', text: 'Mode' }])
   })
 
@@ -297,8 +300,8 @@ describe('summarizeSetup', () => {
       kind: 'sequence',
       short_label: 'rolls',
       options: [
-        { value: '1-2', label: '1–2' },
-        { value: '6', label: '6' },
+        { value: '1-2', label: '1–2', scryfall_id: null },
+        { value: '6', label: '6', scryfall_id: null },
       ],
     })
     expect(summarizeSetup([f], { rolls: ['1-2', '6', '6'] })).toEqual([
@@ -354,6 +357,29 @@ describe('heroOutput / nonPrimaryOutputs', () => {
       ],
     })
     expect(nonPrimaryOutputs(c).map((o) => o.name)).toEqual(['rooms'])
+  })
+})
+
+describe('effectLines', () => {
+  const row = { source: 'Lotus Cobra', effect: 'Add one mana of any color', note: '3 mana' }
+
+  it('reads well-formed rows back', () => {
+    expect(effectLines([row])).toEqual([row])
+  })
+
+  it('returns nothing for a value that is not a list', () => {
+    // The hero slot asks for lines on every render, including before the first compute.
+    expect(effectLines(undefined)).toEqual([])
+    expect(effectLines(null)).toEqual([])
+    expect(effectLines(7)).toEqual([])
+  })
+
+  it('drops rows of the wrong shape', () => {
+    // Crosses the persistence seam, so a roster saved by an older build could arrive
+    // as anything. Dropping beats rendering `undefined` into the readout.
+    expect(
+      effectLines([row, null, 'nope', { source: 'x' }, { ...row, note: 3 }]),
+    ).toEqual([row])
   })
 })
 

@@ -40,7 +40,7 @@ def test_get_card_returns_none_for_unknown_id() -> None:
 # Entries that are format mechanics rather than cards, so they have no Scryfall image
 # and no id. Listed explicitly and by name, so a *real* card added without a scryfall_id
 # still fails the check below instead of hiding among these.
-_FORMAT_MECHANIC_IDS = {"commander-tax", "dungeons"}
+_FORMAT_MECHANIC_IDS = {"commander-tax", "dungeons", "landfall"}
 
 
 def test_every_card_carries_a_scryfall_id() -> None:
@@ -65,3 +65,17 @@ def test_every_scryfall_id_is_a_uuid() -> None:
         if card.scryfall_id and not _UUID.match(card.scryfall_id)
     ]
     assert not malformed, f"malformed Scryfall ids: {malformed}"
+
+
+def test_every_option_scryfall_id_is_a_uuid() -> None:
+    # Options can name a card too (a landfall roster entry), and those ids reach the
+    # same image URL builder. A roster is long enough that one typo would otherwise
+    # only show up as a single broken thumbnail nobody scrolls to.
+    malformed = [
+        f"{card.id}.{field.name}.{option.value}={option.scryfall_id!r}"
+        for card in list_cards()
+        for field in card.fields
+        for option in field.options or []
+        if option.scryfall_id and not _UUID.match(option.scryfall_id)
+    ]
+    assert not malformed, f"malformed option Scryfall ids: {malformed}"

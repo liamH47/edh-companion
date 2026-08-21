@@ -46,6 +46,8 @@ function makeCard(overrides: Partial<CardMetadata> = {}): CardMetadata {
         action_disabled_when: null,
         roll: null,
     map: null,
+    picker: null,
+    persists_across_turns: false,
     new_turn_carries_output: null,
         setup: false,
         short_label: null,
@@ -182,6 +184,35 @@ describe('resetTurn', () => {
     act(() => result.current.setField('count', 7))
     act(() => result.current.resetTurn())
     expect(result.current.values).toEqual({ count: 0 })
+  })
+
+  it('leaves a persists_across_turns field exactly as it was', () => {
+    // Board state a turn boundary doesn't touch: the landfall permanents you control
+    // are still there next turn. Unlike a carry-over this takes no computed value --
+    // it just keeps what's there, which is the only thing that works for a list.
+    const card = makeCard()
+    card.fields[0].persists_across_turns = true
+    card.fields[0].max = null
+    const { result } = renderHook(() => useCardSession(card))
+    act(() => result.current.setField('count', 7))
+
+    act(() => result.current.resetTurn())
+    expect(result.current.values).toEqual({ count: 7 })
+  })
+
+  it('resets the fields around a persisting one', () => {
+    const card = makeCard()
+    card.fields = [
+      { ...card.fields[0], name: 'roster', persists_across_turns: true, default: [] },
+      { ...card.fields[0], name: 'lands', default: 0 },
+    ]
+    const { result } = renderHook(() => useCardSession(card))
+    act(() => result.current.setField('roster', ['lotus-cobra']))
+    act(() => result.current.setField('lands', 3))
+
+    act(() => result.current.resetTurn())
+    // The roster survives the turn; the per-turn tally does not.
+    expect(result.current.values).toEqual({ roster: ['lotus-cobra'], lands: 0 })
   })
 })
 

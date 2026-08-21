@@ -24,6 +24,8 @@ function field(overrides: Partial<FieldSpec> & Pick<FieldSpec, 'name' | 'kind'>)
     action_disabled_when: null,
     roll: null,
     map: null,
+    picker: null,
+    persists_across_turns: false,
     new_turn_carries_output: null,
     setup: false,
     short_label: null,
@@ -64,8 +66,8 @@ describe('validateInputs', () => {
         kind: 'select',
         default: 'a',
         options: [
-          { value: 'a', label: 'A' },
-          { value: 'b', label: 'B' },
+          { value: 'a', label: 'A', scryfall_id: null },
+          { value: 'b', label: 'B', scryfall_id: null },
         ],
       }),
     ]
@@ -96,28 +98,28 @@ describe('type failures the corpus cannot reach', () => {
 
   it('rejects a non-string for a select field', () => {
     const fields = [
-      field({ name: 'mode', kind: 'select', options: [{ value: 'a', label: 'A' }] }),
+      field({ name: 'mode', kind: 'select', options: [{ value: 'a', label: 'A', scryfall_id: null }] }),
     ]
     expect(codeFor(fields, { mode: 1 })).toBe('mode/not_string')
   })
 
   it('rejects a value outside a select field options', () => {
     const fields = [
-      field({ name: 'mode', kind: 'select', options: [{ value: 'a', label: 'A' }] }),
+      field({ name: 'mode', kind: 'select', options: [{ value: 'a', label: 'A', scryfall_id: null }] }),
     ]
     expect(codeFor(fields, { mode: 'b' })).toBe('mode/not_in_options')
   })
 
   it('rejects a non-array for a sequence field', () => {
     const fields = [
-      field({ name: 'rolls', kind: 'sequence', options: [{ value: '1', label: '1' }] }),
+      field({ name: 'rolls', kind: 'sequence', options: [{ value: '1', label: '1', scryfall_id: null }] }),
     ]
     expect(codeFor(fields, { rolls: '1' })).toBe('rolls/not_list')
   })
 
   it('rejects a sequence entry outside the options', () => {
     const fields = [
-      field({ name: 'rolls', kind: 'sequence', options: [{ value: '1', label: '1' }] }),
+      field({ name: 'rolls', kind: 'sequence', options: [{ value: '1', label: '1', scryfall_id: null }] }),
     ]
     expect(codeFor(fields, { rolls: ['1', '9'] })).toBe('rolls/entry_not_in_options')
     expect(codeFor(fields, { rolls: [1] })).toBe('rolls/entry_not_in_options')
@@ -125,7 +127,7 @@ describe('type failures the corpus cannot reach', () => {
 
   it('rejects a sequence longer than the declared cap', () => {
     const fields = [
-      field({ name: 'rolls', kind: 'sequence', max: 2, options: [{ value: '1', label: '1' }] }),
+      field({ name: 'rolls', kind: 'sequence', max: 2, options: [{ value: '1', label: '1', scryfall_id: null }] }),
     ]
     expect(codeFor(fields, { rolls: ['1', '1', '1'] })).toBe('rolls/too_long')
   })
@@ -169,7 +171,7 @@ describe('sequence copying', () => {
         name: 'rolls',
         kind: 'sequence',
         default: shared,
-        options: [{ value: '1', label: '1' }],
+        options: [{ value: '1', label: '1', scryfall_id: null }],
       }),
     ]
     const validated = validateInputs(fields, {}) as { rolls: string[] }

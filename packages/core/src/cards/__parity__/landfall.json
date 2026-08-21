@@ -1,0 +1,2635 @@
+{
+  "cardId": "landfall",
+  "cases": [
+    {
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [],
+        "triggers_per_land": 1
+      },
+      "outputs": {
+        "cards_drawn": 0,
+        "damage_each_opponent": 0,
+        "effects": [],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 1
+      },
+      "outputs": {
+        "cards_drawn": 0,
+        "damage_each_opponent": 0,
+        "effects": [
+          {
+            "effect": "Add one mana of any color",
+            "note": "on your next land",
+            "source": "Lotus Cobra"
+          }
+        ],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "lotus-cobra",
+          "tatyova-benthic-druid",
+          "tannuk-memorial-ensign"
+        ],
+        "triggers_per_land": 1
+      },
+      "outputs": {
+        "cards_drawn": 0,
+        "damage_each_opponent": 0,
+        "effects": [
+          {
+            "effect": "Add one mana of any color",
+            "note": "on your next land",
+            "source": "Lotus Cobra"
+          },
+          {
+            "effect": "Gain 1 life and draw a card",
+            "note": "on your next land",
+            "source": "Tatyova, Benthic Druid"
+          },
+          {
+            "effect": "1 damage to each opponent (2nd resolution also draws)",
+            "note": "on your next land",
+            "source": "Tannuk, Memorial Ensign"
+          }
+        ],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 1
+      },
+      "outputs": {
+        "cards_drawn": 0,
+        "damage_each_opponent": 0,
+        "effects": [
+          {
+            "effect": "Add one mana of any color",
+            "note": "on your next land",
+            "source": "Lotus Cobra x2"
+          }
+        ],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "tannuk-memorial-ensign",
+          "nissa-resurgent-animist",
+          "scythecat-cub"
+        ],
+        "triggers_per_land": 1
+      },
+      "outputs": {
+        "cards_drawn": 0,
+        "damage_each_opponent": 0,
+        "effects": [
+          {
+            "effect": "1 damage to each opponent (2nd resolution also draws)",
+            "note": "on your next land",
+            "source": "Tannuk, Memorial Ensign"
+          },
+          {
+            "effect": "Add one mana of any color (2nd resolution digs for an Elf or Elemental)",
+            "note": "on your next land",
+            "source": "Nissa, Resurgent Animist"
+          },
+          {
+            "effect": "Put a +1/+1 counter on target creature (2nd resolution doubles instead)",
+            "note": "on your next land",
+            "source": "Scythecat Cub"
+          }
+        ],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "evolution-sage",
+          "moraug-fury-of-akoum",
+          "bloodghast"
+        ],
+        "triggers_per_land": 1
+      },
+      "outputs": {
+        "cards_drawn": 0,
+        "damage_each_opponent": 0,
+        "effects": [
+          {
+            "effect": "Proliferate",
+            "note": "on your next land",
+            "source": "Evolution Sage"
+          },
+          {
+            "effect": "An extra combat phase, if it's your main phase",
+            "note": "on your next land",
+            "source": "Moraug, Fury of Akoum"
+          },
+          {
+            "effect": "May return it from your graveyard to the battlefield",
+            "note": "on your next land",
+            "source": "Bloodghast"
+          }
+        ],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "ob-nixilis-the-fallen",
+          "ruin-crab",
+          "hedron-crab",
+          "icetill-explorer"
+        ],
+        "triggers_per_land": 1
+      },
+      "outputs": {
+        "cards_drawn": 0,
+        "damage_each_opponent": 0,
+        "effects": [
+          {
+            "effect": "May drain a player for 3, then grow by three +1/+1 counters",
+            "note": "on your next land",
+            "source": "Ob Nixilis, the Fallen"
+          },
+          {
+            "effect": "Each opponent mills three",
+            "note": "on your next land",
+            "source": "Ruin Crab"
+          },
+          {
+            "effect": "Target player mills three",
+            "note": "on your next land",
+            "source": "Hedron Crab"
+          },
+          {
+            "effect": "Mill a card",
+            "note": "on your next land",
+            "source": "Icetill Explorer"
+          }
+        ],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "entry_not_in_options",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "not-a-landfall-card"
+        ],
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "too_long",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [],
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "lotus-cobra",
+          "tatyova-benthic-druid",
+          "tannuk-memorial-ensign"
+        ],
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "tannuk-memorial-ensign",
+          "nissa-resurgent-animist",
+          "scythecat-cub"
+        ],
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "evolution-sage",
+          "moraug-fury-of-akoum",
+          "bloodghast"
+        ],
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "ob-nixilis-the-fallen",
+          "ruin-crab",
+          "hedron-crab",
+          "icetill-explorer"
+        ],
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "entry_not_in_options",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "not-a-landfall-card"
+        ],
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "too_long",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [],
+        "triggers_per_land": 1
+      },
+      "outputs": {
+        "cards_drawn": 0,
+        "damage_each_opponent": 0,
+        "effects": [],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 1
+      },
+      "outputs": {
+        "cards_drawn": 0,
+        "damage_each_opponent": 0,
+        "effects": [
+          {
+            "effect": "Add one mana of any color",
+            "note": "99 mana",
+            "source": "Lotus Cobra"
+          }
+        ],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 99
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "lotus-cobra",
+          "tatyova-benthic-druid",
+          "tannuk-memorial-ensign"
+        ],
+        "triggers_per_land": 1
+      },
+      "outputs": {
+        "cards_drawn": 100,
+        "damage_each_opponent": 99,
+        "effects": [
+          {
+            "effect": "Add one mana of any color",
+            "note": "99 mana",
+            "source": "Lotus Cobra"
+          },
+          {
+            "effect": "Gain 1 life and draw a card",
+            "note": "99 cards \u00b7 99 life",
+            "source": "Tatyova, Benthic Druid"
+          },
+          {
+            "effect": "1 damage to each opponent (2nd resolution also draws)",
+            "note": "1 card \u00b7 99 damage to each opponent \u00b7 2nd resolution drew a card",
+            "source": "Tannuk, Memorial Ensign"
+          }
+        ],
+        "life_gained": 99,
+        "tokens_created": 0,
+        "triggers": 297
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 1
+      },
+      "outputs": {
+        "cards_drawn": 0,
+        "damage_each_opponent": 0,
+        "effects": [
+          {
+            "effect": "Add one mana of any color",
+            "note": "198 mana",
+            "source": "Lotus Cobra x2"
+          }
+        ],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 198
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "tannuk-memorial-ensign",
+          "nissa-resurgent-animist",
+          "scythecat-cub"
+        ],
+        "triggers_per_land": 1
+      },
+      "outputs": {
+        "cards_drawn": 1,
+        "damage_each_opponent": 99,
+        "effects": [
+          {
+            "effect": "1 damage to each opponent (2nd resolution also draws)",
+            "note": "1 card \u00b7 99 damage to each opponent \u00b7 2nd resolution drew a card",
+            "source": "Tannuk, Memorial Ensign"
+          },
+          {
+            "effect": "Add one mana of any color (2nd resolution digs for an Elf or Elemental)",
+            "note": "99 mana \u00b7 2nd resolution dug for an Elf or Elemental",
+            "source": "Nissa, Resurgent Animist"
+          },
+          {
+            "effect": "Put a +1/+1 counter on target creature (2nd resolution doubles instead)",
+            "note": "99 counters \u00b7 2nd resolution doubled that creature's counters instead",
+            "source": "Scythecat Cub"
+          }
+        ],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 297
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "evolution-sage",
+          "moraug-fury-of-akoum",
+          "bloodghast"
+        ],
+        "triggers_per_land": 1
+      },
+      "outputs": {
+        "cards_drawn": 0,
+        "damage_each_opponent": 0,
+        "effects": [
+          {
+            "effect": "Proliferate",
+            "note": "x99",
+            "source": "Evolution Sage"
+          },
+          {
+            "effect": "An extra combat phase, if it's your main phase",
+            "note": "x99",
+            "source": "Moraug, Fury of Akoum"
+          },
+          {
+            "effect": "May return it from your graveyard to the battlefield",
+            "note": "x99",
+            "source": "Bloodghast"
+          }
+        ],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 297
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "ob-nixilis-the-fallen",
+          "ruin-crab",
+          "hedron-crab",
+          "icetill-explorer"
+        ],
+        "triggers_per_land": 1
+      },
+      "outputs": {
+        "cards_drawn": 0,
+        "damage_each_opponent": 0,
+        "effects": [
+          {
+            "effect": "May drain a player for 3, then grow by three +1/+1 counters",
+            "note": "297 life lost \u00b7 297 counters",
+            "source": "Ob Nixilis, the Fallen"
+          },
+          {
+            "effect": "Each opponent mills three",
+            "note": "297 milled by each opponent",
+            "source": "Ruin Crab"
+          },
+          {
+            "effect": "Target player mills three",
+            "note": "297 milled by a player",
+            "source": "Hedron Crab"
+          },
+          {
+            "effect": "Mill a card",
+            "note": "99 milled",
+            "source": "Icetill Explorer"
+          }
+        ],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 396
+      }
+    },
+    {
+      "error": {
+        "code": "entry_not_in_options",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "not-a-landfall-card"
+        ],
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "too_long",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [],
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "lotus-cobra",
+          "tatyova-benthic-druid",
+          "tannuk-memorial-ensign"
+        ],
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "tannuk-memorial-ensign",
+          "nissa-resurgent-animist",
+          "scythecat-cub"
+        ],
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "evolution-sage",
+          "moraug-fury-of-akoum",
+          "bloodghast"
+        ],
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "ob-nixilis-the-fallen",
+          "ruin-crab",
+          "hedron-crab",
+          "icetill-explorer"
+        ],
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "entry_not_in_options",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "not-a-landfall-card"
+        ],
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "too_long",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "lotus-cobra",
+          "tatyova-benthic-druid",
+          "tannuk-memorial-ensign"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "tannuk-memorial-ensign",
+          "nissa-resurgent-animist",
+          "scythecat-cub"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "evolution-sage",
+          "moraug-fury-of-akoum",
+          "bloodghast"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "ob-nixilis-the-fallen",
+          "ruin-crab",
+          "hedron-crab",
+          "icetill-explorer"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "entry_not_in_options",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "not-a-landfall-card"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "too_long",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "lotus-cobra",
+          "tatyova-benthic-druid",
+          "tannuk-memorial-ensign"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "tannuk-memorial-ensign",
+          "nissa-resurgent-animist",
+          "scythecat-cub"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "evolution-sage",
+          "moraug-fury-of-akoum",
+          "bloodghast"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "ob-nixilis-the-fallen",
+          "ruin-crab",
+          "hedron-crab",
+          "icetill-explorer"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "entry_not_in_options",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "not-a-landfall-card"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "too_long",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "lotus-cobra",
+          "tatyova-benthic-druid",
+          "tannuk-memorial-ensign"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "tannuk-memorial-ensign",
+          "nissa-resurgent-animist",
+          "scythecat-cub"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "evolution-sage",
+          "moraug-fury-of-akoum",
+          "bloodghast"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "ob-nixilis-the-fallen",
+          "ruin-crab",
+          "hedron-crab",
+          "icetill-explorer"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "entry_not_in_options",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "not-a-landfall-card"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "too_long",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "lotus-cobra",
+          "tatyova-benthic-druid",
+          "tannuk-memorial-ensign"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "tannuk-memorial-ensign",
+          "nissa-resurgent-animist",
+          "scythecat-cub"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "evolution-sage",
+          "moraug-fury-of-akoum",
+          "bloodghast"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "ob-nixilis-the-fallen",
+          "ruin-crab",
+          "hedron-crab",
+          "icetill-explorer"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "entry_not_in_options",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "not-a-landfall-card"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "error": {
+        "code": "too_long",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 0
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [],
+        "triggers_per_land": 4
+      },
+      "outputs": {
+        "cards_drawn": 0,
+        "damage_each_opponent": 0,
+        "effects": [],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 4
+      },
+      "outputs": {
+        "cards_drawn": 0,
+        "damage_each_opponent": 0,
+        "effects": [
+          {
+            "effect": "Add one mana of any color",
+            "note": "on your next land",
+            "source": "Lotus Cobra"
+          }
+        ],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "lotus-cobra",
+          "tatyova-benthic-druid",
+          "tannuk-memorial-ensign"
+        ],
+        "triggers_per_land": 4
+      },
+      "outputs": {
+        "cards_drawn": 0,
+        "damage_each_opponent": 0,
+        "effects": [
+          {
+            "effect": "Add one mana of any color",
+            "note": "on your next land",
+            "source": "Lotus Cobra"
+          },
+          {
+            "effect": "Gain 1 life and draw a card",
+            "note": "on your next land",
+            "source": "Tatyova, Benthic Druid"
+          },
+          {
+            "effect": "1 damage to each opponent (2nd resolution also draws)",
+            "note": "on your next land",
+            "source": "Tannuk, Memorial Ensign"
+          }
+        ],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 4
+      },
+      "outputs": {
+        "cards_drawn": 0,
+        "damage_each_opponent": 0,
+        "effects": [
+          {
+            "effect": "Add one mana of any color",
+            "note": "on your next land",
+            "source": "Lotus Cobra x2"
+          }
+        ],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "tannuk-memorial-ensign",
+          "nissa-resurgent-animist",
+          "scythecat-cub"
+        ],
+        "triggers_per_land": 4
+      },
+      "outputs": {
+        "cards_drawn": 0,
+        "damage_each_opponent": 0,
+        "effects": [
+          {
+            "effect": "1 damage to each opponent (2nd resolution also draws)",
+            "note": "on your next land",
+            "source": "Tannuk, Memorial Ensign"
+          },
+          {
+            "effect": "Add one mana of any color (2nd resolution digs for an Elf or Elemental)",
+            "note": "on your next land",
+            "source": "Nissa, Resurgent Animist"
+          },
+          {
+            "effect": "Put a +1/+1 counter on target creature (2nd resolution doubles instead)",
+            "note": "on your next land",
+            "source": "Scythecat Cub"
+          }
+        ],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "evolution-sage",
+          "moraug-fury-of-akoum",
+          "bloodghast"
+        ],
+        "triggers_per_land": 4
+      },
+      "outputs": {
+        "cards_drawn": 0,
+        "damage_each_opponent": 0,
+        "effects": [
+          {
+            "effect": "Proliferate",
+            "note": "on your next land",
+            "source": "Evolution Sage"
+          },
+          {
+            "effect": "An extra combat phase, if it's your main phase",
+            "note": "on your next land",
+            "source": "Moraug, Fury of Akoum"
+          },
+          {
+            "effect": "May return it from your graveyard to the battlefield",
+            "note": "on your next land",
+            "source": "Bloodghast"
+          }
+        ],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "ob-nixilis-the-fallen",
+          "ruin-crab",
+          "hedron-crab",
+          "icetill-explorer"
+        ],
+        "triggers_per_land": 4
+      },
+      "outputs": {
+        "cards_drawn": 0,
+        "damage_each_opponent": 0,
+        "effects": [
+          {
+            "effect": "May drain a player for 3, then grow by three +1/+1 counters",
+            "note": "on your next land",
+            "source": "Ob Nixilis, the Fallen"
+          },
+          {
+            "effect": "Each opponent mills three",
+            "note": "on your next land",
+            "source": "Ruin Crab"
+          },
+          {
+            "effect": "Target player mills three",
+            "note": "on your next land",
+            "source": "Hedron Crab"
+          },
+          {
+            "effect": "Mill a card",
+            "note": "on your next land",
+            "source": "Icetill Explorer"
+          }
+        ],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "entry_not_in_options",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "not-a-landfall-card"
+        ],
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "too_long",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [],
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "lotus-cobra",
+          "tatyova-benthic-druid",
+          "tannuk-memorial-ensign"
+        ],
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "tannuk-memorial-ensign",
+          "nissa-resurgent-animist",
+          "scythecat-cub"
+        ],
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "evolution-sage",
+          "moraug-fury-of-akoum",
+          "bloodghast"
+        ],
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "ob-nixilis-the-fallen",
+          "ruin-crab",
+          "hedron-crab",
+          "icetill-explorer"
+        ],
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "entry_not_in_options",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "not-a-landfall-card"
+        ],
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "too_long",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [],
+        "triggers_per_land": 4
+      },
+      "outputs": {
+        "cards_drawn": 0,
+        "damage_each_opponent": 0,
+        "effects": [],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 4
+      },
+      "outputs": {
+        "cards_drawn": 0,
+        "damage_each_opponent": 0,
+        "effects": [
+          {
+            "effect": "Add one mana of any color",
+            "note": "396 mana",
+            "source": "Lotus Cobra"
+          }
+        ],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 396
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "lotus-cobra",
+          "tatyova-benthic-druid",
+          "tannuk-memorial-ensign"
+        ],
+        "triggers_per_land": 4
+      },
+      "outputs": {
+        "cards_drawn": 397,
+        "damage_each_opponent": 396,
+        "effects": [
+          {
+            "effect": "Add one mana of any color",
+            "note": "396 mana",
+            "source": "Lotus Cobra"
+          },
+          {
+            "effect": "Gain 1 life and draw a card",
+            "note": "396 cards \u00b7 396 life",
+            "source": "Tatyova, Benthic Druid"
+          },
+          {
+            "effect": "1 damage to each opponent (2nd resolution also draws)",
+            "note": "1 card \u00b7 396 damage to each opponent \u00b7 2nd resolution drew a card",
+            "source": "Tannuk, Memorial Ensign"
+          }
+        ],
+        "life_gained": 396,
+        "tokens_created": 0,
+        "triggers": 1188
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 4
+      },
+      "outputs": {
+        "cards_drawn": 0,
+        "damage_each_opponent": 0,
+        "effects": [
+          {
+            "effect": "Add one mana of any color",
+            "note": "792 mana",
+            "source": "Lotus Cobra x2"
+          }
+        ],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 792
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "tannuk-memorial-ensign",
+          "nissa-resurgent-animist",
+          "scythecat-cub"
+        ],
+        "triggers_per_land": 4
+      },
+      "outputs": {
+        "cards_drawn": 1,
+        "damage_each_opponent": 396,
+        "effects": [
+          {
+            "effect": "1 damage to each opponent (2nd resolution also draws)",
+            "note": "1 card \u00b7 396 damage to each opponent \u00b7 2nd resolution drew a card",
+            "source": "Tannuk, Memorial Ensign"
+          },
+          {
+            "effect": "Add one mana of any color (2nd resolution digs for an Elf or Elemental)",
+            "note": "396 mana \u00b7 2nd resolution dug for an Elf or Elemental",
+            "source": "Nissa, Resurgent Animist"
+          },
+          {
+            "effect": "Put a +1/+1 counter on target creature (2nd resolution doubles instead)",
+            "note": "396 counters \u00b7 2nd resolution doubled that creature's counters instead",
+            "source": "Scythecat Cub"
+          }
+        ],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 1188
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "evolution-sage",
+          "moraug-fury-of-akoum",
+          "bloodghast"
+        ],
+        "triggers_per_land": 4
+      },
+      "outputs": {
+        "cards_drawn": 0,
+        "damage_each_opponent": 0,
+        "effects": [
+          {
+            "effect": "Proliferate",
+            "note": "x396",
+            "source": "Evolution Sage"
+          },
+          {
+            "effect": "An extra combat phase, if it's your main phase",
+            "note": "x396",
+            "source": "Moraug, Fury of Akoum"
+          },
+          {
+            "effect": "May return it from your graveyard to the battlefield",
+            "note": "x396",
+            "source": "Bloodghast"
+          }
+        ],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 1188
+      }
+    },
+    {
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "ob-nixilis-the-fallen",
+          "ruin-crab",
+          "hedron-crab",
+          "icetill-explorer"
+        ],
+        "triggers_per_land": 4
+      },
+      "outputs": {
+        "cards_drawn": 0,
+        "damage_each_opponent": 0,
+        "effects": [
+          {
+            "effect": "May drain a player for 3, then grow by three +1/+1 counters",
+            "note": "1188 life lost \u00b7 1188 counters",
+            "source": "Ob Nixilis, the Fallen"
+          },
+          {
+            "effect": "Each opponent mills three",
+            "note": "1188 milled by each opponent",
+            "source": "Ruin Crab"
+          },
+          {
+            "effect": "Target player mills three",
+            "note": "1188 milled by a player",
+            "source": "Hedron Crab"
+          },
+          {
+            "effect": "Mill a card",
+            "note": "396 milled",
+            "source": "Icetill Explorer"
+          }
+        ],
+        "life_gained": 0,
+        "tokens_created": 0,
+        "triggers": 1584
+      }
+    },
+    {
+      "error": {
+        "code": "entry_not_in_options",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "not-a-landfall-card"
+        ],
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "too_long",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [],
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "lotus-cobra",
+          "tatyova-benthic-druid",
+          "tannuk-memorial-ensign"
+        ],
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "tannuk-memorial-ensign",
+          "nissa-resurgent-animist",
+          "scythecat-cub"
+        ],
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "evolution-sage",
+          "moraug-fury-of-akoum",
+          "bloodghast"
+        ],
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "lands_this_turn"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "ob-nixilis-the-fallen",
+          "ruin-crab",
+          "hedron-crab",
+          "icetill-explorer"
+        ],
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "entry_not_in_options",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "not-a-landfall-card"
+        ],
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "too_long",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 4
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "lotus-cobra",
+          "tatyova-benthic-druid",
+          "tannuk-memorial-ensign"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "tannuk-memorial-ensign",
+          "nissa-resurgent-animist",
+          "scythecat-cub"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "evolution-sage",
+          "moraug-fury-of-akoum",
+          "bloodghast"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "ob-nixilis-the-fallen",
+          "ruin-crab",
+          "hedron-crab",
+          "icetill-explorer"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "entry_not_in_options",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "not-a-landfall-card"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "too_long",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": 0,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "lotus-cobra",
+          "tatyova-benthic-druid",
+          "tannuk-memorial-ensign"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "tannuk-memorial-ensign",
+          "nissa-resurgent-animist",
+          "scythecat-cub"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "evolution-sage",
+          "moraug-fury-of-akoum",
+          "bloodghast"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "ob-nixilis-the-fallen",
+          "ruin-crab",
+          "hedron-crab",
+          "icetill-explorer"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "entry_not_in_options",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "not-a-landfall-card"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "too_long",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": -1,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "lotus-cobra",
+          "tatyova-benthic-druid",
+          "tannuk-memorial-ensign"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "tannuk-memorial-ensign",
+          "nissa-resurgent-animist",
+          "scythecat-cub"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "evolution-sage",
+          "moraug-fury-of-akoum",
+          "bloodghast"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "ob-nixilis-the-fallen",
+          "ruin-crab",
+          "hedron-crab",
+          "icetill-explorer"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "entry_not_in_options",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "not-a-landfall-card"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "too_long",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": 99,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "lotus-cobra",
+          "tatyova-benthic-druid",
+          "tannuk-memorial-ensign"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "tannuk-memorial-ensign",
+          "nissa-resurgent-animist",
+          "scythecat-cub"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "evolution-sage",
+          "moraug-fury-of-akoum",
+          "bloodghast"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers_per_land"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "ob-nixilis-the-fallen",
+          "ruin-crab",
+          "hedron-crab",
+          "icetill-explorer"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "entry_not_in_options",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "not-a-landfall-card"
+        ],
+        "triggers_per_land": 5
+      }
+    },
+    {
+      "error": {
+        "code": "too_long",
+        "field": "sources"
+      },
+      "inputs": {
+        "lands_this_turn": 100,
+        "sources": [
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra",
+          "lotus-cobra"
+        ],
+        "triggers_per_land": 5
+      }
+    }
+  ],
+  "generatedFrom": "backend/app/cards/landfall.py",
+  "note": "Generated by backend/tools/generate_parity_corpus.py. Do not edit by hand."
+}

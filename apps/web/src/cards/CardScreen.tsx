@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { heroOutput, nonPrimaryOutputs, splitFields } from '@mtg/core'
+import { effectLines, heroOutput, nonPrimaryOutputs, splitFields } from '@mtg/core'
 import { useCardSession } from '@mtg/core'
 import type { CardMetadata } from '@mtg/core'
 import { ChevronLeftIcon, InfoIcon } from '../ui/Icon'
@@ -11,6 +11,7 @@ import { AlertBanner } from './AlertBanner'
 import { FieldControl } from './FieldControl'
 import { CardArtHero } from './CardArtHero'
 import { CardImage } from './CardImage'
+import { EffectList } from './EffectList'
 import { HeroStat } from './HeroStat'
 import { LoyaltyShield } from './LoyaltyShield'
 import { CardDetailSheet } from './CardDetailSheet'
@@ -53,6 +54,13 @@ export function CardScreen({ card, onBack }: CardScreenProps) {
 
   const hero = heroOutput(card)
   const heroValue = typeof session.outputs?.[hero.name] === 'number' ? (session.outputs[hero.name] as number) : 0
+  // A list hero reads its rows instead of a number. The schema keeps `kind: 'lines'`
+  // and `hero_shape: 'list'` declared together, so either flag identifies it.
+  const heroLines = hero.hero_shape === 'list' ? effectLines(session.outputs?.[hero.name]) : []
+  // An empty list means an empty roster, so the picker's own empty text is the useful
+  // thing to say -- read off the schema rather than hardcoded per card.
+  const rosterEmptyLabel =
+    card.fields.find((field) => field.picker)?.picker?.empty_label ?? 'Nothing to show yet.'
 
   return (
     <section className="flex flex-col gap-4">
@@ -102,7 +110,26 @@ export function CardScreen({ card, onBack }: CardScreenProps) {
           loyalty drawn over its printed loyalty box (a recorded decision -- see
           cardImage.ts) and a standalone-shield fallback offline. Art without a shield
           keeps a small image beside the plain hero. */}
-      {hasMappedField ? (
+      {hero.hero_shape === 'list' ? (
+        /* A list hero is itself the tall content, so the supporting numbers compress
+           into one compact row above it -- the same shape a mapped field takes, and for
+           the same reason: the thing the player reads on a land drop belongs near the
+           top, not below a column of tiles. */
+        <>
+          <StatStrip
+            outputs={nonPrimaryOutputs(card)}
+            values={session.outputs}
+            pending={session.pending}
+            compact
+          />
+          <EffectList
+            label={hero.label}
+            lines={heroLines}
+            pending={session.pending}
+            emptyLabel={rosterEmptyLabel}
+          />
+        </>
+      ) : hasMappedField ? (
         <div className="flex flex-wrap items-center justify-center gap-2">
           <HeroStat
             label={hero.short_label ?? hero.label}
