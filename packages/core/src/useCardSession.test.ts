@@ -58,6 +58,7 @@ function makeCard(overrides: Partial<CardMetadata> = {}): CardMetadata {
         short_label: null,
         primary: true,
         hero_shape: 'number',
+        hidden: false,
       }],
     alert: null,
     ...overrides,

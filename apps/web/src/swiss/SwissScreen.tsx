@@ -29,7 +29,11 @@ interface SwissScreenProps {
 export function SwissScreen({ rng = Math.random, onExit }: SwissScreenProps = {}) {
   const session = useTournament(rng)
   const [view, setView] = useState<View>('round')
-  const [visibleRound, setVisibleRound] = useState(1)
+  // Resume on the round in progress, not round 1: a refresh mid-event reloads the
+  // tournament from storage, and landing the TO back on R1 reads as lost data.
+  const [visibleRound, setVisibleRound] = useState(
+    () => session.tournament?.rounds.length || 1,
+  )
   const [managingEntrants, setManagingEntrants] = useState(false)
 
   const { tournament } = session

@@ -149,6 +149,34 @@ export function TrophyIcon(props: ConcreteIconProps) {
   )
 }
 
+export function SunIcon(props: ConcreteIconProps) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+    </Icon>
+  )
+}
+
+export function MoonIcon(props: ConcreteIconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" />
+    </Icon>
+  )
+}
+
+/** Two fanned card backs -- the stand-in for entries no single printed card
+ * represents (a format mechanic, a tracker shared by several cards). */
+export function CardsIcon(props: ConcreteIconProps) {
+  return (
+    <Icon {...props}>
+      <rect x="4" y="6" width="10" height="14" rx="1.5" />
+      <path d="M10 4h8a2 2 0 0 1 2 2v11" />
+    </Icon>
+  )
+}
+
 export function SpeakerIcon(props: ConcreteIconProps) {
   return (
     <Icon {...props}>

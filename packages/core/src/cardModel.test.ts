@@ -43,6 +43,7 @@ function output(overrides: Partial<OutputSpec> & Pick<OutputSpec, 'name'>): Outp
     short_label: null,
     primary: false,
     hero_shape: 'number',
+    hidden: false,
     ...overrides,
   }
 }
@@ -340,6 +341,19 @@ describe('heroOutput / nonPrimaryOutputs', () => {
   it('returns an empty array of non-primary outputs for a single-output card', () => {
     const c = card({ outputs: [output({ name: 'only' })] })
     expect(nonPrimaryOutputs(c)).toEqual([])
+  })
+
+  it('leaves hidden guard-feed outputs out of the strip', () => {
+    // Dungeons' at_bottom_room: computed for the ActionGuard, but the map marker and
+    // the completion banner already say it -- no tile.
+    const c = card({
+      outputs: [
+        output({ name: 'tally', primary: true }),
+        output({ name: 'rooms' }),
+        output({ name: 'at_bottom', hidden: true }),
+      ],
+    })
+    expect(nonPrimaryOutputs(c).map((o) => o.name)).toEqual(['rooms'])
   })
 })
 

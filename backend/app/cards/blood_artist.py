@@ -13,6 +13,7 @@ METADATA = CardMetadata(
     id="blood-artist",
     name="Blood Artist",
     scryfall_id="b5275d76-2947-4219-be21-614c7421614a",
+    show_hero_art=True,
     rules_text=(
         "Whenever this creature or another creature dies, target player loses 1 life and "
         "you gain 1 life."

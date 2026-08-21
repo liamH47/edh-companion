@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { createPodSession, generateNextRound, savePodSession } from '@mtg/core/pods'
 import { PodsScreen } from './PodsScreen'
 
 afterEach(() => {
@@ -70,5 +71,16 @@ describe('PodsScreen', () => {
 
     await user.click(screen.getByRole('button', { name: '‹ Pairings' }))
     expect(onBack).toHaveBeenCalled()
+  })
+
+  it('resumes on the latest round, not round 1', () => {
+    // A refresh mid-night reloads the session from storage; the current seating is
+    // the only round anyone is looking for.
+    savePodSession(
+      generateNextRound(generateNextRound(createPodSession(['Ava', 'Ben', 'Cara', 'Dev']), rng), rng),
+    )
+    render(<PodsScreen onBack={vi.fn()} rng={rng} />)
+    expect(screen.getByRole('heading', { name: 'Round 2' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'R2' })).toHaveAttribute('aria-current', 'page')
   })
 })

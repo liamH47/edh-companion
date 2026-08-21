@@ -195,6 +195,47 @@ def test_card_metadata_rejects_hero_shape_on_a_non_primary_output() -> None:
         )
 
 
+def test_card_metadata_allows_a_hidden_guard_feed_output() -> None:
+    card = CardMetadata(
+        id="test-card",
+        name="Test Card",
+        rules_text="...",
+        fields=[],
+        outputs=[
+            OutputSpec(name="tally", label="Tally", primary=True),
+            OutputSpec(name="at_threshold", label="At the threshold", hidden=True),
+        ],
+    )
+    assert card.outputs[1].hidden is True
+
+
+def test_card_metadata_rejects_a_hidden_explicit_primary() -> None:
+    with pytest.raises(ValueError, match="hides its hero output"):
+        CardMetadata(
+            id="test-card",
+            name="Test Card",
+            rules_text="...",
+            fields=[],
+            outputs=[OutputSpec(name="tally", label="Tally", primary=True, hidden=True)],
+        )
+
+
+def test_card_metadata_rejects_a_hidden_implicit_hero() -> None:
+    # With no explicit primary, the first output is the hero -- hiding it would
+    # headline the screen with a value the flag says not to render.
+    with pytest.raises(ValueError, match="hides its hero output"):
+        CardMetadata(
+            id="test-card",
+            name="Test Card",
+            rules_text="...",
+            fields=[],
+            outputs=[
+                OutputSpec(name="a", label="A", hidden=True),
+                OutputSpec(name="b", label="B"),
+            ],
+        )
+
+
 def test_card_metadata_alert_defaults_to_none() -> None:
     card = CardMetadata(id="test-card", name="Test Card", rules_text="...", fields=[], outputs=[])
     assert card.alert is None

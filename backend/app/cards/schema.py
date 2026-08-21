@@ -241,6 +241,13 @@ class OutputSpec(BaseModel):
     # and coupling presentation to it would make every kind branch also carry
     # presentation. Frontend-only, like `primary`; compute() knows nothing of it.
     hero_shape: Literal["number", "shield"] = "number"
+    # Computed but never rendered as a stat tile. For outputs that exist to feed
+    # machinery -- an ActionGuard threshold, an AlertSpec boolean -- whose value the
+    # player already sees expressed elsewhere (the guard enabling, the banner firing).
+    # Dungeons' `at_bottom_room` was the motivating case: a 0/1 tile saying what the
+    # map's marker and the completion banner both already say. Frontend-only, like
+    # `primary`; compute() still returns the value and validation still checks it.
+    hidden: bool = False
 
 
 class AlertSpec(BaseModel):
@@ -301,6 +308,17 @@ class CardMetadata(BaseModel):
         ]
         if bad:
             raise ValueError(f"card {self.id!r} carries undeclared outputs on fields: {bad}")
+        return self
+
+    @model_validator(mode="after")
+    def _check_hero_output_is_visible(self) -> "CardMetadata":
+        """The hero slot is the explicit primary, else the first output -- hiding that
+        one would leave the screen headlining a value the flag says not to render."""
+        hero = next((o for o in self.outputs if o.primary), None)
+        if hero is None and self.outputs:
+            hero = self.outputs[0]
+        if hero is not None and hero.hidden:
+            raise ValueError(f"card {self.id!r} hides its hero output: {hero.name!r}")
         return self
 
     @model_validator(mode="after")

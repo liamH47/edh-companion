@@ -295,6 +295,10 @@ METADATA = CardMetadata(
             name="at_bottom_room",
             label="At the bottom room",
             short_label="at bottom",
+            # Feeds the counter's ActionGuard only. The map's marker and the
+            # completion banner already say it; a 0/1 tile repeating them was the
+            # case that introduced `hidden`.
+            hidden=True,
         ),
     ],
     alert=AlertSpec(

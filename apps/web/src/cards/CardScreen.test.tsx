@@ -38,6 +38,7 @@ function output(overrides: Partial<OutputSpec> & Pick<OutputSpec, 'name'>): Outp
     short_label: null,
     primary: false,
     hero_shape: 'number',
+    hidden: false,
     ...overrides,
   }
 }
