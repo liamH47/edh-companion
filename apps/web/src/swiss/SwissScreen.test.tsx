@@ -44,6 +44,23 @@ describe('SwissScreen', () => {
     expect(screen.getByRole('heading', { name: 'Round 1 of 3' })).toBeInTheDocument()
   })
 
+  it('resumes on the round in progress, not round 1', () => {
+    // A refresh mid-event reloads the tournament from storage; the screen must come
+    // back on the live round, or the TO reads it as lost data.
+    saveTournament(
+      makeTournament({
+        entrants: makeEntrants(2),
+        rounds: [
+          round(1, [match('entrant-1', 'entrant-2', result(2, 0))]),
+          round(2, [match('entrant-1', 'entrant-2', null)]),
+        ],
+      }),
+    )
+    render(<SwissScreen />)
+    expect(screen.getByRole('heading', { name: 'Round 2 of 3' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'R2' })).toHaveAttribute('aria-current', 'page')
+  })
+
   it('switches between the round and the standings', async () => {
     const user = userEvent.setup()
     saveTournament(

@@ -21,7 +21,10 @@ Four tabs:
   the option label) as a tappable room map — the `map` capability on a sequence field,
   with walk legality parity-proven on both sides — and Comet's screen shows the card
   itself with the live loyalty overlaid on the printed loyalty box (the one recorded
-  exception to the no-overlay rule; decision note in `cardImage.ts`).
+  exception to the no-overlay rule; decision note in `cardImage.ts`). **Card-first is
+  the default everywhere**: every real card sets `show_hero_art` (art beside the hero
+  number), and the picker leads each row with a full-card thumbnail, degrading to a
+  card-back tile offline and for the two cardless mechanics.
 - **Pairings** — opens on a chooser, because most Commander meetups don't run Swiss.
   Casual **Commander pods** is the headline option (generate tables and reshuffle each
   round to minimise repeat tablemates — no scoring); full **Swiss** is one tap away, with

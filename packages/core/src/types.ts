@@ -94,6 +94,9 @@ export interface OutputSpec {
    * planeswalker loyalty shield (Comet). Presentation only -- deliberately not part of
    * `kind`, which is the value's data type. */
   hero_shape: 'number' | 'shield'
+  /** Computed but never rendered as a stat tile -- for guard/alert feeds the player
+   * already sees expressed elsewhere (dungeons' `at_bottom_room`). Presentation only. */
+  hidden: boolean
 }
 
 export interface AlertSpec {

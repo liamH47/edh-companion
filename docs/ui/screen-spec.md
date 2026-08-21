@@ -83,14 +83,22 @@ renders the note instead.
 
 `CardPickerScreen`: a search field (filters by `card.name`, client-side, case-insensitive) over
 a vertical list of cards, most-recently-opened first (tracked in `src/core/storage.ts`, not the
-backend). Selecting a card pushes `CardScreen`.
+backend). Selecting a card pushes `CardScreen`. Each row leads with a small full-card thumbnail
+(Scryfall's `small` version -- the full card, so the artist/copyright line stays in frame, same
+compliance-by-construction as `CardImage`). The thumbnail is decorative (`alt=""`, the name sits
+beside it); cardless entries (commander tax, dungeons) and failed loads degrade to the same quiet
+card-back tile, so offline the list loses its pictures, never its shape.
 
 ## The hero slot's two schema flags
 
 Rule 6's hero is not always a bare number. Two declarative flags extend it with zero
 per-card branching: `OutputSpec.hero_shape` swaps the primary output's rendering
 (`"shield"` = the planeswalker badge), and `CardMetadata.show_hero_art` puts card art on
-the play surface. Declared together (Comet), they render `CardArtHero`: the card large,
+the play surface. Every entry with a printed card behind it sets `show_hero_art` -- the
+card-first read is the app's default, not a Comet special; only the cardless mechanics
+(commander tax, dungeons' shared tracker) leave it off, and dungeons puts the printed
+cards on screen through its map instead. With a plain number hero the art renders small
+beside `HeroStat`; declared together with the shield (Comet), they render `CardArtHero`: the card large,
 with the live loyalty drawn over its printed loyalty box -- a recorded exception to the
 no-overlay reading of Scryfall's terms, scoped to the loyalty box only (decision note in
 cardImage.ts). Offline the hero falls back to the standalone shield, so the play surface
@@ -224,6 +232,10 @@ three states:
 - **In progress, viewing a round** → a pill row (`R1`, `R2`, … , `Standings`) above
   `RoundScreen`.
 - **In progress, viewing standings** → the same pill row above `StandingsScreen`.
+
+On mount with a saved session, the visible round initializes to the **latest** round, not
+round 1 (same rule in `PodsScreen`): a refresh mid-event reloads everything from storage,
+and coming back on R1 during round 4 reads as lost data even though nothing was lost.
 
 ## TournamentSetupScreen
 

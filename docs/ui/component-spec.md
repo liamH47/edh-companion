@@ -233,7 +233,10 @@ separators). `aria-live="polite"` on the value so screen readers announce recalc
 
 ### StatStrip / StatTile
 
-`StatStrip` is a horizontally-wrapping flex row of `StatTile`s — every non-primary output.
+`StatStrip` is a horizontally-wrapping flex row of `StatTile`s — every non-primary output
+except those marked `OutputSpec.hidden` (guard/alert feeds the player already sees expressed
+elsewhere — dungeons' `at_bottom_room` feeds the counter's guard while the map marker and
+completion banner say the same thing; the filter lives in `nonPrimaryOutputs`).
 Renders nothing (not an empty row) when there are 0 non-primary outputs (the single-output-card
 case, rule 6).
 

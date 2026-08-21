@@ -1,16 +1,16 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { recordCardOpened } from '@mtg/core'
 import type { CardMetadata } from '@mtg/core'
 import { CardPickerScreen } from './CardPickerScreen'
 
-function makeCard(id: string, name: string): CardMetadata {
+function makeCard(id: string, name: string, scryfallId: string | null = null): CardMetadata {
   return {
     id,
     name,
     rules_text: '...',
-    scryfall_id: null,
+    scryfall_id: scryfallId,
     show_hero_art: false,
     resets_on_new_turn: true,
     fields: [],
@@ -64,5 +64,29 @@ describe('CardPickerScreen', () => {
     render(<CardPickerScreen cards={cards} onSelectCard={onSelectCard} />)
     await user.click(screen.getByRole('button', { name: 'Aetherflux Reservoir' }))
     expect(onSelectCard).toHaveBeenCalledWith('aetherflux-reservoir')
+  })
+
+  it('shows a card thumbnail for entries with a printed card', () => {
+    const arted = [makeCard('blood-artist', 'Blood Artist', 'b5275d76-2947-4219-be21-614c7421614a')]
+    render(<CardPickerScreen cards={arted} onSelectCard={() => {}} />)
+    // Decorative (alt="") -- the name is right beside it -- so query by tag.
+    const img = document.querySelector('img')!
+    expect(img.src).toContain('b5275d76-2947-4219-be21-614c7421614a')
+    expect(img.src).toContain('version=small')
+    expect(screen.queryByTestId('card-thumb-fallback')).not.toBeInTheDocument()
+  })
+
+  it('falls back to the card-back tile for cardless entries and failed loads', () => {
+    const mixed = [
+      makeCard('commander-tax', 'Commander Tax'),
+      makeCard('blood-artist', 'Blood Artist', 'b5275d76-2947-4219-be21-614c7421614a'),
+    ]
+    render(<CardPickerScreen cards={mixed} onSelectCard={() => {}} />)
+    // Commander Tax has no printed card: tile from the start.
+    expect(screen.getAllByTestId('card-thumb-fallback')).toHaveLength(1)
+    // Blood Artist's image dies (offline): its row degrades to the same tile.
+    fireEvent.error(document.querySelector('img')!)
+    expect(screen.getAllByTestId('card-thumb-fallback')).toHaveLength(2)
+    expect(document.querySelector('img')).toBeNull()
   })
 })

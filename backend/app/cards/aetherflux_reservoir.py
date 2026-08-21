@@ -22,6 +22,7 @@ METADATA = CardMetadata(
     id="aetherflux-reservoir",
     name="Aetherflux Reservoir",
     scryfall_id="96b6b2e1-c3e6-464c-8a13-b15deb34e862",
+    show_hero_art=True,
     rules_text=(
         "Whenever you cast a spell, you gain 1 life for each spell you've cast this turn. "
         "Pay 50 life: Aetherflux Reservoir deals 50 damage to any target."

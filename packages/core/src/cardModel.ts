@@ -122,10 +122,11 @@ export function heroOutput(card: CardMetadata): OutputSpec {
   return card.outputs.find((output) => output.primary) ?? card.outputs[0]
 }
 
-/** Every output except the hero -- what StatStrip renders (screen-spec.md rule 6). */
+/** Every output except the hero and the hidden guard/alert feeds -- what StatStrip
+ * renders (screen-spec.md rule 6). */
 export function nonPrimaryOutputs(card: CardMetadata): OutputSpec[] {
   const hero = heroOutput(card)
-  return card.outputs.filter((output) => output.name !== hero.name)
+  return card.outputs.filter((output) => output.name !== hero.name && !output.hidden)
 }
 
 /** When a card's alert output is true, its message; otherwise null. Centralizes the

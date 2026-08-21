@@ -20,7 +20,11 @@ interface PodsScreenProps {
  */
 export function PodsScreen({ onBack, rng = Math.random }: PodsScreenProps) {
   const session = usePodSession(rng)
-  const [visibleRound, setVisibleRound] = useState(1)
+  // Resume on the latest round, not round 1: a refresh mid-night reloads the session
+  // from storage, and the current seating is the only round anyone is looking for.
+  const [visibleRound, setVisibleRound] = useState(
+    () => session.session?.rounds.length || 1,
+  )
 
   if (session.session === null) {
     return (

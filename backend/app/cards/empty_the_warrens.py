@@ -19,6 +19,7 @@ METADATA = CardMetadata(
     id="empty-the-warrens",
     name="Empty the Warrens",
     scryfall_id="939d765a-aefb-4393-8808-98b1bbd7e803",
+    show_hero_art=True,
     rules_text=(
         "Create two 1/1 red Goblin creature tokens. Storm (When you cast this spell, "
         "copy it for each spell cast before it this turn.)"
