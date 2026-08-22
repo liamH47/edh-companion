@@ -12,6 +12,7 @@ import { compute as landfall } from './compute/landfall'
 import { compute as nykthosShrineToNyx } from './compute/nykthos-shrine-to-nyx'
 import { compute as obNixilisTheFallen } from './compute/ob-nixilis-the-fallen'
 import { compute as scuteSwarm } from './compute/scute-swarm'
+import { compute as storm } from './compute/storm'
 import { compute as tendrilsOfAgony } from './compute/tendrils-of-agony'
 import type { FieldValues, OutputValues } from '../types'
 
@@ -43,6 +44,7 @@ export const COMPUTE_BY_CARD_ID: Record<string, ComputeFn> = {
   'nykthos-shrine-to-nyx': nykthosShrineToNyx,
   'ob-nixilis-the-fallen': obNixilisTheFallen,
   'scute-swarm': scuteSwarm,
+  storm,
   'tendrils-of-agony': tendrilsOfAgony,
 }
 

@@ -2437,6 +2437,250 @@
     "show_hero_art": true
   },
   {
+    "alert": null,
+    "fields": [
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": [],
+        "default_source": null,
+        "help_text": "Add every payoff you could cast, not just the one you plan to -- seeing two side by side at the same count is what this screen is for.",
+        "kind": "sequence",
+        "label": "Storm cards you're holding",
+        "map": null,
+        "max": 8,
+        "min": null,
+        "name": "payoffs",
+        "new_turn_carries_output": null,
+        "options": [
+          {
+            "label": "Grapeshot",
+            "scryfall_id": "e3e2d90a-3557-49d5-9986-cb50fd31f396",
+            "value": "grapeshot"
+          },
+          {
+            "label": "Brain Freeze",
+            "scryfall_id": "3a2d7cf9-dddb-4de3-b4f2-c52e3ec8fb4b",
+            "value": "brain-freeze"
+          },
+          {
+            "label": "Tendrils of Agony",
+            "scryfall_id": "6f26faca-f338-4ce5-a218-6a61d40fc50a",
+            "value": "tendrils-of-agony"
+          },
+          {
+            "label": "Empty the Warrens",
+            "scryfall_id": "939d765a-aefb-4393-8808-98b1bbd7e803",
+            "value": "empty-the-warrens"
+          },
+          {
+            "label": "Chatterstorm",
+            "scryfall_id": "b34f0ac1-6894-4761-b62c-b85d927acf09",
+            "value": "chatterstorm"
+          },
+          {
+            "label": "Hunting Pack",
+            "scryfall_id": "8c9eb595-e8fa-4a5e-abca-d30613c0e28f",
+            "value": "hunting-pack"
+          },
+          {
+            "label": "Crow Storm",
+            "scryfall_id": "f5e0713c-8358-46fc-9618-66a986d681cb",
+            "value": "crow-storm"
+          },
+          {
+            "label": "Elemental Eruption",
+            "scryfall_id": "32126592-a988-4171-b52e-cca80b881aff",
+            "value": "elemental-eruption"
+          },
+          {
+            "label": "Weather the Storm",
+            "scryfall_id": "f6a9fa51-78c3-42e6-8c2e-39658f59ed87",
+            "value": "weather-the-storm"
+          },
+          {
+            "label": "Scattershot",
+            "scryfall_id": "cf22f3e7-1626-4bab-9f62-7d4774704395",
+            "value": "scattershot"
+          },
+          {
+            "label": "Flusterstorm",
+            "scryfall_id": "f900eeb7-7c45-44bc-ad3a-0bbe594ecf50",
+            "value": "flusterstorm"
+          },
+          {
+            "label": "Hindering Touch",
+            "scryfall_id": "db9735d9-4aac-4175-8ec8-fc9bfd8f2c5c",
+            "value": "hindering-touch"
+          },
+          {
+            "label": "Temporal Fissure",
+            "scryfall_id": "c9f9ece7-ee6e-4379-9d53-209f8805a72d",
+            "value": "temporal-fissure"
+          },
+          {
+            "label": "Wing Shards",
+            "scryfall_id": "f8326bd2-83a8-4600-b12a-0bda47168f7b",
+            "value": "wing-shards"
+          },
+          {
+            "label": "Volcanic Awakening",
+            "scryfall_id": "aebd5c57-cfc8-4a3c-b4a2-0cd64a5e3575",
+            "value": "volcanic-awakening"
+          },
+          {
+            "label": "Ground Rift",
+            "scryfall_id": "62333783-6a18-4461-88ce-1c37eaf64e2b",
+            "value": "ground-rift"
+          },
+          {
+            "label": "Dragonstorm",
+            "scryfall_id": "230cd568-f7ed-4571-a609-36522add91d0",
+            "value": "dragonstorm"
+          },
+          {
+            "label": "Mind's Desire",
+            "scryfall_id": "17ef3058-46b8-4ec4-950f-c721919c4ac1",
+            "value": "minds-desire"
+          },
+          {
+            "label": "Galvanic Relay",
+            "scryfall_id": "06373318-e548-4664-b227-17e3b6fd0a88",
+            "value": "galvanic-relay"
+          },
+          {
+            "label": "Sprouting Vines",
+            "scryfall_id": "b16ba7be-47e6-4c64-918d-bec60abccaa3",
+            "value": "sprouting-vines"
+          },
+          {
+            "label": "Reaping the Graves",
+            "scryfall_id": "760a66bd-2821-4710-8f02-3c30772dd884",
+            "value": "reaping-the-graves"
+          },
+          {
+            "label": "Ignite Memories",
+            "scryfall_id": "2f7b7831-27a1-4c0a-8ed1-6dddf2754d65",
+            "value": "ignite-memories"
+          },
+          {
+            "label": "Storm of Memories",
+            "scryfall_id": "253266de-0eeb-46c7-9912-145586661fc4",
+            "value": "storm-of-memories"
+          },
+          {
+            "label": "Radstorm",
+            "scryfall_id": "d778cdec-8fc7-4174-bae1-4c8e8ccdfab3",
+            "value": "radstorm"
+          },
+          {
+            "label": "Haze of Rage",
+            "scryfall_id": "c344b885-68c6-43d2-b6c1-6c89b3c94983",
+            "value": "haze-of-rage"
+          },
+          {
+            "label": "Astral Steel",
+            "scryfall_id": "64f836d3-52c8-4628-b18a-8c8fb67969c9",
+            "value": "astral-steel"
+          },
+          {
+            "label": "Spreading Insurrection",
+            "scryfall_id": "f1c1918b-2f7a-4cab-9547-029ebc589000",
+            "value": "spreading-insurrection"
+          },
+          {
+            "label": "Mordor on the March",
+            "scryfall_id": "6d553b1e-701b-4f09-80ce-2a16ab53e316",
+            "value": "mordor-on-the-march"
+          }
+        ],
+        "persists_across_turns": true,
+        "picker": {
+          "empty_label": "No storm cards yet -- search and add what you're holding.",
+          "search_placeholder": "Search storm cards"
+        },
+        "roll": null,
+        "setup": true,
+        "short_label": "payoffs",
+        "visible_if": null
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": "Spell cast",
+        "default": 0,
+        "default_source": null,
+        "help_text": "Spells cast by every player this turn, not just you. Countered spells and spells cast from a graveyard or exile still count; the copies storm itself makes are not cast, so they never count.",
+        "kind": "counter",
+        "label": "Spells cast before this one this turn",
+        "map": null,
+        "max": 99,
+        "min": 0,
+        "name": "storm_count",
+        "new_turn_carries_output": null,
+        "options": null,
+        "persists_across_turns": false,
+        "picker": null,
+        "roll": null,
+        "setup": false,
+        "short_label": "storm",
+        "visible_if": null
+      }
+    ],
+    "id": "storm",
+    "name": "Storm",
+    "outputs": [
+      {
+        "hero_shape": "list",
+        "hidden": false,
+        "kind": "lines",
+        "label": "What each one does at this count",
+        "name": "effects",
+        "primary": true,
+        "short_label": "effects"
+      },
+      {
+        "hero_shape": "number",
+        "hidden": false,
+        "kind": "number",
+        "label": "Copies from storm",
+        "name": "copies_from_storm",
+        "primary": false,
+        "short_label": "copies"
+      },
+      {
+        "hero_shape": "number",
+        "hidden": false,
+        "kind": "number",
+        "label": "Total resolutions",
+        "name": "total_copies",
+        "primary": false,
+        "short_label": "resolutions"
+      },
+      {
+        "hero_shape": "number",
+        "hidden": false,
+        "kind": "number",
+        "label": "Damage, all payoffs",
+        "name": "damage_dealt",
+        "primary": false,
+        "short_label": "damage"
+      },
+      {
+        "hero_shape": "number",
+        "hidden": false,
+        "kind": "number",
+        "label": "Tokens, all payoffs",
+        "name": "tokens_created",
+        "primary": false,
+        "short_label": "tokens"
+      }
+    ],
+    "resets_on_new_turn": true,
+    "rules_text": "Storm \u2014 When you cast this spell, copy it for each spell cast before it this turn. You may choose new targets for the copies. Spells cast by every player count, not just yours, and countered spells still count. The copies storm makes are put onto the stack rather than cast, so they never raise the count for a later spell in the same turn.",
+    "scryfall_id": null,
+    "show_hero_art": false
+  },
+  {
     "alert": {
       "message": "That kills them",
       "output": "is_lethal",

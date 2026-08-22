@@ -14,13 +14,15 @@ needs a connection.
 
 Four tabs:
 
-- **Cards** — **15 calculators**, each a Python module plus a mirrored TypeScript
-  implementation. Twelve are real cards; **Commander Tax, Dungeons and Landfall are
-  cardless format mechanics**, which is why the schema allows `scryfall_id: None`.
-  Landfall is the first entry about an *interaction between* cards: pick the landfall
-  permanents you control out of a searchable roster of 29, then each land drop reads out
-  every trigger at once with its running total — including the second-resolution riders
-  (Tannuk, Nissa, Scythecat Cub) that are missed constantly at a real table. Dungeons
+- **Cards** — **16 calculators**, each a Python module plus a mirrored TypeScript
+  implementation. Twelve are real cards; **Commander Tax, Dungeons, Landfall and Storm
+  are cardless format mechanics**, which is why the schema allows `scryfall_id: None`.
+  **Landfall and Storm are rosters**: pick the cards in play (or in hand) out of a
+  searchable list, and the screen reads out what each one does at once. Landfall covers
+  29 permanents and catches the second-resolution riders (Tannuk, Nissa, Scythecat Cub)
+  that are missed constantly at a real table; Storm covers all 34 storm cards against
+  the four with their own screens, so two payoffs can be compared at one count. Both
+  share `effects.py` / `cards/effects.ts`. Dungeons
   tracks all four dungeon cards (Undercity included, its initiative gating recorded in
   the option label) as a tappable room map — the `map` capability on a sequence field,
   with walk legality parity-proven on both sides — and Comet's screen shows the card
@@ -42,7 +44,7 @@ Four tabs:
 
 Every deploy is gated on CI: backend lint/format/types/tests, a design-tokens freshness
 check, both frontend packages at 100% coverage, a parity corpus proving Python and
-TypeScript agree, and Playwright end-to-end against the real Docker image (28 specs run on
+TypeScript agree, and Playwright end-to-end against the real Docker image (29 specs run on
 both a desktop and a Pixel 7 viewport).
 
 Nothing is half-finished. There is no broken state to return to.

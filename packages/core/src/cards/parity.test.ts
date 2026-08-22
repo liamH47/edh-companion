@@ -18,6 +18,7 @@ import landfall from './__parity__/landfall.json'
 import nykthosShrineToNyx from './__parity__/nykthos-shrine-to-nyx.json'
 import obNixilisTheFallen from './__parity__/ob-nixilis-the-fallen.json'
 import scuteSwarm from './__parity__/scute-swarm.json'
+import storm from './__parity__/storm.json'
 import tendrilsOfAgony from './__parity__/tendrils-of-agony.json'
 
 /**
@@ -62,6 +63,7 @@ const CORPORA: Corpus[] = [
   nykthosShrineToNyx,
   obNixilisTheFallen,
   scuteSwarm,
+  storm,
   tendrilsOfAgony,
 ] as Corpus[]
 

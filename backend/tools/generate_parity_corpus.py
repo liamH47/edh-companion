@@ -78,6 +78,24 @@ EXTRA_SEQUENCES: dict[str, list[list[str]]] = {
         # Over the declared roster cap.
         ["lotus-cobra"] * 13,
     ],
+    # Storm's one sequence crosses with the storm-count axis, which is where the
+    # copies-plus-the-original arithmetic actually shows up.
+    "storm": [
+        [],
+        ["grapeshot"],
+        # The comparison the screen exists for: two payoffs, one count.
+        ["grapeshot", "tendrils-of-agony"],
+        # Two copies of one payoff in hand -- two spells, so double the line.
+        ["empty-the-warrens", "empty-the-warrens"],
+        # Payoffs with no countable effect, which must still produce a line.
+        ["flusterstorm", "temporal-fissure", "dragonstorm"],
+        # A payoff whose totals span two categories at once.
+        ["tendrils-of-agony", "brain-freeze", "chatterstorm"],
+        # Not a storm card -- validation refuses it before compute().
+        ["lightning-bolt"],
+        # Over the declared cap.
+        ["grapeshot"] * 9,
+    ],
 }
 
 # Board states worth pinning that a mechanical sweep would not reach.
