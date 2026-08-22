@@ -35,6 +35,12 @@ export interface PickerSpec {
   empty_label: string
 }
 
+/** Marks a sequence field as a mana pool, rendered as a disc per color. The value stays a
+ * plain list of colour letters -- `["G","G","U"]` is two green and one blue -- so
+ * compute() reads it exactly as it reads any other roster. A bare marker: see the note
+ * in schema.py on why there is no "mana still to assign" prompt. */
+export type ManaSpec = Record<string, never>
+
 export interface FieldSpec {
   name: string
   label: string
@@ -53,6 +59,8 @@ export interface FieldSpec {
   map: MapSpec | null
   /** See PickerSpec. Only on a sequence field; mutually exclusive with roll and map. */
   picker: PickerSpec | null
+  /** See ManaSpec. Only on a sequence field; mutually exclusive with the other three. */
+  mana: ManaSpec | null
   /** On "New turn", this field takes the named output's final value (clamped to the
    * field's own bounds) instead of its default -- state that persists across turns
    * (Comet's loyalty). Frontend-only; compute() never knows where the value came from. */

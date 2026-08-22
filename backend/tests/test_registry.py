@@ -40,7 +40,7 @@ def test_get_card_returns_none_for_unknown_id() -> None:
 # Entries that are format mechanics rather than cards, so they have no Scryfall image
 # and no id. Listed explicitly and by name, so a *real* card added without a scryfall_id
 # still fails the check below instead of hiding among these.
-_FORMAT_MECHANIC_IDS = {"commander-tax", "dungeons", "landfall", "storm"}
+_FORMAT_MECHANIC_IDS = {"commander-tax", "dungeons", "landfall", "mana-pool", "storm"}
 
 
 def test_every_card_carries_a_scryfall_id() -> None:

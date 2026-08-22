@@ -63,6 +63,27 @@ export const typeScale = {
   heroLg: { size: 64, weight: 700, letterSpacing: 0 },
 } as const
 
+/** The five colors of Magic, plus colorless. One value each, deliberately **not**
+ * theme-aware: these are the game's own identity and a player reads them by hue, so a
+ * "dark mode green" would be a different colour rather than a darker one. Each is the
+ * pale disc a printed mana symbol sits on, chosen so `manaGlyph` stays legible on it
+ * against either canvas. Tokens rather than raw hex in the component, for the same
+ * reason `diceShade` is: nothing about the design system should live only in JSX. */
+export const mana = {
+  W: '#fbf8e4',
+  U: '#a5d8f2',
+  B: '#c7bfbb',
+  R: '#f7a58c',
+  G: '#9ccfae',
+  C: '#d9d4cf',
+} as const
+
+export type ManaColor = keyof typeof mana
+
+/** The symbol drawn on a mana disc. Near-black rather than pure, so it reads as ink on
+ * a card rather than a UI stroke. */
+export const manaGlyph = '#241f20'
+
 export interface ColorTokens {
   canvas: string
   surface: string

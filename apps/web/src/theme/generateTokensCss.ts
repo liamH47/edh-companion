@@ -1,4 +1,4 @@
-import { color, radius, typeScale } from '@mtg/core/theme/tokens'
+import { color, mana, manaGlyph, radius, typeScale } from '@mtg/core/theme/tokens'
 
 /** camelCase -> kebab-case, e.g. surfaceRaised -> surface-raised. */
 function kebab(name: string): string {
@@ -17,6 +17,14 @@ function block(prefix: string, entries: [string, string | number][], unit = ''):
 export function generateTokensCss(): string {
   const lightColors = block('color', Object.entries(color.light))
   const darkColors = block('color', Object.entries(color.dark))
+  // Emitted into a plain `:root`, deliberately NOT into `@theme`. Two reasons, and the
+  // first is load-bearing: Tailwind v4 tree-shakes theme variables no utility
+  // references, and nothing generates `bg-mana-*` classes -- these are read by SVG
+  // `fill` attributes, so inside `@theme` they were silently pruned from the build and
+  // every mana disc rendered black. Second, they belong outside the theme anyway:
+  // Magic's colors are identity rather than theming, so the same discs appear on
+  // either canvas and there is no dark-mode counterpart below.
+  const manaVars = block('mana', [...Object.entries(mana), ['glyph', manaGlyph]])
   const radiusVars = block('radius', Object.entries(radius), 'px')
   const textVars = block(
     'text',
@@ -39,6 +47,12 @@ export function generateTokensCss(): string {
 ${lightColors}
 ${radiusVars}
 ${textVars}
+}
+
+/* Magic's own five colors plus colorless, read directly by ManaSymbol's SVG fills.
+   Outside @theme on purpose -- see the note in generateTokensCss.ts. */
+:root {
+${manaVars}
 }
 
 /* Overrides the same --color-* variables the utilities above reference, so every

@@ -96,6 +96,22 @@ EXTRA_SEQUENCES: dict[str, list[list[str]]] = {
         # Over the declared cap.
         ["grapeshot"] * 9,
     ],
+    # A pool is a multiset of colour letters, so the cases that matter are the shapes
+    # of that multiset rather than orderings.
+    "mana-pool": [
+        [],
+        ["G"],
+        # Several of one colour, and the WUBRG spread.
+        ["G", "G", "G"],
+        ["W", "U", "B", "R", "G"],
+        # Colorless mixed with coloured: the split the outputs exist to report.
+        ["C", "C", "G"],
+        ["C"],
+        # Not a mana symbol -- validation refuses it.
+        ["X"],
+        # Over the declared cap.
+        ["G"] * 100,
+    ],
 }
 
 # Board states worth pinning that a mechanical sweep would not reach.

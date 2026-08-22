@@ -11,6 +11,7 @@ BASE: dict[str, Any] = {
     "sources": [],
     "triggers_per_land": 1,
     "lands_this_turn": 0,
+    "mana_pool": [],
 }
 
 
@@ -44,6 +45,14 @@ def test_before_a_land_drops_the_roster_reads_as_a_forecast() -> None:
         "note": "on your next land",
     }
     assert outputs["triggers"] == 0
+
+
+def test_the_mana_pool_is_state_the_player_owns() -> None:
+    # The pool is not reconciled against what the triggers produced: compute() cannot
+    # tell mana you spent from mana you never assigned. It is simply where the Cobra
+    # mana goes once you have picked a colour, and the effect line says how much.
+    outputs = run(sources=["lotus-cobra"], lands_this_turn=2, mana_pool=["G", "U"])
+    assert line(outputs, "Lotus Cobra")["note"] == "2 mana"
 
 
 def test_the_user_example_three_permanents_one_land() -> None:

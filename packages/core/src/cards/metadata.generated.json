@@ -14,6 +14,7 @@
         "help_text": null,
         "kind": "number",
         "label": "Life total at the start of the turn",
+        "mana": null,
         "map": null,
         "max": 99999,
         "min": 0,
@@ -35,6 +36,7 @@
         "help_text": null,
         "kind": "boolean",
         "label": "In play at the start of the turn?",
+        "mana": null,
         "map": null,
         "max": null,
         "min": null,
@@ -56,6 +58,7 @@
         "help_text": "Every spell cast this turn before Aetherflux was on the battlefield \u2014 including the cast of Aetherflux itself. It doesn't trigger its own ability, but it still counts toward the spell total that later triggers gain life for.",
         "kind": "number",
         "label": "Spells already cast before it entered",
+        "mana": null,
         "map": null,
         "max": 99,
         "min": 0,
@@ -80,6 +83,7 @@
         "help_text": null,
         "kind": "counter",
         "label": "Spells cast this turn",
+        "mana": null,
         "map": null,
         "max": 99,
         "min": 0,
@@ -104,6 +108,7 @@
         "help_text": null,
         "kind": "counter",
         "label": "Activations used",
+        "mana": null,
         "map": null,
         "max": 99,
         "min": 0,
@@ -201,6 +206,7 @@
         "help_text": "Count Blood Artist itself plus any other death-drain trigger you control (Zulaport Cutthroat, Cruel Celebrant, ...).",
         "kind": "number",
         "label": "Blood-Artist-style triggers you control",
+        "mana": null,
         "map": null,
         "max": 20,
         "min": 0,
@@ -222,6 +228,7 @@
         "help_text": "However many died at once -- a board wipe, a combat trade, a single removal spell.",
         "kind": "number",
         "label": "Creatures that died this event",
+        "mana": null,
         "map": null,
         "max": 99,
         "min": 0,
@@ -269,6 +276,7 @@
         "help_text": "99 is a fresh Commander deck -- lower it to whatever they're actually down to.",
         "kind": "number",
         "label": "Cards left in the library you're targeting",
+        "mana": null,
         "map": null,
         "max": 999,
         "min": 0,
@@ -290,6 +298,7 @@
         "help_text": "Spells cast by every player this turn, not just you. Countered spells and spells cast from a graveyard or exile still count; the copies storm itself makes are not cast, so they never count.",
         "kind": "counter",
         "label": "Spells cast before this one this turn",
+        "mana": null,
         "map": null,
         "max": 99,
         "min": 0,
@@ -364,6 +373,7 @@
         "help_text": "5 the turn he lands.",
         "kind": "number",
         "label": "Loyalty before this turn's first activation",
+        "mana": null,
         "map": null,
         "max": 999,
         "min": 0,
@@ -385,6 +395,7 @@
         "help_text": "Damage he took, proliferate, +1/+1-style counter effects -- anything that moved his loyalty besides the die. Applied before this turn's rolls; cleared on New turn (the carry-over already includes it).",
         "kind": "number",
         "label": "Other loyalty changes",
+        "mana": null,
         "map": null,
         "max": 999,
         "min": -999,
@@ -409,6 +420,7 @@
         "help_text": "1\u20132: +2 loyalty and two Squirrels. 3: \u22121 and return a card. 4\u20135: deals damage equal to his loyalty, then \u22122. 6: +1 and two more activations.",
         "kind": "sequence",
         "label": "Rolls this turn",
+        "mana": null,
         "map": null,
         "max": 40,
         "min": null,
@@ -531,6 +543,7 @@
         "help_text": "Your commander's printed total mana value, before any tax or reduction.",
         "kind": "number",
         "label": "Commander's mana value",
+        "mana": null,
         "map": null,
         "max": 20,
         "min": 0,
@@ -552,6 +565,7 @@
         "help_text": "Total generic reduction from effects you control (Jodah, Emerald Medallion, ...). Applied to the whole cost, never below zero.",
         "kind": "number",
         "label": "Cost reduction you control",
+        "mana": null,
         "map": null,
         "max": 20,
         "min": 0,
@@ -573,6 +587,7 @@
         "help_text": "How many times you've already cast your commander from the command zone this game -- tap once each time you cast it. The next cast is taxed on this.",
         "kind": "counter",
         "label": "Times already cast from the command zone",
+        "mana": null,
         "map": null,
         "max": 30,
         "min": 0,
@@ -625,6 +640,7 @@
         "help_text": null,
         "kind": "number",
         "label": "Total power of your creatures before any trigger resolves",
+        "mana": null,
         "map": null,
         "max": 9999,
         "min": 0,
@@ -646,6 +662,7 @@
         "help_text": "Include Craterhoof itself -- it has haste and is already on the battlefield when its own trigger resolves.",
         "kind": "number",
         "label": "Creatures you control when the first trigger resolves",
+        "mana": null,
         "map": null,
         "max": 99,
         "min": 0,
@@ -667,6 +684,7 @@
         "help_text": "Only if a second trigger resolves this turn (a second copy, a flicker, a similar effect) -- most turns won't have one.",
         "kind": "counter",
         "label": "Second Craterhoof-shaped trigger this turn?",
+        "mana": null,
         "map": null,
         "max": 1,
         "min": 0,
@@ -688,6 +706,7 @@
         "help_text": "Re-confirm the count fresh -- it can differ from the first trigger.",
         "kind": "number",
         "label": "Creatures you control when the second trigger resolves",
+        "mana": null,
         "map": null,
         "max": 99,
         "min": 0,
@@ -765,6 +784,7 @@
         "help_text": "Undercity is entered only by taking the initiative -- its own card face says you can't enter it any other way.",
         "kind": "select",
         "label": "Dungeon",
+        "mana": null,
         "map": null,
         "max": null,
         "min": null,
@@ -812,6 +832,7 @@
         "help_text": "Tap the next room each time you venture. Forward only -- the rules never let a marker move back up the card.",
         "kind": "sequence",
         "label": "Your path through Lost Mine of Phandelver",
+        "mana": null,
         "map": {
           "edges": [
             {
@@ -992,6 +1013,7 @@
         "help_text": "Tap the next room each time you venture. Forward only -- the rules never let a marker move back up the card.",
         "kind": "sequence",
         "label": "Your path through Tomb of Annihilation",
+        "mana": null,
         "map": {
           "edges": [
             {
@@ -1124,6 +1146,7 @@
         "help_text": "Tap the next room each time you venture. Forward only -- the rules never let a marker move back up the card.",
         "kind": "sequence",
         "label": "Your path through Dungeon of the Mad Mage",
+        "mana": null,
         "map": {
           "edges": [
             {
@@ -1340,6 +1363,7 @@
         "help_text": "Tap the next room each time you venture. Forward only -- the rules never let a marker move back up the card.",
         "kind": "sequence",
         "label": "Your path through Undercity",
+        "mana": null,
         "map": {
           "edges": [
             {
@@ -1567,6 +1591,7 @@
         "help_text": "Tap when the bottom room's ability resolves, then pick your next dungeon. The tally is what completion payoffs read, and nothing at the table tracks it for you.",
         "kind": "counter",
         "label": "Dungeons completed this game",
+        "mana": null,
         "map": null,
         "max": 99,
         "min": 0,
@@ -1628,6 +1653,7 @@
         "help_text": "Spells cast by every player this turn, not just you. Countered spells and spells cast from a graveyard or exile still count; the copies storm itself makes are not cast, so they never count.",
         "kind": "counter",
         "label": "Spells cast before this one this turn",
+        "mana": null,
         "map": null,
         "max": 99,
         "min": 0,
@@ -1698,6 +1724,7 @@
         "help_text": "Spells cast by every player this turn, not just you. Countered spells and spells cast from a graveyard or exile still count; the copies storm itself makes are not cast, so they never count.",
         "kind": "counter",
         "label": "Spells cast before this one this turn",
+        "mana": null,
         "map": null,
         "max": 99,
         "min": 0,
@@ -1759,6 +1786,7 @@
         "help_text": "Include the Hydra itself. It is a 0/0, so its four counters are what make it a 4/4.",
         "kind": "number",
         "label": "Total power of your creatures before attacking",
+        "mana": null,
         "map": null,
         "max": 9999,
         "min": 0,
@@ -1780,6 +1808,7 @@
         "help_text": "Count +1/+1 counters only, across every creature you control. A creature with no counters gains nothing when the trigger resolves, however big it already is.",
         "kind": "number",
         "label": "Total +1/+1 counters on your creatures before attacking",
+        "mana": null,
         "map": null,
         "max": 999,
         "min": 0,
@@ -1801,6 +1830,7 @@
         "help_text": "One per attack trigger that resolves. More than one means extra combat phases -- each doubles a board that is already doubled.",
         "kind": "counter",
         "label": "Times the Hydra has attacked this turn",
+        "mana": null,
         "map": null,
         "max": 6,
         "min": 0,
@@ -1862,6 +1892,7 @@
         "help_text": "Add a card twice if you control two of it -- each copy triggers on its own. Modal cards (Felidar Retreat, the Retreat cycle) are left out on purpose: the choice is yours every resolution, so no total would be right.",
         "kind": "sequence",
         "label": "Landfall permanents you control",
+        "mana": null,
         "map": null,
         "max": 12,
         "min": null,
@@ -2032,6 +2063,7 @@
         "help_text": "1 normally. 2 with Ancient Greenwarden or another landfall doubler.",
         "kind": "number",
         "label": "Landfall triggers per land",
+        "mana": null,
         "map": null,
         "max": 4,
         "min": 1,
@@ -2053,6 +2085,7 @@
         "help_text": "Any land entering under your control, not just your land drop -- a fetchland counts twice, once for itself and once for what it finds.",
         "kind": "counter",
         "label": "Lands entered this turn",
+        "mana": null,
         "map": null,
         "max": 99,
         "min": 0,
@@ -2064,6 +2097,59 @@
         "roll": null,
         "setup": false,
         "short_label": "lands",
+        "visible_if": null
+      },
+      {
+        "action_disabled_when": null,
+        "action_label": null,
+        "default": [],
+        "default_source": null,
+        "help_text": "Only what's still floating. Mana empties at the end of every step and phase, so this is emptier than it feels.",
+        "kind": "sequence",
+        "label": "Mana floating",
+        "mana": {},
+        "map": null,
+        "max": 99,
+        "min": null,
+        "name": "mana_pool",
+        "new_turn_carries_output": null,
+        "options": [
+          {
+            "label": "White",
+            "scryfall_id": null,
+            "value": "W"
+          },
+          {
+            "label": "Blue",
+            "scryfall_id": null,
+            "value": "U"
+          },
+          {
+            "label": "Black",
+            "scryfall_id": null,
+            "value": "B"
+          },
+          {
+            "label": "Red",
+            "scryfall_id": null,
+            "value": "R"
+          },
+          {
+            "label": "Green",
+            "scryfall_id": null,
+            "value": "G"
+          },
+          {
+            "label": "Colorless",
+            "scryfall_id": null,
+            "value": "C"
+          }
+        ],
+        "persists_across_turns": false,
+        "picker": null,
+        "roll": null,
+        "setup": false,
+        "short_label": "floating",
         "visible_if": null
       }
     ],
@@ -2135,12 +2221,115 @@
     "fields": [
       {
         "action_disabled_when": null,
+        "action_label": null,
+        "default": [],
+        "default_source": null,
+        "help_text": "Tap a symbol to add, minus to spend. The pool empties on its own at the end of every step and phase -- that is the rule, not a mistake, and Empty pool is how you tell the tracker it happened.",
+        "kind": "sequence",
+        "label": "Floating mana",
+        "mana": {},
+        "map": null,
+        "max": 99,
+        "min": null,
+        "name": "pool",
+        "new_turn_carries_output": null,
+        "options": [
+          {
+            "label": "White",
+            "scryfall_id": null,
+            "value": "W"
+          },
+          {
+            "label": "Blue",
+            "scryfall_id": null,
+            "value": "U"
+          },
+          {
+            "label": "Black",
+            "scryfall_id": null,
+            "value": "B"
+          },
+          {
+            "label": "Red",
+            "scryfall_id": null,
+            "value": "R"
+          },
+          {
+            "label": "Green",
+            "scryfall_id": null,
+            "value": "G"
+          },
+          {
+            "label": "Colorless",
+            "scryfall_id": null,
+            "value": "C"
+          }
+        ],
+        "persists_across_turns": false,
+        "picker": null,
+        "roll": null,
+        "setup": false,
+        "short_label": "pool",
+        "visible_if": null
+      }
+    ],
+    "id": "mana-pool",
+    "name": "Mana Pool",
+    "outputs": [
+      {
+        "hero_shape": "number",
+        "hidden": false,
+        "kind": "number",
+        "label": "Floating mana",
+        "name": "total",
+        "primary": true,
+        "short_label": "floating"
+      },
+      {
+        "hero_shape": "number",
+        "hidden": false,
+        "kind": "number",
+        "label": "Colored mana",
+        "name": "colored",
+        "primary": false,
+        "short_label": "colored"
+      },
+      {
+        "hero_shape": "number",
+        "hidden": false,
+        "kind": "number",
+        "label": "Colorless mana",
+        "name": "colorless",
+        "primary": false,
+        "short_label": "colorless"
+      },
+      {
+        "hero_shape": "number",
+        "hidden": false,
+        "kind": "number",
+        "label": "Colors available",
+        "name": "colors_available",
+        "primary": false,
+        "short_label": "colors"
+      }
+    ],
+    "resets_on_new_turn": true,
+    "rules_text": "Your mana pool empties at the end of each step and phase. Mana of a color pays that color's costs or any generic cost; colorless mana pays {C} costs and generic costs, but never a colored one.",
+    "scryfall_id": null,
+    "show_hero_art": false
+  },
+  {
+    "alert": null,
+    "fields": [
+      {
+        "action_disabled_when": null,
         "action_label": "Found a pip",
         "default": 0,
         "default_source": null,
         "help_text": "Click once per colored mana symbol in the mana costs of permanents you control, for the color you're about to choose.",
         "kind": "counter",
         "label": "Devotion pips found",
+        "mana": null,
         "map": null,
         "max": 99,
         "min": 0,
@@ -2193,6 +2382,7 @@
         "help_text": "From earlier turns. He's a 3/3 with none.",
         "kind": "number",
         "label": "+1/+1 counters already on him",
+        "mana": null,
         "map": null,
         "max": 999,
         "min": 0,
@@ -2214,6 +2404,7 @@
         "help_text": "1 normally. 2 with Ancient Greenwarden or another landfall doubler.",
         "kind": "number",
         "label": "Landfall triggers per land",
+        "mana": null,
         "map": null,
         "max": 4,
         "min": 1,
@@ -2235,6 +2426,7 @@
         "help_text": "Any land, not just Swamps, and not just your land drop for the turn. Assumes you take the drain every trigger -- declining one means no counters from it either.",
         "kind": "counter",
         "label": "Lands entered this turn",
+        "mana": null,
         "map": null,
         "max": 99,
         "min": 0,
@@ -2314,6 +2506,7 @@
         "help_text": null,
         "kind": "number",
         "label": "Lands you control right now",
+        "mana": null,
         "map": null,
         "max": 99,
         "min": 0,
@@ -2335,6 +2528,7 @@
         "help_text": "1 for Scute Swarm itself. Each copy has its own landfall trigger, which is why this doubles instead of staying flat once you hit six lands.",
         "kind": "number",
         "label": "Copies of Scute Swarm you control",
+        "mana": null,
         "map": null,
         "max": 99,
         "min": 0,
@@ -2356,6 +2550,7 @@
         "help_text": null,
         "kind": "number",
         "label": "1/1 Insect tokens you already control",
+        "mana": null,
         "map": null,
         "max": 999,
         "min": 0,
@@ -2377,6 +2572,7 @@
         "help_text": "Each land triggers landfall once per Scute Swarm copy you control at that moment -- that's the doubling.",
         "kind": "counter",
         "label": "Lands played this turn",
+        "mana": null,
         "map": null,
         "max": 12,
         "min": 0,
@@ -2447,6 +2643,7 @@
         "help_text": "Add every payoff you could cast, not just the one you plan to -- seeing two side by side at the same count is what this screen is for.",
         "kind": "sequence",
         "label": "Storm cards you're holding",
+        "mana": null,
         "map": null,
         "max": 8,
         "min": null,
@@ -2612,6 +2809,7 @@
         "help_text": "Spells cast by every player this turn, not just you. Countered spells and spells cast from a graveyard or exile still count; the copies storm itself makes are not cast, so they never count.",
         "kind": "counter",
         "label": "Spells cast before this one this turn",
+        "mana": null,
         "map": null,
         "max": 99,
         "min": 0,
@@ -2695,6 +2893,7 @@
         "help_text": "40 is a fresh Commander life total -- lower it to whatever they're actually on.",
         "kind": "number",
         "label": "Life total you're aiming at",
+        "mana": null,
         "map": null,
         "max": 999,
         "min": 0,
@@ -2716,6 +2915,7 @@
         "help_text": "Spells cast by every player this turn, not just you. Countered spells and spells cast from a graveyard or exile still count; the copies storm itself makes are not cast, so they never count.",
         "kind": "counter",
         "label": "Spells cast before this one this turn",
+        "mana": null,
         "map": null,
         "max": 99,
         "min": 0,

@@ -25,6 +25,7 @@ function pickerField(overrides: Partial<FieldSpec> = {}): FieldSpec {
     roll: null,
     map: null,
     picker: { search_placeholder: 'Search landfall cards', empty_label: 'Nothing added yet.' },
+    mana: null,
     persists_across_turns: true,
     new_turn_carries_output: null,
     setup: true,

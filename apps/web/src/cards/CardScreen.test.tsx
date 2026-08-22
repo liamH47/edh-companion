@@ -25,6 +25,7 @@ function field(overrides: Partial<FieldSpec> & Pick<FieldSpec, 'name' | 'kind'>)
     roll: null,
     map: null,
     picker: null,
+    mana: null,
     persists_across_turns: false,
     new_turn_carries_output: null,
     setup: false,
@@ -343,6 +344,7 @@ describe('CardScreen', () => {
           default: [],
           options: [{ value: 'lotus-cobra', label: 'Lotus Cobra', scryfall_id: null }],
           picker: { search_placeholder: 'Search cards', empty_label: 'Add what you control.' },
+          mana: null,
           setup: true,
           persists_across_turns: true,
         }),
@@ -375,6 +377,7 @@ describe('CardScreen', () => {
           default: [],
           options: [{ value: 'lotus-cobra', label: 'Lotus Cobra', scryfall_id: null }],
           picker: { search_placeholder: 'Search cards', empty_label: 'Add what you control.' },
+          mana: null,
         }),
       ],
       outputs: [
