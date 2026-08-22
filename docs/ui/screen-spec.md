@@ -171,7 +171,7 @@ card with zero per-card branching in the UI layer.
 3. **No live fields → setup fields render inline** in the play area (below the stat strip,
    where live `FieldControl`s would normally go) instead of only behind the sheet, and
    `SetupSummaryBar` is suppressed. Guarantees no card ever shows an empty play surface — this
-   was Craterhoof's failure mode before its `additional_triggers` field was flipped to live
+   was Craterhoof's failure mode before its trigger-count field was flipped to live
    (see `backend/app/cards/craterhoof_behemoth.py`); the rule stays as a safety net for any
    future all-setup card.
 4. **First open of a card with setup fields auto-opens the sheet.** Closing it (Done, backdrop,
@@ -224,17 +224,16 @@ the other 6 outputs → live area shows the "Spells cast this turn" `Stepper` �
 
 **Craterhoof Behemoth** (4 fields: 2 setup, 2 live; 4 outputs, 1 primary, no alert): sheet has
 only "Total power before triggers" and "Creatures at first trigger" — 2 fields, still worth a
-sheet (rule 2 only suppresses the sheet at *zero* setup fields, not "few"). Live area shows
-"Second trigger this turn?" `Toggle`-shaped counter and, once toggled, "Creatures at second
-trigger" `Stepper` (rule: `visible_if` applies identically inside the live area). No action
-button in `ActionBar`, just "New turn" — rule 9 doesn't force an `ActionBar` button to exist.
+sheet (rule 2 only suppresses the sheet at *zero* setup fields, not "few"). Live area shows the
+"Craterhoof-shaped triggers this turn" counter and the "Creatures gained before each later
+trigger" `Stepper`, both learned mid-turn rather than answered up front. `ActionBar` carries
+the counter's "Another trigger" button beside "New turn".
 
 **Hypothetical all-setup card** (rule 3): if every field were `setup: true`, `SetupSummaryBar`
 is suppressed and every field renders inline in the play area instead — never behind a sheet
 with nothing live underneath it.
 
-**Hypothetical single-output card** (rule 6, e.g. Blood Artist from
-`docs/future-card-ideas.md`): `HeroStat` alone, no `StatStrip`.
+**Hypothetical single-output card** (rule 6): `HeroStat` alone, no `StatStrip`.
 
 ---
 

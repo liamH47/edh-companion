@@ -67,11 +67,11 @@ describe('CardPickerScreen', () => {
   })
 
   it('shows a card thumbnail for entries with a printed card', () => {
-    const arted = [makeCard('blood-artist', 'Blood Artist', 'b5275d76-2947-4219-be21-614c7421614a')]
+    const arted = [makeCard('kalonian-hydra', 'Kalonian Hydra', '1d21ae20-2ef5-4dc0-aced-97497e6a8025')]
     render(<CardPickerScreen cards={arted} onSelectCard={() => {}} />)
     // Decorative (alt="") -- the name is right beside it -- so query by tag.
     const img = document.querySelector('img')!
-    expect(img.src).toContain('b5275d76-2947-4219-be21-614c7421614a')
+    expect(img.src).toContain('1d21ae20-2ef5-4dc0-aced-97497e6a8025')
     expect(img.src).toContain('version=small')
     expect(screen.queryByTestId('card-thumb-fallback')).not.toBeInTheDocument()
   })
@@ -79,12 +79,12 @@ describe('CardPickerScreen', () => {
   it('falls back to the card-back tile for cardless entries and failed loads', () => {
     const mixed = [
       makeCard('commander-tax', 'Commander Tax'),
-      makeCard('blood-artist', 'Blood Artist', 'b5275d76-2947-4219-be21-614c7421614a'),
+      makeCard('kalonian-hydra', 'Kalonian Hydra', '1d21ae20-2ef5-4dc0-aced-97497e6a8025'),
     ]
     render(<CardPickerScreen cards={mixed} onSelectCard={() => {}} />)
     // Commander Tax has no printed card: tile from the start.
     expect(screen.getAllByTestId('card-thumb-fallback')).toHaveLength(1)
-    // Blood Artist's image dies (offline): its row degrades to the same tile.
+    // Kalonian Hydra's image dies (offline): its row degrades to the same tile.
     fireEvent.error(document.querySelector('img')!)
     expect(screen.getAllByTestId('card-thumb-fallback')).toHaveLength(2)
     expect(document.querySelector('img')).toBeNull()

@@ -13,41 +13,45 @@ describe('compute backend', () => {
     const fetchMock = vi.fn()
     vi.stubGlobal('fetch', fetchMock)
 
-    const bloodArtist = findCard('blood-artist')!
-    const outputs = computeCard(bloodArtist, { creatures_died: 4, drain_effect_count: 3 })
+    const nykthos = findCard('nykthos-shrine-to-nyx')!
+    const outputs = computeCard(nykthos, { devotion_count: 4 })
 
-    expect(outputs).toEqual({ total_life_drained: 12 })
+    expect(outputs).toEqual({ mana_produced: 4, net_mana_after_activation_cost: 2 })
     expect(fetchMock).not.toHaveBeenCalled()
     vi.unstubAllGlobals()
   })
 
   it('applies field defaults for anything omitted', () => {
-    const bloodArtist = findCard('blood-artist')!
-    // drain_effect_count defaults to 1.
-    expect(computeCard(bloodArtist, { creatures_died: 4 })).toEqual({ total_life_drained: 4 })
+    const nykthos = findCard('nykthos-shrine-to-nyx')!
+    // devotion_count defaults to 0, and activating still costs {2}.
+    expect(computeCard(nykthos, {})).toEqual({
+      mana_produced: 0,
+      net_mana_after_activation_cost: -2,
+    })
   })
 
   it('throws for input the card rejects, so the caller can surface it', () => {
-    const bloodArtist = findCard('blood-artist')!
-    expect(() => computeCard(bloodArtist, { creatures_died: -1 })).toThrow()
+    const nykthos = findCard('nykthos-shrine-to-nyx')!
+    expect(() => computeCard(nykthos, { devotion_count: -1 })).toThrow()
   })
 
   it('routes through a registered backend instead', () => {
-    const local = vi.fn().mockReturnValue({ total_life_drained: 99 })
+    const local = vi.fn().mockReturnValue({ mana_produced: 99 })
     setComputeBackend(local)
 
-    const bloodArtist = findCard('blood-artist')!
-    expect(computeCard(bloodArtist, { creatures_died: 1 })).toEqual({ total_life_drained: 99 })
-    expect(local).toHaveBeenCalledWith(bloodArtist, { creatures_died: 1 })
+    const nykthos = findCard('nykthos-shrine-to-nyx')!
+    expect(computeCard(nykthos, { devotion_count: 1 })).toEqual({ mana_produced: 99 })
+    expect(local).toHaveBeenCalledWith(nykthos, { devotion_count: 1 })
   })
 
   it('goes back to local compute when reset', () => {
-    setComputeBackend(vi.fn().mockReturnValue({ total_life_drained: 99 }))
+    setComputeBackend(vi.fn().mockReturnValue({ mana_produced: 99 }))
     resetComputeBackend()
 
-    const bloodArtist = findCard('blood-artist')!
-    expect(computeCard(bloodArtist, { creatures_died: 2, drain_effect_count: 2 })).toEqual({
-      total_life_drained: 4,
+    const nykthos = findCard('nykthos-shrine-to-nyx')!
+    expect(computeCard(nykthos, { devotion_count: 2 })).toEqual({
+      mana_produced: 2,
+      net_mana_after_activation_cost: 0,
     })
   })
 })

@@ -42,7 +42,7 @@ describe('App', () => {
 
     render(<App />)
 
-    expect(screen.getByRole('button', { name: 'Blood Artist' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Kalonian Hydra' })).toBeInTheDocument()
     expect(fetchMock).not.toHaveBeenCalled()
     vi.unstubAllGlobals()
   })
@@ -51,9 +51,9 @@ describe('App', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByRole('button', { name: 'Blood Artist' }))
+    await user.click(screen.getByRole('button', { name: 'Kalonian Hydra' }))
 
-    expect(screen.getByRole('heading', { name: 'Blood Artist' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Kalonian Hydra' })).toBeInTheDocument()
     // The card screen owns the thumb zone, so the tab bar steps aside.
     expect(screen.queryByRole('button', { name: 'Cards' })).not.toBeInTheDocument()
   })
@@ -62,7 +62,7 @@ describe('App', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByRole('button', { name: 'Blood Artist' }))
+    await user.click(screen.getByRole('button', { name: 'Kalonian Hydra' }))
     await user.click(screen.getByRole('button', { name: 'Back' }))
 
     expect(screen.getByRole('searchbox', { name: 'Search cards' })).toBeInTheDocument()

@@ -1,5 +1,4 @@
 import { compute as aetherfluxReservoir } from './compute/aetherflux-reservoir'
-import { compute as bloodArtist } from './compute/blood-artist'
 import { compute as brainFreeze } from './compute/brain-freeze'
 import { compute as cometStellarPup } from './compute/comet-stellar-pup'
 import { compute as commanderTax } from './compute/commander-tax'
@@ -32,7 +31,6 @@ export type ComputeFn = (inputs: FieldValues) => OutputValues
  */
 export const COMPUTE_BY_CARD_ID: Record<string, ComputeFn> = {
   'aetherflux-reservoir': aetherfluxReservoir,
-  'blood-artist': bloodArtist,
   'brain-freeze': brainFreeze,
   'comet-stellar-pup': cometStellarPup,
   'commander-tax': commanderTax,

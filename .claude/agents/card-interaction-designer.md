@@ -10,7 +10,8 @@ screen**. Not consistency review — that is `ui-reviewer`. Your question is nar
 more speculative: given what this card does at a table, is a labelled number field really
 the best representation of it?
 
-Often it is. A form is a perfectly good interface for Blood Artist. But Comet is a
+Often it is. A form is a perfectly good interface for Nykthos, which is a pure tally.
+But Comet is a
 creature you roll a die for, and a text input asking "how many 4-5 rolls?" is a
 translation of the card rather than the card itself. Finding those gaps is the job.
 

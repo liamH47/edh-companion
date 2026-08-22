@@ -1,16 +1,36 @@
 """Craterhoof Behemoth: creatures you control get +X/+X (and trample) until end of
-turn, where X is your creature count -- recalculated independently each time this
-kind of trigger resolves, since the board can change between them."""
+turn, where X is your creature count -- recalculated independently each time this kind
+of trigger resolves, since the board can change between them.
+
+The count is recalculated per trigger, and each trigger pumps *every* creature, so the
+total added is the sum of X squared rather than one big multiplication. That is the part
+worth a calculator: two triggers at 8 creatures is not 16 creatures' worth of power, it
+is 64 + 81 once the second Hoof is itself on the battlefield.
+
+Any number of triggers is allowed. An earlier version capped this at two, which was an
+arbitrary line -- Helm of the Host, a flicker chain or a second copy can all push past
+it, and the arithmetic does not care how many there are.
+
+`creatures_added_per_trigger` is the one modelled assumption, and it exists because the
+two common cases are exact: **1** when each extra trigger comes from another
+Craterhoof-shaped body entering (that body is itself a creature, so it raises the count
+for every later trigger), and **0** when the same creature is flickered and returns.
+A board that changes in some other way between triggers is rarer than either.
+"""
 
 from typing import Any
 
-from .schema import CardMetadata, FieldKind, FieldSpec, OutputSpec, VisibleIf
+from .schema import CardMetadata, FieldKind, FieldSpec, OutputSpec
 
-# Each trigger squares this into the total (X creatures each gaining +X/+X), so the
-# cap is squared too. 99 creatures is already a board that has won without attacking.
+# Each trigger squares this into the total (X creatures each gaining +X/+X), so the cap
+# is squared too. 99 creatures is already a board that has won without attacking.
 MAX_CREATURE_COUNT = 99
 MAX_TOTAL_POWER = 9_999
-MAX_ADDITIONAL_TRIGGERS = 1
+# Six is past any real non-infinite line; a loop that goes truly infinite does not need
+# a calculator. At the declared maxima this lands near 150,000 power -- large, still
+# readable, and well inside the million past which the exact figure stops mattering.
+MAX_TRIGGERS = 6
+MAX_CREATURES_ADDED = 20
 
 METADATA = CardMetadata(
     id="craterhoof-behemoth",
@@ -33,9 +53,9 @@ METADATA = CardMetadata(
             setup=True,
         ),
         FieldSpec(
-            name="trigger_1_creature_count",
+            name="creature_count",
             label="Creatures you control when the first trigger resolves",
-            short_label="creatures (1st)",
+            short_label="creatures",
             kind=FieldKind.NUMBER,
             default=0,
             min=0,
@@ -44,54 +64,50 @@ METADATA = CardMetadata(
             "battlefield when its own trigger resolves.",
             setup=True,
         ),
-        # Not `setup`: unlike the other fields here, this isn't board state answered once
-        # up front -- it's whether a *second* trigger happens, which a player only learns
-        # partway through the turn, so it stays live alongside trigger_2_creature_count.
+        # Not `setup`: unlike the board state above, this isn't answered once up front --
+        # a player learns partway through the turn how many triggers they got.
         FieldSpec(
-            name="additional_triggers",
-            label="Second Craterhoof-shaped trigger this turn?",
-            short_label="2nd trigger",
+            name="triggers",
+            label="Craterhoof-shaped triggers this turn",
+            short_label="triggers",
             kind=FieldKind.COUNTER,
-            default=0,
-            min=0,
-            max=MAX_ADDITIONAL_TRIGGERS,
-            action_label="Additional Trigger",
-            help_text="Only if a second trigger resolves this turn (a second copy, a "
-            "flicker, a similar effect) -- most turns won't have one.",
+            default=1,
+            min=1,
+            max=MAX_TRIGGERS,
+            action_label="Another trigger",
+            help_text="Its own trigger is the first one. Add another for each further "
+            "copy, flicker or similar effect that resolves this turn.",
         ),
         FieldSpec(
-            name="trigger_2_creature_count",
-            label="Creatures you control when the second trigger resolves",
-            short_label="creatures (2nd)",
+            name="creatures_added_per_trigger",
+            label="Creatures gained before each later trigger",
+            short_label="added each",
             kind=FieldKind.NUMBER,
-            default=0,
+            default=1,
             min=0,
-            max=MAX_CREATURE_COUNT,
-            visible_if=VisibleIf(field="additional_triggers", equals=1),
-            help_text="Re-confirm the count fresh -- it can differ from the first trigger.",
+            max=MAX_CREATURES_ADDED,
+            help_text="1 when the extra trigger is another body entering -- it counts "
+            "itself. 0 for a flicker, where the same creature comes back and the count "
+            "is unchanged. Ignored entirely when there is only one trigger.",
         ),
     ],
     outputs=[
-        OutputSpec(
-            name="power_bonus_trigger_1",
-            label="Power bonus per creature (trigger 1)",
-            short_label="bonus (1st)",
-        ),
-        OutputSpec(
-            name="power_after_trigger_1",
-            label="Total power after trigger 1",
-            short_label="after 1st",
-        ),
-        OutputSpec(
-            name="power_bonus_trigger_2",
-            label="Power bonus per creature (trigger 2)",
-            short_label="bonus (2nd)",
-        ),
         OutputSpec(
             name="total_power_after_triggers",
             label="Total power after all triggers",
             short_label="total power",
             primary=True,
+        ),
+        OutputSpec(name="power_added", label="Power added by the triggers", short_label="added"),
+        OutputSpec(
+            name="pump_per_creature",
+            label="+X/+X each creature ended up with",
+            short_label="each gets",
+        ),
+        OutputSpec(
+            name="last_trigger_bonus",
+            label="X on the final trigger",
+            short_label="final X",
         ),
     ],
 )
@@ -99,17 +115,23 @@ METADATA = CardMetadata(
 
 def compute(inputs: dict[str, Any]) -> dict[str, Any]:
     total_power_before = int(inputs["total_power_before_triggers"])
-    trigger_1_creature_count = int(inputs["trigger_1_creature_count"])
-    trigger_2_creature_count = int(inputs["trigger_2_creature_count"])
+    creature_count = int(inputs["creature_count"])
+    triggers = int(inputs["triggers"])
+    added_per_trigger = int(inputs["creatures_added_per_trigger"])
+
+    # X for each trigger in turn. The first resolves against the board as it stands;
+    # each later one against a board that has grown by `added_per_trigger`.
+    bonuses = [creature_count + step * added_per_trigger for step in range(triggers)]
 
     # Each trigger's X is squared into the total independently -- X creatures each
     # gaining +X power adds X*X to the sum, regardless of what any other trigger did.
-    power_after_trigger_1 = total_power_before + trigger_1_creature_count**2
-    power_after_trigger_2 = power_after_trigger_1 + trigger_2_creature_count**2
+    power_added = sum(bonus**2 for bonus in bonuses)
 
     return {
-        "power_bonus_trigger_1": trigger_1_creature_count,
-        "power_after_trigger_1": power_after_trigger_1,
-        "power_bonus_trigger_2": trigger_2_creature_count,
-        "total_power_after_triggers": power_after_trigger_2,
+        "total_power_after_triggers": total_power_before + power_added,
+        "power_added": power_added,
+        # Every trigger pumps every creature, so a creature present for all of them
+        # gained the sum of the X values -- not the largest one.
+        "pump_per_creature": sum(bonuses),
+        "last_trigger_bonus": bonuses[-1],
     }

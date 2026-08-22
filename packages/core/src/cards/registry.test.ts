@@ -3,7 +3,7 @@ import { COMPUTE_BY_CARD_ID, computeFor } from './registry'
 
 describe('computeFor', () => {
   it('returns the compute for a registered card', () => {
-    expect(computeFor('blood-artist')).toBe(COMPUTE_BY_CARD_ID['blood-artist'])
+    expect(computeFor('grapeshot')).toBe(COMPUTE_BY_CARD_ID['grapeshot'])
   })
 
   it('throws a named error for a card with no client-side compute', () => {
