@@ -20,8 +20,8 @@ misreading the card invites.
 
 ## 1. Python module — `backend/app/cards/<card_name>.py`
 
-Match the idiom of an existing module closely. Read a comparable one first: `blood_artist.py`
-for the minimal case, `brain_freeze.py` for a storm card, `scute_swarm.py` for a simulation,
+Match the idiom of an existing module closely. Read a comparable one first:
+`nykthos_shrine_to_nyx.py` for the minimal case, `brain_freeze.py` for a storm card, `scute_swarm.py` for a simulation,
 `comet_stellar_pup.py` for an ordered sequence.
 
 - Module docstring naming the card **and its wrinkle** — why it is worth a calculator.

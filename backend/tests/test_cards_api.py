@@ -79,47 +79,49 @@ def test_calculate_endpoint_grows_ob_nixilis_per_landfall_trigger(client: TestCl
     assert outputs["life_drained"] == 6
 
 
-def test_get_craterhoof_behemoth_metadata_gates_the_second_trigger_field(
+def test_get_craterhoof_behemoth_metadata_splits_setup_from_live(
     client: TestClient,
 ) -> None:
     response = client.get("/api/cards/craterhoof-behemoth")
     assert response.status_code == 200
     body = response.json()
     fields_by_name = {field["name"]: field for field in body["fields"]}
-    assert fields_by_name["additional_triggers"]["action_label"] == "Additional Trigger"
-    assert fields_by_name["trigger_2_creature_count"]["visible_if"] == {
-        "field": "additional_triggers",
-        "equals": 1,
-    }
-    # Whether a second trigger happens is learned mid-turn, not one-time board setup --
-    # both fields stay live rather than tucked into the Setup section.
-    assert fields_by_name["additional_triggers"]["setup"] is False
-    assert fields_by_name["trigger_2_creature_count"]["setup"] is False
+    assert fields_by_name["triggers"]["action_label"] == "Another trigger"
+    # A trigger count of at least one: the card's own trigger is the first.
+    assert fields_by_name["triggers"]["default"] == 1
+    assert fields_by_name["triggers"]["min"] == 1
+    # How many triggers you got is learned mid-turn, not one-time board setup -- both
+    # it and the growth between triggers stay live rather than tucked into Setup.
+    assert fields_by_name["triggers"]["setup"] is False
+    assert fields_by_name["creatures_added_per_trigger"]["setup"] is False
     assert fields_by_name["total_power_before_triggers"]["setup"] is True
+    assert fields_by_name["creature_count"]["setup"] is True
 
     outputs_by_name = {output["name"]: output for output in body["outputs"]}
     assert outputs_by_name["total_power_after_triggers"]["primary"] is True
-    assert outputs_by_name["power_after_trigger_1"]["primary"] is False
+    assert outputs_by_name["power_added"]["primary"] is False
 
 
-def test_calculate_endpoint_applies_both_craterhoof_triggers(client: TestClient) -> None:
+def test_calculate_endpoint_applies_every_craterhoof_trigger(client: TestClient) -> None:
     response = client.post(
         "/api/cards/craterhoof-behemoth/calculate",
         json={
             "inputs": {
                 "total_power_before_triggers": 8,
-                "trigger_1_creature_count": 4,
-                "trigger_2_creature_count": 6,
+                "creature_count": 4,
+                "triggers": 2,
+                "creatures_added_per_trigger": 1,
             }
         },
     )
     assert response.status_code == 200
+    # X of 4 then 5, since the body causing the second trigger counts itself.
     assert response.json() == {
         "outputs": {
-            "power_bonus_trigger_1": 4,
-            "power_after_trigger_1": 24,
-            "power_bonus_trigger_2": 6,
-            "total_power_after_triggers": 60,
+            "total_power_after_triggers": 49,
+            "power_added": 41,
+            "pump_per_creature": 9,
+            "last_trigger_bonus": 5,
         }
     }
 

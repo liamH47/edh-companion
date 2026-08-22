@@ -3,798 +3,1190 @@
   "cases": [
     {
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 0,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 0
+        "triggers": 1
       },
       "outputs": {
-        "power_after_trigger_1": 0,
-        "power_bonus_trigger_1": 0,
-        "power_bonus_trigger_2": 0,
+        "last_trigger_bonus": 0,
+        "power_added": 0,
+        "pump_per_creature": 0,
+        "total_power_after_triggers": 0
+      }
+    },
+    {
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": 0,
+        "triggers": 1
+      },
+      "outputs": {
+        "last_trigger_bonus": 0,
+        "power_added": 0,
+        "pump_per_creature": 0,
         "total_power_after_triggers": 0
       }
     },
     {
       "error": {
         "code": "below_min",
-        "field": "trigger_2_creature_count"
+        "field": "creatures_added_per_trigger"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 0,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": -1
+        "triggers": 1
       }
     },
     {
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 0,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 99
+        "triggers": 1
       },
       "outputs": {
-        "power_after_trigger_1": 0,
-        "power_bonus_trigger_1": 0,
-        "power_bonus_trigger_2": 99,
-        "total_power_after_triggers": 9801
+        "last_trigger_bonus": 0,
+        "power_added": 0,
+        "pump_per_creature": 0,
+        "total_power_after_triggers": 0
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_2_creature_count"
+        "field": "creatures_added_per_trigger"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 0,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 100
+        "triggers": 1
       }
     },
     {
       "error": {
         "code": "below_min",
-        "field": "additional_triggers"
+        "field": "triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 0,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 0
+        "triggers": 0
       }
     },
     {
       "error": {
         "code": "below_min",
-        "field": "additional_triggers"
+        "field": "triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 0,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": -1
+        "triggers": 0
       }
     },
     {
       "error": {
         "code": "below_min",
-        "field": "additional_triggers"
+        "field": "triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 0,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 99
+        "triggers": 0
       }
     },
     {
       "error": {
         "code": "below_min",
-        "field": "additional_triggers"
+        "field": "triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 0,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 100
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": 0,
+        "triggers": 0
       }
     },
     {
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 0,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 0
+        "triggers": 6
       },
       "outputs": {
-        "power_after_trigger_1": 0,
-        "power_bonus_trigger_1": 0,
-        "power_bonus_trigger_2": 0,
+        "last_trigger_bonus": 5,
+        "power_added": 55,
+        "pump_per_creature": 15,
+        "total_power_after_triggers": 55
+      }
+    },
+    {
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": 0,
+        "triggers": 6
+      },
+      "outputs": {
+        "last_trigger_bonus": 0,
+        "power_added": 0,
+        "pump_per_creature": 0,
         "total_power_after_triggers": 0
       }
     },
     {
       "error": {
         "code": "below_min",
-        "field": "trigger_2_creature_count"
+        "field": "creatures_added_per_trigger"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 0,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": -1
+        "triggers": 6
       }
     },
     {
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 0,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 99
+        "triggers": 6
       },
       "outputs": {
-        "power_after_trigger_1": 0,
-        "power_bonus_trigger_1": 0,
-        "power_bonus_trigger_2": 99,
+        "last_trigger_bonus": 100,
+        "power_added": 22000,
+        "pump_per_creature": 300,
+        "total_power_after_triggers": 22000
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "creatures_added_per_trigger"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": 0,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": 0,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": 0,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": -1,
+        "total_power_before_triggers": 0,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 20,
+        "total_power_before_triggers": 0,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": 0,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": 0,
+        "triggers": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": 0,
+        "triggers": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": -1,
+        "total_power_before_triggers": 0,
+        "triggers": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 20,
+        "total_power_before_triggers": 0,
+        "triggers": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": 0,
+        "triggers": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": -1,
+        "total_power_before_triggers": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 20,
+        "total_power_before_triggers": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": 0,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": 0,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": -1,
+        "total_power_before_triggers": 0,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 20,
+        "total_power_before_triggers": 0,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": 0,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": 0,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": 0,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": -1,
+        "total_power_before_triggers": 0,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 20,
+        "total_power_before_triggers": 0,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": 0,
+        "triggers": 7
+      }
+    },
+    {
+      "inputs": {
+        "creature_count": 99,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": 0,
+        "triggers": 1
+      },
+      "outputs": {
+        "last_trigger_bonus": 99,
+        "power_added": 9801,
+        "pump_per_creature": 99,
         "total_power_after_triggers": 9801
       }
     },
     {
-      "error": {
-        "code": "above_max",
-        "field": "trigger_2_creature_count"
-      },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 100
-      }
-    },
-    {
-      "error": {
-        "code": "above_max",
-        "field": "additional_triggers"
-      },
-      "inputs": {
-        "additional_triggers": 2,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 0
-      }
-    },
-    {
-      "error": {
-        "code": "above_max",
-        "field": "additional_triggers"
-      },
-      "inputs": {
-        "additional_triggers": 2,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": -1
-      }
-    },
-    {
-      "error": {
-        "code": "above_max",
-        "field": "additional_triggers"
-      },
-      "inputs": {
-        "additional_triggers": 2,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 99
-      }
-    },
-    {
-      "error": {
-        "code": "above_max",
-        "field": "additional_triggers"
-      },
-      "inputs": {
-        "additional_triggers": 2,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 100
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 0,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 0
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 0,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": -1
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 0,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 99
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 0,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 100
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": -1,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 0
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": -1,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": -1
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": -1,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 99
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": -1,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 100
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 1,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 0
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 1,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": -1
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 1,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 99
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 1,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 100
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 2,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 0
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 2,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": -1
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 2,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 99
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 2,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 100
-      }
-    },
-    {
-      "inputs": {
-        "additional_triggers": 0,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 0
+        "triggers": 1
       },
       "outputs": {
-        "power_after_trigger_1": 9801,
-        "power_bonus_trigger_1": 99,
-        "power_bonus_trigger_2": 0,
-        "total_power_after_triggers": 9801
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_2_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 0,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": -1
-      }
-    },
-    {
-      "inputs": {
-        "additional_triggers": 0,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 99
-      },
-      "outputs": {
-        "power_after_trigger_1": 9801,
-        "power_bonus_trigger_1": 99,
-        "power_bonus_trigger_2": 99,
-        "total_power_after_triggers": 19602
-      }
-    },
-    {
-      "error": {
-        "code": "above_max",
-        "field": "trigger_2_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 0,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 100
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "additional_triggers"
-      },
-      "inputs": {
-        "additional_triggers": -1,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 0
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "additional_triggers"
-      },
-      "inputs": {
-        "additional_triggers": -1,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": -1
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "additional_triggers"
-      },
-      "inputs": {
-        "additional_triggers": -1,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 99
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "additional_triggers"
-      },
-      "inputs": {
-        "additional_triggers": -1,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 100
-      }
-    },
-    {
-      "inputs": {
-        "additional_triggers": 1,
-        "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 0
-      },
-      "outputs": {
-        "power_after_trigger_1": 9801,
-        "power_bonus_trigger_1": 99,
-        "power_bonus_trigger_2": 0,
+        "last_trigger_bonus": 99,
+        "power_added": 9801,
+        "pump_per_creature": 99,
         "total_power_after_triggers": 9801
       }
     },
     {
       "error": {
         "code": "below_min",
-        "field": "trigger_2_creature_count"
+        "field": "creatures_added_per_trigger"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": -1
+        "triggers": 1
       }
     },
     {
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 99
+        "triggers": 1
       },
       "outputs": {
-        "power_after_trigger_1": 9801,
-        "power_bonus_trigger_1": 99,
-        "power_bonus_trigger_2": 99,
-        "total_power_after_triggers": 19602
+        "last_trigger_bonus": 99,
+        "power_added": 9801,
+        "pump_per_creature": 99,
+        "total_power_after_triggers": 9801
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_2_creature_count"
+        "field": "creatures_added_per_trigger"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 100
+        "triggers": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers"
+      },
+      "inputs": {
+        "creature_count": 99,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers"
+      },
+      "inputs": {
+        "creature_count": 99,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers"
+      },
+      "inputs": {
+        "creature_count": 99,
+        "creatures_added_per_trigger": -1,
+        "total_power_before_triggers": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers"
+      },
+      "inputs": {
+        "creature_count": 99,
+        "creatures_added_per_trigger": 20,
+        "total_power_before_triggers": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers"
+      },
+      "inputs": {
+        "creature_count": 99,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": 0,
+        "triggers": 0
+      }
+    },
+    {
+      "inputs": {
+        "creature_count": 99,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": 0,
+        "triggers": 6
+      },
+      "outputs": {
+        "last_trigger_bonus": 104,
+        "power_added": 61831,
+        "pump_per_creature": 609,
+        "total_power_after_triggers": 61831
+      }
+    },
+    {
+      "inputs": {
+        "creature_count": 99,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": 0,
+        "triggers": 6
+      },
+      "outputs": {
+        "last_trigger_bonus": 99,
+        "power_added": 58806,
+        "pump_per_creature": 594,
+        "total_power_after_triggers": 58806
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creatures_added_per_trigger"
+      },
+      "inputs": {
+        "creature_count": 99,
+        "creatures_added_per_trigger": -1,
+        "total_power_before_triggers": 0,
+        "triggers": 6
+      }
+    },
+    {
+      "inputs": {
+        "creature_count": 99,
+        "creatures_added_per_trigger": 20,
+        "total_power_before_triggers": 0,
+        "triggers": 6
+      },
+      "outputs": {
+        "last_trigger_bonus": 199,
+        "power_added": 140206,
+        "pump_per_creature": 894,
+        "total_power_after_triggers": 140206
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "additional_triggers"
+        "field": "creatures_added_per_trigger"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 0
+        "triggers": 6
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "additional_triggers"
+        "field": "triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": -1
+        "triggers": 7
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "additional_triggers"
+        "field": "triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 99
+        "triggers": 7
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "additional_triggers"
+        "field": "triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 99,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 100
+        "triggers": 7
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 0
+        "triggers": 7
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": -1
+        "triggers": 7
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "creature_count"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 99
+        "triggers": 1
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "creature_count"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 100
+        "triggers": 1
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "creature_count"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 0
+        "triggers": 1
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "creature_count"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": -1
+        "triggers": 1
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "creature_count"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 99
+        "triggers": 1
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "creature_count"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 100
+        "triggers": 0
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "creature_count"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 0
+        "triggers": 0
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "creature_count"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": -1
+        "triggers": 0
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "creature_count"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 99
+        "triggers": 0
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "creature_count"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 100
+        "triggers": 0
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "creature_count"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 0
+        "triggers": 6
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "creature_count"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": -1
+        "triggers": 6
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "creature_count"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 100,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 99
+        "triggers": 6
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "creature_count"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 100
+        "triggers": 6
       }
     },
     {
       "error": {
+        "code": "above_max",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": 100,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": 0,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": 100,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": 0,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": 100,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": 0,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": 100,
+        "creatures_added_per_trigger": -1,
+        "total_power_before_triggers": 0,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": 100,
+        "creatures_added_per_trigger": 20,
+        "total_power_before_triggers": 0,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": 100,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": 0,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": -1,
+        "triggers": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": -1,
+        "triggers": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": -1,
+        "total_power_before_triggers": -1,
+        "triggers": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 20,
+        "total_power_before_triggers": -1,
+        "triggers": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": -1,
+        "triggers": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": -1,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": -1,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": -1,
+        "total_power_before_triggers": -1,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 20,
+        "total_power_before_triggers": -1,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": -1,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": -1,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": -1,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": -1,
+        "total_power_before_triggers": -1,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 20,
+        "total_power_before_triggers": -1,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": -1,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": -1,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
         "code": "below_min",
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 0,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 0
+        "triggers": 7
       }
     },
     {
@@ -803,10 +1195,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 0,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": -1
+        "triggers": 7
       }
     },
     {
@@ -815,10 +1207,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 0,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 99
+        "triggers": 7
       }
     },
     {
@@ -827,10 +1219,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 0,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 100
+        "triggers": 7
       }
     },
     {
@@ -839,10 +1231,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 0
+        "triggers": 1
       }
     },
     {
@@ -851,10 +1243,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": -1
+        "triggers": 1
       }
     },
     {
@@ -863,10 +1255,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": -1,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 99
+        "triggers": 1
       }
     },
     {
@@ -875,10 +1267,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 100
+        "triggers": 1
       }
     },
     {
@@ -887,10 +1279,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 0
+        "triggers": 1
       }
     },
     {
@@ -899,10 +1291,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": -1
+        "triggers": 0
       }
     },
     {
@@ -911,10 +1303,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 99
+        "triggers": 0
       }
     },
     {
@@ -923,10 +1315,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": -1,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 100
+        "triggers": 0
       }
     },
     {
@@ -935,10 +1327,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 0
+        "triggers": 0
       }
     },
     {
@@ -947,10 +1339,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": -1
+        "triggers": 0
       }
     },
     {
@@ -959,10 +1351,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 99
+        "triggers": 6
       }
     },
     {
@@ -971,10 +1363,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 100
+        "triggers": 6
       }
     },
     {
@@ -983,10 +1375,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": -1,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 0
+        "triggers": 6
       }
     },
     {
@@ -995,10 +1387,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": -1
+        "triggers": 6
       }
     },
     {
@@ -1007,10 +1399,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 99
+        "triggers": 6
       }
     },
     {
@@ -1019,10 +1411,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 100
+        "triggers": 7
       }
     },
     {
@@ -1031,10 +1423,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 0
+        "triggers": 7
       }
     },
     {
@@ -1043,10 +1435,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": -1,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": -1
+        "triggers": 7
       }
     },
     {
@@ -1055,10 +1447,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 99
+        "triggers": 7
       }
     },
     {
@@ -1067,10 +1459,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 100
+        "triggers": 7
       }
     },
     {
@@ -1079,10 +1471,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 0
+        "triggers": 1
       }
     },
     {
@@ -1091,10 +1483,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": -1
+        "triggers": 1
       }
     },
     {
@@ -1103,10 +1495,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 99
+        "triggers": 1
       }
     },
     {
@@ -1115,10 +1507,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 100
+        "triggers": 1
       }
     },
     {
@@ -1127,10 +1519,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 0
+        "triggers": 1
       }
     },
     {
@@ -1139,10 +1531,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": -1
+        "triggers": 0
       }
     },
     {
@@ -1151,10 +1543,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 99
+        "triggers": 0
       }
     },
     {
@@ -1163,10 +1555,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 99,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 100
+        "triggers": 0
       }
     },
     {
@@ -1175,10 +1567,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 0
+        "triggers": 0
       }
     },
     {
@@ -1187,10 +1579,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": -1
+        "triggers": 0
       }
     },
     {
@@ -1199,10 +1591,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 99
+        "triggers": 6
       }
     },
     {
@@ -1211,10 +1603,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 100
+        "triggers": 6
       }
     },
     {
@@ -1223,10 +1615,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 0
+        "triggers": 6
       }
     },
     {
@@ -1235,10 +1627,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": -1
+        "triggers": 6
       }
     },
     {
@@ -1247,10 +1639,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 99
+        "triggers": 6
       }
     },
     {
@@ -1259,10 +1651,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 100
+        "triggers": 7
       }
     },
     {
@@ -1271,10 +1663,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 0
+        "triggers": 7
       }
     },
     {
@@ -1283,10 +1675,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": -1
+        "triggers": 7
       }
     },
     {
@@ -1295,10 +1687,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 99
+        "triggers": 7
       }
     },
     {
@@ -1307,10 +1699,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 100
+        "triggers": 7
       }
     },
     {
@@ -1319,10 +1711,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 0
+        "triggers": 1
       }
     },
     {
@@ -1331,10 +1723,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": -1
+        "triggers": 1
       }
     },
     {
@@ -1343,10 +1735,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 100,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 99
+        "triggers": 1
       }
     },
     {
@@ -1355,10 +1747,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 100
+        "triggers": 1
       }
     },
     {
@@ -1367,10 +1759,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 0
+        "triggers": 1
       }
     },
     {
@@ -1379,10 +1771,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": -1
+        "triggers": 0
       }
     },
     {
@@ -1391,10 +1783,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 99
+        "triggers": 0
       }
     },
     {
@@ -1403,10 +1795,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 100,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 100
+        "triggers": 0
       }
     },
     {
@@ -1415,10 +1807,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 0
+        "triggers": 0
       }
     },
     {
@@ -1427,10 +1819,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": -1
+        "triggers": 0
       }
     },
     {
@@ -1439,10 +1831,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 99
+        "triggers": 6
       }
     },
     {
@@ -1451,10 +1843,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 100
+        "triggers": 6
       }
     },
     {
@@ -1463,10 +1855,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 0
+        "triggers": 6
       }
     },
     {
@@ -1475,10 +1867,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": -1
+        "triggers": 6
       }
     },
     {
@@ -1487,10 +1879,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 99
+        "triggers": 6
       }
     },
     {
@@ -1499,10 +1891,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 100
+        "triggers": 7
       }
     },
     {
@@ -1511,10 +1903,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 0
+        "triggers": 7
       }
     },
     {
@@ -1523,10 +1915,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 100,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": -1
+        "triggers": 7
       }
     },
     {
@@ -1535,10 +1927,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 99
+        "triggers": 7
       }
     },
     {
@@ -1547,806 +1939,1198 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": -1,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 100
+        "triggers": 7
       }
     },
     {
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 0,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 0
+        "triggers": 1
       },
       "outputs": {
-        "power_after_trigger_1": 9999,
-        "power_bonus_trigger_1": 0,
-        "power_bonus_trigger_2": 0,
+        "last_trigger_bonus": 0,
+        "power_added": 0,
+        "pump_per_creature": 0,
+        "total_power_after_triggers": 9999
+      }
+    },
+    {
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": 9999,
+        "triggers": 1
+      },
+      "outputs": {
+        "last_trigger_bonus": 0,
+        "power_added": 0,
+        "pump_per_creature": 0,
         "total_power_after_triggers": 9999
       }
     },
     {
       "error": {
         "code": "below_min",
-        "field": "trigger_2_creature_count"
+        "field": "creatures_added_per_trigger"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 0,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": -1
+        "triggers": 1
       }
     },
     {
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 0,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 99
+        "triggers": 1
       },
       "outputs": {
-        "power_after_trigger_1": 9999,
-        "power_bonus_trigger_1": 0,
-        "power_bonus_trigger_2": 99,
-        "total_power_after_triggers": 19800
+        "last_trigger_bonus": 0,
+        "power_added": 0,
+        "pump_per_creature": 0,
+        "total_power_after_triggers": 9999
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_2_creature_count"
+        "field": "creatures_added_per_trigger"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 0,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 100
+        "triggers": 1
       }
     },
     {
       "error": {
         "code": "below_min",
-        "field": "additional_triggers"
+        "field": "triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 0,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 0
+        "triggers": 0
       }
     },
     {
       "error": {
         "code": "below_min",
-        "field": "additional_triggers"
+        "field": "triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 0,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": -1
+        "triggers": 0
       }
     },
     {
       "error": {
         "code": "below_min",
-        "field": "additional_triggers"
+        "field": "triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 0,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 99
+        "triggers": 0
       }
     },
     {
       "error": {
         "code": "below_min",
-        "field": "additional_triggers"
+        "field": "triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 0,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 100
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": 9999,
+        "triggers": 0
       }
     },
     {
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 0,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 0
+        "triggers": 6
       },
       "outputs": {
-        "power_after_trigger_1": 9999,
-        "power_bonus_trigger_1": 0,
-        "power_bonus_trigger_2": 0,
+        "last_trigger_bonus": 5,
+        "power_added": 55,
+        "pump_per_creature": 15,
+        "total_power_after_triggers": 10054
+      }
+    },
+    {
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": 9999,
+        "triggers": 6
+      },
+      "outputs": {
+        "last_trigger_bonus": 0,
+        "power_added": 0,
+        "pump_per_creature": 0,
         "total_power_after_triggers": 9999
       }
     },
     {
       "error": {
         "code": "below_min",
-        "field": "trigger_2_creature_count"
+        "field": "creatures_added_per_trigger"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 0,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": -1
+        "triggers": 6
       }
     },
     {
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 0,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 99
+        "triggers": 6
       },
       "outputs": {
-        "power_after_trigger_1": 9999,
-        "power_bonus_trigger_1": 0,
-        "power_bonus_trigger_2": 99,
+        "last_trigger_bonus": 100,
+        "power_added": 22000,
+        "pump_per_creature": 300,
+        "total_power_after_triggers": 31999
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "creatures_added_per_trigger"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": 9999,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": 9999,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": 9999,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": -1,
+        "total_power_before_triggers": 9999,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 20,
+        "total_power_before_triggers": 9999,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": 9999,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": 9999,
+        "triggers": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": 9999,
+        "triggers": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": -1,
+        "total_power_before_triggers": 9999,
+        "triggers": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 20,
+        "total_power_before_triggers": 9999,
+        "triggers": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": 9999,
+        "triggers": 1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": 9999,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": 9999,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": -1,
+        "total_power_before_triggers": 9999,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 20,
+        "total_power_before_triggers": 9999,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": 9999,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": 9999,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": 9999,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": -1,
+        "total_power_before_triggers": 9999,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 20,
+        "total_power_before_triggers": 9999,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": 9999,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": 9999,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": 9999,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": -1,
+        "total_power_before_triggers": 9999,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 20,
+        "total_power_before_triggers": 9999,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": -1,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": 9999,
+        "triggers": 7
+      }
+    },
+    {
+      "inputs": {
+        "creature_count": 99,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": 9999,
+        "triggers": 1
+      },
+      "outputs": {
+        "last_trigger_bonus": 99,
+        "power_added": 9801,
+        "pump_per_creature": 99,
         "total_power_after_triggers": 19800
       }
     },
     {
-      "error": {
-        "code": "above_max",
-        "field": "trigger_2_creature_count"
-      },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 100
-      }
-    },
-    {
-      "error": {
-        "code": "above_max",
-        "field": "additional_triggers"
-      },
-      "inputs": {
-        "additional_triggers": 2,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 0
-      }
-    },
-    {
-      "error": {
-        "code": "above_max",
-        "field": "additional_triggers"
-      },
-      "inputs": {
-        "additional_triggers": 2,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": -1
-      }
-    },
-    {
-      "error": {
-        "code": "above_max",
-        "field": "additional_triggers"
-      },
-      "inputs": {
-        "additional_triggers": 2,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 99
-      }
-    },
-    {
-      "error": {
-        "code": "above_max",
-        "field": "additional_triggers"
-      },
-      "inputs": {
-        "additional_triggers": 2,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 100
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 0,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 0
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 0,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": -1
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 0,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 99
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 0,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 100
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": -1,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 0
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": -1,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": -1
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": -1,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 99
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": -1,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 100
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 1,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 0
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 1,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": -1
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 1,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 99
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 1,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 100
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 2,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 0
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 2,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": -1
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 2,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 99
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_1_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 2,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 100
-      }
-    },
-    {
-      "inputs": {
-        "additional_triggers": 0,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 0
+        "triggers": 1
       },
       "outputs": {
-        "power_after_trigger_1": 19800,
-        "power_bonus_trigger_1": 99,
-        "power_bonus_trigger_2": 0,
-        "total_power_after_triggers": 19800
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "trigger_2_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 0,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": -1
-      }
-    },
-    {
-      "inputs": {
-        "additional_triggers": 0,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 99
-      },
-      "outputs": {
-        "power_after_trigger_1": 19800,
-        "power_bonus_trigger_1": 99,
-        "power_bonus_trigger_2": 99,
-        "total_power_after_triggers": 29601
-      }
-    },
-    {
-      "error": {
-        "code": "above_max",
-        "field": "trigger_2_creature_count"
-      },
-      "inputs": {
-        "additional_triggers": 0,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 100
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "additional_triggers"
-      },
-      "inputs": {
-        "additional_triggers": -1,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 0
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "additional_triggers"
-      },
-      "inputs": {
-        "additional_triggers": -1,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": -1
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "additional_triggers"
-      },
-      "inputs": {
-        "additional_triggers": -1,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 99
-      }
-    },
-    {
-      "error": {
-        "code": "below_min",
-        "field": "additional_triggers"
-      },
-      "inputs": {
-        "additional_triggers": -1,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 100
-      }
-    },
-    {
-      "inputs": {
-        "additional_triggers": 1,
-        "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 0
-      },
-      "outputs": {
-        "power_after_trigger_1": 19800,
-        "power_bonus_trigger_1": 99,
-        "power_bonus_trigger_2": 0,
+        "last_trigger_bonus": 99,
+        "power_added": 9801,
+        "pump_per_creature": 99,
         "total_power_after_triggers": 19800
       }
     },
     {
       "error": {
         "code": "below_min",
-        "field": "trigger_2_creature_count"
+        "field": "creatures_added_per_trigger"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": -1
+        "triggers": 1
       }
     },
     {
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 99
+        "triggers": 1
       },
       "outputs": {
-        "power_after_trigger_1": 19800,
-        "power_bonus_trigger_1": 99,
-        "power_bonus_trigger_2": 99,
-        "total_power_after_triggers": 29601
+        "last_trigger_bonus": 99,
+        "power_added": 9801,
+        "pump_per_creature": 99,
+        "total_power_after_triggers": 19800
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_2_creature_count"
+        "field": "creatures_added_per_trigger"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 100
+        "triggers": 1
       }
     },
     {
       "error": {
-        "code": "above_max",
-        "field": "additional_triggers"
+        "code": "below_min",
+        "field": "triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 0
+        "triggers": 0
       }
     },
     {
       "error": {
-        "code": "above_max",
-        "field": "additional_triggers"
+        "code": "below_min",
+        "field": "triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": -1
+        "triggers": 0
       }
     },
     {
       "error": {
-        "code": "above_max",
-        "field": "additional_triggers"
+        "code": "below_min",
+        "field": "triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 99,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 99
+        "triggers": 0
       }
     },
     {
       "error": {
-        "code": "above_max",
-        "field": "additional_triggers"
+        "code": "below_min",
+        "field": "triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 100
+        "triggers": 0
       }
     },
     {
       "error": {
-        "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "code": "below_min",
+        "field": "triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 0
+        "triggers": 0
       }
     },
     {
-      "error": {
-        "code": "above_max",
-        "field": "trigger_1_creature_count"
-      },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": -1
+        "triggers": 6
+      },
+      "outputs": {
+        "last_trigger_bonus": 104,
+        "power_added": 61831,
+        "pump_per_creature": 609,
+        "total_power_after_triggers": 71830
       }
     },
     {
-      "error": {
-        "code": "above_max",
-        "field": "trigger_1_creature_count"
-      },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 99
+        "triggers": 6
+      },
+      "outputs": {
+        "last_trigger_bonus": 99,
+        "power_added": 58806,
+        "pump_per_creature": 594,
+        "total_power_after_triggers": 68805
       }
     },
     {
       "error": {
-        "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "code": "below_min",
+        "field": "creatures_added_per_trigger"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 99,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 100
+        "triggers": 6
       }
     },
     {
-      "error": {
-        "code": "above_max",
-        "field": "trigger_1_creature_count"
-      },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 0
+        "triggers": 6
+      },
+      "outputs": {
+        "last_trigger_bonus": 199,
+        "power_added": 140206,
+        "pump_per_creature": 894,
+        "total_power_after_triggers": 150205
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "creatures_added_per_trigger"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": -1
+        "triggers": 6
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 99
+        "triggers": 7
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 100
+        "triggers": 7
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 0
+        "triggers": 7
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": -1
+        "triggers": 7
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 99
+        "triggers": 7
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "creature_count"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 100
+        "triggers": 1
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "creature_count"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 0
+        "triggers": 1
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "creature_count"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 100,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": -1
+        "triggers": 1
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "creature_count"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 99
+        "triggers": 1
       }
     },
     {
       "error": {
         "code": "above_max",
-        "field": "trigger_1_creature_count"
+        "field": "creature_count"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 9999,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 100
+        "triggers": 1
       }
     },
     {
       "error": {
         "code": "above_max",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": 100,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": 9999,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": 100,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": 9999,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": 100,
+        "creatures_added_per_trigger": -1,
+        "total_power_before_triggers": 9999,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": 100,
+        "creatures_added_per_trigger": 20,
+        "total_power_before_triggers": 9999,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": 100,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": 9999,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": 100,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": 9999,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": 100,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": 9999,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": 100,
+        "creatures_added_per_trigger": -1,
+        "total_power_before_triggers": 9999,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": 100,
+        "creatures_added_per_trigger": 20,
+        "total_power_before_triggers": 9999,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": 100,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": 9999,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": 100,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": 9999,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": 100,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": 9999,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": 100,
+        "creatures_added_per_trigger": -1,
+        "total_power_before_triggers": 9999,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": 100,
+        "creatures_added_per_trigger": 20,
+        "total_power_before_triggers": 9999,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "creature_count"
+      },
+      "inputs": {
+        "creature_count": 100,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": 9999,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": 10000,
+        "triggers": 1
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": 10000,
+        "triggers": 1
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": -1,
+        "total_power_before_triggers": 10000,
+        "triggers": 1
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 20,
+        "total_power_before_triggers": 10000,
+        "triggers": 1
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": 10000,
+        "triggers": 1
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": 10000,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": 10000,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": -1,
+        "total_power_before_triggers": 10000,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 20,
+        "total_power_before_triggers": 10000,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": 10000,
+        "triggers": 0
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": 10000,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 0,
+        "total_power_before_triggers": 10000,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": -1,
+        "total_power_before_triggers": 10000,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 20,
+        "total_power_before_triggers": 10000,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 21,
+        "total_power_before_triggers": 10000,
+        "triggers": 6
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "total_power_before_triggers"
+      },
+      "inputs": {
+        "creature_count": 0,
+        "creatures_added_per_trigger": 1,
+        "total_power_before_triggers": 10000,
+        "triggers": 7
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 0,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 0
+        "triggers": 7
       }
     },
     {
@@ -2355,10 +3139,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 0,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": -1
+        "triggers": 7
       }
     },
     {
@@ -2367,10 +3151,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 0,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 99
+        "triggers": 7
       }
     },
     {
@@ -2379,10 +3163,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 0,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 100
+        "triggers": 7
       }
     },
     {
@@ -2391,10 +3175,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 0
+        "triggers": 1
       }
     },
     {
@@ -2403,10 +3187,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": -1
+        "triggers": 1
       }
     },
     {
@@ -2415,10 +3199,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": -1,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 99
+        "triggers": 1
       }
     },
     {
@@ -2427,10 +3211,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 100
+        "triggers": 1
       }
     },
     {
@@ -2439,10 +3223,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 0
+        "triggers": 1
       }
     },
     {
@@ -2451,10 +3235,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": -1
+        "triggers": 0
       }
     },
     {
@@ -2463,10 +3247,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 99
+        "triggers": 0
       }
     },
     {
@@ -2475,10 +3259,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": -1,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 100
+        "triggers": 0
       }
     },
     {
@@ -2487,10 +3271,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 0
+        "triggers": 0
       }
     },
     {
@@ -2499,10 +3283,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": -1
+        "triggers": 0
       }
     },
     {
@@ -2511,10 +3295,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 99
+        "triggers": 6
       }
     },
     {
@@ -2523,10 +3307,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 100
+        "triggers": 6
       }
     },
     {
@@ -2535,10 +3319,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": -1,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 0
+        "triggers": 6
       }
     },
     {
@@ -2547,10 +3331,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": -1
+        "triggers": 6
       }
     },
     {
@@ -2559,10 +3343,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 99
+        "triggers": 6
       }
     },
     {
@@ -2571,10 +3355,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 100
+        "triggers": 7
       }
     },
     {
@@ -2583,10 +3367,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 0
+        "triggers": 7
       }
     },
     {
@@ -2595,10 +3379,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": -1,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": -1
+        "triggers": 7
       }
     },
     {
@@ -2607,10 +3391,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 99
+        "triggers": 7
       }
     },
     {
@@ -2619,10 +3403,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": -1,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 100
+        "triggers": 7
       }
     },
     {
@@ -2631,10 +3415,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 0
+        "triggers": 1
       }
     },
     {
@@ -2643,10 +3427,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": -1
+        "triggers": 1
       }
     },
     {
@@ -2655,10 +3439,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 99
+        "triggers": 1
       }
     },
     {
@@ -2667,10 +3451,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 100
+        "triggers": 1
       }
     },
     {
@@ -2679,10 +3463,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 0
+        "triggers": 1
       }
     },
     {
@@ -2691,10 +3475,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": -1
+        "triggers": 0
       }
     },
     {
@@ -2703,10 +3487,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 99
+        "triggers": 0
       }
     },
     {
@@ -2715,10 +3499,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 99,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": -1,
-        "trigger_2_creature_count": 100
+        "triggers": 0
       }
     },
     {
@@ -2727,10 +3511,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 0
+        "triggers": 0
       }
     },
     {
@@ -2739,10 +3523,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": -1
+        "triggers": 0
       }
     },
     {
@@ -2751,10 +3535,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 99
+        "triggers": 6
       }
     },
     {
@@ -2763,10 +3547,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 100
+        "triggers": 6
       }
     },
     {
@@ -2775,10 +3559,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 0
+        "triggers": 6
       }
     },
     {
@@ -2787,10 +3571,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": -1
+        "triggers": 6
       }
     },
     {
@@ -2799,10 +3583,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 99
+        "triggers": 6
       }
     },
     {
@@ -2811,10 +3595,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 100
+        "triggers": 7
       }
     },
     {
@@ -2823,10 +3607,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 0
+        "triggers": 7
       }
     },
     {
@@ -2835,10 +3619,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": -1
+        "triggers": 7
       }
     },
     {
@@ -2847,10 +3631,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 99
+        "triggers": 7
       }
     },
     {
@@ -2859,10 +3643,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 99,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 100
+        "triggers": 7
       }
     },
     {
@@ -2871,10 +3655,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 0
+        "triggers": 1
       }
     },
     {
@@ -2883,10 +3667,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": -1
+        "triggers": 1
       }
     },
     {
@@ -2895,10 +3679,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 100,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 99
+        "triggers": 1
       }
     },
     {
@@ -2907,10 +3691,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 99,
-        "trigger_2_creature_count": 100
+        "triggers": 1
       }
     },
     {
@@ -2919,10 +3703,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 0
+        "triggers": 1
       }
     },
     {
@@ -2931,10 +3715,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": -1
+        "triggers": 0
       }
     },
     {
@@ -2943,10 +3727,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 99
+        "triggers": 0
       }
     },
     {
@@ -2955,10 +3739,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 0,
+        "creature_count": 100,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 100
+        "triggers": 0
       }
     },
     {
@@ -2967,10 +3751,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 0
+        "triggers": 0
       }
     },
     {
@@ -2979,10 +3763,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": -1
+        "triggers": 0
       }
     },
     {
@@ -2991,10 +3775,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 99
+        "triggers": 6
       }
     },
     {
@@ -3003,10 +3787,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": -1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 100
+        "triggers": 6
       }
     },
     {
@@ -3015,10 +3799,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 0
+        "triggers": 6
       }
     },
     {
@@ -3027,10 +3811,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": -1
+        "triggers": 6
       }
     },
     {
@@ -3039,10 +3823,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 99
+        "triggers": 6
       }
     },
     {
@@ -3051,10 +3835,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 1,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 100
+        "triggers": 7
       }
     },
     {
@@ -3063,10 +3847,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 0,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 0
+        "triggers": 7
       }
     },
     {
@@ -3075,10 +3859,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 100,
+        "creatures_added_per_trigger": -1,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": -1
+        "triggers": 7
       }
     },
     {
@@ -3087,10 +3871,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 20,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 99
+        "triggers": 7
       }
     },
     {
@@ -3099,10 +3883,10 @@
         "field": "total_power_before_triggers"
       },
       "inputs": {
-        "additional_triggers": 2,
+        "creature_count": 100,
+        "creatures_added_per_trigger": 21,
         "total_power_before_triggers": 10000,
-        "trigger_1_creature_count": 100,
-        "trigger_2_creature_count": 100
+        "triggers": 7
       }
     }
   ],

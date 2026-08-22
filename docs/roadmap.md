@@ -15,7 +15,7 @@ needs a connection.
 Four tabs:
 
 - **Cards** — **16 calculators**, each a Python module plus a mirrored TypeScript
-  implementation. Twelve are real cards; **Commander Tax, Dungeons, Landfall, Storm and
+  implementation. Eleven are real cards; **Commander Tax, Dungeons, Landfall, Storm and
   Mana Pool are cardless format mechanics**, which is why the schema allows
   `scryfall_id: None`. **Landfall and Storm are rosters**: pick the cards in play (or in
   hand) out of a searchable list, and the screen reads out what each one does at once.

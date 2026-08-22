@@ -20,13 +20,12 @@ similar shape:
 | Card | Module | Shape worth reusing |
 |---|---|---|
 | Aetherflux Reservoir | `aetherflux_reservoir.py` | Running totals with a baseline, plus an affordability guard on an action button |
-| Craterhoof Behemoth | `craterhoof_behemoth.py` | "X = count of Y" resolved independently per trigger, since the board changes between them |
+| Craterhoof Behemoth | `craterhoof_behemoth.py` | "X = count of Y" resolved independently per trigger and summed over any number of triggers, since the board changes between them |
 | Brain Freeze | `brain_freeze.py` | First storm card; shares `storm.py` |
 | Grapeshot | `grapeshot.py` | Second storm card — near-trivial once `storm.py` existed |
 | Ob Nixilis, the Fallen | `ob_nixilis_the_fallen.py` | Landfall grow-and-drain, with a trigger-doubler multiplier |
 | Comet, Stellar Pup | `comet_stellar_pup.py` | The `sequence` field kind: an **ordered** log where order changes the answer |
-| Blood Artist | `blood_artist.py` | The minimal case — two inputs, one product |
-| Nykthos, Shrine to Nyx | `nykthos_shrine_to_nyx.py` | A pure tally, where the tedium is counting, not computing |
+| Nykthos, Shrine to Nyx | `nykthos_shrine_to_nyx.py` | A pure tally, where the tedium is counting, not computing. The minimal module to copy when adding a card |
 | Scute Swarm | `scute_swarm.py` | Threshold-gated simulation that can't be a closed-form sum |
 | Tendrils of Agony | `tendrils_of_agony.py` | Third storm card — a drain, with a lethal alert |
 | Empty the Warrens | `empty_the_warrens.py` | Fourth storm card — tokens |
@@ -42,6 +41,27 @@ helper, extracted when Storm arrived: `Source`, the total phrasings, and `build_
 Adding a third roster is now a data table plus a `compute()` that says how its event count
 is derived. Landfall's parity corpus was byte-identical across that extraction, which is
 what the corpus is for.
+
+## Removed
+
+**Blood Artist** shipped and was deleted on 2026-08-22, and the reason is worth keeping:
+its whole calculation was `deaths x drain triggers`, two small numbers a player already
+has in front of them. It was argued in on *frequency* -- a board wipe with three drain
+effects out is easy to fumble under pressure -- and that argument turned out not to
+survive contact with a real table, because nobody reaches for a phone to do it. Frequency
+does not rescue arithmetic that small. `.claude/agents/card-evaluator.md` carries the
+same lesson so the next evaluation starts from it.
+
+Nothing else has been removed. The four single-card storm screens and the two landfall
+ones (Ob Nixilis, Scute Swarm) overlap their categories but each earns its place by
+holding something the roster cannot: a threshold to compare against (Brain Freeze's
+library, Tendrils' target life, each with its own alert), state accumulated across turns
+(Ob Nixilis's counters and current power), or maths the roster model deliberately does
+not express (Scute Swarm's exponential copies). Grapeshot and Empty the Warrens are the
+two whose screens are pure subsets of the Storm category -- flagged here rather than
+deleted, because the card picker searches names only, so removing them would make
+searching "grapeshot" return nothing at all even though the app handles it inside Storm.
+Teach the picker to search roster contents first.
 
 **Landfall's roster is data, not code.** Each entry is a `_Source` row — label, Scryfall
 id, effect phrasing, per-resolution totals, and an optional second-resolution rider — so

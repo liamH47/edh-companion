@@ -12,10 +12,10 @@ import { expect, test } from '@playwright/test'
 test.describe('Deep links and static serving', () => {
   test('serves the app at a client-side route on a cold load', async ({ page }) => {
     // Not navigated to -- typed in, the way a shared link arrives.
-    await page.goto('/cards/blood-artist')
+    await page.goto('/cards/grapeshot')
 
-    await expect(page.getByRole('heading', { name: 'Blood Artist' })).toBeVisible()
-    expect(page.url()).toContain('/cards/blood-artist')
+    await expect(page.getByRole('heading', { name: 'Grapeshot' })).toBeVisible()
+    expect(page.url()).toContain('/cards/grapeshot')
   })
 
   test('serves the app at the pairings route on a cold load', async ({ page }) => {

@@ -6,7 +6,6 @@ from typing import Any, Protocol
 
 from . import (
     aetherflux_reservoir,
-    blood_artist,
     brain_freeze,
     comet_stellar_pup,
     commander_tax,
@@ -29,7 +28,6 @@ from .schema import CardMetadata
 # shows up as a one-line diff to review instead of an import-order mystery.
 _MODULES: list[ModuleType] = [
     aetherflux_reservoir,
-    blood_artist,
     brain_freeze,
     comet_stellar_pup,
     commander_tax,

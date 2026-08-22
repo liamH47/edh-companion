@@ -23,8 +23,8 @@ describe('storage', () => {
   })
 
   it('round-trips JSON', () => {
-    setJSON('card', { id: 'blood-artist', count: 3 })
-    expect(getJSON('card', null)).toEqual({ id: 'blood-artist', count: 3 })
+    setJSON('card', { id: 'grapeshot', count: 3 })
+    expect(getJSON('card', null)).toEqual({ id: 'grapeshot', count: 3 })
   })
 
   it('falls back rather than throwing on unparseable JSON', () => {

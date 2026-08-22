@@ -13,35 +13,33 @@ test.describe('Cards', () => {
   test('computes a card result from user input', async ({ page }) => {
     await page.goto('/')
 
-    // Blood Artist is the simplest card with both a setup field and a live field, so
-    // it exercises the sheet-then-play-area flow without any card-specific branching.
-    await page.getByRole('button', { name: 'Blood Artist' }).click()
+    // Ob Nixilis is a plain card with both setup fields and a live one, so it exercises
+    // the sheet-then-play-area flow without any card-specific branching.
+    await page.getByRole('button', { name: 'Ob Nixilis, the Fallen' }).click()
 
-    // One setup field means the board-state sheet auto-opens on first visit
+    // Setup fields mean the board-state sheet auto-opens on first visit
     // (screen-spec.md rule 4). Confirm it, which is what a player does before playing.
     const sheet = page.getByRole('dialog', { name: 'Board state' })
     await expect(sheet).toBeVisible()
-    await sheet.getByRole('spinbutton', { name: 'Blood-Artist-style triggers you control' }).fill('3')
+    await sheet.getByRole('spinbutton', { name: '+1/+1 counters already on him' }).fill('0')
     await sheet.getByRole('button', { name: 'Done' }).click()
     await expect(sheet).toBeHidden()
 
-    // 4 creatures died x 3 drain triggers = 12 life.
-    await page
-      .getByRole('spinbutton', { name: 'Creatures that died this event' })
-      .fill('4')
+    // 4 lands x 3 counters each = 12 counters on a 3/3, so he swings as a 15/15.
+    await page.getByRole('spinbutton', { name: 'Lands entered this turn' }).fill('4')
 
-    await expect(page.getByText('12', { exact: true })).toBeVisible()
+    await expect(page.getByText('15', { exact: true })).toBeVisible()
   })
 
   test('filters the card list by search', async ({ page }) => {
     await page.goto('/')
 
-    await expect(page.getByRole('button', { name: 'Blood Artist' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Kalonian Hydra' })).toBeVisible()
 
     await page.getByRole('searchbox', { name: 'Search cards' }).fill('scute')
 
     await expect(page.getByRole('button', { name: 'Scute Swarm' })).toBeVisible()
-    await expect(page.getByRole('button', { name: 'Blood Artist' })).toBeHidden()
+    await expect(page.getByRole('button', { name: 'Kalonian Hydra' })).toBeHidden()
   })
 
   test('the list URL survives a reload; the bare root still restores the last card', async ({
@@ -49,8 +47,8 @@ test.describe('Cards', () => {
   }) => {
     await page.goto('/')
     // Opening a card from the picker records it as the most-recently-used card.
-    await page.getByRole('button', { name: 'Blood Artist' }).click()
-    await expect(page).toHaveURL(/\/cards\/blood-artist/)
+    await page.getByRole('button', { name: 'Kalonian Hydra' }).click()
+    await expect(page).toHaveURL(/\/cards\/kalonian-hydra/)
 
     // Reloading the list URL stays on the list. This is the reported bug: the picker used
     // to share the bare root, so a refresh here reopened the recorded card.
@@ -120,15 +118,15 @@ test.describe('Cards', () => {
     // already survived an outage; now Cards does too.
     await page.route('**/api/**', (route) => route.abort())
 
-    await page.goto('/cards/blood-artist')
+    await page.goto('/cards/ob-nixilis-the-fallen')
     const sheet = page.getByRole('dialog', { name: 'Board state' })
-    await sheet.getByRole('spinbutton', { name: 'Blood-Artist-style triggers you control' }).fill('3')
+    await sheet.getByRole('spinbutton', { name: '+1/+1 counters already on him' }).fill('0')
     await sheet.getByRole('button', { name: 'Done' }).click()
 
-    await page.getByRole('spinbutton', { name: 'Creatures that died this event' }).fill('4')
+    await page.getByRole('spinbutton', { name: 'Lands entered this turn' }).fill('4')
 
-    // 4 x 3 = 12, computed entirely in the browser.
-    await expect(page.getByText('12', { exact: true })).toBeVisible()
+    // 3 base + 4 lands x 3 counters = 15, computed entirely in the browser.
+    await expect(page.getByText('15', { exact: true })).toBeVisible()
   })
 
   test('serves every card the API advertises', async ({ page, request }) => {

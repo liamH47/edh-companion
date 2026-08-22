@@ -11,7 +11,7 @@ The unit suites are thorough (100% coverage on both sides), and they still canno
 - the Dockerfile copying the build output to the wrong path — `/healthz` stays green
   because it is a FastAPI route that never touches the frontend, so the container looks
   healthy while every page 404s
-- `mount_frontend`'s catch-all failing to serve a deep link like `/cards/blood-artist`,
+- `mount_frontend`'s catch-all failing to serve a deep link like `/cards/grapeshot`,
   which **only exists in the packaged app** (in dev, Vite handles unknown paths)
 - the generated token CSS not making it into the bundle
 - the API and the frontend disagreeing about a card that exists

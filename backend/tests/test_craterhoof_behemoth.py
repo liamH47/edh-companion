@@ -1,58 +1,71 @@
-from app.cards.craterhoof_behemoth import compute
+from app.cards.craterhoof_behemoth import MAX_CREATURE_COUNT, MAX_TRIGGERS, compute
 
 
 def _inputs(**overrides: object) -> dict[str, object]:
     base: dict[str, object] = {
         "total_power_before_triggers": 0,
-        "trigger_1_creature_count": 0,
-        "trigger_2_creature_count": 0,
+        "creature_count": 0,
+        "triggers": 1,
+        "creatures_added_per_trigger": 1,
     }
     base.update(overrides)
     return base
 
 
-def test_compute_returns_zero_bonus_when_no_triggers_have_resolved() -> None:
+def test_compute_returns_zero_bonus_with_no_creatures() -> None:
     result = compute(_inputs())
-    assert result["power_after_trigger_1"] == 0
+    assert result["power_added"] == 0
     assert result["total_power_after_triggers"] == 0
 
 
 def test_compute_applies_the_squared_bonus_for_a_single_trigger() -> None:
-    result = compute(_inputs(total_power_before_triggers=10, trigger_1_creature_count=5))
-    assert result["power_after_trigger_1"] == 35  # 10 + 5*5
-    assert result["total_power_after_triggers"] == 35
+    result = compute(_inputs(total_power_before_triggers=10, creature_count=5))
+    assert result["power_added"] == 25  # 5*5
+    assert result["total_power_after_triggers"] == 35  # 10 + 25
+    # One trigger, so each creature simply got +5/+5.
+    assert result["pump_per_creature"] == 5
+    assert result["last_trigger_bonus"] == 5
 
 
-def test_compute_ignores_a_second_trigger_left_at_zero() -> None:
-    result = compute(_inputs(total_power_before_triggers=10, trigger_1_creature_count=5))
-    assert result["total_power_after_triggers"] == result["power_after_trigger_1"]
+def test_a_later_trigger_counts_the_body_that_caused_it() -> None:
+    # Two triggers at 4 creatures, the second because another Hoof entered: that Hoof
+    # counts itself, so the second X is 5, not 4.
+    result = compute(_inputs(total_power_before_triggers=8, creature_count=4, triggers=2))
+    assert result["last_trigger_bonus"] == 5
+    assert result["power_added"] == 41  # 4*4 + 5*5
+    assert result["total_power_after_triggers"] == 49  # 8 + 41
+    # A creature present for both triggers gained 4 then 5.
+    assert result["pump_per_creature"] == 9
 
 
-def test_compute_applies_both_triggers_independently_with_different_creature_counts() -> None:
-    # Board state can change between triggers, so each trigger's count is its own input --
-    # not derived from or shared with the other.
-    result = compute(
-        _inputs(
-            total_power_before_triggers=8,
-            trigger_1_creature_count=4,
-            trigger_2_creature_count=6,
-        )
-    )
-    assert result["power_after_trigger_1"] == 24  # 8 + 4*4
-    assert result["total_power_after_triggers"] == 60  # 24 + 6*6
+def test_a_flicker_leaves_the_count_unchanged() -> None:
+    # The same creature leaves and returns, so nothing was added: both triggers see 4.
+    result = compute(_inputs(creature_count=4, triggers=2, creatures_added_per_trigger=0))
+    assert result["power_added"] == 32  # 4*4 twice
+    assert result["pump_per_creature"] == 8
+    assert result["last_trigger_bonus"] == 4
 
 
-def test_compute_echoes_each_triggers_creature_count_as_its_own_power_bonus() -> None:
-    result = compute(_inputs(trigger_1_creature_count=4, trigger_2_creature_count=6))
-    assert result["power_bonus_trigger_1"] == 4
-    assert result["power_bonus_trigger_2"] == 6
+def test_the_added_count_is_ignored_when_there_is_only_one_trigger() -> None:
+    # Nothing comes "before a later trigger" if there is no later trigger.
+    with_growth = compute(_inputs(creature_count=6, creatures_added_per_trigger=20))
+    without = compute(_inputs(creature_count=6, creatures_added_per_trigger=0))
+    assert with_growth == without
+
+
+def test_triggers_past_two_keep_compounding() -> None:
+    # The cap of two was the arbitrary part: a fourth trigger is the same arithmetic.
+    result = compute(_inputs(creature_count=3, triggers=4))
+    # X of 3, 4, 5, 6.
+    assert result["power_added"] == 9 + 16 + 25 + 36
+    assert result["pump_per_creature"] == 18
+    assert result["last_trigger_bonus"] == 6
 
 
 def test_compute_handles_craterhoof_alone_with_no_other_creatures() -> None:
     # Craterhoof itself is a 5-power creature and counts itself once its own trigger
-    # resolves -- both total_power_before_triggers and trigger_1_creature_count reflect that.
-    result = compute(_inputs(total_power_before_triggers=5, trigger_1_creature_count=1))
-    assert result["power_after_trigger_1"] == 6
+    # resolves -- both total_power_before_triggers and creature_count reflect that.
+    result = compute(_inputs(total_power_before_triggers=5, creature_count=1))
     assert result["total_power_after_triggers"] == 6
 
 
@@ -60,9 +73,13 @@ def test_compute_at_upper_bound() -> None:
     result = compute(
         _inputs(
             total_power_before_triggers=9_999,
-            trigger_1_creature_count=999,
-            trigger_2_creature_count=999,
+            creature_count=MAX_CREATURE_COUNT,
+            triggers=MAX_TRIGGERS,
+            creatures_added_per_trigger=20,
         )
     )
-    assert result["power_after_trigger_1"] == 9_999 + 999**2
-    assert result["total_power_after_triggers"] == 9_999 + 2 * 999**2
+    expected = sum((99 + step * 20) ** 2 for step in range(MAX_TRIGGERS))
+    assert result["power_added"] == expected
+    assert result["total_power_after_triggers"] == 9_999 + expected
+    # Still a number a player can read, which is what the bounds promise.
+    assert result["total_power_after_triggers"] < 1_000_000

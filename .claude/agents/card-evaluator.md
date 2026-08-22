@@ -30,9 +30,12 @@ Work through these in order. The first clear failure is the answer.
 The card has to be worth reaching for a phone. Arithmetic someone does instantly in
 their head is not. Ask what specifically is hard: is it a running total, a compounding
 effect, a squared term, an ordering that matters, a threshold that flips mid-sequence?
-"You have to multiply two small numbers" usually fails — though Blood Artist passes on
-frequency, because a board wipe with three drain effects out is genuinely easy to fumble
-under pressure.
+"You have to multiply two small numbers" usually fails. **Blood Artist was the test
+case, and it failed**: it shipped on the argument that a board wipe with three drain
+effects out is easy to fumble under pressure, and was removed on 2026-08-22 because in
+practice nobody reaches for a phone to multiply deaths by triggers. Frequency alone does
+not rescue arithmetic this small — if the whole card is one product of two numbers a
+player already has in front of them, say no.
 
 **2. Does it fit `FieldSpec` without new machinery?**
 The kinds are `number`, `boolean`, `select`, `counter`, `sequence`. Anything needing a
@@ -68,9 +71,9 @@ bitten four times by text that sounded right — see `docs/future-card-ideas.md`
   *amplified*: Craterhoof squares its creature count, Scute Swarm doubles per land drop,
   and both originally shipped with caps that produced absurd answers. Compute the maximum
   before proposing a bound.
-- **The computational shape**, and whether it is new. Existing shapes: a plain product
-  (Blood Artist), a running total with an affordability guard (Aetherflux), an
-  independently-resolved X-count per trigger (Craterhoof), a storm copy count (four
+- **The computational shape**, and whether it is new. Existing shapes: a running total
+  with an affordability guard (Aetherflux), a per-trigger X-count resolved independently
+  and summed over any number of triggers (Craterhoof), a storm copy count (four
   cards, sharing `storm.py`), landfall grow-and-drain (Ob Nixilis), an *ordered* sequence
   where order changes the answer (Comet), a pure tally (Nykthos), and a threshold-gated
   simulation (Scute Swarm). A genuinely new shape is a point in favour; a fifth storm

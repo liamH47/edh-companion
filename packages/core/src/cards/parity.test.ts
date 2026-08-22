@@ -5,7 +5,6 @@ import { InputError, validateInputs } from './validation'
 import type { CardMetadata, FieldValues, OutputValues } from '../types'
 
 import aetherfluxReservoir from './__parity__/aetherflux-reservoir.json'
-import bloodArtist from './__parity__/blood-artist.json'
 import brainFreeze from './__parity__/brain-freeze.json'
 import cometStellarPup from './__parity__/comet-stellar-pup.json'
 import commanderTax from './__parity__/commander-tax.json'
@@ -51,7 +50,6 @@ interface Corpus {
 
 const CORPORA: Corpus[] = [
   aetherfluxReservoir,
-  bloodArtist,
   brainFreeze,
   cometStellarPup,
   commanderTax,
