@@ -34,6 +34,13 @@ similar shape:
 | Commander Tax | `commander_tax.py` | First cardless format mechanic: `scryfall_id=None`, allowlisted in `test_registry.py` |
 | Dungeons | `dungeons.py` | The `map` capability on a sequence: a walk through a room graph, rendered as a tappable dungeon map, legality validated on both sides; also the first `resets_on_new_turn=False` game-long tracker |
 | Landfall | `landfall.py` | First entry whose subject is an *interaction between* cards rather than one card: a roster of permanents (the `picker` capability on a sequence) and a `lines` output rendered as the `list` hero. The pattern to reuse for any "several things trigger at once" mechanic |
+| Storm | `storm_payoffs.py` | The second roster, and the proof the shape generalizes: 34 storm cards against the four with their own screens, compared side by side at one count. Where landfall's roster is your board, storm's is your hand |
+
+**`effects.py`** (with `cards/effects.ts` mirroring it) is the second shared non-card
+helper, extracted when Storm arrived: `Source`, the total phrasings, and `build_lines`.
+Adding a third roster is now a data table plus a `compute()` that says how its event count
+is derived. Landfall's parity corpus was byte-identical across that extraction, which is
+what the corpus is for.
 
 **Landfall's roster is data, not code.** Each entry is a `_Source` row — label, Scryfall
 id, effect phrasing, per-resolution totals, and an optional second-resolution rider — so

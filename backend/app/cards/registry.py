@@ -19,6 +19,7 @@ from . import (
     nykthos_shrine_to_nyx,
     ob_nixilis_the_fallen,
     scute_swarm,
+    storm_payoffs,
     tendrils_of_agony,
 )
 from .schema import CardMetadata
@@ -40,6 +41,7 @@ _MODULES: list[ModuleType] = [
     nykthos_shrine_to_nyx,
     ob_nixilis_the_fallen,
     scute_swarm,
+    storm_payoffs,
     tendrils_of_agony,
 ]
 

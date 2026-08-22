@@ -1,15 +1,5 @@
+import { buildLines, type Source } from '../effects'
 import type { FieldValues, OutputValues } from '../../types'
-
-/** One landfall permanent's per-resolution effect. Mirrors `_Source` in
- * backend/app/cards/landfall.py, minus the Scryfall id -- that is presentation, and
- * rides in the field's options rather than through compute(). */
-interface Source {
-  label: string
-  effect: string
-  totals?: readonly (readonly [string, number])[]
-  rider?: string
-  riderTotals?: readonly (readonly [string, number])[]
-}
 
 /** Mirrors `_SOURCES`. Insertion order is the option order, which is the order the
  * picker lists them in -- keep it in step with the Python side. */
@@ -167,21 +157,6 @@ const SOURCES: Record<string, Source> = {
   },
 }
 
-/** Mirrors `_TOTAL_TEMPLATES`, including the order notes read in. */
-const TOTAL_TEMPLATES: Record<string, string> = {
-  mana: '{n} mana',
-  cards: '{n} card{s}',
-  life: '{n} life',
-  damage_each: '{n} damage to each opponent',
-  damage_one: '{n} damage',
-  life_loss: '{n} life lost',
-  tokens: '{n} token{s}',
-  counters: '{n} counter{s}',
-  mill_self: '{n} milled',
-  mill_one: '{n} milled by a player',
-  mill_each: '{n} milled by each opponent',
-}
-
 /** Mirrors `_AGGREGATES`: which totals roll up into which output. */
 const AGGREGATES: Record<string, string> = {
   cards_drawn: 'cards',
@@ -192,66 +167,23 @@ const AGGREGATES: Record<string, string> = {
 
 const SECOND_RESOLUTION = 2
 
-function phrase(category: string, amount: number): string {
-  return TOTAL_TEMPLATES[category]
-    .replace('{n}', String(amount))
-    .replace('{s}', amount === 1 ? '' : 's')
-}
-
-function note(
-  totals: Record<string, number>,
-  resolutions: number,
-  riderFired: string | null,
-): string {
-  if (resolutions === 0) return 'on your next land'
-  const parts = Object.keys(TOTAL_TEMPLATES)
-    .filter((category) => (totals[category] ?? 0) !== 0)
-    .map((category) => phrase(category, totals[category]))
-  if (parts.length === 0) parts.push(`x${resolutions}`)
-  if (riderFired !== null) parts.push(riderFired)
-  return parts.join(' · ')
-}
-
 /** Mirrors backend/app/cards/landfall.py. */
 export function compute(inputs: FieldValues): OutputValues {
   const sources = (inputs.sources as unknown[]).map(String)
   const triggersPerLand = Number(inputs.triggers_per_land)
   const landsThisTurn = Number(inputs.lands_this_turn)
 
+  // How many times each *individual* ability resolves this turn. A second copy of a
+  // card is a second ability, not a bigger one -- which is why the rider fires per copy
+  // rather than once for the whole roster (buildLines handles that).
   const perAbility = landsThisTurn * triggersPerLand
 
-  const copies = new Map<string, number>()
-  for (const sourceId of sources) copies.set(sourceId, (copies.get(sourceId) ?? 0) + 1)
-
-  const effects: { source: string; effect: string; note: string }[] = []
-  const aggregate: Record<string, number> = {}
-
-  for (const [sourceId, count] of copies) {
-    const source = SOURCES[sourceId]
-    const resolutions = perAbility * count
-
-    const totals: Record<string, number> = {}
-    for (const [category, amount] of source.totals ?? []) {
-      totals[category] = amount * resolutions
-    }
-    // Once per copy, on the turn's second land drop, never again.
-    const riderFired = perAbility >= SECOND_RESOLUTION ? (source.rider ?? null) : null
-    if (riderFired !== null) {
-      for (const [category, amount] of source.riderTotals ?? []) {
-        totals[category] = (totals[category] ?? 0) + amount * count
-      }
-    }
-
-    for (const [category, amount] of Object.entries(totals)) {
-      aggregate[category] = (aggregate[category] ?? 0) + amount
-    }
-
-    effects.push({
-      source: count === 1 ? source.label : `${source.label} x${count}`,
-      effect: source.effect,
-      note: note(totals, resolutions, riderFired),
-    })
-  }
+  const { lines, aggregate } = buildLines(SOURCES, sources, perAbility, {
+    // "The second time this ability has resolved this turn" -- the turn's second land
+    // drop, and never again however many more lands follow.
+    riderThreshold: SECOND_RESOLUTION,
+    forecastNote: 'on your next land',
+  })
 
   const rolled: OutputValues = {}
   for (const [output, category] of Object.entries(AGGREGATES)) {
@@ -259,7 +191,7 @@ export function compute(inputs: FieldValues): OutputValues {
   }
 
   return {
-    effects,
+    effects: lines,
     triggers: perAbility * sources.length,
     ...rolled,
   }

@@ -1,0 +1,585 @@
+{
+  "cardId": "storm",
+  "cases": [
+    {
+      "inputs": {
+        "payoffs": [],
+        "storm_count": 0
+      },
+      "outputs": {
+        "copies_from_storm": 0,
+        "damage_dealt": 0,
+        "effects": [],
+        "tokens_created": 0,
+        "total_copies": 1
+      }
+    },
+    {
+      "inputs": {
+        "payoffs": [
+          "grapeshot"
+        ],
+        "storm_count": 0
+      },
+      "outputs": {
+        "copies_from_storm": 0,
+        "damage_dealt": 1,
+        "effects": [
+          {
+            "effect": "1 damage to any target",
+            "note": "1 damage",
+            "source": "Grapeshot"
+          }
+        ],
+        "tokens_created": 0,
+        "total_copies": 1
+      }
+    },
+    {
+      "inputs": {
+        "payoffs": [
+          "grapeshot",
+          "tendrils-of-agony"
+        ],
+        "storm_count": 0
+      },
+      "outputs": {
+        "copies_from_storm": 0,
+        "damage_dealt": 1,
+        "effects": [
+          {
+            "effect": "1 damage to any target",
+            "note": "1 damage",
+            "source": "Grapeshot"
+          },
+          {
+            "effect": "Target player loses 2 life, you gain 2",
+            "note": "2 life \u00b7 2 life lost",
+            "source": "Tendrils of Agony"
+          }
+        ],
+        "tokens_created": 0,
+        "total_copies": 1
+      }
+    },
+    {
+      "inputs": {
+        "payoffs": [
+          "empty-the-warrens",
+          "empty-the-warrens"
+        ],
+        "storm_count": 0
+      },
+      "outputs": {
+        "copies_from_storm": 0,
+        "damage_dealt": 0,
+        "effects": [
+          {
+            "effect": "Create two 1/1 red Goblins",
+            "note": "4 tokens",
+            "source": "Empty the Warrens x2"
+          }
+        ],
+        "tokens_created": 4,
+        "total_copies": 1
+      }
+    },
+    {
+      "inputs": {
+        "payoffs": [
+          "flusterstorm",
+          "temporal-fissure",
+          "dragonstorm"
+        ],
+        "storm_count": 0
+      },
+      "outputs": {
+        "copies_from_storm": 0,
+        "damage_dealt": 0,
+        "effects": [
+          {
+            "effect": "Counter target instant or sorcery unless its controller pays {1}",
+            "note": "x1",
+            "source": "Flusterstorm"
+          },
+          {
+            "effect": "Return target permanent to its owner's hand",
+            "note": "x1",
+            "source": "Temporal Fissure"
+          },
+          {
+            "effect": "Search your library for a Dragon and put it onto the battlefield",
+            "note": "x1",
+            "source": "Dragonstorm"
+          }
+        ],
+        "tokens_created": 0,
+        "total_copies": 1
+      }
+    },
+    {
+      "inputs": {
+        "payoffs": [
+          "tendrils-of-agony",
+          "brain-freeze",
+          "chatterstorm"
+        ],
+        "storm_count": 0
+      },
+      "outputs": {
+        "copies_from_storm": 0,
+        "damage_dealt": 0,
+        "effects": [
+          {
+            "effect": "Target player loses 2 life, you gain 2",
+            "note": "2 life \u00b7 2 life lost",
+            "source": "Tendrils of Agony"
+          },
+          {
+            "effect": "Target player mills three",
+            "note": "3 milled by a player",
+            "source": "Brain Freeze"
+          },
+          {
+            "effect": "Create a 1/1 green Squirrel",
+            "note": "1 token",
+            "source": "Chatterstorm"
+          }
+        ],
+        "tokens_created": 1,
+        "total_copies": 1
+      }
+    },
+    {
+      "error": {
+        "code": "entry_not_in_options",
+        "field": "payoffs"
+      },
+      "inputs": {
+        "payoffs": [
+          "lightning-bolt"
+        ],
+        "storm_count": 0
+      }
+    },
+    {
+      "error": {
+        "code": "too_long",
+        "field": "payoffs"
+      },
+      "inputs": {
+        "payoffs": [
+          "grapeshot",
+          "grapeshot",
+          "grapeshot",
+          "grapeshot",
+          "grapeshot",
+          "grapeshot",
+          "grapeshot",
+          "grapeshot",
+          "grapeshot"
+        ],
+        "storm_count": 0
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "storm_count"
+      },
+      "inputs": {
+        "payoffs": [],
+        "storm_count": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "storm_count"
+      },
+      "inputs": {
+        "payoffs": [
+          "grapeshot"
+        ],
+        "storm_count": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "storm_count"
+      },
+      "inputs": {
+        "payoffs": [
+          "grapeshot",
+          "tendrils-of-agony"
+        ],
+        "storm_count": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "storm_count"
+      },
+      "inputs": {
+        "payoffs": [
+          "empty-the-warrens",
+          "empty-the-warrens"
+        ],
+        "storm_count": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "storm_count"
+      },
+      "inputs": {
+        "payoffs": [
+          "flusterstorm",
+          "temporal-fissure",
+          "dragonstorm"
+        ],
+        "storm_count": -1
+      }
+    },
+    {
+      "error": {
+        "code": "below_min",
+        "field": "storm_count"
+      },
+      "inputs": {
+        "payoffs": [
+          "tendrils-of-agony",
+          "brain-freeze",
+          "chatterstorm"
+        ],
+        "storm_count": -1
+      }
+    },
+    {
+      "error": {
+        "code": "entry_not_in_options",
+        "field": "payoffs"
+      },
+      "inputs": {
+        "payoffs": [
+          "lightning-bolt"
+        ],
+        "storm_count": -1
+      }
+    },
+    {
+      "error": {
+        "code": "too_long",
+        "field": "payoffs"
+      },
+      "inputs": {
+        "payoffs": [
+          "grapeshot",
+          "grapeshot",
+          "grapeshot",
+          "grapeshot",
+          "grapeshot",
+          "grapeshot",
+          "grapeshot",
+          "grapeshot",
+          "grapeshot"
+        ],
+        "storm_count": -1
+      }
+    },
+    {
+      "inputs": {
+        "payoffs": [],
+        "storm_count": 99
+      },
+      "outputs": {
+        "copies_from_storm": 99,
+        "damage_dealt": 0,
+        "effects": [],
+        "tokens_created": 0,
+        "total_copies": 100
+      }
+    },
+    {
+      "inputs": {
+        "payoffs": [
+          "grapeshot"
+        ],
+        "storm_count": 99
+      },
+      "outputs": {
+        "copies_from_storm": 99,
+        "damage_dealt": 100,
+        "effects": [
+          {
+            "effect": "1 damage to any target",
+            "note": "100 damage",
+            "source": "Grapeshot"
+          }
+        ],
+        "tokens_created": 0,
+        "total_copies": 100
+      }
+    },
+    {
+      "inputs": {
+        "payoffs": [
+          "grapeshot",
+          "tendrils-of-agony"
+        ],
+        "storm_count": 99
+      },
+      "outputs": {
+        "copies_from_storm": 99,
+        "damage_dealt": 100,
+        "effects": [
+          {
+            "effect": "1 damage to any target",
+            "note": "100 damage",
+            "source": "Grapeshot"
+          },
+          {
+            "effect": "Target player loses 2 life, you gain 2",
+            "note": "200 life \u00b7 200 life lost",
+            "source": "Tendrils of Agony"
+          }
+        ],
+        "tokens_created": 0,
+        "total_copies": 100
+      }
+    },
+    {
+      "inputs": {
+        "payoffs": [
+          "empty-the-warrens",
+          "empty-the-warrens"
+        ],
+        "storm_count": 99
+      },
+      "outputs": {
+        "copies_from_storm": 99,
+        "damage_dealt": 0,
+        "effects": [
+          {
+            "effect": "Create two 1/1 red Goblins",
+            "note": "400 tokens",
+            "source": "Empty the Warrens x2"
+          }
+        ],
+        "tokens_created": 400,
+        "total_copies": 100
+      }
+    },
+    {
+      "inputs": {
+        "payoffs": [
+          "flusterstorm",
+          "temporal-fissure",
+          "dragonstorm"
+        ],
+        "storm_count": 99
+      },
+      "outputs": {
+        "copies_from_storm": 99,
+        "damage_dealt": 0,
+        "effects": [
+          {
+            "effect": "Counter target instant or sorcery unless its controller pays {1}",
+            "note": "x100",
+            "source": "Flusterstorm"
+          },
+          {
+            "effect": "Return target permanent to its owner's hand",
+            "note": "x100",
+            "source": "Temporal Fissure"
+          },
+          {
+            "effect": "Search your library for a Dragon and put it onto the battlefield",
+            "note": "x100",
+            "source": "Dragonstorm"
+          }
+        ],
+        "tokens_created": 0,
+        "total_copies": 100
+      }
+    },
+    {
+      "inputs": {
+        "payoffs": [
+          "tendrils-of-agony",
+          "brain-freeze",
+          "chatterstorm"
+        ],
+        "storm_count": 99
+      },
+      "outputs": {
+        "copies_from_storm": 99,
+        "damage_dealt": 0,
+        "effects": [
+          {
+            "effect": "Target player loses 2 life, you gain 2",
+            "note": "200 life \u00b7 200 life lost",
+            "source": "Tendrils of Agony"
+          },
+          {
+            "effect": "Target player mills three",
+            "note": "300 milled by a player",
+            "source": "Brain Freeze"
+          },
+          {
+            "effect": "Create a 1/1 green Squirrel",
+            "note": "100 tokens",
+            "source": "Chatterstorm"
+          }
+        ],
+        "tokens_created": 100,
+        "total_copies": 100
+      }
+    },
+    {
+      "error": {
+        "code": "entry_not_in_options",
+        "field": "payoffs"
+      },
+      "inputs": {
+        "payoffs": [
+          "lightning-bolt"
+        ],
+        "storm_count": 99
+      }
+    },
+    {
+      "error": {
+        "code": "too_long",
+        "field": "payoffs"
+      },
+      "inputs": {
+        "payoffs": [
+          "grapeshot",
+          "grapeshot",
+          "grapeshot",
+          "grapeshot",
+          "grapeshot",
+          "grapeshot",
+          "grapeshot",
+          "grapeshot",
+          "grapeshot"
+        ],
+        "storm_count": 99
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "storm_count"
+      },
+      "inputs": {
+        "payoffs": [],
+        "storm_count": 100
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "storm_count"
+      },
+      "inputs": {
+        "payoffs": [
+          "grapeshot"
+        ],
+        "storm_count": 100
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "storm_count"
+      },
+      "inputs": {
+        "payoffs": [
+          "grapeshot",
+          "tendrils-of-agony"
+        ],
+        "storm_count": 100
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "storm_count"
+      },
+      "inputs": {
+        "payoffs": [
+          "empty-the-warrens",
+          "empty-the-warrens"
+        ],
+        "storm_count": 100
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "storm_count"
+      },
+      "inputs": {
+        "payoffs": [
+          "flusterstorm",
+          "temporal-fissure",
+          "dragonstorm"
+        ],
+        "storm_count": 100
+      }
+    },
+    {
+      "error": {
+        "code": "above_max",
+        "field": "storm_count"
+      },
+      "inputs": {
+        "payoffs": [
+          "tendrils-of-agony",
+          "brain-freeze",
+          "chatterstorm"
+        ],
+        "storm_count": 100
+      }
+    },
+    {
+      "error": {
+        "code": "entry_not_in_options",
+        "field": "payoffs"
+      },
+      "inputs": {
+        "payoffs": [
+          "lightning-bolt"
+        ],
+        "storm_count": 100
+      }
+    },
+    {
+      "error": {
+        "code": "too_long",
+        "field": "payoffs"
+      },
+      "inputs": {
+        "payoffs": [
+          "grapeshot",
+          "grapeshot",
+          "grapeshot",
+          "grapeshot",
+          "grapeshot",
+          "grapeshot",
+          "grapeshot",
+          "grapeshot",
+          "grapeshot"
+        ],
+        "storm_count": 100
+      }
+    }
+  ],
+  "generatedFrom": "backend/app/cards/storm.py",
+  "note": "Generated by backend/tools/generate_parity_corpus.py. Do not edit by hand."
+}

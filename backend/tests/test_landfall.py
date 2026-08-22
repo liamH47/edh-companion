@@ -4,6 +4,7 @@ sources with no number attached, and the forecast before any land has dropped.""
 
 from typing import Any
 
+from app.cards.effects import TOTAL_TEMPLATES
 from app.cards.landfall import _SOURCES, METADATA, compute
 
 BASE: dict[str, Any] = {
@@ -160,11 +161,9 @@ def test_every_roster_option_maps_to_a_source() -> None:
 
 def test_every_source_declares_known_total_categories() -> None:
     # A typo'd category would silently vanish from every note and every aggregate.
-    from app.cards.landfall import _TOTAL_TEMPLATES
-
     for source_id, source in _SOURCES.items():
         for category, _amount in (*source.totals, *source.rider_totals):
-            assert category in _TOTAL_TEMPLATES, f"{source_id} uses unknown total {category}"
+            assert category in TOTAL_TEMPLATES, f"{source_id} uses unknown total {category}"
 
 
 def test_every_source_with_rider_totals_declares_a_rider() -> None:
