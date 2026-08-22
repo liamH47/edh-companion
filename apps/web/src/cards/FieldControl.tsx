@@ -4,6 +4,7 @@ import type { FieldSpec } from '@mtg/core'
 import { Chip } from '../ui/Chip'
 import { InfoIcon, UndoIcon } from '../ui/Icon'
 import { DungeonMap } from './DungeonMap'
+import { ManaPool } from './ManaPool'
 import { Pressable } from '../ui/Pressable'
 import { SourcePicker } from './SourcePicker'
 import { Stepper } from '../ui/Stepper'
@@ -139,6 +140,17 @@ export function FieldControl({ field, value, onChange }: FieldControlProps) {
       )
     }
     case 'sequence': {
+      // A mana pool renders as its discs -- the pool is the control, the way a rolled
+      // sequence is the die.
+      if (field.mana) {
+        return (
+          <div className="flex flex-col gap-1">
+            {labelRow}
+            <ManaPool field={field} value={value} onChange={onChange} />
+            {helpText}
+          </div>
+        )
+      }
       // A picker sequence renders as a searchable roster -- it owns its own add and
       // remove controls per row, so no shared undo affordance above it.
       if (field.picker) {

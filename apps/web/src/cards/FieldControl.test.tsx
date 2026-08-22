@@ -19,6 +19,7 @@ function field(overrides: Partial<FieldSpec> & Pick<FieldSpec, 'name' | 'kind'>)
     roll: null,
     map: null,
     picker: null,
+    mana: null,
     persists_across_turns: false,
     new_turn_carries_output: null,
     setup: false,
@@ -264,6 +265,7 @@ describe('FieldControl', () => {
         default: [],
         options: [{ value: 'lotus-cobra', label: 'Lotus Cobra', scryfall_id: null }],
         picker: { search_placeholder: 'Search landfall cards', empty_label: 'Nothing added yet.' },
+        mana: null,
       })
 
     it('renders the searchable roster instead of a chip log', () => {
@@ -279,6 +281,28 @@ describe('FieldControl', () => {
       ).not.toBeInTheDocument()
       expect(screen.getByRole('button', { name: 'Remove Lotus Cobra' })).toBeInTheDocument()
     })
+  })
+
+  describe('mana sequence', () => {
+    const poolField = () =>
+      field({
+        name: 'mana_pool',
+        kind: 'sequence',
+        label: 'Mana floating',
+        default: [],
+        options: [
+          { value: 'G', label: 'Green', scryfall_id: null },
+          { value: 'U', label: 'Blue', scryfall_id: null },
+        ],
+        mana: {},
+      })
+
+    it('renders the pool discs instead of a chip log', () => {
+      render(<FieldControl field={poolField()} value={['G']} onChange={() => {}} />)
+      expect(screen.getByRole('button', { name: 'Add green mana' })).toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: /Undo last/ })).not.toBeInTheDocument()
+    })
+
   })
 
   it('throws for an unrecognized field kind from the API', () => {

@@ -44,6 +44,7 @@ function mappedField(overrides: Partial<FieldSpec> = {}): FieldSpec {
     roll: null,
     map: MAP,
     picker: null,
+    mana: null,
     persists_across_turns: false,
     new_turn_carries_output: null,
     setup: false,

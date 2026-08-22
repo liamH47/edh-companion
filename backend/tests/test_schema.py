@@ -6,6 +6,7 @@ from app.cards.schema import (
     CardMetadata,
     FieldKind,
     FieldSpec,
+    ManaSpec,
     MapEdge,
     MapNode,
     MapSpec,
@@ -219,6 +220,41 @@ def test_picker_cannot_be_combined_with_roll_or_map() -> None:
             options=[SelectOption(value=str(face), label=str(face)) for face in range(1, 7)],
             roll=RollSpec(faces=6),
             picker=PickerSpec(),
+        )
+
+
+def test_mana_must_be_a_sequence() -> None:
+    with pytest.raises(ValueError, match="declares mana but is kind"):
+        FieldSpec(
+            name="pool",
+            label="Pool",
+            kind=FieldKind.COUNTER,
+            mana=ManaSpec(),
+        )
+
+
+def test_mana_cannot_be_combined_with_a_die_or_a_map() -> None:
+    # A pool is the fourth mutually exclusive rendering of a sequence.
+    with pytest.raises(ValueError, match="declares both mana and roll"):
+        FieldSpec(
+            name="pool",
+            label="Pool",
+            kind=FieldKind.SEQUENCE,
+            options=[SelectOption(value=str(face), label=str(face)) for face in range(1, 7)],
+            roll=RollSpec(faces=6),
+            mana=ManaSpec(),
+        )
+
+
+def test_picker_and_mana_are_mutually_exclusive() -> None:
+    with pytest.raises(ValueError, match="declares both picker and mana"):
+        FieldSpec(
+            name="pool",
+            label="Pool",
+            kind=FieldKind.SEQUENCE,
+            options=[SelectOption(value="G", label="Green")],
+            picker=PickerSpec(),
+            mana=ManaSpec(),
         )
 
 

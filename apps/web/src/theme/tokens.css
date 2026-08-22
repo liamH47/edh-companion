@@ -40,6 +40,18 @@
   --text-hero-lg: 4.0000rem;
 }
 
+/* Magic's own five colors plus colorless, read directly by ManaSymbol's SVG fills.
+   Outside @theme on purpose -- see the note in generateTokensCss.ts. */
+:root {
+  --mana-w: #fbf8e4;
+  --mana-u: #a5d8f2;
+  --mana-b: #c7bfbb;
+  --mana-r: #f7a58c;
+  --mana-g: #9ccfae;
+  --mana-c: #d9d4cf;
+  --mana-glyph: #241f20;
+}
+
 /* Overrides the same --color-* variables the utilities above reference, so every
    Tailwind class generated from them (bg-surface, text-text-muted, ...) repaints for
    dark mode without a single hand-written dark: variant. .dark is toggled on <html>

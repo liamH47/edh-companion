@@ -93,6 +93,27 @@ class PickerSpec(BaseModel):
     empty_label: str = "Nothing added yet."
 
 
+class ManaSpec(BaseModel):
+    """Marks a `sequence` field as a mana pool -- rendered as a disc per color, tap to
+    add, minus to spend.
+
+    Same doctrine as RollSpec, MapSpec and PickerSpec: the value stays a plain list of
+    option values (`["G", "G", "U"]` is two green and one blue) and compute() reads it
+    exactly as it reads any other roster. A pool is a multiset, and a list of letters is
+    the honest encoding of one -- a per-color counter map would be a new value shape for
+    no gain, and could not reuse the sequence validation that already exists.
+
+    The field's `options` declare which symbols to offer, so a card that only ever makes
+    colored mana can leave `C` out.
+
+    Deliberately carries no "mana still to assign" prompt driven by an output. That was
+    built and removed: compute() is pure over the current field values, so it cannot tell
+    mana you spent from mana you never assigned, and the prompt reappeared the moment you
+    cast anything. Reconciling would need a record of spending that no field holds. The
+    effect line already says how much a trigger made; the pool is where you put it.
+    """
+
+
 class ArtBox(BaseModel):
     """Where a room sits on the printed card image, as fractions of its width/height.
     Lets the frontend draw the venture marker over the card's own room box."""
@@ -186,6 +207,9 @@ class FieldSpec(BaseModel):
     # See PickerSpec: this sequence is a roster searched out of a long option list.
     # Only meaningful on a sequence field; mutually exclusive with roll and map.
     picker: PickerSpec | None = None
+    # See ManaSpec: this sequence is a mana pool, rendered as a disc per color.
+    # Only meaningful on a sequence field; mutually exclusive with the other three.
+    mana: ManaSpec | None = None
     # On "New turn", this field takes the named output's final value instead of its
     # default -- state that persists across turns rather than resetting (Comet's
     # loyalty: the walker keeps the counters it ended the turn with). Frontend-only,
@@ -271,9 +295,23 @@ class FieldSpec(BaseModel):
             return self
         if self.kind is not FieldKind.SEQUENCE:
             raise ValueError(f"field {self.name!r} declares picker but is kind={self.kind}")
-        conflicting = [name for name in ("roll", "map") if getattr(self, name) is not None]
+        conflicting = [name for name in ("roll", "map", "mana") if getattr(self, name) is not None]
         if conflicting:
             raise ValueError(f"field {self.name!r} declares both picker and {conflicting[0]}")
+        return self
+
+    @model_validator(mode="after")
+    def _check_mana_is_a_pooled_sequence(self) -> "FieldSpec":
+        """A pool is the fourth mutually exclusive rendering of a sequence. Same rule as
+        the picker: two at once has no meaning, and letting one win silently would make
+        the screen depend on component dispatch order."""
+        if self.mana is None:
+            return self
+        if self.kind is not FieldKind.SEQUENCE:
+            raise ValueError(f"field {self.name!r} declares mana but is kind={self.kind}")
+        conflicting = [name for name in ("roll", "map") if getattr(self, name) is not None]
+        if conflicting:
+            raise ValueError(f"field {self.name!r} declares both mana and {conflicting[0]}")
         return self
 
     @model_validator(mode="after")

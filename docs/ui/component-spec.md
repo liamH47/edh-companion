@@ -454,6 +454,31 @@ dead end. Adding twice is how the schema expresses "I control two of these".
 `ActionBar` filters picker sequences out of its button row for the same reason it filters
 mapped ones: the field owns its own controls inline.
 
+### ManaSymbol / ManaPool
+
+`ManaSymbol` draws one mana disc: the pale background from the `mana` tokens with a
+hand-written glyph on top. Simplified silhouettes rather than traced printed symbols — at
+22px on a phone the outline is all that reads, and a faithful skull becomes mud. Every
+color has a *distinct* glyph, so hue is never the only cue.
+
+The `mana` tokens are **deliberately theme-independent** and live in a plain `:root` block,
+not `@theme`. Two reasons, the first load-bearing: Tailwind v4 tree-shakes theme variables
+no utility references, and nothing generates `bg-mana-*` classes — these are read by SVG
+`fill` attributes, so inside `@theme` they were silently pruned from the production build
+and every disc rendered black. Second, Magic's colors are identity rather than theming;
+there is no dark-mode counterpart.
+
+`ManaPool` is the fourth rendering of a `sequence` field (`FieldSpec.mana` / `ManaSpec`),
+after the die, the dungeon map and the searchable roster. One column per color: tap the
+disc to add, minus to spend, plus an **Empty pool** button — emptying is something the
+*rules* do to you at every phase change, not an undo. Six 44px columns fit a 360px phone.
+
+The value is a plain list of color letters (`["G","G","U"]`), so compute() reads it as it
+reads any roster. There is deliberately **no** "mana still to assign" prompt driven by an
+output: that was built and removed, because compute() is pure over current field values
+and cannot tell mana you spent from mana you never assigned — the prompt reappeared the
+moment you cast anything. The effect line already says how much a trigger made.
+
 ### EffectList
 
 The `list` hero shape (`OutputSpec.hero_shape: "list"` + `kind: "lines"`). One row per

@@ -33,6 +33,7 @@ similar shape:
 | Kalonian Hydra | `kalonian_hydra.py` | Geometric compounding: a repeatable trigger that doubles a board-wide aggregate, where only part of the total participates |
 | Commander Tax | `commander_tax.py` | First cardless format mechanic: `scryfall_id=None`, allowlisted in `test_registry.py` |
 | Dungeons | `dungeons.py` | The `map` capability on a sequence: a walk through a room graph, rendered as a tappable dungeon map, legality validated on both sides; also the first `resets_on_new_turn=False` game-long tracker |
+| Mana Pool | `mana_pool.py` | The `mana` capability on a sequence: a multiset of colour letters rendered as tappable discs. State rather than arithmetic — the first entry whose value is what you are holding, not what you computed |
 | Landfall | `landfall.py` | First entry whose subject is an *interaction between* cards rather than one card: a roster of permanents (the `picker` capability on a sequence) and a `lines` output rendered as the `list` hero. The pattern to reuse for any "several things trigger at once" mechanic |
 | Storm | `storm_payoffs.py` | The second roster, and the proof the shape generalizes: 34 storm cards against the four with their own screens, compared side by side at one count. Where landfall's roster is your board, storm's is your hand |
 

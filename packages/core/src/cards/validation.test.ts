@@ -25,6 +25,7 @@ function field(overrides: Partial<FieldSpec> & Pick<FieldSpec, 'name' | 'kind'>)
     roll: null,
     map: null,
     picker: null,
+    mana: null,
     persists_across_turns: false,
     new_turn_carries_output: null,
     setup: false,

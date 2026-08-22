@@ -47,6 +47,7 @@ function makeCard(overrides: Partial<CardMetadata> = {}): CardMetadata {
         roll: null,
     map: null,
     picker: null,
+    mana: null,
     persists_across_turns: false,
     new_turn_carries_output: null,
         setup: false,

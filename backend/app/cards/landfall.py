@@ -35,6 +35,7 @@ from .schema import (
     CardMetadata,
     FieldKind,
     FieldSpec,
+    ManaSpec,
     OutputKind,
     OutputSpec,
     PickerSpec,
@@ -44,9 +45,20 @@ from .schema import (
 MAX_LANDS_PER_TURN = 99
 MAX_TRIGGERS_PER_LAND = 4
 MAX_SOURCES = 12
+MAX_FLOATING = 99
 # "If this is the second time this ability has resolved this turn" -- the exact wording
 # shared by Tannuk, Nissa, Resurgent Animist and Scythecat Cub.
 SECOND_RESOLUTION = 2
+
+# WUBRG plus colorless, in the order every player already reads a mana cost in.
+_MANA_COLORS: dict[str, str] = {
+    "W": "White",
+    "U": "Blue",
+    "B": "Black",
+    "R": "Red",
+    "G": "Green",
+    "C": "Colorless",
+}
 
 
 # Oracle text pulled verbatim from Scryfall 2026-08-21 and condensed to the phrasing that
@@ -299,6 +311,24 @@ METADATA = CardMetadata(
             action_label="Land enters",
             help_text="Any land entering under your control, not just your land drop -- "
             "a fetchland counts twice, once for itself and once for what it finds.",
+        ),
+        FieldSpec(
+            name="mana_pool",
+            label="Mana floating",
+            short_label="floating",
+            kind=FieldKind.SEQUENCE,
+            default=[],
+            max=MAX_FLOATING,
+            # Lotus Cobra and Nissa both say "add one mana of any color": the effect
+            # line says how much, and this is where you put it once you have picked. Not
+            # persisted across turns -- mana empties at every phase change, so surviving
+            # a whole turn boundary would be the wrong default by a mile.
+            mana=ManaSpec(),
+            options=[
+                SelectOption(value=symbol, label=label) for symbol, label in _MANA_COLORS.items()
+            ],
+            help_text="Only what's still floating. Mana empties at the end of every "
+            "step and phase, so this is emptier than it feels.",
         ),
     ],
     outputs=[

@@ -9,6 +9,7 @@ import { compute as emptyTheWarrens } from './compute/empty-the-warrens'
 import { compute as grapeshot } from './compute/grapeshot'
 import { compute as kalonianHydra } from './compute/kalonian-hydra'
 import { compute as landfall } from './compute/landfall'
+import { compute as manaPool } from './compute/mana-pool'
 import { compute as nykthosShrineToNyx } from './compute/nykthos-shrine-to-nyx'
 import { compute as obNixilisTheFallen } from './compute/ob-nixilis-the-fallen'
 import { compute as scuteSwarm } from './compute/scute-swarm'
@@ -41,6 +42,7 @@ export const COMPUTE_BY_CARD_ID: Record<string, ComputeFn> = {
   grapeshot,
   'kalonian-hydra': kalonianHydra,
   landfall,
+  'mana-pool': manaPool,
   'nykthos-shrine-to-nyx': nykthosShrineToNyx,
   'ob-nixilis-the-fallen': obNixilisTheFallen,
   'scute-swarm': scuteSwarm,

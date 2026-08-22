@@ -15,6 +15,7 @@ import emptyTheWarrens from './__parity__/empty-the-warrens.json'
 import grapeshot from './__parity__/grapeshot.json'
 import kalonianHydra from './__parity__/kalonian-hydra.json'
 import landfall from './__parity__/landfall.json'
+import manaPool from './__parity__/mana-pool.json'
 import nykthosShrineToNyx from './__parity__/nykthos-shrine-to-nyx.json'
 import obNixilisTheFallen from './__parity__/ob-nixilis-the-fallen.json'
 import scuteSwarm from './__parity__/scute-swarm.json'
@@ -60,6 +61,7 @@ const CORPORA: Corpus[] = [
   grapeshot,
   kalonianHydra,
   landfall,
+  manaPool,
   nykthosShrineToNyx,
   obNixilisTheFallen,
   scuteSwarm,
