@@ -214,6 +214,18 @@ export function DiceIcon(props: ConcreteIconProps) {
   )
 }
 
+/** An arrow into a tray -- "install this" in the same vocabulary a browser's own
+ * download/install affordances already use. */
+export function InstallIcon(props: ConcreteIconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M12 3v12" />
+      <path d="M7 10l5 5 5-5" />
+      <path d="M4 19h16" />
+    </Icon>
+  )
+}
+
 export function SpeakerIcon(props: ConcreteIconProps) {
   return (
     <Icon {...props}>

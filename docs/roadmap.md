@@ -4,13 +4,16 @@ Where this project is and what is left. Written into the repo deliberately: a Cl
 cloud session clones the repo and cannot see anything on a local machine, so a plan that
 lives only in `~/.claude/plans/` is invisible there.
 
-Last updated 2026-08-20 (evening: 3D dice, Comet card screen, Dungeons).
+Last updated 2026-08-23 (a visual identity, and the app is installable).
 
 ## Where it stands
 
-The web app is **complete and deployed** at <https://mtg-calc.onrender.com>, and works
-entirely offline — card metadata is bundled and compute runs in the browser, so no tab
-needs a connection.
+The web app is **complete, deployed, and installable** at
+<https://mtg-calc.onrender.com> — "Add to Home Screen" / "Install" puts it on a phone
+with no store and no developer account, and it works entirely offline from a cold
+launch, not just an already-open tab: card metadata is bundled, compute runs in the
+browser, and a service worker precaches the app shell plus previously-viewed card art.
+See `docs/mobile-port-roadmap.md` for how.
 
 Four tabs:
 
@@ -48,7 +51,7 @@ Four tabs:
 
 Every deploy is gated on CI: backend lint/format/types/tests, a design-tokens freshness
 check, both frontend packages at 100% coverage, a parity corpus proving Python and
-TypeScript agree, and Playwright end-to-end against the real Docker image (31 specs run on
+TypeScript agree, and Playwright end-to-end against the real Docker image (35 specs run on
 both a desktop and a Pixel 7 viewport).
 
 Nothing is half-finished. There is no broken state to return to.

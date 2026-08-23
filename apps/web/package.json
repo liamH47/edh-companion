@@ -16,11 +16,11 @@
     "typecheck": "tsc -b"
   },
   "dependencies": {
+    "@mtg/core": "*",
     "@tailwindcss/vite": "^4.3.3",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "tailwindcss": "^4.3.3",
-    "@mtg/core": "*"
+    "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^7.0.0",
@@ -34,6 +34,7 @@
     "jsdom": "^30.0.1",
     "typescript": "~6.0.2",
     "vite": "^8.1.1",
+    "vite-plugin-pwa": "^1.3.0",
     "vitest": "^4.1.10"
   }
 }

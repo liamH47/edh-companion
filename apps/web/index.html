@@ -3,7 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- iOS reads this for "Add to Home Screen" -- it does not consult the web
+         manifest's icons the way Android/desktop Chrome does. -->
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#17130e" />
+    <!-- Standalone-launch affordance on iOS Safari, which has no beforeinstallprompt
+         event at all -- InstallPrompt.tsx checks this to decide whether to show its
+         one-time "Add to Home Screen" hint instead of waiting on that event. -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <title>Commander's Companion</title>
     <script>
       // Applied before first paint so there's no flash of the wrong theme.
