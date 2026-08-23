@@ -177,6 +177,43 @@ export function CardsIcon(props: ConcreteIconProps) {
   )
 }
 
+/** A coin edge-on -- the outer rim plus a tall inner ellipse suggesting the tilt of a
+ * spinning flip, rather than a flat disc. */
+export function CoinIcon(props: ConcreteIconProps) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <ellipse cx="12" cy="12" rx="3.2" ry="9" />
+    </Icon>
+  )
+}
+
+/** Two seated players -- the Pairings tab, whether that means Swiss opponents or a
+ * Commander pod. */
+export function UsersIcon(props: ConcreteIconProps) {
+  return (
+    <Icon {...props}>
+      <circle cx="8" cy="9" r="3" />
+      <circle cx="16" cy="9" r="3" />
+      <path d="M3 20a5 5 0 0 1 10 0" />
+      <path d="M11 20a5 5 0 0 1 10 0" />
+    </Icon>
+  )
+}
+
+/** A die face showing three pips -- filled, not stroked, so it reads as marks on a
+ * face rather than three more empty circles. */
+export function DiceIcon(props: ConcreteIconProps) {
+  return (
+    <Icon {...props}>
+      <rect x="4" y="4" width="16" height="16" rx="3" />
+      <circle cx="8" cy="8" r="1.3" fill="currentColor" stroke="none" />
+      <circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none" />
+      <circle cx="16" cy="16" r="1.3" fill="currentColor" stroke="none" />
+    </Icon>
+  )
+}
+
 export function SpeakerIcon(props: ConcreteIconProps) {
   return (
     <Icon {...props}>

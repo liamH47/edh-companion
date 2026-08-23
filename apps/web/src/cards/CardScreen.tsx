@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { effectLines, heroOutput, nonPrimaryOutputs, splitFields } from '@mtg/core'
 import { useCardSession } from '@mtg/core'
 import type { CardMetadata } from '@mtg/core'
-import { ChevronLeftIcon, InfoIcon } from '../ui/Icon'
+import { BackButton } from '../ui/BackButton'
+import { InfoIcon } from '../ui/Icon'
 import { Pressable } from '../ui/Pressable'
 import { Surface } from '../ui/Surface'
 import { Text } from '../ui/Text'
@@ -65,15 +66,7 @@ export function CardScreen({ card, onBack }: CardScreenProps) {
   return (
     <section className="flex flex-col gap-4">
       <header className="flex items-center gap-3">
-        {onBack && (
-          <Pressable
-            aria-label="Back"
-            onClick={onBack}
-            className="min-h-12 min-w-12 justify-center rounded-full text-text-muted hover:text-text"
-          >
-            <ChevronLeftIcon />
-          </Pressable>
-        )}
+        {onBack && <BackButton onClick={onBack} />}
         <Text as="h1" variant="title" className="flex-1">
           {card.name}
         </Text>

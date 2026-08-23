@@ -40,8 +40,10 @@ describe('RoundScreen', () => {
 
   it('lists each pairing with both names', () => {
     renderRound()
-    expect(screen.getByText('A')).toBeInTheDocument()
-    expect(screen.getByText('B')).toBeInTheDocument()
+    // By accessible name, not getByText('A')/getByText('B') -- the decorative
+    // EntrantBadge renders the same single-letter initial these fixture names happen
+    // to already be, which would make a plain text query ambiguous.
+    expect(screen.getByRole('button', { name: 'Report A versus B' })).toBeInTheDocument()
     expect(screen.getAllByText('Not reported')).toHaveLength(2)
   })
 
@@ -241,8 +243,7 @@ describe('RoundScreen with Commander pods', () => {
 
   it('still stacks the two sides of an ordinary 1v1 match', () => {
     renderRound()
-    expect(screen.getByText('A')).toBeInTheDocument()
-    expect(screen.getByText('B')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Report A versus B' })).toBeInTheDocument()
   })
 
   it('labels a pod by its members rather than as a versus pair', () => {

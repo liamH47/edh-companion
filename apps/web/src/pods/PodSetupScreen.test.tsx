@@ -68,7 +68,7 @@ describe('PodSetupScreen', () => {
     const user = userEvent.setup()
     const { onBack } = renderSetup()
 
-    await user.click(screen.getByRole('button', { name: '‹ Pairings' }))
+    await user.click(screen.getByRole('button', { name: 'Pairings' }))
     expect(onBack).toHaveBeenCalled()
   })
 })

@@ -25,7 +25,7 @@ describe('PairingsScreen', () => {
     await user.click(screen.getByRole('button', { name: 'Commander pods' }))
     expect(screen.getByRole('heading', { name: 'Commander pods' })).toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', { name: '‹ Pairings' }))
+    await user.click(screen.getByRole('button', { name: 'Pairings' }))
     expect(screen.getByRole('heading', { name: 'Pairings' })).toBeInTheDocument()
   })
 
@@ -36,7 +36,7 @@ describe('PairingsScreen', () => {
     await user.click(screen.getByRole('button', { name: 'Swiss tournament' }))
     expect(screen.getByRole('heading', { name: 'New tournament' })).toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', { name: '‹ Pairings' }))
+    await user.click(screen.getByRole('button', { name: 'Pairings' }))
     expect(screen.getByRole('heading', { name: 'Pairings' })).toBeInTheDocument()
   })
 

@@ -69,7 +69,7 @@ describe('PodsScreen', () => {
     render(<PodsScreen onBack={onBack} rng={rng} />)
     await generate(user, ['Ava', 'Ben', 'Cara', 'Dev'])
 
-    await user.click(screen.getByRole('button', { name: '‹ Pairings' }))
+    await user.click(screen.getByRole('button', { name: 'Pairings' }))
     expect(onBack).toHaveBeenCalled()
   })
 

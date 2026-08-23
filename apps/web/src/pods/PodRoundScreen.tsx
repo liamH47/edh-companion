@@ -1,6 +1,7 @@
 import { entrantName } from '@mtg/core/swiss'
 import type { PodRound, PodSession } from '@mtg/core/pods'
 import { Button } from '../ui/Button'
+import { EntrantBadge } from '../ui/EntrantBadge'
 import { ShuffleIcon } from '../ui/Icon'
 import { Text } from '../ui/Text'
 
@@ -48,12 +49,15 @@ export function PodRoundScreen({
         {round.pods.map((pod, index) => (
           <li
             key={pod.seats.join('-')}
-            className="flex flex-col gap-1 rounded-lg border border-border bg-surface px-4 py-3"
+            className="flex items-center gap-3 rounded-lg border border-border bg-surface px-4 py-3"
           >
-            <Text variant="label" color="muted">
-              Pod {index + 1} · {pod.seats.length} players
-            </Text>
-            <Text variant="bodyStrong">{pod.seats.map(nameOf).join(', ')}</Text>
+            <EntrantBadge />
+            <span className="flex min-w-0 flex-1 flex-col gap-1">
+              <Text variant="label" color="muted">
+                Pod {index + 1} · {pod.seats.length} players
+              </Text>
+              <Text variant="bodyStrong">{pod.seats.map(nameOf).join(', ')}</Text>
+            </span>
           </li>
         ))}
       </ul>

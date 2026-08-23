@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { MIN_PLAYERS } from '@mtg/core/pods'
 import { podSizes } from '@mtg/core/swiss'
+import { BackButton } from '../ui/BackButton'
 import { Button } from '../ui/Button'
 import { PlusIcon, TrashIcon } from '../ui/Icon'
 import { Pressable } from '../ui/Pressable'
@@ -68,9 +69,7 @@ export function PodSetupScreen({ onStart, onBack }: PodSetupScreenProps) {
   return (
     <section className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
-        <Button variant="ghost" onClick={onBack} className="self-start">
-          ‹ Pairings
-        </Button>
+        <BackButton onClick={onBack} label="Pairings" className="self-start" />
         <Text as="h2" variant="title">
           Commander pods
         </Text>
