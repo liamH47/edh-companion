@@ -76,8 +76,8 @@ function App() {
           mathematically centred here. */}
       <header className="flex items-center">
         <div className="flex-1" aria-hidden="true" />
-        <h1 className="text-center text-xl font-semibold tracking-tight text-text sm:text-2xl">
-          Commander&apos;s Companion
+        <h1 className="font-display text-center text-xl font-semibold tracking-tight text-text sm:text-2xl">
+          Mana Ledger
         </h1>
         <div className="flex flex-1 items-center justify-end gap-2">
           <InstallPrompt />

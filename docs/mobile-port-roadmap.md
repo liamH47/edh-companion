@@ -74,9 +74,11 @@ store specifically, not for testing.
 
 ## Phase 7 — Expo scaffold and platform seams
 
-**Gate: the app name must be final before this phase**, because `app.json` writes
-`ios.bundleIdentifier` and `android.package` here, and both are permanent after the
-first publish to either store. See "Naming" below.
+The app is named (Mana Ledger, see "Naming" below), so the one-time gate on this phase
+is clear: `app.json` writes `ios.bundleIdentifier` and `android.package` here, and both
+are permanent after the first publish to either store — pick them deliberately when
+this phase actually starts (e.g. reverse-DNS off a domain or handle actually owned),
+not as an afterthought mid-scaffold.
 
 - `npx create-expo-app apps/mobile --template expo-template-blank-typescript`, dropped in
   as a third npm workspace member alongside `apps/web` (root `package.json`'s
@@ -207,28 +209,32 @@ it.
 
 ## Naming
 
-Still open, and it's the actual gate on Phase 7 (not Phase 10 — bundle identifiers are
-permanent). Three candidates, chosen to avoid two specific collisions: Wizards' own app
+**Decided: Mana Ledger** (2026-08-23). Already live in the web app — the header,
+`index.html`'s `<title>`, and the PWA manifest's `name`/`short_name` all carry it — so
+what's still pending at Phase 7 is only the two things that don't exist until then:
+`ios.bundleIdentifier` and `android.package`, permanent once written.
+
+Three candidates were weighed, chosen to avoid two specific collisions: Wizards' own app
 is literally called **"Magic: The Gathering Companion,"** and the Fan Content Policy
-forbids anything implying Wizards made this one — so "Companion" in the name (today's
-header, and the `edh-companion` git remote) is worth dropping, not just the word
-"Magic."
+forbids anything implying Wizards made this one — so "Companion" (the old header, and
+the `edh-companion` git remote, neither of which is user-visible) was worth dropping,
+not just the word "Magic."
 
 | Candidate | Why | Risk |
 |---|---|---|
-| **Mana Ledger** | Ties directly to the new visual identity (`docs/design/visual-identity.md`'s "illuminated ledger" palette) and describes what the app actually does — tracks a running account of game state. Distinctive, no trademark collision found. | None identified |
-| **Draw Seven** | A Magic-flavored pun (many effects read "draw seven cards") that reads as fan-made rather than official, which is the safer posture under the Fan Content Policy. Memorable. | Slightly cute for a utility app |
-| **First Main** | A phase-name pun (calculators get used mid-turn, in main phase). Distinctive, obscure enough to be low-collision-risk. | Less immediately legible to a non-player |
+| **Mana Ledger** (chosen) | Ties directly to the new visual identity (`docs/design/visual-identity.md`'s "illuminated ledger" palette) and describes what the app actually does — tracks a running account of game state. Distinctive, no trademark collision found. | None identified |
+| Draw Seven | A Magic-flavored pun (many effects read "draw seven cards") that reads as fan-made rather than official, which is the safer posture under the Fan Content Policy. Memorable. | Slightly cute for a utility app |
+| First Main | A phase-name pun (calculators get used mid-turn, in main phase). Distinctive, obscure enough to be low-collision-risk. | Less immediately legible to a non-player |
 
-**Mana Ledger** is the working recommendation — it's the only one of the three that also
-reinforces the visual identity decision instead of being an unrelated label bolted onto
-it. Confirm before Phase 7 writes `app.json`.
+Mana Ledger won on being the only one of the three that also reinforces the visual
+identity decision instead of being an unrelated label bolted onto it.
 
 ## Sequencing summary
 
 ```
 Phase 6.5  PWA (manifest, service worker, icons)         ── shipped
-Phase 7    Expo scaffold + platform seams                ── gated on the name
+Phase 7    Expo scaffold + platform seams                ── named (Mana Ledger); bundle
+                                                              identifiers still pending
 Phase 8    RN primitives + screens
 Phase 9    Maestro + EAS internal distribution            ── second "friends test" moment
 Phase 10   Store submission                                ── start the Play 14-day clock

@@ -12,8 +12,8 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: "Commander's Companion",
-        short_name: 'MTG Companion',
+        name: 'Mana Ledger',
+        short_name: 'Mana Ledger',
         description:
           'Dice, coin flips, pairings, and per-card calculators for casual Commander games -- works fully offline once installed.',
         // Matches the app icon's own background (docs/design/visual-identity.md) --
