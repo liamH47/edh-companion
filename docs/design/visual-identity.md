@@ -203,8 +203,8 @@ Each is scoped to land as its own PR, per this repo's normal size. **1–2 are o
 
 ## Implementation checklist
 
-- [ ] Item 1 — identity rollout (tokens, fonts, docs)
-- [ ] Item 3 — unified back button
-- [ ] Item 4 — tab bar icons
-- [ ] Item 5 — Swiss/pods row badges
-- [ ] Item 6 — PWA (tracked in `docs/mobile-port-roadmap.md`)
+- [x] Item 1 — identity rollout (tokens, fonts, docs) — #43
+- [x] Item 3 — unified back button — #44
+- [x] Item 4 — tab bar icons — #44
+- [x] Item 5 — Swiss/pods row badges — #44
+- [x] Item 6 — PWA (tracked in `docs/mobile-port-roadmap.md`)

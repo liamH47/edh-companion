@@ -7,6 +7,7 @@ import { CoinFlip } from './CoinFlip'
 import { useNavigation } from './core/navigation/useNavigation'
 import { ErrorBoundary } from './ErrorBoundary'
 import { DiceScreen } from './DiceScreen'
+import { InstallPrompt } from './InstallPrompt'
 import { PairingsScreen } from './pairings/PairingsScreen'
 import { SoundToggle } from './SoundToggle'
 import { TabBar, type TabName } from './TabBar'
@@ -79,6 +80,7 @@ function App() {
           Commander&apos;s Companion
         </h1>
         <div className="flex flex-1 items-center justify-end gap-2">
+          <InstallPrompt />
           <SoundToggle />
           <ThemeToggle />
         </div>
