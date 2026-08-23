@@ -3,6 +3,7 @@ import { activeEntrantsForRound, entrantIdsInRound, isRoundComplete } from '@mtg
 import { entrantName, isBye, type Match, type MatchResult, type Tournament } from '@mtg/core/swiss'
 import { Button } from '../ui/Button'
 import { Chip } from '../ui/Chip'
+import { EntrantBadge } from '../ui/EntrantBadge'
 import { ShuffleIcon } from '../ui/Icon'
 import { Pressable } from '../ui/Pressable'
 import { Sheet } from '../ui/Sheet'
@@ -116,20 +117,28 @@ export function RoundScreen({
               {/* A 1v1 stacks the two sides, because the scoreline below is written
                   from the top one's point of view. A pod has no such hierarchy --
                   everyone is equally in it -- so it lists all its members at one
-                  weight rather than promoting whoever happens to be first. */}
+                  weight rather than promoting whoever happens to be first. The badge
+                  follows the same split: one entrant's initial when there is a "top"
+                  one, a group glyph when there isn't. */}
               {match.entrantIds.length > 2 ? (
-                <Text variant="bodyStrong" className="min-w-0 flex-1 truncate text-left">
-                  {match.entrantIds.map(nameOf).join(', ')}
-                </Text>
+                <>
+                  <EntrantBadge />
+                  <Text variant="bodyStrong" className="min-w-0 flex-1 truncate text-left">
+                    {match.entrantIds.map(nameOf).join(', ')}
+                  </Text>
+                </>
               ) : (
-                <span className="flex min-w-0 flex-col">
-                  <Text variant="bodyStrong" className="truncate">
-                    {nameOf(match.entrantIds[0])}
-                  </Text>
-                  <Text variant="body" color="muted" className="truncate">
-                    {isBye(match) ? '—' : nameOf(match.entrantIds[1])}
-                  </Text>
-                </span>
+                <>
+                  <EntrantBadge name={nameOf(match.entrantIds[0])} />
+                  <span className="flex min-w-0 flex-1 flex-col">
+                    <Text variant="bodyStrong" className="truncate">
+                      {nameOf(match.entrantIds[0])}
+                    </Text>
+                    <Text variant="body" color="muted" className="truncate">
+                      {isBye(match) ? '—' : nameOf(match.entrantIds[1])}
+                    </Text>
+                  </span>
+                </>
               )}
               <Text
                 variant="bodyStrong"

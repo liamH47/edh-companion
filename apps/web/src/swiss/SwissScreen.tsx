@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useTournament } from '@mtg/core/swiss'
 import { entrantName, type Rng } from '@mtg/core/swiss'
+import { BackButton } from '../ui/BackButton'
 import { Button } from '../ui/Button'
 import { Pressable } from '../ui/Pressable'
 import { Sheet } from '../ui/Sheet'
@@ -41,11 +42,7 @@ export function SwissScreen({ rng = Math.random, onExit }: SwissScreenProps = {}
   if (tournament === null) {
     return (
       <div className="flex flex-col gap-4">
-        {onExit && (
-          <Button variant="ghost" onClick={onExit} className="self-start">
-            ‹ Pairings
-          </Button>
-        )}
+        {onExit && <BackButton onClick={onExit} label="Pairings" className="self-start" />}
         <TournamentSetupScreen
           rng={rng}
           onStart={(input, seatingIsRandom) => {

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { usePodSession } from '@mtg/core/pods'
 import type { Rng } from '@mtg/core/swiss'
+import { BackButton } from '../ui/BackButton'
 import { Button } from '../ui/Button'
 import { Pressable } from '../ui/Pressable'
 import { PodRoundScreen } from './PodRoundScreen'
@@ -46,9 +47,7 @@ export function PodsScreen({ onBack, rng = Math.random }: PodsScreenProps) {
   return (
     <section className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center gap-2">
-        <Button variant="ghost" onClick={onBack} className="mr-1">
-          ‹ Pairings
-        </Button>
+        <BackButton onClick={onBack} label="Pairings" />
         {rounds.map((candidate) => (
           <Pressable
             key={candidate.number}
