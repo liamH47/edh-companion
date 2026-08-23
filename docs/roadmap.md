@@ -4,11 +4,13 @@ Where this project is and what is left. Written into the repo deliberately: a Cl
 cloud session clones the repo and cannot see anything on a local machine, so a plan that
 lives only in `~/.claude/plans/` is invisible there.
 
-Last updated 2026-08-23 (a visual identity, and the app is installable).
+Last updated 2026-08-23 (a visual identity, the app is installable, and it has a name).
 
 ## Where it stands
 
-The web app is **complete, deployed, and installable** at
+The app is called **Mana Ledger** now — decided 2026-08-23, see
+`docs/mobile-port-roadmap.md`'s Naming section for the alternatives and why. The web
+app is **complete, deployed, and installable** at
 <https://mtg-calc.onrender.com> — "Add to Home Screen" / "Install" puts it on a phone
 with no store and no developer account, and it works entirely offline from a cold
 launch, not just an already-open tab: card metadata is bundled, compute runs in the
@@ -92,9 +94,11 @@ when this was first written: `ThemeToggle` (`getInitialTheme`), `SoundToggle`, `
 which checks for both a saved pod session and a saved tournament). An async store would
 mean a flash of the wrong state on every one of them.
 
-> **Decide the name before this phase, not before phase 10.** The Expo scaffold is where
-> `ios.bundleIdentifier` and `android.package` get written, and those are permanent after
-> publish. See "The actual blocker" below.
+> **The app is named Mana Ledger**, decided 2026-08-23 (`docs/mobile-port-roadmap.md`'s
+> Naming section has the alternatives considered and why). This phase is where
+> `ios.bundleIdentifier` and `android.package` get written from it, permanent after
+> publish — the app header, HTML title, and PWA manifest already use the name; only the
+> bundle identifiers are still pending, since they only exist once this phase starts.
 
 **Phase 8 — React Native primitives and screens.** Rewrite the **12** `apps/web/src/ui/`
 primitives in `StyleSheet` + a `useColors()` theme context (React Native has no cascading
@@ -122,10 +126,10 @@ shortens it. Apple enrolment ($99/yr) is usually 24–48h. **Start both now**, i
 with phase 7 — starting them at phase 10 instead adds two weeks to the finish, and
 recruiting twelve real testers is usually the slow half.
 
-**The name is unresolved and becomes permanent on publish.** The repo is `mtg-calc`, the
-git remote is `edh-companion`, the Render service is `mtg-calc`, and the app header says
-"Commander's Companion". Bundle identifiers cannot be changed afterwards without a new
-listing — and phase 7 is where they get chosen, so this is not a phase-10 problem.
+**The app is named Mana Ledger** (decided 2026-08-23); only the bundle identifiers
+derived from it are still pending, at phase 7. The repo is still `mtg-calc`, the git
+remote `edh-companion`, and the Render service `mtg-calc` — none of those are
+user-visible and none need to change for the app itself to carry its real name.
 
 **Wizards' Fan Content Policy** permits the verbatim Oracle text every card module carries,
 but only for non-commercial fan content: ship free, no ads, no IAP, with the standard
