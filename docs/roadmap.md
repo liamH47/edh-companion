@@ -68,7 +68,16 @@ CLAUDE.md            the rules a session in this repo has to follow
 ## What is left
 
 All of it is the mobile port. See `docs/ui/portability-rules.md` for why the split above
-makes this cheap.
+makes this cheap, and **`docs/mobile-port-roadmap.md` for the full technical plan** —
+phase-by-phase package and config choices, plus how to get the app onto a friend's phone
+at each stage (a PWA first, needing no store; EAS internal distribution once Expo lands;
+the store listings last). This section stays a summary.
+
+A parallel audit of the current app's look, `docs/design/visual-identity.md`, found the
+palette and typeface were never actually chosen (stock Tailwind slate + indigo, system
+font) and fixed a real bug hiding in the defaults (`surface`/`surfaceRaised` were
+identical in light mode, so every "raised" panel had no visible lift). That document is
+the design record for the palette and type system now in `theme/tokens.ts`.
 
 **Phase 7 — Expo scaffold and platform seams.** `packages/core` already exposes settable
 backends for storage, compute, reduced-motion, haptics and sound; `apps/web/src/platform.ts`

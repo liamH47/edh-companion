@@ -1,4 +1,4 @@
-import { color, mana, manaGlyph, radius, typeScale } from '@mtg/core/theme/tokens'
+import { color, fontFamily, mana, manaGlyph, radius, typeScale } from '@mtg/core/theme/tokens'
 
 /** camelCase -> kebab-case, e.g. surfaceRaised -> surface-raised. */
 function kebab(name: string): string {
@@ -31,6 +31,11 @@ export function generateTokensCss(): string {
     Object.entries(typeScale).map(([key, value]) => [key, (value.size / 16).toFixed(4)]),
     'rem',
   )
+  // `--font-*` is Tailwind's own reserved theme namespace, so this generates real
+  // `font-display`/`font-body` utility classes -- a static class name Tailwind's
+  // scanner sees in Text.tsx's source, unlike the mana discs' runtime `var()`
+  // interpolation above, so there is no tree-shaking risk putting these in @theme.
+  const fontVars = block('font', Object.entries(fontFamily))
 
   return `/* GENERATED FILE -- do not edit by hand. Run \`npm run tokens:build\`.
    Source of truth: src/theme/tokens.ts */
@@ -47,6 +52,7 @@ export function generateTokensCss(): string {
 ${lightColors}
 ${radiusVars}
 ${textVars}
+${fontVars}
 }
 
 /* Magic's own five colors plus colorless, read directly by ManaSymbol's SVG fills.

@@ -1,6 +1,40 @@
 @import 'tailwindcss';
 @import './theme/tokens.css';
 
+/* Self-hosted, not a Google Fonts <link>: the app's whole pitch is that no tab needs a
+   connection, and a bundled static file is what ports to Expo's useFonts() unchanged.
+   See docs/design/visual-identity.md. Latin subset only (the app is English-only), OFL
+   licensed (permits redistribution). One weight per file -- the type scale never needed
+   more than 500/600/700. */
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/fraunces-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/sora-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/sora-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/sora-700.woff2') format('woff2');
+}
+
 /* Redefine `dark:` to key off a `.dark` class (toggled by ThemeToggle) instead of
    only prefers-color-scheme, so the user's choice can override the system setting. */
 @custom-variant dark (&:where(.dark, .dark *));
@@ -17,9 +51,12 @@ body {
   /* Not @apply: Tailwind's production build resolves @apply against @theme values
      before it has fully processed the separately-@imported tokens.css, so a custom
      color utility here (bg-canvas, text-text) fails to resolve at build time even
-     though the same classes work fine applied directly in JSX. var() sidesteps it. */
+     though the same classes work fine applied directly in JSX. var() sidesteps it.
+     Same reasoning for font-family: Sora is the body face everywhere; Text's `title`
+     variant opts into --font-display (Fraunces) on top of this default. */
   background-color: var(--color-canvas);
   color: var(--color-text);
+  font-family: var(--font-body);
   @apply antialiased transition-colors duration-200;
   font-variant-numeric: tabular-nums;
 }
