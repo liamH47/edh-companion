@@ -16,7 +16,9 @@ const variantClasses: Record<TextVariant, string> = {
   label: 'text-label font-semibold tracking-[0.06em] uppercase',
   body: 'text-body font-medium',
   bodyStrong: 'text-body-strong font-semibold',
-  title: 'text-title font-semibold',
+  // The one place the display serif appears -- screen and sheet headers read as "a
+  // ledger," not a dashboard. Every other variant stays on the body face set on <body>.
+  title: 'text-title font-semibold font-display',
   statTile: 'text-stat-tile font-bold',
   heroSm: 'text-hero-sm font-bold',
   heroMd: 'text-hero-md font-bold',

@@ -10,22 +10,22 @@
    of the default 4px unit, so components use the stock numeric scale directly
    (p-1, gap-2, px-4, gap-6, p-8, and so on) instead. */
 @theme {
-  --color-canvas: #f8fafc;
-  --color-surface: #ffffff;
-  --color-surface-raised: #ffffff;
-  --color-border: #e2e8f0;
-  --color-text: #0f172a;
-  --color-text-muted: #64748b;
-  --color-accent: #4f46e5;
-  --color-accent-text: #ffffff;
-  --color-accent-muted: #eef2ff;
-  --color-danger: #dc2626;
-  --color-danger-surface: #fef2f2;
-  --color-danger-border: #fecaca;
-  --color-danger-text: #991b1b;
-  --color-overlay: rgba(15, 23, 42, 0.4);
-  --color-disabled-surface: #e2e8f0;
-  --color-disabled-text: #94a3b8;
+  --color-canvas: #f6f1e6;
+  --color-surface: #fffdf7;
+  --color-surface-raised: #f4e9d2;
+  --color-border: #e2d5b8;
+  --color-text: #241f1a;
+  --color-text-muted: #655a49;
+  --color-accent: #8a4a12;
+  --color-accent-text: #fff8ec;
+  --color-accent-muted: #f2e2c4;
+  --color-danger: #b3261e;
+  --color-danger-surface: #fbeae8;
+  --color-danger-border: #eec2bc;
+  --color-danger-text: #7a1c15;
+  --color-overlay: rgba(36, 31, 26, 0.45);
+  --color-disabled-surface: #e9decb;
+  --color-disabled-text: #a89b83;
   --radius-sm: 8px;
   --radius-md: 16px;
   --radius-lg: 24px;
@@ -38,6 +38,8 @@
   --text-hero-sm: 2.2500rem;
   --text-hero-md: 3.0000rem;
   --text-hero-lg: 4.0000rem;
+  --font-display: 'Fraunces', ui-serif, Georgia, 'Times New Roman', serif;
+  --font-body: 'Sora', ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
 /* Magic's own five colors plus colorless, read directly by ManaSymbol's SVG fills.
@@ -57,20 +59,20 @@
    dark mode without a single hand-written dark: variant. .dark is toggled on <html>
    by src/core/theme.ts. */
 :root.dark {
-  --color-canvas: #0b1120;
-  --color-surface: #151d2e;
-  --color-surface-raised: #1c2740;
-  --color-border: #293349;
-  --color-text: #f1f5f9;
-  --color-text-muted: #94a3b8;
-  --color-accent: #818cf8;
-  --color-accent-text: #0b1120;
-  --color-accent-muted: #1e2547;
-  --color-danger: #f87171;
-  --color-danger-surface: #2a1315;
-  --color-danger-border: #7f1d1d;
-  --color-danger-text: #fecaca;
-  --color-overlay: rgba(2, 6, 23, 0.6);
-  --color-disabled-surface: #1c2740;
-  --color-disabled-text: #475569;
+  --color-canvas: #17130e;
+  --color-surface: #221b13;
+  --color-surface-raised: #2d2418;
+  --color-border: #40331f;
+  --color-text: #f3ead9;
+  --color-text-muted: #b6a686;
+  --color-accent: #dba054;
+  --color-accent-text: #241a0d;
+  --color-accent-muted: #3a2c16;
+  --color-danger: #e88579;
+  --color-danger-surface: #2e1712;
+  --color-danger-border: #6b2c22;
+  --color-danger-text: #f6c8c0;
+  --color-overlay: rgba(10, 8, 5, 0.65);
+  --color-disabled-surface: #2d2418;
+  --color-disabled-text: #6b5d45;
 }

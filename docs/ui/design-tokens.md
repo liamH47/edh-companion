@@ -13,32 +13,51 @@ object only where a numeric value is required (inline `style`, JS math), e.g. `h
 
 ## Color
 
-Two full palettes, `color.light` and `color.dark`. `.dark` on `<html>` (set by
-`src/core/theme.ts`) swaps every `--color-*` variable at once — no component ever writes a
-`dark:` variant.
+Two full palettes, `color.light` and `color.dark` — "an illuminated ledger": warm
+parchment and ink in light mode, the same page by candlelight in dark mode. `.dark` on
+`<html>` (set by `src/core/theme.ts`) swaps every `--color-*` variable at once — no
+component ever writes a `dark:` variant. Full rationale, the palette's relationship to
+the coin/mana art already in the app, and a contrast-ratio table for every pair:
+`docs/design/visual-identity.md`.
 
 | Token | Utility | Light | Dark | Use for |
 |---|---|---|---|---|
-| `canvas` | `bg-canvas` | `#f8fafc` | `#0b1120` | Page background |
-| `surface` | `bg-surface` | `#ffffff` | `#151d2e` | Base panels, cards |
-| `surfaceRaised` | `bg-surface-raised` | `#ffffff` | `#1c2740` | Sheets, popovers — one step up |
-| `border` | `border-border` | `#e2e8f0` | `#293349` | Hairlines, panel borders |
-| `text` | `text-text` | `#0f172a` | `#f1f5f9` | Primary text |
-| `textMuted` | `text-text-muted` | `#64748b` | `#94a3b8` | Labels, secondary text |
-| `accent` | `bg-accent` / `text-accent` | `#4f46e5` | `#818cf8` | Primary actions, hero emphasis |
-| `accentText` | `text-accent-text` | `#ffffff` | `#0b1120` | Text/icons on an accent fill |
-| `accentMuted` | `bg-accent-muted` | `#eef2ff` | `#1e2547` | Selected/hover tint of accent surfaces |
-| `danger` | `text-danger` | `#dc2626` | `#f87171` | Alert text/icons |
-| `dangerSurface` | `bg-danger-surface` | `#fef2f2` | `#2a1315` | Alert banner background |
-| `dangerBorder` | `border-danger-border` | `#fecaca` | `#7f1d1d` | Alert banner border |
-| `dangerText` | `text-danger-text` | `#991b1b` | `#fecaca` | Alert banner text |
-| `overlay` | `bg-overlay` | `rgba(15,23,42,.4)` | `rgba(2,6,23,.6)` | Sheet backdrop |
-| `disabledSurface` | `bg-disabled-surface` | `#e2e8f0` | `#1c2740` | Disabled button fill |
-| `disabledText` | `text-disabled-text` | `#94a3b8` | `#475569` | Disabled button/field text |
+| `canvas` | `bg-canvas` | `#f6f1e6` | `#17130e` | Page background |
+| `surface` | `bg-surface` | `#fffdf7` | `#221b13` | Base panels, cards |
+| `surfaceRaised` | `bg-surface-raised` | `#f4e9d2` | `#2d2418` | Sheets, popovers — one step up |
+| `border` | `border-border` | `#e2d5b8` | `#40331f` | Hairlines, panel borders |
+| `text` | `text-text` | `#241f1a` | `#f3ead9` | Primary text |
+| `textMuted` | `text-text-muted` | `#655a49` | `#b6a686` | Labels, secondary text |
+| `accent` | `bg-accent` / `text-accent` | `#8a4a12` | `#dba054` | Primary actions, hero emphasis |
+| `accentText` | `text-accent-text` | `#fff8ec` | `#241a0d` | Text/icons on an accent fill |
+| `accentMuted` | `bg-accent-muted` | `#f2e2c4` | `#3a2c16` | Selected/hover tint of accent surfaces |
+| `danger` | `text-danger` | `#b3261e` | `#e88579` | Alert text/icons |
+| `dangerSurface` | `bg-danger-surface` | `#fbeae8` | `#2e1712` | Alert banner background |
+| `dangerBorder` | `border-danger-border` | `#eec2bc` | `#6b2c22` | Alert banner border |
+| `dangerText` | `text-danger-text` | `#7a1c15` | `#f6c8c0` | Alert banner text |
+| `overlay` | `bg-overlay` | `rgba(36,31,26,.45)` | `rgba(10,8,5,.65)` | Sheet backdrop |
+| `disabledSurface` | `bg-disabled-surface` | `#e9decb` | `#2d2418` | Disabled button fill |
+| `disabledText` | `text-disabled-text` | `#a89b83` | `#6b5d45` | Disabled button/field text |
 
-**Rule: one accent.** Indigo (`accent`) is the only saturated color used for interactive
-emphasis. `danger` is reserved for the loss-alert path (`AlertSpec`) — never reuse it for
-ordinary destructive-but-safe actions like "New turn".
+**Rule: one accent.** Bronze/gold (`accent`) is the only saturated color used for
+interactive emphasis. `danger` is reserved for the loss-alert path (`AlertSpec`) — never
+reuse it for ordinary destructive-but-safe actions like "New turn".
+
+## Typography: two self-hosted faces
+
+`fontFamily.display` (**Fraunces**, weight 600) and `fontFamily.body` (**Sora**, weights
+500/600/700) in `tokens.ts` emit as `--font-display`/`--font-body` inside the `@theme`
+block, which is Tailwind's own reserved namespace — they generate real `font-display`/
+`font-body` utility classes, not just CSS variables. `body { font-family: var(--font-body)
+}` in `index.css` sets Sora as the default for everything; `Text`'s `title` variant is
+the only place `font-display` is added, so Fraunces appears exclusively on screen and
+sheet headers.
+
+Both are self-hosted `.woff2` files in `apps/web/public/fonts/`, loaded via `@font-face`
+in `index.css` — not a Google Fonts `<link>`. Two reasons: the app's offline pitch means
+no tab should need a font request either, and a bundled static file is what carries
+unchanged into Expo's `useFonts()`, where a `<link>` tag has no equivalent at all. Latin
+subset only, OFL-licensed. See `docs/design/visual-identity.md` for the full reasoning.
 
 **Naming pitfall:** a color token named exactly like the utility prefix that consumes it
 (originally `bg`, generating `bg-bg`) breaks Tailwind's production `@apply` resolution against a

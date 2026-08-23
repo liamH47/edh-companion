@@ -1,0 +1,224 @@
+# Mobile port roadmap
+
+Technical plan for shipping this app as installable software on iOS and Android, in the
+order that gets friends testing it soonest. `docs/roadmap.md` keeps the one-paragraph
+summary and the decisions already made (Expo over Capacitor, npm workspaces, compute
+ported to TypeScript); this document is the how.
+
+## The fast path: a PWA needs no store, no review, no wait
+
+Today the web app has no manifest and no service worker, so it can't be installed and a
+cold launch with no signal fails outright — the offline story only covers a tab that was
+already open. That's a real gap, and it's also the cheapest thing on this whole roadmap
+to close: it ships on the *existing* Vite/React build, no native tooling, no developer
+account, no app-store review. This is **Phase 6.5**, and it should land before Phase 7,
+not after — it gets the app onto a friend's phone this week.
+
+### What it takes
+
+- **`apps/web/public/manifest.webmanifest`** — name, short name (from the app-name
+  decision below), icons at 192/512px (maskable + any), `display: "standalone"`,
+  `theme_color`/`background_color` pulled from the new token palette
+  (`docs/design/visual-identity.md`), `start_url: "/"`. Linked from `index.html`'s
+  `<head>`.
+- **App icons.** `apps/web/public/favicon.svg` is a good source mark; export it (or a
+  simplified version — the current mark has fifteen blurred gradient layers, which is
+  fine at favicon size but will look muddy at 512px if not simplified) to the required
+  raster sizes. `npx @vite-pwa/assets-generator` or a one-off script with `sharp` can
+  generate the full icon set from one source SVG.
+- **A service worker**, via `vite-plugin-pwa` (`registerType: 'autoUpdate'`,
+  `generateSW` strategy — not `injectManifest`, which is more control than this app
+  needs). It's a build-time devDependency; the generated service worker is the only
+  runtime artifact, consistent with the repo's existing "own the dependency, don't add
+  weight" stance (the same reasoning that ruled out three.js for the dice).
+  - **Precache the app shell** (JS/CSS/HTML) so a cold launch with zero signal still
+    loads the UI — this is the actual fix for the "offline only helps an already-open
+    tab" gap.
+  - **Runtime-cache Scryfall card images** with a cache-first strategy. Card art is
+    immutable per print (a given `scryfall_id` never changes its image), so this is safe
+    to cache indefinitely and it's a genuine functional upgrade: today `CardImage`
+    degrades to a text note when offline; with this, previously-viewed card art keeps
+    rendering offline too. This also foreshadows the native build, where `expo-image`'s
+    disk cache gives the same behavior for free (Phase 8).
+  - Do **not** cache `/api/`. There is no `/api/` left to cache — compute is already
+    fully client-side (`docs/roadmap.md`) — so the service worker's job is purely
+    static-asset and image caching, which keeps it simple.
+- **A one-line install prompt.** Android/Chrome fires `beforeinstallprompt`; capture it
+  and surface a small "Install" affordance (e.g. in the header, next to the theme/sound
+  toggles) rather than relying on the browser's own menu item, which most people never
+  find. iOS Safari has no install event — there, the affordance is a one-time dismissible
+  hint ("Add to Home Screen from the Share menu") shown via `navigator.standalone`
+  detection, since Apple has no programmatic install prompt at all.
+
+### Distribution once it's built
+
+No account, no review: deploy to Render as already happens on every green `main` merge,
+then send friends the URL. Chrome/Edge on Android and desktop offer a native install
+prompt; iOS Safari installs via Share → Add to Home Screen. Either way the result is a
+standalone icon-launched app with the app shell and card art available offline. This is
+the actual answer to "get friends testing it easily" — everything below is for the app
+store specifically, not for testing.
+
+## Phase 7 — Expo scaffold and platform seams
+
+**Gate: the app name must be final before this phase**, because `app.json` writes
+`ios.bundleIdentifier` and `android.package` here, and both are permanent after the
+first publish to either store. See "Naming" below.
+
+- `npx create-expo-app apps/mobile --template expo-template-blank-typescript`, dropped in
+  as a third npm workspace member alongside `apps/web` (root `package.json`'s
+  `"workspaces": ["packages/*", "apps/*"]` already matches it — no change needed there).
+- **Metro + npm workspaces**, the single most common Expo-monorepo failure mode:
+  `apps/mobile/metro.config.js` needs
+  `config.watchFolders = [monorepoRoot]` and
+  `config.resolver.nodeModulesPaths = [path.resolve(monorepoRoot, 'node_modules'), path.resolve(projectRoot, 'node_modules')]`
+  (via `getDefaultConfig` from `expo/metro-config`) so Metro's resolver walks up past
+  `apps/mobile/node_modules` to find `@mtg/core` hoisted at the root. Without this, Metro
+  reports `@mtg/core` as an unresolvable module the moment the workspace import is
+  written, even though `npm install` succeeded.
+- **`apps/mobile/src/platform.ts`** — the native half of the seam table in
+  `docs/ui/portability-rules.md`, filling in exactly the interfaces
+  `apps/web/src/platform.ts` fills for web:
+
+  | Seam | Web (existing) | Native (this phase) |
+  |---|---|---|
+  | `setStorageBackend` | `localStorage` | `react-native-mmkv` (`MMKV.getString`/`.set`, both synchronous — this is *why* MMKV and not AsyncStorage, per the existing decision record) |
+  | `setReducedMotionSource` | `matchMedia` | `AccessibilityInfo.isReduceMotionEnabled()` cached at startup, refreshed on the `reduceMotionChanged` event |
+  | `setHapticsBackend` | `navigator.vibrate` | `expo-haptics`' `impactAsync(ImpactFeedbackStyle.Light)` |
+  | `setSoundBackend` | `new Audio(url)` | `expo-audio`, with `win.mp3`/`lose.mp3`/`roll.wav` copied into `apps/mobile/assets/sounds/` and loaded via `createAudioPlayer(require(...))` |
+  | `setComputeBackend` | already local (no backend call) | unchanged — `@mtg/core`'s compute is already platform-free, nothing to seam here |
+
+- **Fonts**: reuse the exact `.woff2` source files pulled for the PWA phase (Fraunces
+  600, Sora 500/600/700) — same upstream files, different loader. Expo's `expo-font`
+  `useFonts()` accepts `.ttf`/`.otf` more reliably than `.woff2` in older SDKs; convert
+  once with `fonttools`/`woff2_decompress` if the installed Expo SDK's `useFonts` balks
+  at woff2 directly (recent SDKs do accept it — check against whatever version Phase 7
+  actually installs). Gate the first paint on `SplashScreen.preventAutoHideAsync()` +
+  `useFonts()` resolving, so there's no flash of the fallback system font.
+- **Icon/splash assets**: `npx expo-splash-screen` for the boot splash; app icon and
+  adaptive icon (Android's foreground/background layer split) generated from the same
+  source mark chosen for the PWA's icon set in Phase 6.5 — one source asset, two
+  generation passes.
+
+## Phase 8 — React Native primitives and screens
+
+`docs/ui/portability-rules.md`'s layer table already draws this map; this phase executes
+it.
+
+- **The 12 `apps/web/src/ui/` primitives** get RN siblings in `apps/mobile/src/ui/`,
+  same prop APIs, `StyleSheet.create` instead of Tailwind classes. Most are mechanical
+  (`Text`, `Button`, `Chip`, `StatTile`, `TextField`, `SegmentedControl`, `Stepper`,
+  `Icon` — the last via `react-native-svg`'s `Svg`/`Path`/`Circle`, a 1:1 element-name
+  swap per the existing hand-written-icon rule). Four need real rewrites, already
+  flagged in `docs/roadmap.md`: `Surface`, `Sheet` (RN modal API, not a fixed-position
+  div), `CoinFlip`'s 3D flip (RN's `Animated`/Reanimated instead of a CSS
+  `transform`/`transition` pair), `DieRoller`/`Die3D` (same rAF sampling loop, same
+  `dice3d/` math, `react-native-svg` `Polygon` instead of `<polygon>` — per
+  `docs/design/dice3d.md`, this is a props/element swap, not a math rewrite, since the
+  loop already only touches `requestAnimationFrame`, which RN polyfills).
+- **`useColors()` theme context.** RN has no cascading CSS custom properties, so this is
+  the one real architectural difference. A `ThemeProvider` at the app root resolves
+  `color.light`/`color.dark` from `tokens.ts` (unchanged import) against either
+  `useColorScheme()` or the persisted preference (same storage seam), and every styled
+  component calls `const colors = useColors()` inside a `useMemo(() => StyleSheet.create(...), [colors])`
+  factory rather than a module-level static `StyleSheet.create` object, since RN styles
+  can't react to a runtime value the way a CSS variable swap can.
+- **Domain components** (`apps/web/src/cards/`, `pods/`, `pairings/`, `swiss/`) port as
+  copy-paste starting points: the JSX structure and all the `@mtg/core` hook usage
+  survive unchanged, only the Tailwind class strings become `style={styles.foo}`
+  lookups against the new `useColors()`-driven `StyleSheet`.
+- **`CardImage`/`CardThumb`/`CardArtHero`** move from `<img onError>` to `expo-image`'s
+  `<Image source={{uri}} onError={}>`, keeping the same fallback-tile behavior. Bonus:
+  `expo-image` disk-caches by default, so previously-viewed card art survives offline on
+  native the same way the PWA's service-worker image cache does on web (Phase 6.5) — no
+  extra code, just the library's default behavior.
+- **Navigation**: implement `apps/mobile/app/(tabs)/{cards,coin,swiss,dice}.tsx` and
+  `apps/mobile/app/cards/[id].tsx` as thin screens delegating to the ported domain
+  components. `packages/core/src/navigation/navigation.ts` already maps 1:1 onto this
+  file layout (`docs/ui/screen-spec.md` names this explicitly). `apps/web/src/core/navigation/useNavigation.ts`
+  (the `pushState`/`popstate` sync) is web-only and is not ported — Expo Router's own
+  `useRouter()`/`useLocalSearchParams()` replace it outright, exactly the "one file an
+  RN port rewrites wholesale" screen-spec.md already calls out.
+
+## Phase 9 — Maestro flows and EAS, and the second "friends test it" moment
+
+- **Maestro** (`.maestro/*.yaml`) covers the same critical paths the Playwright suite
+  already names as load-bearing: open a card and see a computed value, roll a die and
+  see the log gain an entry, complete a Swiss round. Run via `workflow_dispatch` only,
+  **not** on every push — `render.yaml`'s `autoDeployTrigger: checksPass` waits on every
+  check on a commit, so a flaky emulator run would block the web deploy that has nothing
+  to do with it. This mirrors the reasoning already recorded for the same decision in
+  `docs/roadmap.md`.
+- **EAS Build** (`eas.json`) with a `preview` profile — internal distribution, no store
+  credentials required. This is the native equivalent of Phase 6.5's PWA link:
+  - **Android**: a directly-installable `.apk` from `eas build --profile preview
+    --platform android`, or push straight to Play Console's **Internal testing** track
+    (up to 100 testers via a shareable opt-in link, no review wait). Internal testing is
+    the better target of the two if the plan is to eventually go to Production on the
+    same listing, since it's the same Play Console app record from day one.
+  - **iOS**: prefer **TestFlight internal testing** over a raw ad-hoc `.ipa`. Ad-hoc
+    builds require registering every tester's device UDID before the build
+    (`eas device:create`, one at a time) and re-signing when a new tester joins.
+    TestFlight internal testing (up to 100 testers, added by Apple ID, no UDID
+    collection, no review wait — only *external* TestFlight testing needs a review) is
+    materially less friction for the same "friends install and test" goal.
+- Once this phase lands, distributing a new build to testers is `eas build --profile
+  preview --platform all` followed by sharing the Play internal-testing link and
+  inviting testers' Apple IDs to the TestFlight group — no store listing, no public
+  review, repeatable on every meaningful change.
+
+## Phase 10 — Store submission
+
+- **Assets**: 1024×1024 icon (already generated in Phase 7), screenshots at each
+  required device size (capture from iOS Simulator + an Android emulator at the 2–3
+  mandated sizes per store — this is manual work, not automatable without a paid
+  screenshot-farm service), and a privacy policy page. The simplest privacy policy is a
+  static route on the already-deployed web app (e.g. `/privacy`) — the app collects
+  nothing (`docs/roadmap.md`'s "no data collected" fact is real: everything lives in
+  `localStorage`/MMKV, there's no backend call once compute moved client-side), so the
+  policy itself is short.
+- **The Fan Content Policy disclaimer** (already required per `docs/roadmap.md`) needs a
+  home: a small in-app "About" screen (not built yet — one screen, one route, in both
+  the web and native app) carrying the standard non-commercial fan-content disclaimer,
+  plus the same text in both store listings' descriptions.
+- **Play Console**: create the app record (if Phase 9 didn't already, via the internal
+  testing track), complete the Data Safety form (truthfully: no data collected, nothing
+  shared), content rating questionnaire, then **Internal testing → Production**. The
+  12-tester/14-continuous-day requirement for a personal account to reach Production is
+  the actual calendar-time blocker on this whole roadmap — see `docs/roadmap.md`, and
+  start it the moment Phase 9's internal testing link exists, not at Phase 10.
+- **App Store Connect**: enroll in the Apple Developer Program ($99/yr, usually 24–48h
+  approval), create the app record, then submit the build already in TestFlight for App
+  Review (typically 24–48h turnaround, not the multi-week wait Play's tester clock
+  requires).
+
+## Naming
+
+Still open, and it's the actual gate on Phase 7 (not Phase 10 — bundle identifiers are
+permanent). Three candidates, chosen to avoid two specific collisions: Wizards' own app
+is literally called **"Magic: The Gathering Companion,"** and the Fan Content Policy
+forbids anything implying Wizards made this one — so "Companion" in the name (today's
+header, and the `edh-companion` git remote) is worth dropping, not just the word
+"Magic."
+
+| Candidate | Why | Risk |
+|---|---|---|
+| **Mana Ledger** | Ties directly to the new visual identity (`docs/design/visual-identity.md`'s "illuminated ledger" palette) and describes what the app actually does — tracks a running account of game state. Distinctive, no trademark collision found. | None identified |
+| **Draw Seven** | A Magic-flavored pun (many effects read "draw seven cards") that reads as fan-made rather than official, which is the safer posture under the Fan Content Policy. Memorable. | Slightly cute for a utility app |
+| **First Main** | A phase-name pun (calculators get used mid-turn, in main phase). Distinctive, obscure enough to be low-collision-risk. | Less immediately legible to a non-player |
+
+**Mana Ledger** is the working recommendation — it's the only one of the three that also
+reinforces the visual identity decision instead of being an unrelated label bolted onto
+it. Confirm before Phase 7 writes `app.json`.
+
+## Sequencing summary
+
+```
+Phase 6.5  PWA (manifest, service worker, icons)         ── ships this week, no gates
+Phase 7    Expo scaffold + platform seams                ── gated on the name
+Phase 8    RN primitives + screens
+Phase 9    Maestro + EAS internal distribution            ── second "friends test" moment
+Phase 10   Store submission                                ── start the Play 14-day clock
+                                                              the moment Phase 9 lands,
+                                                              not when Phase 10 starts
+```

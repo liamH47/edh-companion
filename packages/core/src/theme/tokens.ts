@@ -84,6 +84,22 @@ export type ManaColor = keyof typeof mana
  * a card rather than a UI stroke. */
 export const manaGlyph = '#241f20'
 
+/**
+ * The two typefaces, self-hosted (see `apps/web/src/index.css`'s `@font-face` rules and
+ * `docs/design/visual-identity.md`) rather than linked from Google Fonts' CDN: the app's
+ * whole pitch is that no tab needs a connection, and a bundled static file is what
+ * ports to Expo's `useFonts()` unchanged, where a `<link>` tag has no equivalent at all.
+ * `display` is used once, for `Text`'s `title` variant only -- a serif for screen and
+ * sheet headers reads as "a ledger," not a dashboard, without imitating Magic's own
+ * proprietary type (Beleren, Plantin). `body` carries everything else, including the
+ * hero numbers, at the weights already in the type scale (500/600/700 -- no new weight
+ * steps were added, only a family).
+ */
+export const fontFamily = {
+  display: "'Fraunces', ui-serif, Georgia, 'Times New Roman', serif",
+  body: "'Sora', ui-sans-serif, system-ui, -apple-system, sans-serif",
+} as const
+
 export interface ColorTokens {
   canvas: string
   surface: string
@@ -103,41 +119,54 @@ export interface ColorTokens {
   disabledText: string
 }
 
+/**
+ * "An illuminated ledger" -- parchment and ink in light mode, the same page by
+ * candlelight in dark mode. Every neutral carries a warm cast rather than the cool
+ * blue-gray of an unstyled admin panel, and the accent is a burnished bronze/gold
+ * rather than generic indigo -- chosen after noticing it was already half-built:
+ * `CoinBase`'s hand-drawn coin (`#e0b64a`/`#a87c1f`, in `CoinFlip.tsx`) and the mana
+ * glyph ink (`manaGlyph`, `#241f20`, almost exactly this palette's light `text`) were
+ * already living in this hue family before the token file caught up to them. Full
+ * rationale and the contrast-ratio table for every changed pair: `docs/design/visual-identity.md`.
+ */
 export const color: { light: ColorTokens; dark: ColorTokens } = {
   light: {
-    canvas: '#f8fafc',
-    surface: '#ffffff',
-    surfaceRaised: '#ffffff',
-    border: '#e2e8f0',
-    text: '#0f172a',
-    textMuted: '#64748b',
-    accent: '#4f46e5',
-    accentText: '#ffffff',
-    accentMuted: '#eef2ff',
-    danger: '#dc2626',
-    dangerSurface: '#fef2f2',
-    dangerBorder: '#fecaca',
-    dangerText: '#991b1b',
-    overlay: 'rgba(15, 23, 42, 0.4)',
-    disabledSurface: '#e2e8f0',
-    disabledText: '#94a3b8',
+    canvas: '#f6f1e6',
+    surface: '#fffdf7',
+    // Deliberately distinct from `surface` -- the previous palette had both at
+    // `#ffffff`, so every "raised" panel (Sheet, StatTile, Chip) had no visible lift
+    // in light mode. This is the fix, not just a repaint.
+    surfaceRaised: '#f4e9d2',
+    border: '#e2d5b8',
+    text: '#241f1a',
+    textMuted: '#655a49',
+    accent: '#8a4a12',
+    accentText: '#fff8ec',
+    accentMuted: '#f2e2c4',
+    danger: '#b3261e',
+    dangerSurface: '#fbeae8',
+    dangerBorder: '#eec2bc',
+    dangerText: '#7a1c15',
+    overlay: 'rgba(36, 31, 26, 0.45)',
+    disabledSurface: '#e9decb',
+    disabledText: '#a89b83',
   },
   dark: {
-    canvas: '#0b1120',
-    surface: '#151d2e',
-    surfaceRaised: '#1c2740',
-    border: '#293349',
-    text: '#f1f5f9',
-    textMuted: '#94a3b8',
-    accent: '#818cf8',
-    accentText: '#0b1120',
-    accentMuted: '#1e2547',
-    danger: '#f87171',
-    dangerSurface: '#2a1315',
-    dangerBorder: '#7f1d1d',
-    dangerText: '#fecaca',
-    overlay: 'rgba(2, 6, 23, 0.6)',
-    disabledSurface: '#1c2740',
-    disabledText: '#475569',
+    canvas: '#17130e',
+    surface: '#221b13',
+    surfaceRaised: '#2d2418',
+    border: '#40331f',
+    text: '#f3ead9',
+    textMuted: '#b6a686',
+    accent: '#dba054',
+    accentText: '#241a0d',
+    accentMuted: '#3a2c16',
+    danger: '#e88579',
+    dangerSurface: '#2e1712',
+    dangerBorder: '#6b2c22',
+    dangerText: '#f6c8c0',
+    overlay: 'rgba(10, 8, 5, 0.65)',
+    disabledSurface: '#2d2418',
+    disabledText: '#6b5d45',
   },
 }
