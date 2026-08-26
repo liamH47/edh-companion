@@ -42,6 +42,16 @@ function persistSetupConfirmed(cardId: string): void {
   setJSON(SETUP_CONFIRMED_KEY, { ...current, [cardId]: true })
 }
 
+/** Drops this card's confirmed flag entirely rather than storing `false`, so the stored
+ * shape stays "the set of confirmed cards" and a reset leaves nothing behind. */
+function clearSetupConfirmed(cardId: string): void {
+  const { [cardId]: _removed, ...rest } = getJSON<Record<string, boolean>>(
+    SETUP_CONFIRMED_KEY,
+    {},
+  )
+  setJSON(SETUP_CONFIRMED_KEY, rest)
+}
+
 export interface CardSession {
   values: FieldValues
   outputs: OutputValues | null
@@ -53,6 +63,13 @@ export interface CardSession {
   setupConfirmed: boolean
   setField: (name: string, value: unknown) => void
   resetTurn: () => void
+  /** Back to a blank card: every field to its default, and the setup flag cleared so
+   * the board-state sheet asks again. Unlike `resetTurn` this ignores
+   * `persists_across_turns` and `new_turn_carries_output` -- those exist to survive a
+   * turn boundary, and this is a new *game*, not a new turn. The only way to zero a
+   * game-long tracker (commander tax, dungeons completed), which `resetTurn` cannot
+   * touch by design. */
+  resetCard: () => void
   confirmSetup: () => void
 }
 
@@ -160,6 +177,15 @@ export function useCardSession(card: CardMetadata): CardSession {
     })
   }, [runCalculation])
 
+  const resetCard = useCallback(() => {
+    const card = cardRef.current
+    const reset = defaultValues(card)
+    clearSetupConfirmed(card.id)
+    setSetupConfirmed(false)
+    setValues(reset)
+    runCalculation(reset)
+  }, [runCalculation])
+
   const confirmSetup = useCallback(() => {
     persistSetupConfirmed(cardRef.current.id)
     setSetupConfirmed(true)
@@ -198,6 +224,7 @@ export function useCardSession(card: CardMetadata): CardSession {
     setupConfirmed,
     setField,
     resetTurn,
+    resetCard,
     confirmSetup,
   }
 }

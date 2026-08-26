@@ -418,4 +418,84 @@ describe('CardScreen', () => {
     expect(screen.getByRole('spinbutton', { name: 'Spells cast this turn' })).toHaveValue(0)
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
+
+  describe('Reset card', () => {
+    async function openConfirmedCard(user: ReturnType<typeof userEvent.setup>) {
+      render(<CardScreen card={aetherfluxLikeCard} />)
+      await screen.findByRole('dialog', { name: 'Board state' })
+      await user.click(screen.getByRole('button', { name: 'Done' }))
+      await user.click(await screen.findByRole('button', { name: 'Increase Spells cast this turn' }))
+    }
+
+    it('asks before wiping anything, and changes nothing while the question is open', async () => {
+      const user = userEvent.setup()
+      await openConfirmedCard(user)
+      expect(screen.getByRole('spinbutton', { name: 'Spells cast this turn' })).toHaveValue(1)
+
+      await user.click(screen.getByRole('button', { name: 'Reset card' }))
+      expect(
+        screen.getByRole('dialog', { name: 'Reset Aetherflux Reservoir?' }),
+      ).toBeInTheDocument()
+      expect(screen.getByRole('spinbutton', { name: 'Spells cast this turn' })).toHaveValue(1)
+    })
+
+    it('keeps everything when the reset is declined', async () => {
+      const user = userEvent.setup()
+      await openConfirmedCard(user)
+
+      await user.click(screen.getByRole('button', { name: 'Reset card' }))
+      await user.click(screen.getByRole('button', { name: 'Keep it' }))
+
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+      expect(screen.getByRole('spinbutton', { name: 'Spells cast this turn' })).toHaveValue(1)
+    })
+
+    it('clears the card and asks the board-state questions again once confirmed', async () => {
+      const user = userEvent.setup()
+      await openConfirmedCard(user)
+
+      await user.click(screen.getByRole('button', { name: 'Reset card' }))
+      // The confirm button repeats the action's own label, so scope the query to the
+      // dialog rather than matching the screen's "Reset card" trigger behind it.
+      const dialog = screen.getByRole('dialog', { name: 'Reset Aetherflux Reservoir?' })
+      await user.click(within(dialog).getByRole('button', { name: 'Reset card' }))
+
+      // Unlike New turn, this reopens setup: a fresh game needs its own board state.
+      expect(await screen.findByRole('dialog', { name: 'Board state' })).toBeInTheDocument()
+      await user.click(screen.getByRole('button', { name: 'Done' }))
+      expect(screen.getByRole('spinbutton', { name: 'Spells cast this turn' })).toHaveValue(0)
+    })
+
+    it('opens no sheet on a card that has no setup fields to re-ask', async () => {
+      const user = userEvent.setup()
+      render(<CardScreen card={singleOutputCard} />)
+      await user.click(await screen.findByRole('button', { name: 'Increase Creatures died' }))
+      expect(screen.getByRole('spinbutton', { name: 'Creatures died' })).toHaveValue(1)
+
+      await user.click(screen.getByRole('button', { name: 'Reset card' }))
+      const dialog = screen.getByRole('dialog', { name: 'Reset Single Output Card?' })
+      await user.click(within(dialog).getByRole('button', { name: 'Reset card' }))
+
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+      expect(screen.getByRole('spinbutton', { name: 'Creatures died' })).toHaveValue(0)
+    })
+
+    it('offers the reset on a game-long tracker, which has no New turn button at all', async () => {
+      // commander-tax and dungeons set resets_on_new_turn: false. Before this existed
+      // their tallies could never be zeroed without clearing browser storage.
+      const user = userEvent.setup()
+      const tracker: CardMetadata = {
+        ...aetherfluxLikeCard,
+        id: 'commander-tax-like',
+        name: 'Commander Tax',
+        resets_on_new_turn: false,
+      }
+      render(<CardScreen card={tracker} />)
+      await screen.findByRole('dialog', { name: 'Board state' })
+      await user.click(screen.getByRole('button', { name: 'Done' }))
+
+      expect(screen.queryByRole('button', { name: 'New turn' })).not.toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'Reset card' })).toBeInTheDocument()
+    })
+  })
 })

@@ -11,13 +11,23 @@ describe('Button', () => {
     expect(el).toHaveClass('bg-accent', 'min-h-12')
   })
 
-  it.each<ButtonVariant>(['primary', 'secondary', 'ghost'])(
+  it.each<ButtonVariant>(['primary', 'secondary', 'ghost', 'danger'])(
     'renders the %s variant',
     (variant) => {
       render(<Button variant={variant}>{variant}</Button>)
       expect(screen.getByRole('button', { name: variant })).toBeInTheDocument()
     },
   )
+
+  it('gives the danger variant its own text color rather than inheriting the default', () => {
+    // This exists because the first version was `secondary` plus a `text-danger`
+    // className: two text-color utilities at equal specificity, so which applied came
+    // down to Tailwind's emission order, and `text-text` was silently winning.
+    render(<Button variant="danger">Delete</Button>)
+    const button = screen.getByRole('button', { name: 'Delete' })
+    expect(button).toHaveClass('text-danger')
+    expect(button).not.toHaveClass('text-text')
+  })
 
   it.each<ButtonSize>(['md', 'lg'])('renders the %s size', (size) => {
     render(<Button size={size}>{size}</Button>)

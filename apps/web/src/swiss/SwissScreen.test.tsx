@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it } from 'vitest'
 import { makeEntrants, makeTournament, match, result, round } from '@mtg/core/swiss/fixtures'
@@ -149,7 +149,7 @@ describe('SwissScreen', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
-  it('ends the tournament back to a fresh setup screen', async () => {
+  it('ends the tournament back to a fresh setup screen, once confirmed', async () => {
     const user = userEvent.setup()
     saveTournament(
       makeTournament({
@@ -160,7 +160,30 @@ describe('SwissScreen', () => {
     render(<SwissScreen />)
     await user.click(screen.getByRole('button', { name: 'Standings' }))
     await user.click(screen.getByRole('button', { name: 'End tournament' }))
+
+    const dialog = screen.getByRole('dialog', { name: 'End the tournament?' })
+    await user.click(within(dialog).getByRole('button', { name: 'End tournament' }))
     expect(screen.getByRole('heading', { name: 'New tournament' })).toBeInTheDocument()
+  })
+
+  it('keeps the tournament when ending it is declined', async () => {
+    // Standings for a whole event are discarded with no record kept, so this is the
+    // most expensive button in the app to hit by accident.
+    const user = userEvent.setup()
+    saveTournament(
+      makeTournament({
+        entrants: makeEntrants(2),
+        rounds: [round(1, [match('entrant-1', 'entrant-2', result(2, 0))])],
+      }),
+    )
+    render(<SwissScreen />)
+    await user.click(screen.getByRole('button', { name: 'Standings' }))
+    await user.click(screen.getByRole('button', { name: 'End tournament' }))
+    await user.click(screen.getByRole('button', { name: 'Keep it' }))
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'New tournament' })).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'End tournament' })).toBeInTheDocument()
   })
 
   it('pairs round 1 at random when started that way', async () => {

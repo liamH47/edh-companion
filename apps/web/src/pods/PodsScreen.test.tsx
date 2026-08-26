@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createPodSession, generateNextRound, savePodSession } from '@mtg/core/pods'
@@ -54,13 +54,31 @@ describe('PodsScreen', () => {
     expect(screen.queryByRole('button', { name: 'R2' })).not.toBeInTheDocument()
   })
 
-  it('starts over back to setup', async () => {
+  it('starts over back to setup, once confirmed', async () => {
     const user = userEvent.setup()
     render(<PodsScreen onBack={vi.fn()} rng={rng} />)
     await generate(user, ['Ava', 'Ben', 'Cara', 'Dev'])
 
     await user.click(screen.getByRole('button', { name: 'Start over' }))
+    const dialog = screen.getByRole('dialog', { name: 'Start the night over?' })
+    await user.click(within(dialog).getByRole('button', { name: 'Start over' }))
+
     expect(screen.getByRole('button', { name: 'Generate pods' })).toBeInTheDocument()
+  })
+
+  it('keeps the night going when starting over is declined', async () => {
+    // The roster and every round played are gone for good on confirm, so a mis-tap on
+    // a ghost button at the bottom of the screen must not be enough to lose them.
+    const user = userEvent.setup()
+    render(<PodsScreen onBack={vi.fn()} rng={rng} />)
+    await generate(user, ['Ava', 'Ben', 'Cara', 'Dev'])
+
+    await user.click(screen.getByRole('button', { name: 'Start over' }))
+    await user.click(screen.getByRole('button', { name: 'Keep it' }))
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'R1' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Generate pods' })).not.toBeInTheDocument()
   })
 
   it('resumes a saved session and goes back to the chooser', async () => {

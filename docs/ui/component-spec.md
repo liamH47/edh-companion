@@ -172,6 +172,36 @@ Behavior:
 RN notes: this is the one primitive with a genuinely different RN implementation (a native
 `Modal`/bottom-sheet library), not a mechanical swap — budget real time for it in a port.
 
+### ConfirmSheet
+
+The one confirmation dialog, composed over `Sheet`. Every irreversible reset in the app
+routes through it, so they read identically.
+
+| Prop | Type |
+|---|---|
+| `open` | `boolean` |
+| `onCancel` | `() => void` |
+| `onConfirm` | `() => void` |
+| `title` | `string` — the question ("Reset Craterhoof Behemoth?") |
+| `message` | `string` — what it costs, in the player's terms |
+| `confirmLabel` | `string` — repeats the verb ("Reset card"), never "OK" |
+
+**Which actions get one.** Only those that destroy state a player cannot reconstruct:
+"Reset card" (every card screen), "Start over" (pods), "End tournament" (Swiss).
+Deliberately **not** "New turn", "Empty pool" or "Clear result" — those are reversible or
+routine, and a confirm on something pressed every turn trains people to tap straight
+through, which is what makes the dialog useless on the three that genuinely needed one.
+
+Behavior:
+- Every `Sheet` dismissal path (backdrop, Esc, close button) maps to `onCancel`. Wiring any
+  of them to `onConfirm` would let a stray tap outside the panel destroy a session.
+- Cancel ("Keep it") is the primary-weight button and comes first; confirm is `secondary`
+  tinted with `danger-border`/`danger`. The safe path is the easy thumb target.
+- This is the sanctioned exception to design-tokens.md's "danger is only for the loss-alert
+  path": the rule bars danger on *ordinary, reversible* destructive actions like "New turn",
+  and an already-confirmed irreversible wipe is the opposite case. Same precedent as
+  `TournamentSetupScreen`'s `text-danger` remove-entrant button.
+
 ### TextField
 
 The only text-entry primitive — entrant names, search. A `<label>` wraps the input rather

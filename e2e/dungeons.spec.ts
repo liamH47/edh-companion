@@ -70,4 +70,40 @@ test.describe('dungeons', () => {
     ).toBeVisible()
     await expect(page.getByText('You are here: Cradle of the Death God')).toBeVisible()
   })
+
+  test('resets the game-long tally, but only after the confirmation is accepted', async ({
+    page,
+  }) => {
+    // Dungeons is the sharpest case for the reset: it has no "New turn" at all, so
+    // before this existed its completed count could never go back to zero without
+    // clearing browser storage. And it is persisted, so a mis-tap would be permanent.
+    await page.goto('/cards/dungeons')
+    await page.getByRole('radio', { name: 'Tomb of Annihilation' }).click()
+
+    const map = page.getByTestId('dungeon-map-tomb_path')
+    await map.getByRole('button', { name: 'Trapped Entry, venture here' }).click()
+    await expect(page.getByText('You are here: Trapped Entry')).toBeVisible()
+
+    // Declining leaves the walk exactly where it was.
+    await page.getByRole('button', { name: 'Reset card' }).click()
+    const confirm = page.getByRole('dialog', { name: 'Reset Dungeons?' })
+    await expect(confirm).toBeVisible()
+    await confirm.getByRole('button', { name: 'Keep it' }).click()
+    await expect(confirm).toBeHidden()
+    await expect(page.getByText('You are here: Trapped Entry')).toBeVisible()
+
+    // Accepting clears it, and the board-state sheet asks its questions again.
+    await page.getByRole('button', { name: 'Reset card' }).click()
+    await page
+      .getByRole('dialog', { name: 'Reset Dungeons?' })
+      .getByRole('button', { name: 'Reset card' })
+      .click()
+
+    await expect(page.getByText('You are here: Trapped Entry')).toBeHidden()
+
+    // And the reset outlives a reload, rather than the old values coming back from
+    // storage -- the write has to have happened, not just the in-memory state.
+    await page.reload()
+    await expect(page.getByText('You are here: Trapped Entry')).toBeHidden()
+  })
 })

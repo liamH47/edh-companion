@@ -217,6 +217,116 @@ describe('resetTurn', () => {
   })
 })
 
+describe('resetCard', () => {
+  it('returns every field to its default', () => {
+    const { result } = renderHook(() => useCardSession(makeCard()))
+    act(() => result.current.setField('count', 7))
+
+    act(() => result.current.resetCard())
+    expect(result.current.values).toEqual({ count: 0 })
+  })
+
+  it('clears a persists_across_turns field that resetTurn would have kept', () => {
+    // The difference between the two resets: `persists_across_turns` means "a turn
+    // boundary doesn't touch this", not "nothing ever does". A new game clears it.
+    const card = makeCard()
+    card.fields[0].persists_across_turns = true
+    card.fields[0].max = null
+    const { result } = renderHook(() => useCardSession(card))
+    act(() => result.current.setField('count', 7))
+
+    act(() => result.current.resetTurn())
+    expect(result.current.values).toEqual({ count: 7 })
+
+    act(() => result.current.resetCard())
+    expect(result.current.values).toEqual({ count: 0 })
+  })
+
+  it('ignores new_turn_carries_output rather than carrying the value forward', () => {
+    const card = makeCard()
+    card.fields[0].new_turn_carries_output = 'total'
+    compute.mockReturnValue({ total: 5 })
+    const { result } = renderHook(() => useCardSession(card))
+
+    act(() => result.current.resetTurn())
+    expect(result.current.values).toEqual({ count: 5 })
+
+    act(() => result.current.resetCard())
+    expect(result.current.values).toEqual({ count: 0 })
+  })
+
+  it('zeroes a game-long tracker, which resetTurn cannot touch at all', () => {
+    // commander-tax and dungeons set resets_on_new_turn: false, so their screens show
+    // no "New turn" button -- this is the only way their tally ever goes back to zero.
+    const card = makeCard({ resets_on_new_turn: false })
+    const { result } = renderHook(() => useCardSession(card))
+    act(() => result.current.setField('count', 4))
+
+    act(() => result.current.resetCard())
+    expect(result.current.values).toEqual({ count: 0 })
+  })
+
+  it('clears the confirmed setup flag, in storage as well as in state', () => {
+    const { result } = renderHook(() => useCardSession(makeCard()))
+    act(() => result.current.confirmSetup())
+    expect(result.current.setupConfirmed).toBe(true)
+
+    act(() => result.current.resetCard())
+    expect(result.current.setupConfirmed).toBe(false)
+
+    // A remount reads storage, so this proves the flag was actually removed rather
+    // than only cleared in memory.
+    const remounted = renderHook(() => useCardSession(makeCard()))
+    expect(remounted.result.current.setupConfirmed).toBe(false)
+  })
+
+  it('leaves another card"s confirmed flag alone', () => {
+    const other = makeCard({ id: 'other-card' })
+    const otherSession = renderHook(() => useCardSession(other))
+    act(() => otherSession.result.current.confirmSetup())
+
+    const { result } = renderHook(() => useCardSession(makeCard()))
+    act(() => result.current.confirmSetup())
+    act(() => result.current.resetCard())
+
+    const otherRemounted = renderHook(() => useCardSession(other))
+    expect(otherRemounted.result.current.setupConfirmed).toBe(true)
+  })
+
+  it('recomputes off the reset values', () => {
+    const { result } = renderHook(() => useCardSession(makeCard()))
+    act(() => result.current.setField('count', 7))
+    compute.mockClear()
+    compute.mockReturnValue({ total: 0 })
+
+    act(() => result.current.resetCard())
+    expect(compute).toHaveBeenLastCalledWith(expect.anything(), { count: 0 })
+    expect(result.current.outputs).toEqual({ total: 0 })
+  })
+
+  it('clears an active alert, and lets the next one fire its sound again', () => {
+    // The alert edge needs no special handling in resetCard: defaults are not a lethal
+    // state, so resetting flips the alert off on its own, which rearms the edge. Play
+    // through the whole cycle rather than asserting the ref, since that is the part a
+    // player would actually notice going wrong.
+    const card = makeCard({
+      alert: { output: 'dead', message: 'Dead.', tone: 'danger' },
+    })
+    compute.mockReturnValue({ total: 0, dead: true })
+    const { result } = renderHook(() => useCardSession(card))
+    expect(result.current.alertMessage).toBe('Dead.')
+    expect(soundBackend.playLose).toHaveBeenCalledTimes(1)
+
+    compute.mockReturnValue({ total: 0, dead: false })
+    act(() => result.current.resetCard())
+    expect(result.current.alertMessage).toBeNull()
+
+    compute.mockReturnValue({ total: 0, dead: true })
+    act(() => result.current.setField('count', 1))
+    expect(soundBackend.playLose).toHaveBeenCalledTimes(2)
+  })
+})
+
 describe('persistence', () => {
   it('hydrates a later session from what the last one stored', () => {
     compute.mockReturnValue({ total: 5 })
