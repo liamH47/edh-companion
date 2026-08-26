@@ -43,6 +43,12 @@ the coin/mana art already in the app, and a contrast-ratio table for every pair:
 interactive emphasis. `danger` is reserved for the loss-alert path (`AlertSpec`) — never
 reuse it for ordinary destructive-but-safe actions like "New turn".
 
+Two sanctioned exceptions, both for controls that destroy something a player cannot get
+back: `TournamentSetupScreen`'s remove-entrant button (`text-danger`, so the destructive
+one of three otherwise-identical circles reads apart), and `ConfirmSheet`'s confirm button.
+The distinction the rule is really drawing is *reversible* versus not — "New turn" is
+undone by playing on, a wiped tournament is not.
+
 ## Typography: two self-hosted faces
 
 `fontFamily.display` (**Fraunces**, weight 600) and `fontFamily.body` (**Sora**, weights

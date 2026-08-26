@@ -1,7 +1,7 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import { motion } from '@mtg/core/theme/tokens'
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost'
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger'
 export type ButtonSize = 'md' | 'lg'
 
 const variantClasses: Record<ButtonVariant, string> = {
@@ -10,6 +10,13 @@ const variantClasses: Record<ButtonVariant, string> = {
   secondary:
     'bg-transparent text-text border border-border hover:bg-surface-raised disabled:text-disabled-text disabled:border-disabled-surface',
   ghost: 'bg-transparent text-text-muted hover:text-text disabled:text-disabled-text',
+  // Outlined rather than filled: this is the confirm side of a ConfirmSheet, which must
+  // read as the weightier choice without becoming the easy one to hit by reflex. A real
+  // variant and not a `text-danger` className on `secondary` -- both set a text color at
+  // equal specificity, so which one won came down to Tailwind's emission order, and it
+  // was silently resolving to `text`. See design-tokens.md for when danger is sanctioned.
+  danger:
+    'bg-transparent text-danger border border-danger-border hover:bg-danger-surface disabled:text-disabled-text disabled:border-disabled-surface',
 }
 
 const sizeClasses: Record<ButtonSize, string> = {

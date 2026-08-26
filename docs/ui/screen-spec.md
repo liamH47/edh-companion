@@ -123,6 +123,14 @@ turn" button entirely: a game-long tally has no turn boundary, and the old behav
 resetTurn wiping every field to defaults -- quietly erased state the player could not
 reconstruct.
 
+**"Reset card" is the counterpart, and it is on every card screen** regardless of that
+flag -- a ghost `Button` below the `ActionBar`, behind a `ConfirmSheet`. `resetTurn` is a
+turn boundary; `resetCard` is a new *game*, so it ignores `persists_across_turns` and
+`new_turn_carries_output` (both exist to survive a turn, not a game) and clears the
+card's confirmed-setup flag so the board-state sheet asks again. For a game-long tracker
+it is the **only** way the tally ever returns to zero, since `resetTurn` cannot touch one
+by design.
+
 `FieldSpec.persists_across_turns` is the field-level counterpart: "New turn" leaves that
 one field alone while resetting everything around it. For board state a turn boundary does
 not change — the landfall permanents you control are still there next turn, and a "New turn"

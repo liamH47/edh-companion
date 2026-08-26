@@ -3,6 +3,7 @@ import { useTournament } from '@mtg/core/swiss'
 import { entrantName, type Rng } from '@mtg/core/swiss'
 import { BackButton } from '../ui/BackButton'
 import { Button } from '../ui/Button'
+import { ConfirmSheet } from '../ui/ConfirmSheet'
 import { Pressable } from '../ui/Pressable'
 import { Sheet } from '../ui/Sheet'
 import { Text } from '../ui/Text'
@@ -36,6 +37,7 @@ export function SwissScreen({ rng = Math.random, onExit }: SwissScreenProps = {}
     () => session.tournament?.rounds.length || 1,
   )
   const [managingEntrants, setManagingEntrants] = useState(false)
+  const [endOpen, setEndOpen] = useState(false)
 
   const { tournament } = session
 
@@ -99,7 +101,7 @@ export function SwissScreen({ rng = Math.random, onExit }: SwissScreenProps = {}
             <Button variant="secondary" fullWidth onClick={() => setManagingEntrants(true)}>
               Manage drops
             </Button>
-            <Button variant="ghost" fullWidth onClick={session.reset}>
+            <Button variant="ghost" fullWidth onClick={() => setEndOpen(true)}>
               End tournament
             </Button>
           </div>
@@ -151,6 +153,20 @@ export function SwissScreen({ rng = Math.random, onExit }: SwissScreenProps = {}
           })}
         </div>
       </Sheet>
+
+      <ConfirmSheet
+        open={endOpen}
+        onCancel={() => setEndOpen(false)}
+        onConfirm={() => {
+          session.reset()
+          setEndOpen(false)
+          setVisibleRound(1)
+          setView('round')
+        }}
+        title="End the tournament?"
+        message="Every round, every reported result and the final standings are discarded. There is no record kept afterwards, so write down anything you still need first."
+        confirmLabel="End tournament"
+      />
     </section>
   )
 }

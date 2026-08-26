@@ -3,6 +3,7 @@ import { usePodSession } from '@mtg/core/pods'
 import type { Rng } from '@mtg/core/swiss'
 import { BackButton } from '../ui/BackButton'
 import { Button } from '../ui/Button'
+import { ConfirmSheet } from '../ui/ConfirmSheet'
 import { Pressable } from '../ui/Pressable'
 import { PodRoundScreen } from './PodRoundScreen'
 import { PodSetupScreen } from './PodSetupScreen'
@@ -26,6 +27,7 @@ export function PodsScreen({ onBack, rng = Math.random }: PodsScreenProps) {
   const [visibleRound, setVisibleRound] = useState(
     () => session.session?.rounds.length || 1,
   )
+  const [resetOpen, setResetOpen] = useState(false)
 
   if (session.session === null) {
     return (
@@ -75,9 +77,22 @@ export function PodsScreen({ onBack, rng = Math.random }: PodsScreenProps) {
         onReshuffle={session.reshuffle}
       />
 
-      <Button variant="ghost" fullWidth onClick={session.reset}>
+      <Button variant="ghost" fullWidth onClick={() => setResetOpen(true)}>
         Start over
       </Button>
+
+      <ConfirmSheet
+        open={resetOpen}
+        onCancel={() => setResetOpen(false)}
+        onConfirm={() => {
+          session.reset()
+          setResetOpen(false)
+          setVisibleRound(1)
+        }}
+        title="Start the night over?"
+        message="The roster and every round played so far are discarded, and you go back to entering names. Nobody's seating history survives, so future rounds can pair people who have already played."
+        confirmLabel="Start over"
+      />
     </section>
   )
 }

@@ -3,6 +3,8 @@ import { effectLines, heroOutput, nonPrimaryOutputs, splitFields } from '@mtg/co
 import { useCardSession } from '@mtg/core'
 import type { CardMetadata } from '@mtg/core'
 import { BackButton } from '../ui/BackButton'
+import { Button } from '../ui/Button'
+import { ConfirmSheet } from '../ui/ConfirmSheet'
 import { InfoIcon } from '../ui/Icon'
 import { Pressable } from '../ui/Pressable'
 import { Surface } from '../ui/Surface'
@@ -52,6 +54,18 @@ export function CardScreen({ card, onBack }: CardScreenProps) {
     () => sheetFields.length > 0 && !session.setupConfirmed,
   )
   const [rulesOpen, setRulesOpen] = useState(false)
+  const [resetOpen, setResetOpen] = useState(false)
+
+  const confirmReset = () => {
+    session.resetCard()
+    setResetOpen(false)
+    // A reset card has no confirmed setup any more, so the board-state sheet asks
+    // again -- the same thing rule 4 does on a first visit, for the same reason: a new
+    // game needs its own answers. Opened here rather than from an effect watching
+    // `setupConfirmed`, which would also fire on the reset that happens when *switching*
+    // cards and reopen a sheet the player just dismissed.
+    if (sheetFields.length > 0) setSheetOpen(true)
+  }
 
   const hero = heroOutput(card)
   const heroValue = typeof session.outputs?.[hero.name] === 'number' ? (session.outputs[hero.name] as number) : 0
@@ -205,6 +219,26 @@ export function CardScreen({ card, onBack }: CardScreenProps) {
         onFieldChange={session.setField}
         onNewTurn={session.resetTurn}
         showNewTurn={card.resets_on_new_turn}
+      />
+
+      {/* Below the ActionBar, quiet, and on every card -- the same slot and the same
+          ghost weight PodsScreen and SwissScreen already give their session resets, so
+          "start this over" sits in one place across the app. Not *in* the bar: that is
+          thumb-zone space for per-turn actions, and a wipe belongs a deliberate reach
+          away from where a thumb rests. This is also the only reset a game-long
+          tracker has -- commander tax and dungeons set `resets_on_new_turn: false`, so
+          "New turn" above is correctly absent for them. */}
+      <Button variant="ghost" fullWidth onClick={() => setResetOpen(true)}>
+        Reset card
+      </Button>
+
+      <ConfirmSheet
+        open={resetOpen}
+        onCancel={() => setResetOpen(false)}
+        onConfirm={confirmReset}
+        title={`Reset ${card.name}?`}
+        message="Every field goes back to its default and the board-state questions get asked again. Nothing else on other cards is touched."
+        confirmLabel="Reset card"
       />
 
       <SetupSheet
