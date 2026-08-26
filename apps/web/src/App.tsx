@@ -71,10 +71,20 @@ function App() {
       // silently overriding the clearance, leaving the fixed tab bar overlapping the
       // last ~32px of every scrollable view. Caught by e2e failing to click a
       // bottom-of-screen button on the desktop viewport only.
-      className={`mx-auto flex min-h-screen w-full max-w-xl flex-col gap-4 bg-canvas px-4 pt-4 sm:px-6 sm:pt-8 ${
+      //
+      // dvh, not vh: on iOS Safari `100vh` is the LARGE viewport (60-110px taller than
+      // what is actually on screen with the URL bar showing). While every screen was
+      // top-aligned that only padded invisible space at the bottom; now that the card
+      // route bounds its height and scrolls inside, vh would put the pinned ActionBar
+      // under the browser chrome.
+      //
+      // A card route is `h-dvh` (bounded, so CardScreen's middle region scrolls between
+      // a static header and a pinned ActionBar); every other route is `min-h-dvh` and
+      // scrolls the page as before.
+      className={`mx-auto flex w-full max-w-xl flex-col gap-4 bg-canvas px-4 pt-4 sm:px-6 sm:pt-8 ${
         showTabBar
-          ? 'pb-[calc(4rem+env(safe-area-inset-bottom))] sm:pb-[calc(5rem+env(safe-area-inset-bottom))]'
-          : 'pb-4 sm:pb-8'
+          ? 'min-h-dvh pb-[calc(4rem+env(safe-area-inset-bottom))] sm:pb-[calc(5rem+env(safe-area-inset-bottom))]'
+          : 'h-dvh pb-4 sm:pb-8'
       }`}
     >
       {/* Two mirrored flex-1 regions centre the title. On a narrow screen the icon

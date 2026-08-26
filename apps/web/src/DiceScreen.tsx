@@ -120,7 +120,13 @@ export function DiceScreen({ rng = Math.random }: { rng?: () => number }) {
   const sum = dice.reduce((total, die) => total + die.face, 0)
 
   return (
-    <section className="flex flex-col items-center gap-5 py-4">
+    /* Centred in the column rather than stacked at the top: this screen paints ~300px
+       into a ~666px phone column, and top-aligning it pooled every leftover pixel into
+       one dead block above the tab bar. `justify-center` here on the screen's own root,
+       NOT flex-1 on the shell -- every screen root is justify-start, so a shell-level
+       change relocates the dead space without moving anything, and centring the shell
+       instead drops the app title into the middle of the page. */
+    <section className="flex min-h-0 flex-1 flex-col items-center justify-center gap-5 py-4">
       <div className="w-full max-w-xs">
         <SegmentedControl
           options={MODES}
@@ -132,8 +138,14 @@ export function DiceScreen({ rng = Math.random }: { rng?: () => number }) {
         />
       </div>
 
-      {/* Keyed by mode so switching remounts the dice, clearing any prior visual state. */}
-      <div key={mode} className="flex items-center justify-center gap-4">
+      {/* Keyed by mode so switching remounts the dice, clearing any prior visual state.
+          The extra top margin is clearance, not decoration: the throw deliberately
+          overflows the top of its box (Die3D sets `overflow: visible`), and at the `lg`
+          size the apex reaches **64px** above it -- computed against the real tumble path
+          over 20 seeds x 6 faces, not eyeballed. mt-14 plus the section's gap-5 gives
+          76px of clearance, ~12px of margin. Without it the tumbling die paints straight
+          over the mode selector the player just tapped. */}
+      <div key={mode} className="mt-14 flex items-center justify-center gap-4">
         {dice.map((die, index) => (
           <Die3D
             key={index}
@@ -142,22 +154,32 @@ export function DiceScreen({ rng = Math.random }: { rng?: () => number }) {
             rolling={rolling}
             durationMs={durationMs}
             seed={die.seed}
+            size="lg"
           />
         ))}
       </div>
 
       {/* Visible sum for 2d6 -- the whole point of a roller is to not make the player add
-          the pips in their head. Single dice show their own face. */}
-      {mode === '2d6' && !rolling && announcement !== '' && (
-        <div className="text-center">
-          <Text as="p" variant="statTile">
-            {sum}
-          </Text>
-          <Text as="p" variant="body" color="muted">
-            {dice[0].face} + {dice[1].face}
-          </Text>
-        </div>
-      )}
+          the pips in their head. Single dice show their own face.
+
+          The slot is ALWAYS mounted and the guard is on its contents: mounting it
+          conditionally made the Roll button jump 71px on every roll (and under reduced
+          motion it moved out from under the thumb within 150ms of the tap). Rendering
+          the sum unconditionally instead would be worse -- `changeMode` reseeds both
+          dice to face 1, so switching to 2d6 would flash "2 / 1 + 1", a snake-eyes
+          nobody rolled. CoinFlip's reserved h-8/h-10 result areas are the same pattern. */}
+      <div className="flex h-14 flex-col justify-center text-center" data-testid="sum-slot">
+        {mode === '2d6' && !rolling && announcement !== '' && (
+          <>
+            <Text as="p" variant="statTile">
+              {sum}
+            </Text>
+            <Text as="p" variant="body" color="muted">
+              {dice[0].face} + {dice[1].face}
+            </Text>
+          </>
+        )}
+      </div>
 
       <Button size="lg" onClick={roll} disabled={rolling}>
         {rolling ? 'Rolling…' : 'Roll'}

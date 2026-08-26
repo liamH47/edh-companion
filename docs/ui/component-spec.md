@@ -393,6 +393,35 @@ final contact. It decides nothing: no RNG, no result callback, no announcement; 
 drive `face`/`rolling`/`seed`. Fills and strokes are theme CSS variables passed as literal
 SVG props, never Tailwind classes (the react-native-svg-portable pattern). Under reduced
 motion it runs no frame loop at all: final pose, opacity ease-in over `revealDuration()`.
+
+**`size`: `'md'` (96px, default) | `'lg'` (160px).** A `Record` lookup, not a ternary —
+a lookup is zero branches against the 100% gate. `DieRoller` (a card's ActionBar) keeps
+`md`; `DiceScreen` opts into `lg`, where an audit measured 459px of dead space below the
+Roll button. The projection math is unitless (normalized by circumradius), so only the
+box changes.
+
+Three measured constraints pin `lg` at 160px, all computed against the real
+`tumblePath`/`projectDie` over 20 seeds × 6 faces rather than eyeballed:
+
+- **2d6 must not interpenetrate.** The throw overflows its box sideways while the row gap
+  stays a fixed 16px. At `DIE_RADIUS = 34` two dice still clear by 11.3px at 160px. This
+  is why the *box* grew and the fill ratio did not: raising `DIE_RADIUS` toward 44 (to
+  fill more of the box) makes the two dice **overlap by 15.8px at 96px and 26.4px at
+  128px** — a worse artefact than an under-filled box, and exactly what the projected-solid
+  rewrite exists to avoid.
+- **Two dice plus the gap must fit a phone**: 2×160+16 = 336 inside 358px of content
+  width at 390px.
+- **The apex reaches ~64px above a 160px box** (`overflow: visible` is deliberate — the
+  throw leaves the box the way a real toss leaves your palm). `DiceScreen` reserves that
+  as top margin; without it the tumbling die paints over the mode selector the player
+  just tapped. Going past 160px means scaling `FIRST_APEX` (`tumble.ts`) down inversely.
+
+**Conditional result regions reserve their height.** `DiceScreen`'s 2d6 sum slot is always
+mounted and only its *contents* are guarded; mounting the slot itself conditionally moved
+the Roll button 71px on every roll (and under reduced motion, out from under the thumb
+within 150ms of the tap). Rendering the sum unconditionally instead is the opposite trap:
+`changeMode` reseeds both dice to face 1, so it would flash "2 / 1 + 1" — a snake-eyes
+nobody rolled. `CoinFlip`'s `h-8`/`h-10` result areas are the same pattern.
 Design record: `docs/design/dice3d.md`.
 
 - `DieRoller` (`cards/DieRoller.tsx`) keeps the self-deciding shape for the Comet card path:

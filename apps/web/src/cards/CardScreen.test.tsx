@@ -427,6 +427,17 @@ describe('CardScreen', () => {
       await user.click(await screen.findByRole('button', { name: 'Increase Spells cast this turn' }))
     }
 
+    it('lives in the header, not in a row under the action bar', async () => {
+      // It used to be a full-width ghost button below the ActionBar, costing 64px of
+      // every card's column and sitting below the fold on the tall ones -- one of the
+      // two controls the user reported having to scroll to reach.
+      const user = userEvent.setup()
+      await openConfirmedCard(user)
+
+      const header = screen.getByRole('banner')
+      expect(within(header).getByRole('button', { name: 'Reset card' })).toBeInTheDocument()
+    })
+
     it('asks before wiping anything, and changes nothing while the question is open', async () => {
       const user = userEvent.setup()
       await openConfirmedCard(user)
