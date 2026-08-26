@@ -187,10 +187,12 @@ routes through it, so they read identically.
 | `confirmLabel` | `string` — repeats the verb ("Reset card"), never "OK" |
 
 **Which actions get one.** Only those that destroy state a player cannot reconstruct:
-"Reset card" (every card screen), "Start over" (pods), "End tournament" (Swiss).
-Deliberately **not** "New turn", "Empty pool" or "Clear result" — those are reversible or
-routine, and a confirm on something pressed every turn trains people to tap straight
-through, which is what makes the dialog useless on the three that genuinely needed one.
+"Reset card" (every card screen), "Start over" (pods), "End tournament" (Swiss), and
+"Re-pair later rounds" (Swiss — it rebuilds later rounds from scratch, discarding every
+result reported in them). Deliberately **not** "New turn", "Empty pool" or clearing a
+match result (plain decrementing on the score card) — those are reversible or routine,
+and a confirm on something pressed every turn trains people to tap straight through,
+which is what makes the dialog useless on the ones that genuinely needed it.
 
 Behavior:
 - Every `Sheet` dismissal path (backdrop, Esc, close button) maps to `onCancel`. Wiring any

@@ -28,9 +28,13 @@ describe('SwissScreen', () => {
     await startFourPlayerTournament(user)
 
     expect(screen.getByRole('heading', { name: 'Round 1 of 3' })).toBeInTheDocument()
-    // A 4-pod seats 1v3 and 2v4, so Ava faces Cara.
-    expect(screen.getByRole('button', { name: 'Report Ava versus Cara' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Report Ben versus Dev' })).toBeInTheDocument()
+    // A 4-pod seats 1v3 and 2v4, so Ava faces Cara -- and every player has an inline
+    // tap target rather than a sheet behind a row.
+    const items = screen.getAllByRole('listitem')
+    expect(within(items[0]).getByRole('button', { name: 'Add a game win for Ava' })).toBeInTheDocument()
+    expect(within(items[0]).getByRole('button', { name: 'Add a game win for Cara' })).toBeInTheDocument()
+    expect(within(items[1]).getByRole('button', { name: 'Add a game win for Ben' })).toBeInTheDocument()
+    expect(within(items[1]).getByRole('button', { name: 'Add a game win for Dev' })).toBeInTheDocument()
   })
 
   it('resumes a tournament already in progress', () => {
@@ -88,8 +92,9 @@ describe('SwissScreen', () => {
     )
     render(<SwissScreen />)
 
-    await user.click(screen.getByRole('button', { name: 'Report A versus B' }))
-    await user.click(screen.getByRole('button', { name: '0-2' }))
+    // 0-2 by taps: two game wins for B.
+    await user.click(screen.getByRole('button', { name: 'Add a game win for B' }))
+    await user.click(screen.getByRole('button', { name: 'Add a game win for B' }))
     await user.click(screen.getByRole('button', { name: 'Standings' }))
 
     // B won, so B is top of the table.
@@ -212,7 +217,13 @@ describe('SwissScreen', () => {
     render(<SwissScreen />)
     await user.click(screen.getByRole('button', { name: /Swap A with another entrant/ }))
     await user.click(screen.getByRole('button', { name: 'C' }))
-    expect(screen.getByRole('button', { name: 'Report C versus B' })).toBeInTheDocument()
+    // The first match is now C versus B: A is out of it entirely.
+    const firstMatch = screen.getAllByRole('listitem')[0]
+    expect(within(firstMatch).getByRole('button', { name: 'Add a game win for C' })).toBeInTheDocument()
+    expect(within(firstMatch).getByRole('button', { name: 'Add a game win for B' })).toBeInTheDocument()
+    expect(
+      within(firstMatch).queryByRole('button', { name: 'Add a game win for A' }),
+    ).not.toBeInTheDocument()
   })
 
   it('re-pairs later rounds when a corrected result asks for it', async () => {
@@ -234,11 +245,63 @@ describe('SwissScreen', () => {
     )
     render(<SwissScreen />)
     await user.click(screen.getByRole('button', { name: 'R1' }))
-    await user.click(screen.getByRole('button', { name: 'Report A versus B' }))
+    // Correct a result on the past round: the banner offers re-pairing, which runs
+    // behind a confirm since it discards later-round results.
+    await user.click(screen.getByRole('button', { name: 'Remove a game win for A' }))
     await user.click(screen.getByRole('button', { name: 'Re-pair later rounds' }))
+    const dialog = screen.getByRole('dialog', { name: 'Re-pair later rounds?' })
+    await user.click(within(dialog).getByRole('button', { name: 'Re-pair' }))
 
-    // Round 2 still exists, rebuilt from the (unchanged here) standings.
+    // Round 2 still exists, rebuilt from the corrected standings.
     await user.click(screen.getByRole('button', { name: 'R2' }))
     expect(screen.getByRole('heading', { name: 'Round 2 of 3' })).toBeInTheDocument()
+  })
+
+  it('clears the re-pair offer when switching rounds', async () => {
+    // key={showRound} remounts RoundScreen, so a banner raised on R1 must not follow
+    // the TO onto R2 and back.
+    const user = userEvent.setup()
+    saveTournament(
+      makeTournament({
+        entrants: makeEntrants(4),
+        rounds: [
+          round(1, [
+            match('entrant-1', 'entrant-2', result(2, 0)),
+            match('entrant-3', 'entrant-4', result(2, 0)),
+          ]),
+          round(2, [
+            match('entrant-1', 'entrant-3', null),
+            match('entrant-2', 'entrant-4', null),
+          ]),
+        ],
+      }),
+    )
+    render(<SwissScreen />)
+    await user.click(screen.getByRole('button', { name: 'R1' }))
+    await user.click(screen.getByRole('button', { name: 'Remove a game win for A' }))
+    expect(screen.getByRole('button', { name: 'Re-pair later rounds' })).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'R2' }))
+    await user.click(screen.getByRole('button', { name: 'R1' }))
+    expect(screen.queryByRole('button', { name: 'Re-pair later rounds' })).not.toBeInTheDocument()
+  })
+
+  it('offers End tournament from the round view, not just the standings', async () => {
+    // "Easily available at all times": ending the night must not require remembering
+    // which tab the button lives on. Still behind the confirm either way.
+    const user = userEvent.setup()
+    saveTournament(
+      makeTournament({
+        entrants: makeEntrants(2),
+        rounds: [round(1, [match('entrant-1', 'entrant-2', null)])],
+      }),
+    )
+    render(<SwissScreen />)
+    expect(screen.getByRole('heading', { name: 'Round 1 of 3' })).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'End tournament' }))
+    const dialog = screen.getByRole('dialog', { name: 'End the tournament?' })
+    await user.click(within(dialog).getByRole('button', { name: 'End tournament' }))
+    expect(screen.getByRole('heading', { name: 'New tournament' })).toBeInTheDocument()
   })
 })

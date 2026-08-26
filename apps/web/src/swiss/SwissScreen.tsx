@@ -97,17 +97,15 @@ export function SwissScreen({ rng = Math.random, onExit }: SwissScreenProps = {}
       {view === 'standings' ? (
         <>
           <StandingsScreen tournament={tournament} />
-          <div className="flex flex-col gap-2">
-            <Button variant="secondary" fullWidth onClick={() => setManagingEntrants(true)}>
-              Manage drops
-            </Button>
-            <Button variant="ghost" fullWidth onClick={() => setEndOpen(true)}>
-              End tournament
-            </Button>
-          </div>
+          <Button variant="secondary" fullWidth onClick={() => setManagingEntrants(true)}>
+            Manage drops
+          </Button>
         </>
       ) : (
         <RoundScreen
+          // Remount on round switch so per-round UI state (the re-pair banner, a
+          // half-opened swap) never leaks from one round onto another.
+          key={showRound}
           tournament={tournament}
           roundNumber={showRound}
           hadToRepeatPairing={session.hadToRepeatPairing}
@@ -120,6 +118,19 @@ export function SwissScreen({ rng = Math.random, onExit }: SwissScreenProps = {}
           }}
         />
       )}
+
+      {/* On every view, not just standings: ending the night shouldn't require
+          remembering which tab the button lives on. Ghost weight and last in the
+          column -- the same quiet slot pods' "Start over" and cards' "Reset card"
+          use -- and always behind the confirm below. */}
+      <div
+        className="flex flex-col gap-2"
+        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+      >
+        <Button variant="ghost" fullWidth onClick={() => setEndOpen(true)}>
+          End tournament
+        </Button>
+      </div>
 
       <Sheet
         open={managingEntrants}

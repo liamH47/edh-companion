@@ -65,8 +65,16 @@ function App() {
 
   return (
     <main
-      className={`mx-auto flex min-h-screen w-full max-w-xl flex-col gap-4 bg-canvas px-4 py-4 sm:px-6 sm:py-8 ${
-        showTabBar ? 'pb-[calc(4rem+env(safe-area-inset-bottom))]' : ''
+      // Bottom padding is set explicitly in BOTH branches rather than letting py-4/
+      // sm:py-8 carry it: the tab-bar clearance class is unprefixed, and a responsive
+      // variant like sm:py-8 is emitted later in the stylesheet -- so on desktop it was
+      // silently overriding the clearance, leaving the fixed tab bar overlapping the
+      // last ~32px of every scrollable view. Caught by e2e failing to click a
+      // bottom-of-screen button on the desktop viewport only.
+      className={`mx-auto flex min-h-screen w-full max-w-xl flex-col gap-4 bg-canvas px-4 pt-4 sm:px-6 sm:pt-8 ${
+        showTabBar
+          ? 'pb-[calc(4rem+env(safe-area-inset-bottom))] sm:pb-[calc(5rem+env(safe-area-inset-bottom))]'
+          : 'pb-4 sm:pb-8'
       }`}
     >
       {/* Two mirrored flex-1 regions centre the title. On a narrow screen the icon
