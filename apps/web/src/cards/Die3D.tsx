@@ -67,6 +67,33 @@ function decorationOpacity(t: number): number {
   return (t - LAST_CONTACT) / (1 - LAST_CONTACT)
 }
 
+/**
+ * Rendered box sizes. A record rather than a ternary on purpose: a lookup is zero
+ * branches against the 100% gate, where `size === 'lg' ? a : b` would need a covered
+ * case per value.
+ *
+ * `lg` stops at 160px, and that ceiling is measured rather than taste. Two independent
+ * limits pin it, both computed against the real `tumblePath`/`projectDie` over 20 seeds
+ * x 6 faces:
+ *
+ *  - **2d6 must not interpenetrate.** The throw overflows its box sideways, and the row
+ *    gap is a fixed 16px while the die scales. At `DIE_RADIUS = 34` the two dice still
+ *    clear by 11.3px at a 160px box. (Raising the radius is what breaks this, not the
+ *    box: at R44/128 the dice overlap by 26px. That is why the box grew and the fill
+ *    ratio did not.)
+ *  - **Two 160px dice plus the gap must fit a phone.** 2*160+16 = 336 inside a 358px
+ *    content width at 390px.
+ *
+ * The apex reaches ~64px above a 160px box, which DiceScreen reserves as top margin.
+ * Going further means scaling `FIRST_APEX` (tumble.ts) down inversely.
+ */
+const SIZE_CLASS = {
+  md: 'h-24 w-24',
+  lg: 'h-40 w-40',
+} as const
+
+export type Die3DSize = keyof typeof SIZE_CLASS
+
 interface Die3DProps {
   /** The value the die lands showing. */
   face: number
@@ -76,6 +103,9 @@ interface Die3DProps {
   /** Varies the tumble and the resting tilt between rolls. The owner supplies it from
    * the same RNG that picked the face, so a test can pin both. */
   seed?: number
+  /** `md` (96px) is the default so the card ActionBar's die is unchanged; the Dice tab
+   * opts into `lg`, where there is room for it. */
+  size?: Die3DSize
 }
 
 /**
@@ -93,7 +123,7 @@ interface Die3DProps {
  * in with an opacity transition over the (already shortened) reveal duration -- the
  * one CSS-animatable property portability-rules.md allows besides transform.
  */
-export function Die3D({ face, faces, rolling, durationMs, seed = 1 }: Die3DProps) {
+export function Die3D({ face, faces, rolling, durationMs, seed = 1, size = 'md' }: Die3DProps) {
   const [t, setT] = useState(1)
   const reduced = prefersReducedMotion()
 
@@ -172,7 +202,7 @@ export function Die3D({ face, faces, rolling, durationMs, seed = 1 }: Die3DProps
   return (
     <svg
       viewBox={`${-HALF} ${-HALF} ${HALF * 2} ${HALF * 2}`}
-      className="h-24 w-24"
+      className={SIZE_CLASS[size]}
       style={{ overflow: 'visible' }}
       role="img"
       aria-hidden="true"

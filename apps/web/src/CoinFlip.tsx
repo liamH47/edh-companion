@@ -135,9 +135,12 @@ function FlipCoin({
   back: ReactNode
 }) {
   return (
-    <div style={{ perspective: '800px' }}>
+    <div className="w-full max-w-40" style={{ perspective: '800px' }}>
       <div
-        className="relative h-32 w-32"
+        // aspect-square + a max-width cap rather than a fixed h-32/w-32, matching the
+        // card-art sizing pattern already used across the app. The inner CoinBase svg is
+        // already h-full w-full, so it follows with no change.
+        className="relative aspect-square w-full"
         style={{
           transformStyle: 'preserve-3d',
           transform: `rotateY(${rotation}deg)`,
@@ -359,7 +362,10 @@ export function CoinFlip() {
   }
 
   return (
-    <section className="flex flex-col items-center gap-4 py-2">
+    /* Centred for the same reason as DiceScreen: plain mode paints ~410px into a ~666px
+       column. Applied on this outer section (the one that owns the mode toggle *and*
+       the chosen coin) so the pair centres as a group. */
+    <section className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4 py-2">
       <div className="w-full max-w-xs">
         {/* Inverted so "Plain" sits on the left as the default-highlighted option. */}
         <Toggle

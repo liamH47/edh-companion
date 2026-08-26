@@ -45,25 +45,40 @@ subtree (`key`), so it is always a fresh start.
 
 ## CardScreen layout
 
+**A card screen is an app shell, not one long column.** The header and the `ActionBar`
+are static; only the middle scrolls between them (`flex-1 min-h-0 overflow-y-auto`, with
+`App.tsx` giving the card route a bounded `h-dvh` so there is a height to divide). That
+is what makes the control a player taps every turn reachable without scrolling on a tall
+card: Comet's printed art alone is 401px and dungeons' room map is ~518px, so the old
+"put the bar last in the column" only ever worked on the short cards. Measured across
+390×844 / 375×667 / 1280×800, primary actions reachable without scrolling went from
+**5/7, 2/7 and 6/7 to 7/7** on all three.
+
+`ActionBar`'s docstring claimed it was "bottom-pinned, in the thumb zone" long before it
+actually was; this is what made that true. It ports as `View flex:1 > ScrollView` +
+footer `View` — the shape a React Native screen would have used anyway. `dvh`, not `vh`:
+on iOS Safari `100vh` is the *large* viewport, which would put the pinned bar under the
+browser chrome.
+
 ```
 ┌──────────────────────────────┐
-│ ‹  Aetherflux Reservoir    ⓘ │  header: back, title, "View card" button
+│ ‹  Aetherflux Reservoir  ⓘ ↺ │  header (static): back, title, "View card", "Reset card"
 ├──────────────────────────────┤
-│ 40 life · in play ✓       ✎ │  SetupSummaryBar (only if setup fields exist)
+│ 40 life · in play ✓       ✎ │  ┐ SetupSummaryBar (only if setup fields exist)
+├──────────────────────────────┤  │
+│         (alert banner)       │  │ AlertBanner (only if card.alert is active)
+│                              │  │
+│   DAMAGE AVAILABLE           │  │ ← THIS REGION SCROLLS
+│        50                    │  │   (flex-1 min-h-0 overflow-y-auto)
+│                              │  │
+│  ┌──────┐┌──────┐┌──────┐    │  │ StatStrip (only if >0 non-primary outputs)
+│  │  50  ││  +4  ││   7  │    │  │
+│  └──────┘└──────┘└──────┘    │  │
+│  ────────────────────────    │  │ read/act divider
+│  (live-only FieldControls)   │  ┘ omitted entirely if there are no live fields
 ├──────────────────────────────┤
-│         (alert banner)       │  AlertBanner (only if card.alert is active)
-│                              │
-│   DAMAGE AVAILABLE           │
-│        50                    │  HeroStat
-│                              │
-│  ┌──────┐┌──────┐┌──────┐    │
-│  │  50  ││  +4  ││   7  │    │  StatStrip (only if >0 non-primary outputs)
-│  └──────┘└──────┘└──────┘    │
-├──────────────────────────────┤
-│  (live-only FieldControls)   │  omitted entirely if there are no live fields
-├──────────────────────────────┤
-│         ActionBar             │  action button (if any) + "New turn"
-└──────────────────────────────┘
+│         ActionBar             │  STATIC, always in the thumb zone:
+└──────────────────────────────┘  action button (if any) + "New turn"
 ```
 
 `CardDetailSheet`: the header's info button (labelled "View card") opens a `Sheet` holding the
@@ -124,12 +139,19 @@ resetTurn wiping every field to defaults -- quietly erased state the player coul
 reconstruct.
 
 **"Reset card" is the counterpart, and it is on every card screen** regardless of that
-flag -- a ghost `Button` below the `ActionBar`, behind a `ConfirmSheet`. `resetTurn` is a
-turn boundary; `resetCard` is a new *game*, so it ignores `persists_across_turns` and
-`new_turn_carries_output` (both exist to survive a turn, not a game) and clears the
-card's confirmed-setup flag so the board-state sheet asks again. For a game-long tracker
-it is the **only** way the tally ever returns to zero, since `resetTurn` cannot touch one
-by design.
+flag -- an icon `Pressable` in the header beside "View card", behind a `ConfirmSheet`.
+`resetTurn` is a turn boundary; `resetCard` is a new *game*, so it ignores
+`persists_across_turns` and `new_turn_carries_output` (both exist to survive a turn, not
+a game) and clears the card's confirmed-setup flag so the board-state sheet asks again.
+For a game-long tracker it is the **only** way the tally ever returns to zero, since
+`resetTurn` cannot touch one by design.
+
+It sat below the `ActionBar` as a full-width ghost button until an audit measured what
+that cost: 64px of column on all 16 screens including the 11 that never overflow, and on
+the tall cards it fell below the fold -- one of the two controls a player reported having
+to scroll to reach. The header keeps the deliberate distance from the thumb zone (it is
+still nowhere near the per-turn actions, and still behind its confirm) at zero vertical
+cost, and it never scrolls away.
 
 `FieldSpec.persists_across_turns` is the field-level counterpart: "New turn" leaves that
 one field alone while resetting everything around it. For board state a turn boundary does

@@ -49,6 +49,19 @@ describe('Die3D', () => {
     expect(pipCount()).toBe(5)
   })
 
+  it('defaults to the compact box, so the card action bar is unaffected', () => {
+    const { container } = render(<Die3D face={1} faces={6} rolling={false} durationMs={900} />)
+    expect(container.querySelector('svg')).toHaveClass('h-24', 'w-24')
+  })
+
+  it('renders the larger box when a screen with room opts into it', () => {
+    // The Dice tab passes size="lg"; the geometry is unitless so only the box changes.
+    const { container } = render(
+      <Die3D face={1} faces={6} rolling={false} durationMs={900} size="lg" />,
+    )
+    expect(container.querySelector('svg')).toHaveClass('h-40', 'w-40')
+  })
+
   it('renders a true icosahedron for a d20 with an upright numeral', () => {
     render(<Die3D face={17} faces={20} rolling={false} durationMs={900} />)
     // A d20 at rest shows several triangular faces, not one square.

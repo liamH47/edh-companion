@@ -58,6 +58,18 @@ No React Native equivalent, or a painful one:
 - Percentage heights, `vh`/`vw` units — use flex sizing or fixed values from `spacing`.
 - CSS transitions/animations on any property except `opacity` and `transform`.
 
+> **The shell is the one exception to the viewport-unit ban.** `App.tsx` sets `min-h-dvh`
+> (and `h-dvh` on the card route, so `CardScreen` can divide it into a static header, a
+> scrolling middle and a pinned `ActionBar`). Some element has to establish the viewport's
+> height before flex can divide it, and the shell is the layer `docs/roadmap.md` already
+> lists as "rewritten against Expo Router" — there it becomes `SafeAreaView flex:1`. The
+> ban still applies with no exceptions inside `src/ui/` and `src/cards/`.
+>
+> Use `dvh`, never `vh`: on iOS Safari `100vh` is the *large* viewport, 60–110px taller
+> than what is on screen with the URL bar showing. While every screen was top-aligned that
+> only padded invisible space; the moment a layout divides that height, `vh` puts pinned
+> bottom content underneath the browser chrome.
+
 ## Use instead
 
 - Flexbox row/column (`flex flex-col`/`flex-row`) with `gap-*` from the spacing scale.

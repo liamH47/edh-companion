@@ -3,9 +3,8 @@ import { effectLines, heroOutput, nonPrimaryOutputs, splitFields } from '@mtg/co
 import { useCardSession } from '@mtg/core'
 import type { CardMetadata } from '@mtg/core'
 import { BackButton } from '../ui/BackButton'
-import { Button } from '../ui/Button'
 import { ConfirmSheet } from '../ui/ConfirmSheet'
-import { InfoIcon } from '../ui/Icon'
+import { InfoIcon, ResetIcon } from '../ui/Icon'
 import { Pressable } from '../ui/Pressable'
 import { Surface } from '../ui/Surface'
 import { Text } from '../ui/Text'
@@ -78,21 +77,42 @@ export function CardScreen({ card, onBack }: CardScreenProps) {
     card.fields.find((field) => field.picker)?.picker?.empty_label ?? 'Nothing to show yet.'
 
   return (
-    <section className="flex flex-col gap-4">
+    /* An app shell, not one long column: the header and the ActionBar are static and the
+       middle scrolls between them. That is what makes the action the player taps every
+       turn reachable without scrolling on a tall card -- Comet's printed art alone is
+       401px, and dungeons' room map is ~518px, so "put the bar last in the column" only
+       ever worked on the short cards. ErrorBoundary renders children directly, so this
+       is a direct flex child of App's `h-dvh` main -- hence flex-1 rather than h-full.
+       Ports as View flex:1 > ScrollView + footer View. */
+    <section className="flex min-h-0 flex-1 flex-col gap-4">
       <header className="flex items-center gap-3">
         {onBack && <BackButton onClick={onBack} />}
-        <Text as="h1" variant="title" className="flex-1">
+        <Text as="h1" variant="title" className="min-w-0 flex-1 truncate">
           {card.name}
         </Text>
         <Pressable
           aria-label="View card"
           onClick={() => setRulesOpen(true)}
-          className="min-h-12 min-w-12 justify-center rounded-full text-text-muted hover:text-text"
+          className="min-h-12 min-w-12 shrink-0 justify-center rounded-full text-text-muted hover:text-text"
         >
           <InfoIcon />
         </Pressable>
+        {/* Beside "View card" rather than a full-width row under the ActionBar: a wipe
+            still wants a deliberate reach (it keeps its ConfirmSheet), but it does not
+            want 64px of every card's column -- including the 11 that never overflow --
+            and it should not be something the player has to scroll to find. */}
+        <Pressable
+          aria-label="Reset card"
+          onClick={() => setResetOpen(true)}
+          className="min-h-12 min-w-12 shrink-0 justify-center rounded-full text-text-muted hover:text-danger"
+        >
+          <ResetIcon />
+        </Pressable>
       </header>
 
+      {/* min-h-0: a flex item's automatic minimum size is its content, so without this
+          the region refuses to shrink and nothing scrolls. */}
+      <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto">
       <SetupSummaryBar
         fields={sheetFields}
         values={session.values}
@@ -211,7 +231,10 @@ export function CardScreen({ card, onBack }: CardScreenProps) {
           ))}
         </div>
       )}
+      </div>
 
+      {/* Outside the scroll region: genuinely bottom-pinned now, which is what the
+          ActionBar's own docstring has claimed since it was written. */}
       <ActionBar
         liveFields={inlineFields}
         values={session.values}
@@ -220,17 +243,6 @@ export function CardScreen({ card, onBack }: CardScreenProps) {
         onNewTurn={session.resetTurn}
         showNewTurn={card.resets_on_new_turn}
       />
-
-      {/* Below the ActionBar, quiet, and on every card -- the same slot and the same
-          ghost weight PodsScreen and SwissScreen already give their session resets, so
-          "start this over" sits in one place across the app. Not *in* the bar: that is
-          thumb-zone space for per-turn actions, and a wipe belongs a deliberate reach
-          away from where a thumb rests. This is also the only reset a game-long
-          tracker has -- commander tax and dungeons set `resets_on_new_turn: false`, so
-          "New turn" above is correctly absent for them. */}
-      <Button variant="ghost" fullWidth onClick={() => setResetOpen(true)}>
-        Reset card
-      </Button>
 
       <ConfirmSheet
         open={resetOpen}

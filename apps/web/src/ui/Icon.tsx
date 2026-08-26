@@ -214,6 +214,17 @@ export function DiceIcon(props: ConcreteIconProps) {
   )
 }
 
+/** A circular arrow back to the start -- "put this back how it was". Distinct from
+ * UndoIcon's single hooked arrow, which reverses one step rather than all of them. */
+export function ResetIcon(props: ConcreteIconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M3 12a9 9 0 1 0 3-6.7" />
+      <path d="M3 4v5h5" />
+    </Icon>
+  )
+}
+
 /** An arrow into a tray -- "install this" in the same vocabulary a browser's own
  * download/install affordances already use. */
 export function InstallIcon(props: ConcreteIconProps) {

@@ -137,6 +137,35 @@ describe('DiceScreen', () => {
     expect(screen.queryByText('1 + 6')).not.toBeInTheDocument()
   })
 
+  it('shows no sum at all before the first 2d6 roll -- never a fabricated snake eyes', () => {
+    // The sum slot is always mounted so the Roll button cannot jump 71px on every roll,
+    // but its *contents* stay guarded: changeMode reseeds both dice to face 1, so an
+    // unguarded slot would flash "2" / "1 + 1" the instant you switch to 2d6 -- a result
+    // nobody rolled. The older "previous result is cleared" test above cannot catch this,
+    // since it only looks for '1 + 6'.
+    render(<DiceScreen rng={queuedRng([0, 0.99])} />)
+    chooseMode('2d6')
+
+    expect(screen.queryByText('1 + 1')).not.toBeInTheDocument()
+    expect(screen.queryByText('2')).not.toBeInTheDocument()
+  })
+
+  it('reserves the sum slot in every mode, so the Roll button never moves', () => {
+    // The slot's reason for existing: mounting it only once a result existed moved the
+    // Roll button 71px out from under the thumb on every roll.
+    render(<DiceScreen rng={queuedRng([0, 0.99])} />)
+    expect(screen.getByTestId('sum-slot')).toBeInTheDocument() // d6: reserved but empty
+
+    chooseMode('2d6')
+    expect(screen.getByTestId('sum-slot')).toBeEmptyDOMElement()
+
+    pressRoll()
+    advance()
+
+    // Same element, now filled -- nothing above the button was added or removed.
+    expect(screen.getByTestId('sum-slot')).toHaveTextContent('1 + 6')
+  })
+
   it('ignores a same-frame double tap, rolling only once', () => {
     const rng = vi.fn(() => 0.5)
     render(<DiceScreen rng={rng} />)
