@@ -3,10 +3,20 @@ name: CI
 # Runs on every PR and on pushes to main. The deploy job at the bottom is what actually
 # ships to Render -- `render.yaml` has autoDeploy disabled precisely so that a push to
 # main cannot deploy without these checks passing first.
+#
+# `workflow_dispatch` exists for one specific failure: a push event that never produced a
+# run at all. Render's `autoDeployTrigger: checksPass` treats zero checks on a commit as
+# "do not deploy", silently -- so a dropped event leaves main merged but unshipped, with
+# nothing on either side reporting a problem. That happened during the GitHub Actions
+# outage on 2026-08-26 (the event was late rather than lost, and the deploy did go out,
+# but there was no way to force it if it hadn't). Dispatching against a branch runs these
+# jobs on its current HEAD and reports checks on that SHA, which is what un-sticks it.
+# Before this the only recourse was pushing an empty commit to main.
 on:
   pull_request:
   push:
     branches: [main]
+  workflow_dispatch:
 
 # A new push to the same branch makes the in-flight run obsolete. Never cancel a run on
 # main, though: the deploy job hangs off it.

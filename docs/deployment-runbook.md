@@ -72,7 +72,20 @@ Two behaviours of `checksPass` worth internalising:
 
 - **Zero checks detected on a commit means no deploy, silently.** That's the safe
   direction, but if deploys ever stop mysteriously, first confirm CI actually ran on that
-  commit rather than assuming Render is broken.
+  commit rather than assuming Render is broken:
+  ```
+  gh api "repos/liamH47/edh-companion/actions/runs?head_sha=$(git rev-parse HEAD)" --jq .total_count
+  ```
+  `0` means the push event never produced a run — GitHub dropped or delayed it, most
+  likely an Actions incident (check <https://www.githubstatus.com>). **The fix is to
+  dispatch CI by hand** against `main`, which runs the jobs on its current HEAD and
+  reports checks on that SHA, satisfying `checksPass`:
+  ```
+  gh workflow run ci.yml --ref main
+  ```
+  This is the whole reason `ci.yml` carries a `workflow_dispatch` trigger; the trigger's
+  own comment records the incident that motivated it. Before it existed the only way to
+  un-stick a deploy was pushing an empty commit to `main`.
 - **Render counts a check as passed if it concluded `success`, `neutral`, or `skipped`.**
   A conditionally-skipped job therefore never blocks a deploy — don't rely on one as a gate.
 - **Every check on the commit gates the deploy, not a chosen subset.** Adding a slow job to
