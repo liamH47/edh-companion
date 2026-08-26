@@ -263,6 +263,13 @@ three states:
 On mount with a saved session, the visible round initializes to the **latest** round, not
 round 1 (same rule in `PodsScreen`): a refresh mid-event reloads everything from storage,
 and coming back on R1 during round 4 reads as lost data even though nothing was lost.
+`RoundScreen` renders with `key={showRound}`, so per-round UI state (the re-pair banner,
+a half-opened swap) never leaks from one round onto another.
+
+**"End tournament" sits at the bottom of every Swiss view** — round and standings alike,
+behind the shared `ConfirmSheet` — so ending the night never requires remembering which
+tab the button lives on. Ghost weight and last in the column, the same quiet slot pods'
+"Start over" and cards' "Reset card" use.
 
 ## TournamentSetupScreen
 
@@ -286,29 +293,49 @@ overflow a pairing row or the report sheet.
 
 ## RoundScreen
 
-The round's pairings, each row tappable to open `MatchResultSheet`. Rows show both names
-stacked with the scoreline on the right: `Not reported`, a scoreline like `2-1`, `Draw`,
-or `Bye`. A bye is unreportable — it's recorded as a 2-0 win the moment it's created.
+The round's pairings, each an **inline score card** (`MatchScoreRow`) — tap a player's
+name to report, no sheet in between. Two interaction shapes behind one layout, chosen by
+the *event* (never by table size, so a 2-player commander duel keeps pod semantics):
 
-Each unreported row also carries a shuffle button for the **manual pairing override**:
+- **1v1 counting** (draft/sealed/constructed): tap a name for +1 game win, capped at the
+  format's winning threshold (bo3: 2, bo1: 1); an undo control beside each name removes
+  one. A per-match Draw line counts the shared drawn games (capped bo3: 3, bo1: 1).
+  There is deliberately no cross-player constraint — a TO entering a finished 2-1
+  naturally taps A, A, B, and blocking "+" once anyone reaches the cap would make that
+  third tap dead. The degenerate 2-2 this permits scores as a draw, and the card's own
+  scoreline reading "Draw" is the visible tell.
+- **Pod set-winner** (commander): a pod is one game with one survivor, so tapping a name
+  SETS the winner (the single 1 moves; `aria-pressed` marks the current one), the undo
+  beside the winner clears back to unreported, and Draw covers the timed-out table.
+  `[1, 1, 0, 0]` is unreachable from the UI.
+
+Decrementing everything back to zero reports `null` — "Not reported" is reachable again
+by plain undoing, so no separate Clear control exists. Accessible names are stable
+("Add a game win for Ava"); the live count sits in the button's visible content, and the
+card's status footer ("Not reported" / "2-1" / "Draw" / "Ben won") is an `aria-live`
+region.
+
+**The first tap reports the match.** `isRoundComplete` is `every(result !== null)`, so a
+1-0-in-progress already scores as a win, the round can read Complete mid-entry, and
+"Start round N+1" can appear before every match is at its final scoreline. The TO
+controls when to actually advance; a mid-edit standings view reflects whatever has been
+entered so far. (This also means swap buttons — gated on `!complete` — hide once every
+match has a tap, and reappear if a count is removed.)
+
+A bye renders as a **static row with no controls at all** — it's recorded as a 2-0 win
+the moment it's created, and MTR gives its entrant no say in the matter.
+
+Each unreported card also carries a shuffle button for the **manual pairing override**:
 pick another entrant in the round and the two swap places. Both affected matches lose
 their results, since a reported result no longer describes who played.
 
-Only one bottom-pinned action, "Start round N", and only when the round is complete, it's
-the latest round, and rounds remain. Standings are always one tap away in the pill row, so
-repeating them at the bottom would put two competing buttons in the thumb zone.
-
-## MatchResultSheet
-
-Scorelines written from entrant A's side, which is why A's name is shown first: `2-0`,
-`2-1`, `1-1 draw`, `1-2`, `0-2` for best-of-three; `1-0` / `Draw` / `0-1` for best-of-one.
-The already-reported scoreline is marked `aria-pressed`, and an existing result can be
-cleared back to unreported.
-
-**Editing a result from a round that later rounds were paired from** is the same flow,
-with one addition: the sheet explains that standings update either way, and offers
-"Re-pair later rounds". Keeping the pairings is the default — people may already be
-playing — and re-pairing is the deliberate opt-in.
+**Editing a round that later rounds were paired from** is the same inline surface, with
+one addition: the first edit (or swap) there raises a banner explaining that later
+rounds were paired from these results, offering "Re-pair later rounds" behind a
+`ConfirmSheet` — re-pairing rebuilds those rounds from scratch and discards their
+reported results, which meets the bar for a confirm. Keeping the pairings is the
+default: people may already be playing, and merely *looking* at an old round never
+dangles the destructive offer.
 
 ## StandingsScreen
 
@@ -317,5 +344,5 @@ horizontally scrollable strip so a phone shows name and record without squeezing
 Flex rows, not a table or CSS grid (`portability-rules.md`). Dropped entrants are marked
 but still listed — they still count in everyone else's tiebreakers.
 
-Below the table: "Manage drops" (a sheet toggling each entrant in or out) and "End
-tournament".
+Below the table: "Manage drops" (a sheet toggling each entrant in or out). "End
+tournament" sits below in `SwissScreen`'s own bottom block, shared by every view.

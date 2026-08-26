@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { makeEntrants, makeTournament, match, pod, podResult, result, round } from '@mtg/core/swiss/fixtures'
@@ -27,6 +27,17 @@ function renderRound(overrides: Partial<Parameters<typeof RoundScreen>[0]> = {})
   return props
 }
 
+/** A round-1-edited, round-2-exists tournament -- the shape that offers re-pairing. */
+function tournamentWithLaterRound() {
+  return makeTournament({
+    entrants: makeEntrants(2),
+    rounds: [
+      round(1, [match('entrant-1', 'entrant-2', result(2, 0))]),
+      round(2, [match('entrant-2', 'entrant-1', null)]),
+    ],
+  })
+}
+
 describe('RoundScreen', () => {
   it('says so when the round has not started', () => {
     renderRound({ roundNumber: 9 })
@@ -38,13 +49,22 @@ describe('RoundScreen', () => {
     expect(screen.getByRole('heading', { name: 'Round 1 of 3' })).toBeInTheDocument()
   })
 
-  it('lists each pairing with both names', () => {
+  it('lists each pairing as an inline score card with a tap target per player', () => {
     renderRound()
-    // By accessible name, not getByText('A')/getByText('B') -- the decorative
-    // EntrantBadge renders the same single-letter initial these fixture names happen
-    // to already be, which would make a plain text query ambiguous.
-    expect(screen.getByRole('button', { name: 'Report A versus B' })).toBeInTheDocument()
+    for (const name of ['A', 'B', 'C', 'D']) {
+      expect(screen.getByRole('button', { name: `Add a game win for ${name}` })).toBeInTheDocument()
+    }
     expect(screen.getAllByText('Not reported')).toHaveLength(2)
+  })
+
+  it('reports a game win with the exact payload when a name is tapped', async () => {
+    const user = userEvent.setup()
+    const props = renderRound()
+    await user.click(screen.getByRole('button', { name: 'Add a game win for A' }))
+    expect(props.onReport).toHaveBeenCalledWith(1, 'entrant-1-vs-entrant-2', {
+      gameWins: [1, 0],
+      gameDraws: 0,
+    })
   })
 
   it('marks the round in progress until every match is reported', () => {
@@ -62,7 +82,7 @@ describe('RoundScreen', () => {
     expect(screen.getByText('Complete')).toBeInTheDocument()
   })
 
-  it('shows a reported scoreline', () => {
+  it('shows a reported scoreline on the card', () => {
     renderRound({
       tournament: makeTournament({
         entrants: makeEntrants(2),
@@ -72,17 +92,7 @@ describe('RoundScreen', () => {
     expect(screen.getByText('2-1')).toBeInTheDocument()
   })
 
-  it('shows a drawn match as a draw rather than a scoreline', () => {
-    renderRound({
-      tournament: makeTournament({
-        entrants: makeEntrants(2),
-        rounds: [round(1, [match('entrant-1', 'entrant-2', result(1, 1, 1))])],
-      }),
-    })
-    expect(screen.getByText('Draw')).toBeInTheDocument()
-  })
-
-  it('shows a bye and makes it unreportable', () => {
+  it('renders a bye as a static row with no controls at all', () => {
     renderRound({
       tournament: makeTournament({
         entrants: makeEntrants(1),
@@ -90,25 +100,10 @@ describe('RoundScreen', () => {
       }),
     })
     expect(screen.getByText('Bye')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /Report A versus Bye/ })).toBeDisabled()
-  })
-
-  it('opens the result sheet for a real match', async () => {
-    const user = userEvent.setup()
-    renderRound()
-    await user.click(screen.getByRole('button', { name: 'Report A versus B' }))
-    expect(screen.getByRole('dialog', { name: 'Report result' })).toBeInTheDocument()
-  })
-
-  it('reports the chosen result for that match', async () => {
-    const user = userEvent.setup()
-    const props = renderRound()
-    await user.click(screen.getByRole('button', { name: 'Report A versus B' }))
-    await user.click(screen.getByRole('button', { name: '2-0' }))
-    expect(props.onReport).toHaveBeenCalledWith(1, 'entrant-1-vs-entrant-2', {
-      gameWins: [2, 0],
-      gameDraws: 0,
-    })
+    // Pre-reported 2-0 by MTR; nothing about it is editable, so the row offers no
+    // win, draw or swap control. ("Start round 2" still renders below the list -- a
+    // bye-only round is complete by construction.)
+    expect(screen.queryByRole('button', { name: /game win|won$|draw|Swap/i })).not.toBeInTheDocument()
   })
 
   it('warns when the pairing had to be repeated', () => {
@@ -173,7 +168,6 @@ describe('RoundScreen', () => {
     expect(screen.getByText(/no field left to pair/)).toBeInTheDocument()
   })
 
-
   it('swaps two entrants between matches', async () => {
     const user = userEvent.setup()
     const props = renderRound()
@@ -200,21 +194,75 @@ describe('RoundScreen', () => {
     })
     expect(screen.queryByRole('button', { name: /Swap/ })).not.toBeInTheDocument()
   })
+})
 
-  it('offers re-pairing when a later round was built from this one', async () => {
+describe('the re-pair banner', () => {
+  it('does not dangle a destructive offer from merely looking at an old round', () => {
+    renderRound({ tournament: tournamentWithLaterRound(), roundNumber: 1 })
+    expect(screen.queryByRole('button', { name: 'Re-pair later rounds' })).not.toBeInTheDocument()
+  })
+
+  it('does not appear for edits on the latest round, which nothing was paired from', async () => {
     const user = userEvent.setup()
-    const props = renderRound({
-      tournament: makeTournament({
-        entrants: makeEntrants(2),
-        rounds: [
-          round(1, [match('entrant-1', 'entrant-2', result(2, 0))]),
-          round(2, [match('entrant-2', 'entrant-1', null)]),
-        ],
-      }),
+    renderRound()
+    await user.click(screen.getByRole('button', { name: 'Add a game win for A' }))
+    expect(screen.queryByRole('button', { name: 'Re-pair later rounds' })).not.toBeInTheDocument()
+  })
+
+  it('appears after a result edit on a round with later rounds', async () => {
+    const user = userEvent.setup()
+    renderRound({ tournament: tournamentWithLaterRound(), roundNumber: 1 })
+    await user.click(screen.getByRole('button', { name: 'Remove a game win for A' }))
+    expect(screen.getByRole('status')).toHaveTextContent(/Later rounds were already paired/)
+    expect(screen.getByRole('button', { name: 'Re-pair later rounds' })).toBeInTheDocument()
+  })
+
+  it('appears after a swap on a round with later rounds', async () => {
+    // Possible once a decrement makes the earlier round incomplete again -- a swap
+    // invalidates later pairings the same way a corrected result does.
+    const user = userEvent.setup()
+    const tournament = makeTournament({
+      entrants: makeEntrants(4),
+      rounds: [
+        round(1, [
+          match('entrant-1', 'entrant-2', null),
+          match('entrant-3', 'entrant-4', null),
+        ]),
+        round(2, [
+          match('entrant-1', 'entrant-3', null),
+          match('entrant-2', 'entrant-4', null),
+        ]),
+      ],
     })
-    await user.click(screen.getByRole('button', { name: 'Report A versus B' }))
+    renderRound({ tournament, roundNumber: 1 })
+    await user.click(screen.getByRole('button', { name: /Swap A with another entrant/ }))
+    await user.click(screen.getByRole('button', { name: 'C' }))
+    expect(screen.getByRole('button', { name: 'Re-pair later rounds' })).toBeInTheDocument()
+  })
+
+  it('re-pairs only after the confirmation is accepted', async () => {
+    const user = userEvent.setup()
+    const props = renderRound({ tournament: tournamentWithLaterRound(), roundNumber: 1 })
+    await user.click(screen.getByRole('button', { name: 'Remove a game win for A' }))
     await user.click(screen.getByRole('button', { name: 'Re-pair later rounds' }))
+    expect(props.onRepairFrom).not.toHaveBeenCalled()
+
+    const dialog = screen.getByRole('dialog', { name: 'Re-pair later rounds?' })
+    await user.click(within(dialog).getByRole('button', { name: 'Re-pair' }))
     expect(props.onRepairFrom).toHaveBeenCalledWith(1)
+    // Acted on: the offer is spent.
+    expect(screen.queryByRole('button', { name: 'Re-pair later rounds' })).not.toBeInTheDocument()
+  })
+
+  it('keeps the offer when the confirmation is declined', async () => {
+    const user = userEvent.setup()
+    const props = renderRound({ tournament: tournamentWithLaterRound(), roundNumber: 1 })
+    await user.click(screen.getByRole('button', { name: 'Remove a game win for A' }))
+    await user.click(screen.getByRole('button', { name: 'Re-pair later rounds' }))
+    await user.click(screen.getByRole('button', { name: 'Keep it' }))
+
+    expect(props.onRepairFrom).not.toHaveBeenCalled()
+    expect(screen.getByRole('button', { name: 'Re-pair later rounds' })).toBeInTheDocument()
   })
 })
 
@@ -231,43 +279,25 @@ describe('RoundScreen with Commander pods', () => {
     ],
   })
 
-  it('lists a pod at one weight, with nobody promoted above the rest', () => {
-    // A 1v1 stacks the two sides because the scoreline reads from the top one. A pod
-    // has no such hierarchy, so showing the first member as a headline would imply
-    // one that does not exist.
+  it('gives every pod member their own set-winner tap target', () => {
     renderRound({ tournament: POD_TOURNAMENT })
-
-    expect(screen.getByText('A, B, C, D')).toBeInTheDocument()
-    expect(screen.getByText('E, F, G')).toBeInTheDocument()
+    for (const name of ['A', 'B', 'C', 'D', 'E', 'F', 'G']) {
+      expect(screen.getByRole('button', { name: `${name} won` })).toBeInTheDocument()
+    }
   })
 
-  it('still stacks the two sides of an ordinary 1v1 match', () => {
-    renderRound()
-    expect(screen.getByRole('button', { name: 'Report A versus B' })).toBeInTheDocument()
-  })
-
-  it('labels a pod by its members rather than as a versus pair', () => {
-    // A four-name "A versus B versus C versus D" chain reads badly aloud.
-    renderRound({ tournament: POD_TOURNAMENT })
-
-    expect(
-      screen.getByRole('button', { name: 'Report the pod with A, B, C, D' }),
-    ).toBeInTheDocument()
-  })
-
-  it('opens the who-won sheet for a pod', async () => {
+  it('reports the pod winner with the single-1 shape', async () => {
     const user = userEvent.setup()
-    renderRound({ tournament: POD_TOURNAMENT })
-
-    await user.click(screen.getByRole('button', { name: 'Report the pod with A, B, C, D' }))
-
-    const sheet = screen.getByRole('dialog', { name: 'Report result' })
-    expect(sheet).toBeVisible()
-    expect(sheet.querySelector('button')).toBeTruthy()
-    expect(screen.getByRole('button', { name: 'C won' })).toBeInTheDocument()
+    const props = renderRound({ tournament: POD_TOURNAMENT })
+    await user.click(screen.getByRole('button', { name: 'C won' }))
+    expect(props.onReport).toHaveBeenCalledWith(
+      1,
+      'entrant-1-vs-entrant-2-vs-entrant-3-vs-entrant-4',
+      { gameWins: [0, 0, 1, 0], gameDraws: 0 },
+    )
   })
 
-  it('shows the winner rather than a scoreline once a pod is reported', () => {
+  it('shows the winner by name rather than a scoreline once a pod is reported', () => {
     const reported = makeTournament({
       eventFormat: 'commander',
       format: 'bo1',
@@ -275,8 +305,7 @@ describe('RoundScreen with Commander pods', () => {
       rounds: [round(1, [pod(['entrant-1', 'entrant-2', 'entrant-3'], podResult(3, 1))])],
     })
     renderRound({ tournament: reported })
-
-    // gameWins [0,1,0] -> B is the sole maximum.
-    expect(screen.getByText('0-1-0')).toBeInTheDocument()
+    // gameWins [0,1,0] -> B won; readable, not "0-1-0".
+    expect(screen.getByText('B won')).toBeInTheDocument()
   })
 })

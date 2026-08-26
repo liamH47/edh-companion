@@ -2,6 +2,7 @@
 export * from './invariants'
 export * from './pairing'
 export * from './pods'
+export * from './reporting'
 export * from './scoring'
 export * from './storage'
 export * from './tournament'
