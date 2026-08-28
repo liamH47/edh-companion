@@ -25,6 +25,26 @@ describe('Sheet', () => {
     expect(screen.getByText('child content')).toBeInTheDocument()
   })
 
+  it('keeps the header out of the scroll region so the way out never scrolls away', () => {
+    // On a short viewport (a landscape phone) a tall sheet used to grow off the TOP of
+    // the screen -- panel top at -38px with the Close button at y=-1, unreachable, and
+    // nothing scrolling to bring it back. The panel is now a shrinkable flex item whose
+    // body scrolls; the handle and header are shrink-0 above that body.
+    render(
+      <Sheet open onClose={() => {}} title="Board state">
+        <p>child content</p>
+      </Sheet>,
+    )
+    const dialog = screen.getByRole('dialog', { name: 'Board state' })
+    expect(dialog).toHaveClass('min-h-0')
+
+    const close = screen.getByRole('button', { name: 'Close' })
+    const body = screen.getByText('child content').parentElement
+    expect(body).toHaveClass('overflow-y-auto')
+    // The scrolling body holds the children and not the close button.
+    expect(body).not.toContainElement(close)
+  })
+
   it('calls onClose when the close button is clicked', async () => {
     const user = userEvent.setup()
     const onClose = vi.fn()
