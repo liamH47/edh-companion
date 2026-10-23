@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { entrantLabel, mulberry32, playRound } from './fixtures'
 import { checkAllInvariants, checkNoRematches } from './invariants'
+import { activeEntrantsForRound, havePlayed } from './pairing'
 import { computeStandings } from './scoring'
 import {
   createTournament,
@@ -14,7 +15,15 @@ import {
   swapPairing,
   type FirstRoundPairingMethod,
 } from './tournament'
-import type { Match, MatchFormat, MatchResult, Rng, Tournament, TournamentMode } from './types'
+import {
+  isBye,
+  type Match,
+  type MatchFormat,
+  type MatchResult,
+  type Rng,
+  type Tournament,
+  type TournamentMode,
+} from './types'
 
 /**
  * Whole tournaments, start to finish, checked against invariants after every
@@ -501,4 +510,90 @@ describe('Commander pod events', () => {
     expect(anyRepeat).toBe(true)
     expect(checkAllInvariants(tournament, { allowRematches: true })).toEqual([])
   })
+})
+
+/**
+ * Whether `ids` can be split into pairs with nobody meeting twice. A tiny independent
+ * matcher, so the sweep below can tell "the pairer chose not to pair the leaders" from
+ * "no rematch-free pairing containing them existed".
+ */
+function hasRematchFreePairing(ids: string[], tournament: Tournament): boolean {
+  if (ids.length === 0) return true
+  const [first, ...rest] = ids
+  return rest.some(
+    (candidate, index) =>
+      !havePlayed(first, candidate, tournament) &&
+      hasRematchFreePairing(rest.filter((_unused, i) => i !== index), tournament),
+  )
+}
+
+describe('leaders meet', () => {
+  // Reported from an 8-player event: two players alone on 2-0 after round 2 were not
+  // paired in round 3. The pairing spec pins that exact fixture; this sweeps random
+  // results across sizes and seeds for the general property -- whenever exactly two
+  // entrants lead the field, have never met, and neither is taking the bye, they play
+  // each other (provided the rest of the field can still be paired without a rematch
+  // once they do, which is the one thing the pairer is allowed to put first).
+  const entrantCounts = [4, 5, 6, 7, 8, 9, 10, 12, 16]
+  const seeds = Array.from({ length: 30 }, (_unused, index) => index + 1)
+
+  for (const entrantCount of entrantCounts) {
+    it(`pairs two sole leaders together in a ${entrantCount}-player event`, () => {
+      let leaderRoundsChecked = 0
+
+      for (const seed of seeds) {
+        const rng = mulberry32(seed)
+        const decide = seededDecider(rng, 'bo3')
+        const totalRounds = recommendedRounds(entrantCount)
+        const fresh = newTournament({ entrantCount, totalRounds, rng, decide })
+        let tournament = playRound(startNextRound(fresh, rng).tournament, 1, decide)
+
+        for (let roundNumber = 2; roundNumber <= totalRounds; roundNumber++) {
+          const context = `n=${entrantCount} seed=${seed} R${roundNumber}`
+          const active = new Set(
+            activeEntrantsForRound(tournament, roundNumber).map((entrant) => entrant.id),
+          )
+          const standings = computeStandings(tournament).filter((row) => active.has(row.entrantId))
+          const [first, second, third] = standings
+
+          // `tournament` still holds only the played rounds, so "have met" and "can
+          // the rest pair" are judged on history, not on the round being built.
+          const history = tournament
+          const outcome = startNextRound(tournament, rng)
+          tournament = outcome.tournament
+          const round = tournament.rounds[roundNumber - 1]
+
+          const soleLeaders =
+            second !== undefined &&
+            first.matchPoints === second.matchPoints &&
+            (third === undefined || third.matchPoints < second.matchPoints) &&
+            !havePlayed(first.entrantId, second.entrantId, history)
+          const bye = round.matches.find(isBye)?.entrantIds[0]
+          const leadersPlaying = bye !== first.entrantId && bye !== second.entrantId
+          const others = [...active].filter(
+            (id) => id !== first.entrantId && id !== second.entrantId && id !== bye,
+          )
+
+          if (soleLeaders && leadersPlaying && hasRematchFreePairing(others, history)) {
+            leaderRoundsChecked += 1
+            const leadersMatch = round.matches.find((match) =>
+              match.entrantIds.includes(first.entrantId),
+            )
+            expect(
+              leadersMatch?.entrantIds,
+              `${context}: leaders ${first.entrantId} and ${second.entrantId} not paired`,
+            ).toContain(second.entrantId)
+          }
+
+          tournament = playRound(tournament, roundNumber, decide)
+        }
+      }
+
+      // A sweep that never found two sole leaders would pass without checking anything.
+      expect(
+        leaderRoundsChecked,
+        `n=${entrantCount}: no round ever had two sole leaders`,
+      ).toBeGreaterThan(0)
+    })
+  }
 })

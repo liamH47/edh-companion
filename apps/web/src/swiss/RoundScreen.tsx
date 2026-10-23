@@ -1,6 +1,11 @@
 import { useState } from 'react'
-import { activeEntrantsForRound, entrantIdsInRound, isRoundComplete } from '@mtg/core/swiss'
-import { entrantName, isBye, type MatchResult, type Tournament } from '@mtg/core/swiss'
+import {
+  activeEntrantsForRound,
+  entrantIdsInRound,
+  isRoundComplete,
+  provisionalMatches,
+} from '@mtg/core/swiss'
+import { entrantName, isBye, type Match, type MatchResult, type Tournament } from '@mtg/core/swiss'
 import { Button } from '../ui/Button'
 import { Chip } from '../ui/Chip'
 import { ConfirmSheet } from '../ui/ConfirmSheet'
@@ -19,6 +24,17 @@ interface RoundScreenProps {
   onRepairFrom: (roundNumber: number) => void
   onSwap: (roundNumber: number, entrantAId: string, entrantBId: string) => void
   onNextRound: () => void
+}
+
+/** "A vs B is at 1-1 and C vs D is at 1-0 with 1 drawn", for the start-round confirm. */
+function describeScores(matches: Match[], nameOf: (id: string) => string): string {
+  return matches
+    .map((match) => {
+      const { gameWins, gameDraws } = match.result!
+      const drawn = gameDraws > 0 ? ` with ${gameDraws} drawn` : ''
+      return `${match.entrantIds.map(nameOf).join(' vs ')} is at ${gameWins.join('-')}${drawn}`
+    })
+    .join(' and ')
 }
 
 /**
@@ -46,6 +62,11 @@ export function RoundScreen({
   // offer.
   const [repairOffered, setRepairOffered] = useState(false)
   const [repairConfirmOpen, setRepairConfirmOpen] = useState(false)
+  // Tap-to-score reports a best-of-three from its first game, so a round reads as
+  // complete while a match is still at 1-0 or 1-1. Pairing the next round from those
+  // records is exactly how two undefeated players end up not meeting (it happened at a
+  // real event), so starting a round past unfinished-looking scores asks first.
+  const [startConfirmOpen, setStartConfirmOpen] = useState(false)
 
   const round = tournament.rounds.find((candidate) => candidate.number === roundNumber)
   if (!round) {
@@ -69,6 +90,10 @@ export function RoundScreen({
   const complete = isRoundComplete(tournament, roundNumber)
   const isLatestRound = roundNumber === tournament.rounds.length
   const hasLaterRounds = roundNumber < tournament.rounds.length
+  const provisional = provisionalMatches(tournament, roundNumber)
+  // Once a later round exists the TO has confirmed these scores, so a 1-1 left as a
+  // genuine drawn match no longer reads as "in progress" forever.
+  const looksFinished = provisional.length === 0 || hasLaterRounds
   const moreRoundsToPlay = tournament.rounds.length < tournament.totalRounds
   // If everyone left has dropped, the next round has no field to pair. Offering "Start
   // round" would spawn an empty round the pairer refuses to build anyway.
@@ -94,7 +119,7 @@ export function RoundScreen({
         <Text as="h2" variant="title">
           Round {roundNumber} of {tournament.totalRounds}
         </Text>
-        <Chip>{complete ? 'Complete' : 'In progress'}</Chip>
+        <Chip>{complete && looksFinished ? 'Complete' : 'In progress'}</Chip>
       </div>
 
       {hadToRepeatPairing && isLatestRound && (
@@ -167,7 +192,11 @@ export function RoundScreen({
       {complete && isLatestRound && moreRoundsToPlay && (
         <div className="flex flex-col gap-2">
           {hasFieldForNextRound ? (
-            <Button size="lg" fullWidth onClick={onNextRound}>
+            <Button
+              size="lg"
+              fullWidth
+              onClick={() => (provisional.length > 0 ? setStartConfirmOpen(true) : onNextRound())}
+            >
               Start round {roundNumber + 1}
             </Button>
           ) : (
@@ -191,6 +220,22 @@ export function RoundScreen({
         title="Re-pair later rounds?"
         message="Every later round is rebuilt from the corrected results, and every result already reported in those rounds is discarded."
         confirmLabel="Re-pair"
+      />
+
+      <ConfirmSheet
+        open={startConfirmOpen}
+        onCancel={() => setStartConfirmOpen(false)}
+        onConfirm={() => {
+          setStartConfirmOpen(false)
+          onNextRound()
+        }}
+        title={`Start round ${roundNumber + 1} with unfinished scores?`}
+        message={
+          `${describeScores(provisional, nameOf)}. If a game is still being played, ` +
+          `round ${roundNumber + 1} would be paired from records that are about to change.`
+        }
+        cancelLabel="Keep scoring"
+        confirmLabel={`Start round ${roundNumber + 1}`}
       />
 
       <Sheet

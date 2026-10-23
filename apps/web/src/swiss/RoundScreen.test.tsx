@@ -133,6 +133,97 @@ describe('RoundScreen', () => {
     expect(props.onNextRound).toHaveBeenCalled()
   })
 
+  describe('unfinished-looking scores', () => {
+    // A best-of-three tapped to 1-1 while game three is still being played: reported,
+    // so the round is complete, but not something the next round should be paired from
+    // without the TO saying so.
+    function midMatchTournament() {
+      return makeTournament({
+        entrants: makeEntrants(4),
+        rounds: [
+          round(1, [
+            match('entrant-1', 'entrant-2', result(2, 1)),
+            match('entrant-3', 'entrant-4', result(1, 1)),
+          ]),
+        ],
+      })
+    }
+
+    it('keeps the round marked in progress while a best-of-three looks mid-match', () => {
+      renderRound({ tournament: midMatchTournament() })
+      expect(screen.getByText('In progress')).toBeInTheDocument()
+      expect(screen.queryByText('Complete')).not.toBeInTheDocument()
+    })
+
+    it('marks the round complete once every score is decisive', () => {
+      renderRound({
+        tournament: makeTournament({
+          entrants: makeEntrants(2),
+          rounds: [round(1, [match('entrant-1', 'entrant-2', result(2, 0))])],
+        }),
+      })
+      expect(screen.getByText('Complete')).toBeInTheDocument()
+    })
+
+    it('asks before starting the next round, naming the match and its score', async () => {
+      const user = userEvent.setup()
+      const props = renderRound({ tournament: midMatchTournament() })
+      await user.click(screen.getByRole('button', { name: 'Start round 2' }))
+
+      expect(props.onNextRound).not.toHaveBeenCalled()
+      const dialog = screen.getByRole('dialog')
+      expect(dialog).toHaveTextContent('Start round 2 with unfinished scores?')
+      expect(dialog).toHaveTextContent('C vs D is at 1-1')
+    })
+
+    it('keeps scoring when the TO backs out', async () => {
+      const user = userEvent.setup()
+      const props = renderRound({ tournament: midMatchTournament() })
+      await user.click(screen.getByRole('button', { name: 'Start round 2' }))
+      await user.click(screen.getByRole('button', { name: 'Keep scoring' }))
+
+      expect(props.onNextRound).not.toHaveBeenCalled()
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    })
+
+    it('starts the next round once the TO confirms', async () => {
+      const user = userEvent.setup()
+      const props = renderRound({ tournament: midMatchTournament() })
+      await user.click(screen.getByRole('button', { name: 'Start round 2' }))
+      await user.click(
+        within(screen.getByRole('dialog')).getByRole('button', { name: 'Start round 2' }),
+      )
+
+      expect(props.onNextRound).toHaveBeenCalledTimes(1)
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    })
+
+    it('mentions drawn games in the score it reads back', async () => {
+      const user = userEvent.setup()
+      renderRound({
+        tournament: makeTournament({
+          entrants: makeEntrants(2),
+          rounds: [round(1, [match('entrant-1', 'entrant-2', result(1, 0, 1))])],
+        }),
+      })
+      await user.click(screen.getByRole('button', { name: 'Start round 2' }))
+      expect(screen.getByRole('dialog')).toHaveTextContent('A vs B is at 1-0 with 1 drawn')
+    })
+
+    it('reads a confirmed 1-1 as complete once a later round exists', () => {
+      renderRound({
+        tournament: makeTournament({
+          entrants: makeEntrants(2),
+          rounds: [
+            round(1, [match('entrant-1', 'entrant-2', result(1, 1))]),
+            round(2, [match('entrant-2', 'entrant-1', null)]),
+          ],
+        }),
+      })
+      expect(screen.getByText('Complete')).toBeInTheDocument()
+    })
+  })
+
   it('does not offer another round once the tournament is played out', () => {
     renderRound({
       tournament: makeTournament({

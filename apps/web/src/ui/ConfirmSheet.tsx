@@ -17,6 +17,10 @@ interface ConfirmSheetProps {
    * "OK" -- a labelled button is what makes a confirm readable at a glance instead of
    * something to tap through. */
   confirmLabel: string
+  /** The safe button's label. Defaults to "Keep it", which reads right for every
+   * reset; a confirm that guards a forward step rather than a wipe names what staying
+   * put means instead ("Keep scoring"). */
+  cancelLabel?: string
 }
 
 /**
@@ -40,6 +44,7 @@ export function ConfirmSheet({
   title,
   message,
   confirmLabel,
+  cancelLabel = 'Keep it',
 }: ConfirmSheetProps) {
   return (
     <Sheet open={open} onClose={onCancel} title={title}>
@@ -48,7 +53,7 @@ export function ConfirmSheet({
       </Text>
       <div className="flex gap-3">
         <Button onClick={onCancel} className="flex-1">
-          Keep it
+          {cancelLabel}
         </Button>
         <Button variant="danger" onClick={onConfirm} className="flex-1">
           {confirmLabel}

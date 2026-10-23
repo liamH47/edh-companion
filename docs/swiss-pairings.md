@@ -205,6 +205,27 @@ objects, which matters for two reasons that are easy to get wrong:
 A real match does still lose its result, because the result described a pairing that no
 longer exists.
 
+## A round that is reported is not necessarily finished
+
+Tap-to-score reports a match from its first game, so a best-of-three sits at 1-0 or 1-1
+while game two or three is still being played — and `isRoundComplete` is just
+`every(result !== null)`, which cannot tell that from a finished match. It stays that way
+on purpose: a 1-1 at time really is a final, drawn result, and refusing to advance past
+one would strand a round.
+
+What went wrong at a real 8-player event was the pairing side of this. One round-2 match
+was at 1-1 when "Start round 3" was tapped; the pairer correctly treated both players as
+1-0-1 and paired them apart, and when game three was entered a minute later the standings
+showed two 2-0 players who never met. The pairer itself was never at fault — `leaders
+meet` in the integration spec sweeps exactly that property.
+
+`provisionalMatches` (tournament.ts) names the matches whose scores could still be
+mid-match: a best-of-three with nobody on two wins and fewer than three games played.
+Nothing else qualifies — a best-of-one is over at its first result and a Commander pod
+sets its winner outright. The round screen keeps such a round marked "In progress" and
+asks for confirmation before starting the next round from it, reading the scores back so
+the TO can see which table is still playing.
+
 ## Testing
 
 Unit specs cover each function; `swiss.integration.test.ts` covers whole events —

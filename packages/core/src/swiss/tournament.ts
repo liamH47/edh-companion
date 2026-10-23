@@ -12,6 +12,7 @@ import {
 } from './pairing'
 import type {
   EventFormat,
+  Match,
   MatchFormat,
   MatchResult,
   Rng,
@@ -293,6 +294,37 @@ export function isTournamentComplete(tournament: Tournament): boolean {
 export function isRoundComplete(tournament: Tournament, roundNumber: number): boolean {
   const round = tournament.rounds.find((candidate) => candidate.number === roundNumber)
   return round !== undefined && round.matches.every((match) => match.result !== null)
+}
+
+/**
+ * Whether a reported result could still be a match in progress. Tap-to-score reports
+ * from the first game, so a best-of-three sits at 1-0 or 1-1 while game two or three is
+ * being played -- and `isRoundComplete` cannot tell that from a finished match. A
+ * best-of-three is settled once someone has two game wins or three games have been
+ * played (a 1-1-1 is a legitimate drawn match at time). Nothing else can be
+ * mid-match: a best-of-one is over at its first result, and a Commander pod sets a
+ * winner outright.
+ *
+ * The round is still *complete* in the `every(result !== null)` sense -- a 1-1 at
+ * time really is a final result -- so this does not block advancing. It is what the
+ * UI asks the TO to confirm before pairing the next round from records that may be
+ * about to change.
+ */
+export function isProvisionalResult(match: Match, tournament: Tournament): boolean {
+  if (match.result === null || tournament.eventFormat === 'commander' || tournament.format !== 'bo3') {
+    return false
+  }
+  const { gameWins, gameDraws } = match.result
+  const gamesPlayed = gameWins.reduce((total, wins) => total + wins, 0) + gameDraws
+  return Math.max(...gameWins) < 2 && gamesPlayed < 3
+}
+
+/** The reported matches in a round whose scores could still be mid-match. */
+export function provisionalMatches(tournament: Tournament, roundNumber: number): Match[] {
+  const round = tournament.rounds.find((candidate) => candidate.number === roundNumber)
+  return round === undefined
+    ? []
+    : round.matches.filter((match) => isProvisionalResult(match, tournament))
 }
 
 /** Entrant ids paired in a round, used by the UI to offer swap targets. */
