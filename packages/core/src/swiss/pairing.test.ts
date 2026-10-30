@@ -5,6 +5,7 @@ import {
   match,
   pod,
   podResult,
+  mulberry32,
   result,
   round,
   seededRng,
@@ -267,6 +268,60 @@ describe('swissPairings', () => {
     expect(new Set(involved).size).toBe(8)
     for (const m of matches) {
       expect(havePlayed(m.entrantIds[0], m.entrantIds[1]!, tournament)).toBe(false)
+    }
+  })
+
+  /**
+   * Reported from a real 8-player event: after round 2 exactly two players were 2-0,
+   * and round 3 did not pair them. Round 1 is seat pairings (1v5, 2v6, 3v7, 4v8)
+   * with the low seats winning; round 2 crosses the winners (1v2, 3v4) and the
+   * losers (5v6, 7v8). Entrants 1 and 3 are then the only two on 6 points and have
+   * never met, so every rematch-free round 3 must put them at the same table.
+   */
+  function twoUndefeatedAfterTwoRounds() {
+    return makeTournament({
+      entrants: makeEntrants(8),
+      rounds: [
+        round(1, [
+          match('entrant-1', 'entrant-5', result(2, 0)),
+          match('entrant-2', 'entrant-6', result(2, 1)),
+          match('entrant-3', 'entrant-7', result(2, 1)),
+          match('entrant-4', 'entrant-8', result(2, 0)),
+        ]),
+        round(2, [
+          match('entrant-1', 'entrant-2', result(2, 1)),
+          match('entrant-3', 'entrant-4', result(2, 0)),
+          match('entrant-5', 'entrant-6', result(2, 0)),
+          match('entrant-7', 'entrant-8', result(1, 2)),
+        ]),
+      ],
+    })
+  }
+
+  it('pairs the only two undefeated players together in round 3 of an 8-player event', () => {
+    const tournament = twoUndefeatedAfterTwoRounds()
+    // The rng only breaks ties within a score group, so no seed may separate them.
+    for (let seed = 0; seed < 50; seed++) {
+      const { matches, hadToRepeatPairing } = swissPairings(tournament, 3, mulberry32(seed))
+      expect(hadToRepeatPairing, `seed=${seed}`).toBe(false)
+      expect(pairsOf(matches), `seed=${seed}`).toContain('entrant-1|entrant-3')
+    }
+  })
+
+  it('still pairs the two undefeated players when a drop makes the field odd', () => {
+    const base = twoUndefeatedAfterTwoRounds()
+    const tournament = {
+      ...base,
+      entrants: base.entrants.map((e) =>
+        e.id === 'entrant-6' ? { ...e, droppedAfterRound: 2 } : e,
+      ),
+    }
+    for (let seed = 0; seed < 50; seed++) {
+      const { matches, hadToRepeatPairing } = swissPairings(tournament, 3, mulberry32(seed))
+      expect(hadToRepeatPairing, `seed=${seed}`).toBe(false)
+      expect(pairsOf(matches), `seed=${seed}`).toContain('entrant-1|entrant-3')
+      // The bye goes to the bottom of the standings, never near the leaders.
+      expect(['entrant-1', 'entrant-3']).not.toContain(byeIn(matches))
     }
   })
 

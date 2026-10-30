@@ -56,9 +56,10 @@ function statusText(
  * reachable again by plain undoing, which is why there is no separate Clear control.
  *
  * The first tap reports the match: `isRoundComplete` is just `every(result !== null)`,
- * so a 1-0 in bo3 already scores as a win and lets "Start round N+1" appear. That is
- * fine -- the TO controls when to actually advance, and the scoreline on the row shows
- * exactly what has been entered so far.
+ * so a 1-0 in bo3 already scores as a win and lets "Start round N+1" appear. The TO
+ * controls when to actually advance, the scoreline on the row shows exactly what has
+ * been entered so far, and RoundScreen asks before starting a round while any
+ * best-of-three still looks mid-match (see `provisionalMatches`).
  *
  * Accessible names are stable ("Add a game win for Ava") while the live count lives in
  * the button's visible content -- without the override, every tap would rename the

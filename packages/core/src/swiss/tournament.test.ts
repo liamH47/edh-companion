@@ -4,6 +4,7 @@ import {
   makeTournament,
   match,
   playRound,
+  pod,
   podResult,
   result,
   round,
@@ -18,7 +19,9 @@ import {
   entrantIdsInRound,
   isRoundComplete,
   isTournamentComplete,
+  isProvisionalResult,
   moveEntrantSeat,
+  provisionalMatches,
   recommendedRounds,
   reinstateEntrant,
   reportResult,
@@ -558,5 +561,66 @@ describe('Commander events', () => {
     expect(round2.matches[0].entrantIds).toEqual(['entrant-1'])
     expect(isBye(round2.matches[0])).toBe(true)
     expect(isRoundComplete(next, 2)).toBe(true)
+  })
+})
+
+describe('provisionalMatches', () => {
+  function bo3Round(matches: ReturnType<typeof match>[]) {
+    return makeTournament({ format: 'bo3', entrants: makeEntrants(4), rounds: [round(1, matches)] })
+  }
+
+  it('flags a best-of-three that nobody has won yet with games still to play', () => {
+    for (const score of [result(1, 0), result(0, 1), result(1, 1), result(0, 0, 1), result(1, 0, 1)]) {
+      const tournament = bo3Round([match('entrant-1', 'entrant-2', score)])
+      expect(provisionalMatches(tournament, 1).map((m) => m.id), JSON.stringify(score)).toEqual([
+        'entrant-1-vs-entrant-2',
+      ])
+    }
+  })
+
+  it('accepts a best-of-three once someone has two wins or three games are in', () => {
+    for (const score of [result(2, 0), result(2, 1), result(1, 2), result(1, 1, 1), result(0, 0, 3)]) {
+      const tournament = bo3Round([match('entrant-1', 'entrant-2', score)])
+      expect(provisionalMatches(tournament, 1), JSON.stringify(score)).toEqual([])
+    }
+  })
+
+  it('never flags an unreported match or a bye', () => {
+    const tournament = bo3Round([
+      match('entrant-1', 'entrant-2', null),
+      match('entrant-3', null, result(2, 0)),
+    ])
+    expect(provisionalMatches(tournament, 1)).toEqual([])
+  })
+
+  it('never flags a best-of-one, whose first result is its last', () => {
+    const tournament = makeTournament({
+      format: 'bo1',
+      entrants: makeEntrants(2),
+      rounds: [round(1, [match('entrant-1', 'entrant-2', result(1, 0))])],
+    })
+    expect(provisionalMatches(tournament, 1)).toEqual([])
+  })
+
+  it('never flags a Commander pod, which sets its winner outright', () => {
+    const tournament = makeTournament({
+      eventFormat: 'commander',
+      format: 'bo1',
+      entrants: makeEntrants(4),
+      rounds: [round(1, [pod(['entrant-1', 'entrant-2', 'entrant-3', 'entrant-4'], podResult(4, 0))])],
+    })
+    expect(isProvisionalResult(tournament.rounds[0].matches[0], tournament)).toBe(false)
+  })
+
+  it('returns nothing for a round that has not started', () => {
+    expect(provisionalMatches(makeTournament(), 1)).toEqual([])
+  })
+
+  it('lists only the provisional matches of a mixed round', () => {
+    const tournament = bo3Round([
+      match('entrant-1', 'entrant-2', result(2, 1)),
+      match('entrant-3', 'entrant-4', result(1, 1)),
+    ])
+    expect(provisionalMatches(tournament, 1).map((m) => m.id)).toEqual(['entrant-3-vs-entrant-4'])
   })
 })
